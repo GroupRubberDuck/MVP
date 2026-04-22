@@ -1,0 +1,26 @@
+name: poc
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    environment:
+      DB_HOST: mongo
+      DB_PORT: 27017
+      DB_USER: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
