@@ -16,10 +16,20 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "mypy (>=1.20.2,<2.0.0)"
+    "mypy (>=1.20.2,<2.0.0)",
+    "pytest (>=8.0.0,<9.0.0)",
+    "pytest-json-report (>=1.5.0,<2.0.0)"
 ]
-
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+pythonpath = ["backend/src"]
+markers = [
+    "requirement: ID del requisito coperto dal test",
+    "priority: priorità del test (high, medium, low)",
+    "type: tipo di test (unità, integrazione, smoke, test di sistema)",
+]

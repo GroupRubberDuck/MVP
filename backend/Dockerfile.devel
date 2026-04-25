@@ -24,4 +24,4 @@ RUN poetry install --no-root
 
 COPY . .
 
-CMD ["poetry", "run", "flask", "--app", "backend.app:create_app", "run", "--debug", "--host", "0.0.0.0"]
+CMD ["poetry", "run", "flask", "--app", "backend.src.app:create_app", "run", "--debug", "--host", "0.0.0.0"]
