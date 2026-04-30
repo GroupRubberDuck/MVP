@@ -3,6 +3,8 @@ from .asset_type import AssetType
 from .exceptions import RequirementNotFoundError,RequirementAlreadyExistsError
 from dataclasses import dataclass
 from types import MappingProxyType
+import copy
+
 
 
 @dataclass(frozen=True)
@@ -26,12 +28,16 @@ class Asset:
                      name: str, 
                      asset_type: AssetType,
                      description: str,
-                     answers: dict[str, Answer] | None = None):
+                     answers: list[Answer] | tuple[Answer, ...] | None = None):
             self._id = asset_id
             self._name = name
             self._asset_type = asset_type
             self._description = description
-            self._answers: dict[str, Answer] = answers.copy() if answers is not None else {}
+            self._answers: dict[str, Answer] = {}
+
+            if answers is not None:
+                for answer in answers:
+                    self.add_answer(answer)
         
 
         @property
@@ -80,7 +86,7 @@ class Asset:
                     raise RequirementAlreadyExistsError(
                         f"Impossibile aggiungere: il requisito '{answer.requirement_id}' esiste già nell'Asset '{self._name}'."
                     )
-                self._answers[answer.requirement_id] = answer
+                self._answers[answer.requirement_id] = copy.deepcopy(answer)
 
         def set_justification(self, requirement_id: str, justification: str):
             self._get_answer(requirement_id).set_justification(justification)

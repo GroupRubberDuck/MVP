@@ -14,7 +14,7 @@ class SnapshotAnswer:
 class Answer:
     # Il costruttore costringe a creare l'oggetto in uno stato valido fin da subito
     def __init__(self, requirement_id: str,
-                  justification: str = "",
+                  justification: str="",
                   node_choices: dict[str, bool] | None = None):
         self._requirement_id = requirement_id
         self._justification = justification

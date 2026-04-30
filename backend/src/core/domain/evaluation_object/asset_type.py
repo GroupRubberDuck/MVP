@@ -1,5 +1,6 @@
-from enum import Enum
+from enum import StrEnum
 
-class AssetType(str, Enum):
+class AssetType(StrEnum):
     SECURITY = "security"
     NETWORK = "network"
+

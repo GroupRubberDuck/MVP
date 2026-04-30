@@ -5,7 +5,7 @@ from .exceptions import DuplicateAssetError, AssetNotFoundError
 # from ..shared.validators import is_blank,key_exists 
 from dataclasses import dataclass
 from types import MappingProxyType
-
+import copy
 
 @dataclass(frozen=True)
 class DeviceSnapshot:
@@ -31,14 +31,25 @@ class Device:
     """Rappresenta un dispositivo da valutare, 
     con i suoi asset 
     e le risposte ai requirement."""
-    def __init__(self, device_id: str,standard_id:str, name: str, os: str, description: str, assets: dict[str, Asset] | None = None):
+    def __init__(self, device_id: str,
+                standard_id:str,
+                name: str, 
+                os: str, 
+                description: str, 
+                assets: list[Asset] | tuple[Asset, ...] | None = None):
         self._id = device_id
         self._standard_id = standard_id
         self._name = name
         self._os = os
         self._description = description
-        self._assets: dict[str, Asset] = assets if assets is not None else {}
+        self._assets: dict[str, Asset] = {}
 
+        if assets is not None:
+            for asset in assets:
+                # Usiamo il metodo add_asset che ha GIA' il controllo dei duplicati!
+                self.add_asset(asset)
+
+                
     def _get_asset_by_id(self, asset_id: str) -> Asset:
         if asset_id not in self._assets:
             raise AssetNotFoundError(f"Asset con id '{asset_id}' non trovato nel dispositivo.")
@@ -77,7 +88,7 @@ class Device:
     def add_asset(self, asset: Asset):
         if asset.id in self._assets:
             raise DuplicateAssetError(f"Asset con id '{asset.id}' già esistente nel dispositivo.")
-        self._assets[asset.id] = asset
+        self._assets[asset.id] = copy.copy(asset)
 
     def remove_asset(self, asset_id: str):
         if asset_id not in self._assets:
