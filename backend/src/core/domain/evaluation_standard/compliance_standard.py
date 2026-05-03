@@ -1,7 +1,7 @@
 # compliance_standard.py
-from types import MappingProxyType
 
 from .requirement import Requirement
+from core.domain.evaluation_object.answer import Answer
 from .evaluation_state import EvaluationState
 from .exceptions import RequirementNotFoundError
 
@@ -55,5 +55,5 @@ class ComplianceStandard:
         return self._requirements[requirement_id]
 
     def evaluate_requirement(self, requirement_id: str,
-                             answers: MappingProxyType[str, bool]) -> EvaluationState:
+                             answers: Answer) -> EvaluationState:
         return self.get_requirement(requirement_id).evaluate(answers)

@@ -2,8 +2,7 @@
 from dataclasses import dataclass, field
 from .answer import Answer
 from .asset_type import AssetType
-from .exceptions import RequirementNotFoundError, RequirementAlreadyExistsError
-import copy
+from .exceptions import AnswerNotFoundError, RequirementAlreadyExistsError
 from types import MappingProxyType
 
 @dataclass
@@ -28,10 +27,9 @@ class Asset:
     def answers(self) -> MappingProxyType[str, Answer]:
         return MappingProxyType(self._answers)
 
-    def get_answer(self, requirement_id: str) -> Answer:
+    def get_answer(self, requirement_id: str) -> Answer|None:
         if requirement_id not in self._answers:
-            raise RequirementNotFoundError(
-                f"Requirement '{requirement_id}' non trovato")
+            return None
         return self._answers[requirement_id]
 
     # --- scrittura ---
@@ -39,12 +37,34 @@ class Asset:
         if answer.requirement_id in self._answers:
             raise RequirementAlreadyExistsError(
                 f"Requisito '{answer.requirement_id}' già presente in '{self.name}'")
-        self._answers[answer.requirement_id] = copy.deepcopy(answer)
+        self._answers[answer.requirement_id] = answer
 
     def set_node_choice(self, requirement_id: str, 
                         node_id: str, value: bool) -> None:
-        self.get_answer(requirement_id).set_node_choice(node_id, value)
+        ans=self.get_answer(requirement_id)
+        
+        if ans is None:
+            raise AnswerNotFoundError(
+                f"Non esiste una risposta per il requisito '{requirement_id}' in '{self.name}'")
+        self._answers[requirement_id] = ans.with_node_choice(node_id, value)
 
     def set_justification(self, requirement_id: str, 
                           justification: str) -> None:
-        self.get_answer(requirement_id).set_justification(justification)
+        ans=self.get_answer(requirement_id)
+        if ans is None:
+            raise AnswerNotFoundError(
+                f"Non esiste una risposta per il requisito '{requirement_id}' in '{self.name}'")
+        self._answers[requirement_id] = ans.with_justification(justification)
+
+
+    def update_info(self, name: str | None = None,
+                     asset_type: AssetType | None = None,
+                     description: str | None = None) -> None:
+        if name is not None:
+            self.name = name
+
+        if asset_type is not None: 
+            self.asset_type = asset_type
+
+        if description is not None: 
+            self.description = description

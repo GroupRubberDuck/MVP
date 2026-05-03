@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from types import MappingProxyType
-
+from collections.abc import Sequence
 from .evaluation_state import EvaluationState
 from .standard_verdict import StandardVerdict
 from .exceptions import CycleDetectedError
@@ -60,9 +60,12 @@ class LeafNode(Node):
     @property
     def id(self) -> str: 
         return self.node_id
+    
+
+    
 class DecisionTree:
  
-    def __init__(self, root: str, nodes: list[Node] | tuple[Node, ...]):
+    def __init__(self, root: str, nodes: Sequence[Node] | tuple[Node, ...]):
         # Costruzione del dizionario con validazione duplicati e root
         nodes_dict: dict[str, Node] = {}
         for node in nodes:
