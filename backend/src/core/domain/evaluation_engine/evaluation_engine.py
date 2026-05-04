@@ -57,22 +57,22 @@ class EvaluationEngine:
             return cache[requirement_id]
 
         requirement = standard.get_requirement(requirement_id)
-        answer = asset.proprieties.get_evidence(requirement_id)
+        evidence = asset.proprieties.get_evidence(requirement_id)
 
         dependencies = tuple(
             (dep_id, self._resolve(dep_id, standard, asset, cache).state)
             for dep_id in requirement.dependency_ids
         )
 
-        if answer is None:
+        if evidence is None:
             state = EvaluationState.PENDING
         else:
-            state = requirement.evaluate(answer, dependencies)
+            state = requirement.evaluate(evidence, dependencies)
 
         result = RequirementResult(
             requirement_id=requirement_id,
-            justification=answer.justification if answer else "",
-            node_choices=answer.node_choices if answer else MappingProxyType({}),
+            justification=evidence.justification if evidence else "",
+            node_choices=evidence.node_choices if evidence else MappingProxyType({}),
             state=state,
             dependencies=dependencies,
         )

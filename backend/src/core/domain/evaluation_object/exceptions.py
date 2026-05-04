@@ -6,7 +6,7 @@ class DuplicateAssetError(Exception):
 class AssetNotFoundError(Exception):
     pass
 
-class AnswerNotFoundError(Exception):
+class EvidenceNotFoundError(Exception):
     pass
 
 class RequirementAlreadyExistsError(Exception):

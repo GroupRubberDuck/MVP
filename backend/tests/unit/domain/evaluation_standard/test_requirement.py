@@ -1,6 +1,6 @@
 import pytest
 from types import MappingProxyType
-from core.domain.evaluation_object.answer import Answer
+from core.domain.evaluation_object.asset import AssetEvidence
 from core.domain.evaluation_standard.decision_tree import (
     DecisionTree, DecisionNode, LeafNode,
 )
@@ -69,7 +69,7 @@ class TestRequirementValidation:
             decision_tree=None,
         )
         with pytest.raises(MissingDecisionTreeError, match="non ha un albero decisionale"):
-            req.evaluate(Answer(requirement_id="REQ-001"))
+            req.evaluate(AssetEvidence(requirement_id="REQ-001"))
 
 
 # ── Valutazione base ──
@@ -77,11 +77,11 @@ class TestRequirementValidation:
 class TestRequirementEvaluation:
 
     def test_pass(self, requirement_with_tree):
-        answer = Answer(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": True}))
+        answer = AssetEvidence(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": True}))
         assert requirement_with_tree.evaluate(answer) == EvaluationState.PASS
 
     def test_fail(self, requirement_with_tree):
-        answer = Answer(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": False}))
+        answer = AssetEvidence(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": False}))
         assert requirement_with_tree.evaluate(answer) == EvaluationState.FAIL
 
     def test_pending_incomplete_answers(self):
@@ -97,7 +97,7 @@ class TestRequirementEvaluation:
             description="Test", target_description="Test",
             decision_tree=tree,
         )
-        answer = Answer(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": True}))
+        answer = AssetEvidence(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": True}))
         assert req.evaluate(answer) == EvaluationState.PENDING
 
 
@@ -111,7 +111,7 @@ class TestRequirementNAJustification:
             description="Test", target_description="Test",
             decision_tree=na_tree,
         )
-        answer = Answer(
+        answer = AssetEvidence(
             requirement_id="REQ-001",
             node_choices=MappingProxyType({"n1": False}),
             justification="",
@@ -124,7 +124,7 @@ class TestRequirementNAJustification:
             description="Test", target_description="Test",
             decision_tree=na_tree,
         )
-        answer = Answer(
+        answer = AssetEvidence(
             requirement_id="REQ-001",
             node_choices=MappingProxyType({"n1": False}),
             justification="   ",
@@ -137,7 +137,7 @@ class TestRequirementNAJustification:
             description="Test", target_description="Test",
             decision_tree=na_tree,
         )
-        answer = Answer(
+        answer = AssetEvidence(
             requirement_id="REQ-001",
             node_choices=MappingProxyType({"n1": False}),
             justification="Non compatibile",
@@ -151,7 +151,7 @@ class TestRequirementNAJustification:
             description="Test", target_description="Test",
             decision_tree=na_tree,
         )
-        answer = Answer(
+        answer = AssetEvidence(
             requirement_id="REQ-001",
             node_choices=MappingProxyType({"n1": True}),
             justification="",
@@ -174,7 +174,7 @@ class TestRequirementDependencies:
         ((("DEP-1", EvaluationState.PASS), ("DEP-2", EvaluationState.NA)), EvaluationState.NA),
     ])
     def test_dependency_blocking(self, requirement_with_tree, dependency_states, expected):
-        answer = Answer(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": True}))
+        answer = AssetEvidence(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": True}))
         assert requirement_with_tree.evaluate(answer, dependency_states) == expected
 
     @pytest.mark.parametrize("dependency_states, expected", [
@@ -187,16 +187,16 @@ class TestRequirementDependencies:
     ])
     def test_dependency_priority(self, requirement_with_tree, dependency_states, expected):
         """Priorità: FAIL > PENDING > NA."""
-        answer = Answer(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": True}))
+        answer = AssetEvidence(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": True}))
         assert requirement_with_tree.evaluate(answer, dependency_states) == expected
 
     def test_no_dependencies_evaluates_normally(self, requirement_with_tree):
-        answer = Answer(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": True}))
+        answer = AssetEvidence(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": True}))
         assert requirement_with_tree.evaluate(answer) == EvaluationState.PASS
 
     def test_dependencies_block_before_tree_evaluation(self, requirement_with_tree):
         """Se le dipendenze bloccano, l'albero non viene nemmeno consultato."""
-        answer = Answer(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": False}))
+        answer = AssetEvidence(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": False}))
         deps = (("DEP-1", EvaluationState.FAIL),)
         # L'answer porterebbe a FAIL dal tree, ma il risultato è FAIL dalle dipendenze
         # Il punto è che il tree non viene valutato — il risultato è lo stesso,

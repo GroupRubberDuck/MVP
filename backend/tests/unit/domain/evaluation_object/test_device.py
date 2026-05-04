@@ -1,6 +1,6 @@
 import pytest
-from core.domain.evaluation_object.asset import Asset
-from core.domain.evaluation_object.asset_type import AssetType
+from core.domain.evaluation_object.asset import Asset,AssetAnagraphic
+from core.domain.evaluation_object.asset.asset_type import AssetType
 from core.domain.evaluation_object.device import Device
 from core.domain.evaluation_object.exceptions import DuplicateAssetError, AssetNotFoundError
 
@@ -17,9 +17,9 @@ def device_vuoto():
 
 @pytest.fixture
 def device_con_asset():
-    asset = Asset.create(
-        asset_id="A1", name="Test Asset",
-        asset_type=AssetType.NETWORK, description="Test",
+    asset = Asset(
+        id="A1", 
+        anagraphic=AssetAnagraphic (name="Test Asset", asset_type=AssetType.NETWORK, description="Test"),
     )
     return Device.create(
         device_id="DEV-1", standard_id="EN-18031",
@@ -29,9 +29,8 @@ def device_con_asset():
 
 
 def _make_asset(asset_id="ASSET-1"):
-    return Asset.create(
-        asset_id=asset_id, name="Test Asset",
-        asset_type=AssetType.NETWORK, description="Test",
+    return Asset(
+        id=asset_id, anagraphic=AssetAnagraphic(name="Test Asset", asset_type=AssetType.NETWORK, description="Test")
     )
 
 

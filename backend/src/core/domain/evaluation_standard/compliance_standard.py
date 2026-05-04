@@ -1,8 +1,8 @@
 # compliance_standard.py
 
 from .requirement import Requirement
-from core.domain.evaluation_object.answer import Answer
 from .evaluation_state import EvaluationState
+from core.domain.evaluation_object.asset import AssetEvidence
 from .exceptions import RequirementNotFoundError
 
 
@@ -55,5 +55,5 @@ class ComplianceStandard:
         return self._requirements[requirement_id]
 
     def evaluate_requirement(self, requirement_id: str,
-                             answers: Answer) -> EvaluationState:
+                             answers: AssetEvidence) -> EvaluationState:
         return self.get_requirement(requirement_id).evaluate(answers)
