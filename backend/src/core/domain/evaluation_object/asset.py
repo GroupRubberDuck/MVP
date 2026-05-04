@@ -1,70 +1,98 @@
 # asset.py
 from dataclasses import dataclass, field
-from .answer import Answer
-from .asset_type import AssetType
-from .exceptions import AnswerNotFoundError, RequirementAlreadyExistsError
 from types import MappingProxyType
 
-@dataclass
-class Asset:
-    id: str
+from .asset_type import AssetType
+
+
+@dataclass(frozen=True)
+class AssetAnagraphic:
     name: str
     asset_type: AssetType
     description: str
-    _answers: dict[str, Answer] = field(default_factory=dict, repr=False)
 
-    @classmethod
-    def create(cls, asset_id: str, name: str, 
-               asset_type: AssetType, description: str,
-               answers: list[Answer] | None = None) -> "Asset":
-        obj = cls(asset_id, name, asset_type, description)
-        for answer in (answers or []):
-            obj.add_answer(answer)
-        return obj
 
-    # --- lettura ---
+@dataclass(frozen=True)
+class AssetEvidence:
+    requirement_id: str
+    node_choices: MappingProxyType[str, bool] = field(
+        default_factory=lambda: MappingProxyType({})
+    )
+    justification: str = ""
+
+    def with_node_choice(self, node_id: str, value: bool) -> "AssetEvidence":
+        new_choices = dict(self.node_choices)
+        new_choices[node_id] = value
+        return AssetEvidence(
+            requirement_id=self.requirement_id,
+            node_choices=MappingProxyType(new_choices),
+            justification=self.justification,
+        )
+
+    def with_justification(self, justification: str) -> "AssetEvidence":
+        return AssetEvidence(
+            requirement_id=self.requirement_id,
+            node_choices=self.node_choices,
+            justification=justification,
+        )
+
+
+class AssetProprieties:
+    """
+    Classe che gestisce le AssetEvidence
+    indicizzate per requirement_id.
+    Creazione automatica alla prima scrittura: il chiamante
+    non deve pre-creare l'evidence prima di scrivere un nodo.
+    """
+
+    def __init__(self, evidences: dict[str, AssetEvidence] | None = None):
+        self._evidences: dict[str, AssetEvidence] = dict(evidences or {})
+
     @property
-    def answers(self) -> MappingProxyType[str, Answer]:
-        return MappingProxyType(self._answers)
+    def evidences(self) -> MappingProxyType[str, AssetEvidence]:
+        return MappingProxyType(self._evidences)
 
-    def get_answer(self, requirement_id: str) -> Answer|None:
-        if requirement_id not in self._answers:
-            return None
-        return self._answers[requirement_id]
+    def get_evidence(self, requirement_id: str) -> AssetEvidence | None:
+        return self._evidences.get(requirement_id)
 
-    # --- scrittura ---
-    def add_answer(self, answer: Answer) -> None:
-        if answer.requirement_id in self._answers:
-            raise RequirementAlreadyExistsError(
-                f"Requisito '{answer.requirement_id}' già presente in '{self.name}'")
-        self._answers[answer.requirement_id] = answer
-
-    def set_node_choice(self, requirement_id: str, 
+    def set_node_choice(self, requirement_id: str,
                         node_id: str, value: bool) -> None:
-        ans=self.get_answer(requirement_id)
-        
-        if ans is None:
-            raise AnswerNotFoundError(
-                f"Non esiste una risposta per il requisito '{requirement_id}' in '{self.name}'")
-        self._answers[requirement_id] = ans.with_node_choice(node_id, value)
+        evidence = self._evidences.get(requirement_id)
+        if evidence is None:
+            evidence = AssetEvidence(requirement_id=requirement_id)
+        self._evidences[requirement_id] = evidence.with_node_choice(node_id, value)
 
-    def set_justification(self, requirement_id: str, 
+    def set_justification(self, requirement_id: str,
                           justification: str) -> None:
-        ans=self.get_answer(requirement_id)
-        if ans is None:
-            raise AnswerNotFoundError(
-                f"Non esiste una risposta per il requisito '{requirement_id}' in '{self.name}'")
-        self._answers[requirement_id] = ans.with_justification(justification)
+        evidence = self._evidences.get(requirement_id)
+        if evidence is None:
+            evidence = AssetEvidence(requirement_id=requirement_id)
+        self._evidences[requirement_id] = evidence.with_justification(justification)
 
 
-    def update_info(self, name: str | None = None,
-                     asset_type: AssetType | None = None,
-                     description: str | None = None) -> None:
-        if name is not None:
-            self.name = name
+@dataclass(frozen=True)
+class Asset:
+    id: str
+    anagraphic: AssetAnagraphic
+    proprieties: AssetProprieties = field(default_factory=AssetProprieties)
+    def set_node_choice(self, requirement_id: str,
+                    node_id: str, value: bool) -> None:
+        self.proprieties.set_node_choice(requirement_id, node_id, value)
 
-        if asset_type is not None: 
-            self.asset_type = asset_type
+    def set_justification(self, requirement_id: str,
+                      justification: str) -> None:
+        self.proprieties.set_justification(requirement_id, justification)
 
-        if description is not None: 
-            self.description = description
+    def update_anagraphic(self, name: str | None = None,
+                          asset_type: AssetType | None = None,
+                          description: str | None = None) -> "Asset":
+        new_anagraphic = AssetAnagraphic(
+            name=name if name is not None else self.anagraphic.name,
+            asset_type=asset_type if asset_type is not None else self.anagraphic.asset_type,
+            description=description if description is not None else self.anagraphic.description,
+        )
+        return Asset(
+            id=self.id,
+            anagraphic=new_anagraphic,
+            proprieties=self.proprieties,
+        )

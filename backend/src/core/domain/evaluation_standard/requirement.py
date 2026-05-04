@@ -2,6 +2,7 @@
 # requirement.py
 from dataclasses import dataclass, field
 from core.domain.evaluation_object.answer import Answer 
+from core.domain.evaluation_object.asset import AssetEvidence
 from .decision_tree import DecisionTree
 from .evaluation_state import EvaluationState
 from .exceptions import MissingDecisionTreeError
@@ -20,7 +21,7 @@ class Requirement:
         if not self.requirement_id:
             raise ValueError("requirement_id non può essere vuoto.")
 
-    def evaluate(self, answer: Answer,
+    def evaluate(self, answer: AssetEvidence,
                  dependency_states: tuple[tuple[str, EvaluationState], ...] = ()
                  ) -> EvaluationState:
         blocked = self._check_dependencies(dependency_states)

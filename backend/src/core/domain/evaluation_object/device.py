@@ -7,11 +7,11 @@ from types import MappingProxyType
 
 @dataclass
 class Device:
-    id: str
-    standard_id: str
-    name: str
-    os: str
-    description: str
+    _id: str
+    _standard_id: str
+    _name: str
+    _os: str
+    _description: str
     _assets: dict[str, Asset] = field(default_factory=dict, repr=False)
 
     @classmethod
@@ -24,6 +24,27 @@ class Device:
         return obj
 
     # --- lettura ---
+    @property
+    def id(self) -> str:
+        return self._id
+    
+    @property
+    def standard_id(self) -> str:
+        return self._standard_id
+    
+    @property
+    def name(self) -> str:
+        return self._name
+    
+    @property
+    def os(self) -> str:
+        return self._os
+    
+    @property
+    def description(self) -> str:
+        return self._description
+
+
     @property
     def assets(self) -> MappingProxyType[str, Asset]:
         return MappingProxyType(self._assets)
@@ -39,11 +60,11 @@ class Device:
                     os: str | None = None,
                     description: str | None = None) -> None:
         if name is not None: 
-            self.name = name
+            self._name = name
         if os is not None: 
-            self.os = os
+            self._os = os
         if description is not None: 
-            self.description = description
+            self._description = description
 
     # --- gestione asset ---
     def add_asset(self, asset: Asset) -> None:

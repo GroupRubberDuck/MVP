@@ -9,8 +9,6 @@ from core.domain.evaluation_engine.evaluation_result import (
     DeviceEvaluationResult,
 )
 from collections.abc import Sequence
-from functools import cache
-from types import MappingProxyType
 from types import MappingProxyType
 
 class EvaluationEngine:
@@ -59,7 +57,7 @@ class EvaluationEngine:
             return cache[requirement_id]
 
         requirement = standard.get_requirement(requirement_id)
-        answer = asset.get_answer(requirement_id)
+        answer = asset.proprieties.get_evidence(requirement_id)
 
         dependencies = tuple(
             (dep_id, self._resolve(dep_id, standard, asset, cache).state)
