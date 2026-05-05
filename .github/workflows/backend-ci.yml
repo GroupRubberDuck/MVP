@@ -22,12 +22,13 @@ jobs:
         with:
           python-version: '3.11'
 
-      # 1. Recupera l'installazione di Poetry stessa dalla cache (se esiste)
+# 1. Recupera l'installazione di Poetry stessa dalla cache (se esiste)
       - name: Load cached Poetry installation
         id: cached-poetry
         uses: actions/cache@v4
         with:
           path: ~/.local
+          # AGGIORNA IL NUMERO QUI SOTTO:
           key: poetry-2.0.1-python-3.11 
 
       # 2. Installa Poetry SOLO se non lo ha trovato nella cache
@@ -35,10 +36,10 @@ jobs:
         if: steps.cached-poetry.outputs.cache-hit != 'true'
         uses: snok/install-poetry@v1
         with:
-          version: 1.8.2
+          # AGGIORNA IL NUMERO QUI SOTTO:
+          version: 2.0.1 
           virtualenvs-create: true
           virtualenvs-in-project: true
-
       # 3. Recupera l'ambiente virtuale con le tue librerie dalla cache
       - name: Load cached venv
         id: cached-poetry-dependencies
