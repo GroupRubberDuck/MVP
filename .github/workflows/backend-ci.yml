@@ -2,15 +2,12 @@ name: Backend CI
 
 on:
   push:
-  branches:
-      - main
-      - develop
-
+    branches:
+      - '**'  
   pull_request:
     branches:
       - main
       - develop
-
 jobs:
   unit-tests:
     name: Unit Tests and Linting
