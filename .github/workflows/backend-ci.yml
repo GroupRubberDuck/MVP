@@ -28,7 +28,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.local
-          key: poetry-1.8.2-python-3.11 
+          key: poetry-2.0.1-python-3.11 
 
       # 2. Installa Poetry SOLO se non lo ha trovato nella cache
       - name: Setup Poetry
