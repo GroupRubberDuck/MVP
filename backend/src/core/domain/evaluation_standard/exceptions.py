@@ -1,5 +1,3 @@
-# exceptions.py
-
 class CycleDetectedError(Exception):
     pass
 

@@ -5,7 +5,7 @@ from core.domain.evaluation_standard.evaluation_state import EvaluationState
 
 
 @dataclass(frozen=True)
-class RequirementResult:
+class RequirementEvaluationResult:
     requirement_id: str
     justification: str
     node_choices: MappingProxyType[str, bool]
@@ -24,18 +24,18 @@ class RequirementResult:
 @dataclass(frozen=True)
 class AssetEvaluationResult:
     asset_id: str
-    requirement_results: tuple[RequirementResult, ...]
+    requirement_results: tuple[RequirementEvaluationResult, ...]
     verdict: EvaluationState
 
-    def get_requirement_result(self, requirement_id: str) -> RequirementResult | None:
+    def get_requirement_result(self, requirement_id: str) -> RequirementEvaluationResult | None:
         return next((r for r in self.requirement_results
                      if r.requirement_id == requirement_id), None)
 
-    def failed(self) -> tuple[RequirementResult, ...]:
+    def failed(self) -> tuple[RequirementEvaluationResult, ...]:
         return tuple(r for r in self.requirement_results
                      if r.state == EvaluationState.FAIL)
 
-    def pending(self) -> tuple[RequirementResult, ...]:
+    def pending(self) -> tuple[RequirementEvaluationResult, ...]:
         return tuple(r for r in self.requirement_results
                      if r.state == EvaluationState.PENDING)
 

@@ -5,7 +5,7 @@ from types import MappingProxyType
 from core.domain.evaluation_engine.evaluation_engine import EvaluationEngine
 from core.domain.evaluation_standard.evaluation_state import EvaluationState
 from core.domain.evaluation_engine.evaluation_result import (
-    RequirementResult,
+    RequirementEvaluationResult,
     AssetEvaluationResult,
     # DeviceEvaluationResult,
 )
@@ -64,7 +64,7 @@ class TestEvaluationEngineResolve:
 
     def test_resolve_uses_cache(self, engine):
         """Se il requisito è già nella cache, _resolve lo restituisce senza ricalcolarlo."""
-        cached_result = RequirementResult(
+        cached_result = RequirementEvaluationResult(
             requirement_id="REQ-001",
             state=EvaluationState.PASS,
             node_choices=MappingProxyType({}),
@@ -196,13 +196,13 @@ class TestEvaluationEngineEvaluateAsset:
         mock_asset = Mock()
         mock_asset.id = "ASSET-1"
 
-        res1 = RequirementResult(
+        res1 = RequirementEvaluationResult(
             requirement_id="REQ-001",
             state=EvaluationState.PASS,
             node_choices=MappingProxyType({}),
             justification="",
         )
-        res2 = RequirementResult(
+        res2 = RequirementEvaluationResult(
             requirement_id="REQ-002",
             state=EvaluationState.FAIL,
             node_choices=MappingProxyType({}),
