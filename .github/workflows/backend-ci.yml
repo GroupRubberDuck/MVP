@@ -105,8 +105,8 @@ jobs:
 
       - name: Collect all metrics
         if: always()
-        run: python scripts/collect_metrics.py
-      
+        run: python script/collect_metrics.py
+
       - name: Salva i Report come Artifacts
         if: always()
         uses: actions/upload-artifact@v4
