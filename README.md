@@ -1,4 +1,12 @@
 # MVP
+<!-- Badges — sostituisci GroupRubberDuck/MVP con il tuo username/MVP e main con main o develop -->
+![CI](https://github.com/GroupRubberDuck/MVP/actions/workflows/ci.yml/badge.svg?main=main)
+![Coverage](https://raw.githubusercontent.com/GroupRubberDuck/MVP/main/badges/coverage.svg)
+![Tests](https://raw.githubusercontent.com/GroupRubberDuck/MVP/main/badges/tests.svg)
+![Ruff](https://raw.githubusercontent.com/GroupRubberDuck/MVP/main/badges/ruff.svg)
+ 
+
+
 
 Per avviare l'applicazione è sufficiente aver docker e docker compose installati, aver impostato le due variabili di ambiente `DB_USERNAME` e `DB_PASSWORD`, ed eseguire il seguente comando:
 ```bash
