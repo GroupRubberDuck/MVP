@@ -48,12 +48,12 @@ class MongoComplianceStandardAdapter(FindStandardPort):
                     )
             requirements.append(
                 Requirement(
-                    req_doc["id"],
-                    req_doc["name"],
-                    req_doc["description"]["norm_description"],
-                    req_doc["description"]["target_description"],
-                    req_doc.get("dependency_ids", []),
-                    DecisionTree(root=root, nodes=nodes),
+                    requirement_id=req_doc["id"],
+                    name=req_doc["name"],
+                    description=req_doc["description"]["norm_description"],
+                    target_description=req_doc["description"]["target_description"],
+                    decision_tree=DecisionTree(root=root, nodes=nodes),
+                    dependency_ids=req_doc.get("dependency_ids", []),
                 )
             )
         return ComplianceStandard(
