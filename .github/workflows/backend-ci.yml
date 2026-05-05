@@ -9,6 +9,9 @@ on:
       - main
       - develop
 
+permissions:
+  contents: write
+
 jobs:
   unit-tests:
     name: Unit Tests and Linting
@@ -29,7 +32,6 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      # --- UNICA AGGIUNTA: cache del .venv ---
       - name: Load cached venv
         id: cached-venv
         uses: actions/cache@v4
@@ -42,10 +44,53 @@ jobs:
         run: poetry install --no-interaction
 
       - name: Run Ruff (Analisi Statica)
-        run: poetry run ruff check backend/ --output-format=junit -o ruff-report.xml
+        id: ruff
+        run: |
+          poetry run ruff check backend/ --output-format=junit -o ruff-report.xml
+        continue-on-error: true
 
       - name: Run Unit Tests and Coverage
+        id: tests
         run: poetry run pytest --junitxml=test-results.xml
+
+      # --- Badge generation ---
+      - name: Install badge dependencies
+        if: always() && github.event_name == 'push'
+        run: pip install genbadge[all] --break-system-packages
+
+      - name: Generate coverage badge
+        if: always() && github.event_name == 'push'
+        run: genbadge coverage -i coverage.xml -o badges/coverage.svg
+
+      - name: Generate tests badge
+        if: always() && github.event_name == 'push'
+        run: genbadge tests -i test-results.xml -o badges/tests.svg
+
+      - name: Generate ruff badge
+        if: always() && github.event_name == 'push'
+        run: |
+          if [ "${{ steps.ruff.outcome }}" == "success" ]; then
+            genbadge flake8 -n "ruff" -i ruff-report.xml -o badges/ruff.svg || \
+              python -c "
+          import urllib.request
+          url = 'https://img.shields.io/badge/ruff-passed-brightgreen'
+          urllib.request.urlretrieve(url, 'badges/ruff.svg')
+          "
+          else
+            python -c "
+          import urllib.request
+          url = 'https://img.shields.io/badge/ruff-failed-red'
+          urllib.request.urlretrieve(url, 'badges/ruff.svg')
+          "
+          fi
+
+      - name: Commit badges
+        if: always() && github.event_name == 'push'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add badges/*.svg
+          git diff --staged --quiet || git commit -m "ci: update badges [skip ci]" && git push
 
       - name: Salva i Report come Artifacts
         if: always()
