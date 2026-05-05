@@ -34,7 +34,7 @@ jobs:
 
       - name: Run Unit Tests and Coverage
         # Aggiorna il percorso della cartella test e quello della coverage
-        run: poetry run pytest backend/tests/unit --cov=backend/src --cov-report=xml:coverage.xml --junitxml=test-results.xml
+        run: poetry run pytest --junitxml=test-results.xml      
       - name: Salva i Report come Artifacts
         if: always() 
         uses: actions/upload-artifact@v4
