@@ -1,9 +1,6 @@
 name: Backend CI
 
 on:
-  push:
-    branches:
-      - "**"
   pull_request:
     branches:
       - main
@@ -21,35 +18,25 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: '3.11'
 
-      - name: Install Poetry
+      - name: Setup Poetry
         uses: snok/install-poetry@v1
         with:
-          version: 2.0.1
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      # Cache del venv nella root (dove Poetry lo crea)
-      - name: Load cached venv
-        id: cached-venv
-        uses: actions/cache@v4
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-python3.12-${{ hashFiles('poetry.lock') }}
-
       - name: Install dependencies
-        if: steps.cached-venv.outputs.cache-hit != 'true'
         run: poetry install --no-interaction
-
+      
       - name: Run Ruff (Analisi Statica)
         run: poetry run ruff check backend/ --output-format=junit -o ruff-report.xml
 
       - name: Run Unit Tests and Coverage
-        run: poetry run pytest --junitxml=test-results.xml
-
+        # Aggiorna il percorso della cartella test e quello della coverage
+        run: poetry run pytest --junitxml=test-results.xml      
       - name: Salva i Report come Artifacts
-        if: always()
+        if: always() 
         uses: actions/upload-artifact@v4
         with:
           name: ci-reports
