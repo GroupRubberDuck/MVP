@@ -35,7 +35,7 @@ jobs:
       
       - name: Run Unit Tests and Coverage
         # Genera coverage.xml e un file test-results.xml con l'esito dei test
-        run: poetry run pytest tests/unit/ --cov=nome_cartella_app --cov-report=xml:coverage.xml --junitxml=test-results.xml
+        run: poetry run pytest backend/tests/unit/ --cov=nome_cartella_app --cov-report=xml:coverage.xml --junitxml=test-results.xml
 
       - name: Salva i Report come Artifacts
         if: always() 
