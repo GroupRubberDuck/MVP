@@ -6,9 +6,6 @@ from .evaluation_state import EvaluationState
 from .standard_verdict import StandardVerdict
 from .exceptions import CycleDetectedError
 
-# --- DOMINIO ---
-
-
 class Node(ABC):
     @property
     @abstractmethod
@@ -18,7 +15,7 @@ class Node(ABC):
     def next(self, condition: bool | None) -> str | None: 
         pass
 
-    @property # Ti consiglio vivamente di usare @property per i getter semplici!
+    @property
     @abstractmethod
     def verdict(self) -> StandardVerdict | None: 
         pass

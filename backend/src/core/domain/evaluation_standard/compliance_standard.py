@@ -1,5 +1,3 @@
-# compliance_standard.py
-
 from .requirement import Requirement
 from .evaluation_state import EvaluationState
 from core.domain.evaluation_object.asset import AssetEvidence
