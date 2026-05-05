@@ -1,0 +1,1535 @@
+{
+  "quality": {
+    "coverage": {
+      "statement": {
+        "total": 392,
+        "covered": 374,
+        "missing": 18,
+        "percentage": 94.87
+      },
+      "branch": {
+        "total": 76,
+        "covered": 70,
+        "missing": 6,
+        "percentage": 95.0
+      },
+      "per_file": {
+        "backend/src/core/domain/__init__.py": {
+          "statements": 0,
+          "missing": 0,
+          "branches": 0,
+          "branches_missing": 0,
+          "statement_coverage_pct": 100.0
+        },
+        "backend/src/core/domain/evaluation_engine/evaluation_engine.py": {
+          "statements": 37,
+          "missing": 0,
+          "branches": 10,
+          "branches_missing": 0,
+          "statement_coverage_pct": 100.0
+        },
+        "backend/src/core/domain/evaluation_engine/evaluation_result.py": {
+          "statements": 37,
+          "missing": 8,
+          "branches": 0,
+          "branches_missing": 0,
+          "statement_coverage_pct": 78.37837837837837
+        },
+        "backend/src/core/domain/evaluation_object/__init__.py": {
+          "statements": 0,
+          "missing": 0,
+          "branches": 0,
+          "branches_missing": 0,
+          "statement_coverage_pct": 100.0
+        },
+        "backend/src/core/domain/evaluation_object/asset/__init__.py": {
+          "statements": 6,
+          "missing": 0,
+          "branches": 0,
+          "branches_missing": 0,
+          "statement_coverage_pct": 100.0
+        },
+        "backend/src/core/domain/evaluation_object/asset/asset.py": {
+          "statements": 19,
+          "missing": 1,
+          "branches": 0,
+          "branches_missing": 0,
+          "statement_coverage_pct": 94.73684210526316
+        },
+        "backend/src/core/domain/evaluation_object/asset/asset_anagraphic.py": {
+          "statements": 7,
+          "missing": 0,
+          "branches": 0,
+          "branches_missing": 0,
+          "statement_coverage_pct": 100.0
+        },
+        "backend/src/core/domain/evaluation_object/asset/asset_evidence.py": {
+          "statements": 13,
+          "missing": 0,
+          "branches": 0,
+          "branches_missing": 0,
+          "statement_coverage_pct": 100.0
+        },
+        "backend/src/core/domain/evaluation_object/asset/asset_proprieties.py": {
+          "statements": 20,
+          "missing": 0,
+          "branches": 4,
+          "branches_missing": 0,
+          "statement_coverage_pct": 100.0
+        },
+        "backend/src/core/domain/evaluation_object/asset/asset_type.py": {
+          "statements": 4,
+          "missing": 0,
+          "branches": 0,
+          "branches_missing": 0,
+          "statement_coverage_pct": 100.0
+        },
+        "backend/src/core/domain/evaluation_object/device.py": {
+          "statements": 54,
+          "missing": 1,
+          "branches": 12,
+          "branches_missing": 1,
+          "statement_coverage_pct": 96.96969696969697
+        },
+        "backend/src/core/domain/evaluation_object/exceptions.py": {
+          "statements": 8,
+          "missing": 0,
+          "branches": 0,
+          "branches_missing": 0,
+          "statement_coverage_pct": 100.0
+        },
+        "backend/src/core/domain/evaluation_standard/compliance_standard.py": {
+          "statements": 37,
+          "missing": 1,
+          "branches": 10,
+          "branches_missing": 0,
+          "statement_coverage_pct": 97.87234042553192
+        },
+        "backend/src/core/domain/evaluation_standard/decision_tree.py": {
+          "statements": 76,
+          "missing": 6,
+          "branches": 20,
+          "branches_missing": 4,
+          "statement_coverage_pct": 89.58333333333333
+        },
+        "backend/src/core/domain/evaluation_standard/evaluation_state.py": {
+          "statements": 14,
+          "missing": 1,
+          "branches": 2,
+          "branches_missing": 1,
+          "statement_coverage_pct": 87.5
+        },
+        "backend/src/core/domain/evaluation_standard/exceptions.py": {
+          "statements": 6,
+          "missing": 0,
+          "branches": 0,
+          "branches_missing": 0,
+          "statement_coverage_pct": 100.0
+        },
+        "backend/src/core/domain/evaluation_standard/requirement.py": {
+          "statements": 37,
+          "missing": 0,
+          "branches": 16,
+          "branches_missing": 0,
+          "statement_coverage_pct": 100.0
+        },
+        "backend/src/core/domain/evaluation_standard/standard_verdict.py": {
+          "statements": 5,
+          "missing": 0,
+          "branches": 0,
+          "branches_missing": 0,
+          "statement_coverage_pct": 100.0
+        },
+        "backend/src/core/domain/session/session_handler.py": {
+          "statements": 8,
+          "missing": 0,
+          "branches": 2,
+          "branches_missing": 0,
+          "statement_coverage_pct": 100.0
+        },
+        "backend/src/core/domain/session/session_type.py": {
+          "statements": 4,
+          "missing": 0,
+          "branches": 0,
+          "branches_missing": 0,
+          "statement_coverage_pct": 100.0
+        }
+      }
+    },
+    "tests": {
+      "total": 109,
+      "passed": 109,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "pass_rate_pct": 100.0,
+      "failures": []
+    },
+    "failure_density": {
+      "failed_tests": 0,
+      "source_loc": 651,
+      "source_kloc": 0.65,
+      "failure_density_per_kloc": 0.0
+    },
+    "source_lines": {
+      "files": {
+        "__init__.py": 0,
+        "adapters/inbound/asset/asset_controller.py": 0,
+        "adapters/inbound/compliance_standard/import_export_model_controller.py": 0,
+        "adapters/inbound/device/device_controller.py": 0,
+        "adapters/inbound/device/import_export_device_controller.py": 0,
+        "adapters/inbound/evaluation/evaluation_controller.py": 0,
+        "adapters/inbound/report/report_controller.py": 0,
+        "adapters/outbound/compliance_standard/__init__.py": 0,
+        "adapters/outbound/compliance_standard/concrete_file_model_exporter_factory.py": 0,
+        "adapters/outbound/compliance_standard/concrete_file_model_importer_factory.py": 0,
+        "adapters/outbound/compliance_standard/csv_file_model_exporter.py": 0,
+        "adapters/outbound/compliance_standard/csv_file_model_importer.py": 0,
+        "adapters/outbound/compliance_standard/json_file_model_exporter.py": 0,
+        "adapters/outbound/compliance_standard/json_file_model_importer.py": 0,
+        "adapters/outbound/compliance_standard/mongo_compliance_standard_repository.py": 0,
+        "adapters/outbound/compliance_standard/xml_file_model_exporter.py": 0,
+        "adapters/outbound/compliance_standard/xml_file_model_importer..py": 0,
+        "adapters/outbound/device/__init__.py": 0,
+        "adapters/outbound/device/concrete_file_device_exporter_factory.py": 0,
+        "adapters/outbound/device/concrete_file_device_importer_factory.py": 0,
+        "adapters/outbound/device/csv_file_device_exporter.py": 0,
+        "adapters/outbound/device/csv_file_device_importer.py": 0,
+        "adapters/outbound/device/json_file_device_exporter.py": 0,
+        "adapters/outbound/device/json_file_device_importer.py": 0,
+        "adapters/outbound/device/mongo_device_repository.py": 92,
+        "adapters/outbound/device/xml_file_device_exporter.py": 0,
+        "adapters/outbound/device/xml_file_device_importer..py": 0,
+        "adapters/outbound/evaluation/in_memory_session_cache.py": 0,
+        "adapters/outbound/report/pdf_report_generator.py": 0,
+        "app.py": 27,
+        "core/domain/__init__.py": 0,
+        "core/domain/evaluation_engine/evaluation_engine.py": 75,
+        "core/domain/evaluation_engine/evaluation_result.py": 48,
+        "core/domain/evaluation_engine/evaluation_sheet.py": 0,
+        "core/domain/evaluation_object/__init__.py": 0,
+        "core/domain/evaluation_object/asset/__init__.py": 12,
+        "core/domain/evaluation_object/asset/asset.py": 31,
+        "core/domain/evaluation_object/asset/asset_anagraphic.py": 7,
+        "core/domain/evaluation_object/asset/asset_evidence.py": 23,
+        "core/domain/evaluation_object/asset/asset_proprieties.py": 28,
+        "core/domain/evaluation_object/asset/asset_type.py": 4,
+        "core/domain/evaluation_object/device.py": 60,
+        "core/domain/evaluation_object/exceptions.py": 8,
+        "core/domain/evaluation_standard/compliance_standard.py": 46,
+        "core/domain/evaluation_standard/decision_tree.py": 82,
+        "core/domain/evaluation_standard/evaluation_state.py": 19,
+        "core/domain/evaluation_standard/exceptions.py": 6,
+        "core/domain/evaluation_standard/requirement.py": 42,
+        "core/domain/evaluation_standard/standard_verdict.py": 5,
+        "core/domain/session/evaluate_session.py": 8,
+        "core/domain/session/session_handler.py": 10,
+        "core/domain/session/session_type.py": 4,
+        "core/domain/shared/validators.py": 6,
+        "core/ports/inbound/asset/create_asset_use_case.py": 0,
+        "core/ports/inbound/asset/delete_asset.py": 0,
+        "core/ports/inbound/asset/get_asset_use_case.py": 0,
+        "core/ports/inbound/asset/update_asset_use_case.py": 0,
+        "core/ports/inbound/compliance_standard/export_model_port.py": 0,
+        "core/ports/inbound/compliance_standard/import_model_port.py": 0,
+        "core/ports/inbound/device/__init__.py": 0,
+        "core/ports/inbound/device/create_device_use_case.py": 0,
+        "core/ports/inbound/device/delete_device_use_case.py": 0,
+        "core/ports/inbound/device/export_device_use_case.py": 0,
+        "core/ports/inbound/device/get_device_list_use_case.py": 0,
+        "core/ports/inbound/device/get_device_use_case.py": 0,
+        "core/ports/inbound/device/import_device_use_case.py": 0,
+        "core/ports/inbound/device/update_device_anagraphic_use_case.py": 0,
+        "core/ports/inbound/evaluation/dashboard_use_case.py": 0,
+        "core/ports/inbound/evaluation/evaluation_session/close_evaluation_session.py": 0,
+        "core/ports/inbound/evaluation/evaluation_session/open_evaluation_session_use_case.py": 0,
+        "core/ports/inbound/evaluation/evaluation_session/save_evaluation_session.py": 0,
+        "core/ports/inbound/evaluation/evalute_node_use_case.py": 0,
+        "core/ports/inbound/evaluation/get_evaluated_requirement_use_case.py": 0,
+        "core/ports/inbound/evaluation/set_justification_use_case.py": 0,
+        "core/ports/inbound/report/generate_report_use_case.py": 0,
+        "core/ports/outbound/compliance_standard/file_model_exporter_factory_port.py": 0,
+        "core/ports/outbound/compliance_standard/file_model_exporter_port.py": 0,
+        "core/ports/outbound/compliance_standard/file_model_importer_factory_port.py": 0,
+        "core/ports/outbound/compliance_standard/file_model_importer_port.py": 0,
+        "core/ports/outbound/device/device_repository.py": 0,
+        "core/ports/outbound/device/file_device_exporter_factory_port .py": 0,
+        "core/ports/outbound/device/file_device_exporter_port.py": 0,
+        "core/ports/outbound/device/file_device_importer_factory_port.py": 0,
+        "core/ports/outbound/device/file_device_importer_port.py": 0,
+        "core/ports/outbound/evaluation/session_cache_port.py": 0,
+        "core/ports/outbound/report/report_generator_port.py": 0,
+        "core/services/asset/asset_service.py": 0,
+        "core/services/compliance_standard/compliance_standard_service.py": 0,
+        "core/services/compliance_standard/export_model_service.py": 0,
+        "core/services/compliance_standard/import_model_service.py": 0,
+        "core/services/device/device_service.py": 0,
+        "core/services/device/export_device_service.py": 0,
+        "core/services/device/import_device_service.py": 0,
+        "core/services/evaluation/evaluation_service.py": 0,
+        "core/services/report/generate_report_service.py": 0,
+        "routes.py": 8
+      },
+      "total": 651
+    }
+  },
+  "maintainability": {
+    "cyclomatic_complexity": {
+      "files": {
+        "routes.py": {
+          "functions": [
+            {
+              "name": "index",
+              "type": "function",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 7
+            },
+            {
+              "name": "test_vue",
+              "type": "function",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 12
+            }
+          ],
+          "average_complexity": 1.0
+        },
+        "app.py": {
+          "functions": [
+            {
+              "name": "create_app",
+              "type": "function",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 12
+            }
+          ],
+          "average_complexity": 1.0
+        },
+        "adapters/outbound/device/mongo_device_repository.py": {
+          "functions": [
+            {
+              "name": "MongoStandardAdapter",
+              "type": "class",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 11
+            },
+            {
+              "name": "find_by_id",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 22
+            },
+            {
+              "name": "_from_document",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 29
+            },
+            {
+              "name": "_parse_requirement",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 41
+            },
+            {
+              "name": "_parse_node",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 54
+            },
+            {
+              "name": "_to_document",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 72
+            },
+            {
+              "name": "_serialize_requirement",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 82
+            },
+            {
+              "name": "_serialize_node",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 96
+            },
+            {
+              "name": "__init__",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 13
+            },
+            {
+              "name": "save",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 16
+            }
+          ],
+          "average_complexity": 1.8
+        },
+        "core/domain/evaluation_standard/decision_tree.py": {
+          "functions": [
+            {
+              "name": "DecisionTree",
+              "type": "class",
+              "complexity": 7,
+              "rank": "B",
+              "lineno": 66
+            },
+            {
+              "name": "evaluate",
+              "type": "method",
+              "complexity": 7,
+              "rank": "B",
+              "lineno": 84
+            },
+            {
+              "name": "__init__",
+              "type": "method",
+              "complexity": 4,
+              "rank": "A",
+              "lineno": 68
+            },
+            {
+              "name": "DecisionNode",
+              "type": "class",
+              "complexity": 3,
+              "rank": "A",
+              "lineno": 28
+            },
+            {
+              "name": "next",
+              "type": "method",
+              "complexity": 3,
+              "rank": "A",
+              "lineno": 35
+            },
+            {
+              "name": "Node",
+              "type": "class",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 12
+            },
+            {
+              "name": "LeafNode",
+              "type": "class",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 48
+            },
+            {
+              "name": "id",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 15
+            },
+            {
+              "name": "next",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 18
+            },
+            {
+              "name": "verdict",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 23
+            },
+            {
+              "name": "verdict",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 41
+            },
+            {
+              "name": "id",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 45
+            },
+            {
+              "name": "verdict",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 54
+            },
+            {
+              "name": "next",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 57
+            },
+            {
+              "name": "id",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 61
+            }
+          ],
+          "average_complexity": 2.4
+        },
+        "core/domain/evaluation_standard/exceptions.py": {
+          "functions": [
+            {
+              "name": "CycleDetectedError",
+              "type": "class",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 3
+            },
+            {
+              "name": "MissingDecisionTreeError",
+              "type": "class",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 6
+            },
+            {
+              "name": "RequirementNotFoundError",
+              "type": "class",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 9
+            }
+          ],
+          "average_complexity": 1.0
+        },
+        "core/domain/evaluation_standard/compliance_standard.py": {
+          "functions": [
+            {
+              "name": "__init__",
+              "type": "method",
+              "complexity": 5,
+              "rank": "A",
+              "lineno": 16
+            },
+            {
+              "name": "ComplianceStandard",
+              "type": "class",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 9
+            },
+            {
+              "name": "get_requirement",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 51
+            },
+            {
+              "name": "id",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 36
+            },
+            {
+              "name": "name",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 40
+            },
+            {
+              "name": "version_number",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 44
+            },
+            {
+              "name": "requirements",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 48
+            },
+            {
+              "name": "evaluate_requirement",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 57
+            }
+          ],
+          "average_complexity": 1.75
+        },
+        "core/domain/evaluation_standard/standard_verdict.py": {
+          "functions": [
+            {
+              "name": "StandardVerdict",
+              "type": "class",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 2
+            }
+          ],
+          "average_complexity": 1.0
+        },
+        "core/domain/evaluation_standard/evaluation_state.py": {
+          "functions": [
+            {
+              "name": "EvaluationState",
+              "type": "class",
+              "complexity": 3,
+              "rank": "A",
+              "lineno": 5
+            },
+            {
+              "name": "from_verdict",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 12
+            }
+          ],
+          "average_complexity": 2.5
+        },
+        "core/domain/evaluation_standard/requirement.py": {
+          "functions": [
+            {
+              "name": "_check_dependencies",
+              "type": "method",
+              "complexity": 6,
+              "rank": "B",
+              "lineno": 38
+            },
+            {
+              "name": "Requirement",
+              "type": "class",
+              "complexity": 5,
+              "rank": "A",
+              "lineno": 11
+            },
+            {
+              "name": "evaluate",
+              "type": "method",
+              "complexity": 5,
+              "rank": "A",
+              "lineno": 23
+            },
+            {
+              "name": "__post_init__",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 19
+            }
+          ],
+          "average_complexity": 4.5
+        },
+        "core/domain/evaluation_object/exceptions.py": {
+          "functions": [
+            {
+              "name": "DuplicateAssetError",
+              "type": "class",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 3
+            },
+            {
+              "name": "AssetNotFoundError",
+              "type": "class",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 6
+            },
+            {
+              "name": "EvidenceNotFoundError",
+              "type": "class",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 9
+            },
+            {
+              "name": "RequirementAlreadyExistsError",
+              "type": "class",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 12
+            }
+          ],
+          "average_complexity": 1.0
+        },
+        "core/domain/evaluation_object/device.py": {
+          "functions": [
+            {
+              "name": "update_info",
+              "type": "method",
+              "complexity": 4,
+              "rank": "A",
+              "lineno": 59
+            },
+            {
+              "name": "create",
+              "type": "method",
+              "complexity": 3,
+              "rank": "A",
+              "lineno": 18
+            },
+            {
+              "name": "Device",
+              "type": "class",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 9
+            },
+            {
+              "name": "get_asset",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 52
+            },
+            {
+              "name": "add_asset",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 70
+            },
+            {
+              "name": "id",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 28
+            },
+            {
+              "name": "standard_id",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 32
+            },
+            {
+              "name": "name",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 36
+            },
+            {
+              "name": "os",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 40
+            },
+            {
+              "name": "description",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 44
+            },
+            {
+              "name": "assets",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 49
+            },
+            {
+              "name": "remove_asset",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 76
+            }
+          ],
+          "average_complexity": 1.67
+        },
+        "core/domain/evaluation_object/asset/asset_evidence.py": {
+          "functions": [
+            {
+              "name": "AssetEvidence",
+              "type": "class",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 6
+            },
+            {
+              "name": "with_node_choice",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 13
+            },
+            {
+              "name": "with_justification",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 22
+            }
+          ],
+          "average_complexity": 1.33
+        },
+        "core/domain/evaluation_object/asset/asset_anagraphic.py": {
+          "functions": [
+            {
+              "name": "AssetAnagraphic",
+              "type": "class",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 7
+            }
+          ],
+          "average_complexity": 1.0
+        },
+        "core/domain/evaluation_object/asset/asset_type.py": {
+          "functions": [
+            {
+              "name": "AssetType",
+              "type": "class",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 3
+            }
+          ],
+          "average_complexity": 1.0
+        },
+        "core/domain/evaluation_object/asset/asset.py": {
+          "functions": [
+            {
+              "name": "update_anagraphic",
+              "type": "method",
+              "complexity": 4,
+              "rank": "A",
+              "lineno": 23
+            },
+            {
+              "name": "Asset",
+              "type": "class",
+              "complexity": 3,
+              "rank": "A",
+              "lineno": 10
+            },
+            {
+              "name": "set_node_choice",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 15
+            },
+            {
+              "name": "set_justification",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 19
+            },
+            {
+              "name": "get_evidence",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 37
+            }
+          ],
+          "average_complexity": 2.0
+        },
+        "core/domain/evaluation_object/asset/asset_proprieties.py": {
+          "functions": [
+            {
+              "name": "AssetProprieties",
+              "type": "class",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 6
+            },
+            {
+              "name": "__init__",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 14
+            },
+            {
+              "name": "set_node_choice",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 24
+            },
+            {
+              "name": "set_justification",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 31
+            },
+            {
+              "name": "evidences",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 18
+            },
+            {
+              "name": "get_evidence",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 21
+            }
+          ],
+          "average_complexity": 1.67
+        },
+        "core/domain/evaluation_engine/evaluation_result.py": {
+          "functions": [
+            {
+              "name": "AssetEvaluationResult",
+              "type": "class",
+              "complexity": 4,
+              "rank": "A",
+              "lineno": 25
+            },
+            {
+              "name": "RequirementResult",
+              "type": "class",
+              "complexity": 3,
+              "rank": "A",
+              "lineno": 8
+            },
+            {
+              "name": "get_requirement_result",
+              "type": "method",
+              "complexity": 3,
+              "rank": "A",
+              "lineno": 30
+            },
+            {
+              "name": "failed",
+              "type": "method",
+              "complexity": 3,
+              "rank": "A",
+              "lineno": 34
+            },
+            {
+              "name": "pending",
+              "type": "method",
+              "complexity": 3,
+              "rank": "A",
+              "lineno": 38
+            },
+            {
+              "name": "DeviceEvaluationResult",
+              "type": "class",
+              "complexity": 3,
+              "rank": "A",
+              "lineno": 44
+            },
+            {
+              "name": "get_asset_result",
+              "type": "method",
+              "complexity": 3,
+              "rank": "A",
+              "lineno": 50
+            },
+            {
+              "name": "failed_assets",
+              "type": "method",
+              "complexity": 3,
+              "rank": "A",
+              "lineno": 54
+            },
+            {
+              "name": "pending_assets",
+              "type": "method",
+              "complexity": 3,
+              "rank": "A",
+              "lineno": 58
+            },
+            {
+              "name": "was_blocked_by_dependencies",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 17
+            },
+            {
+              "name": "is_complete",
+              "type": "method",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 62
+            }
+          ],
+          "average_complexity": 2.82
+        },
+        "core/domain/evaluation_engine/evaluation_engine.py": {
+          "functions": [
+            {
+              "name": "_resolve",
+              "type": "method",
+              "complexity": 6,
+              "rank": "B",
+              "lineno": 51
+            },
+            {
+              "name": "EvaluationEngine",
+              "type": "class",
+              "complexity": 5,
+              "rank": "A",
+              "lineno": 14
+            },
+            {
+              "name": "_aggregate_evaluation_states",
+              "type": "method",
+              "complexity": 5,
+              "rank": "A",
+              "lineno": 82
+            },
+            {
+              "name": "evaluate",
+              "type": "method",
+              "complexity": 3,
+              "rank": "A",
+              "lineno": 16
+            },
+            {
+              "name": "_evaluate_asset",
+              "type": "method",
+              "complexity": 3,
+              "rank": "A",
+              "lineno": 33
+            }
+          ],
+          "average_complexity": 4.4
+        },
+        "core/domain/session/session_type.py": {
+          "functions": [
+            {
+              "name": "SessionType",
+              "type": "class",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 4
+            }
+          ],
+          "average_complexity": 1.0
+        },
+        "core/domain/session/session_handler.py": {
+          "functions": [
+            {
+              "name": "SessionHandler",
+              "type": "class",
+              "complexity": 3,
+              "rank": "A",
+              "lineno": 5
+            },
+            {
+              "name": "can_open_session",
+              "type": "method",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 6
+            }
+          ],
+          "average_complexity": 2.5
+        },
+        "core/domain/session/evaluate_session.py": {
+          "functions": [
+            {
+              "name": "Session",
+              "type": "class",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 6
+            }
+          ],
+          "average_complexity": 1.0
+        },
+        "core/domain/shared/validators.py": {
+          "functions": [
+            {
+              "name": "is_blank",
+              "type": "function",
+              "complexity": 2,
+              "rank": "A",
+              "lineno": 1
+            },
+            {
+              "name": "key_exists",
+              "type": "function",
+              "complexity": 1,
+              "rank": "A",
+              "lineno": 6
+            }
+          ],
+          "average_complexity": 1.5
+        }
+      },
+      "summary": {
+        "total_functions": 100,
+        "average_complexity": 2.11,
+        "max_complexity": 7,
+        "rank_distribution": {
+          "A": 96,
+          "B": 4,
+          "C": 0,
+          "D": 0,
+          "E": 0,
+          "F": 0
+        }
+      }
+    },
+    "coupling_and_instability": {
+      "modules": {
+        "(root)": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "adapters.inbound.asset": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "adapters.inbound.compliance_standard": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "adapters.inbound.device": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "adapters.inbound.evaluation": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "adapters.inbound.report": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "adapters.outbound.compliance_standard": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "adapters.outbound.device": {
+          "classes_defined": [
+            "MongoStandardAdapter"
+          ],
+          "classes_count": 1,
+          "efferent_coupling_Ce": 8,
+          "efferent_classes": [
+            "ComplianceStandard",
+            "DecisionNode",
+            "DecisionTree",
+            "LeafNode",
+            "Node",
+            "Requirement",
+            "StandardRepository",
+            "StandardVerdict"
+          ],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 1.0,
+          "zone": "ottimo"
+        },
+        "adapters.outbound.evaluation": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "adapters.outbound.report": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.domain.evaluation_engine": {
+          "classes_defined": [
+            "AssetEvaluationResult",
+            "DeviceEvaluationResult",
+            "EvaluationEngine",
+            "RequirementResult"
+          ],
+          "classes_count": 4,
+          "efferent_coupling_Ce": 4,
+          "efferent_classes": [
+            "Asset",
+            "ComplianceStandard",
+            "Device",
+            "EvaluationState"
+          ],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 1.0,
+          "zone": "ottimo"
+        },
+        "core.domain.evaluation_object": {
+          "classes_defined": [
+            "AssetNotFoundError",
+            "Device",
+            "DuplicateAssetError",
+            "EvidenceNotFoundError",
+            "RequirementAlreadyExistsError"
+          ],
+          "classes_count": 5,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 1,
+          "afferent_classes": [
+            "Device"
+          ],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.domain.evaluation_object.asset": {
+          "classes_defined": [
+            "Asset",
+            "AssetAnagraphic",
+            "AssetEvidence",
+            "AssetProprieties",
+            "AssetType"
+          ],
+          "classes_count": 5,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 2,
+          "afferent_classes": [
+            "Asset",
+            "AssetEvidence"
+          ],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.domain.evaluation_standard": {
+          "classes_defined": [
+            "ComplianceStandard",
+            "CycleDetectedError",
+            "DecisionNode",
+            "DecisionTree",
+            "EvaluationState",
+            "LeafNode",
+            "MissingDecisionTreeError",
+            "Node",
+            "Requirement",
+            "RequirementNotFoundError",
+            "StandardVerdict"
+          ],
+          "classes_count": 11,
+          "efferent_coupling_Ce": 1,
+          "efferent_classes": [
+            "AssetEvidence"
+          ],
+          "afferent_coupling_Ca": 8,
+          "afferent_classes": [
+            "ComplianceStandard",
+            "DecisionNode",
+            "DecisionTree",
+            "EvaluationState",
+            "LeafNode",
+            "Node",
+            "Requirement",
+            "StandardVerdict"
+          ],
+          "instability_index": 0.1111,
+          "zone": "ottimo"
+        },
+        "core.domain.session": {
+          "classes_defined": [
+            "Session",
+            "SessionHandler",
+            "SessionType"
+          ],
+          "classes_count": 3,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.domain.shared": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.ports.inbound.asset": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.ports.inbound.compliance_standard": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.ports.inbound.device": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.ports.inbound.evaluation": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.ports.inbound.evaluation.evaluation_session": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.ports.inbound.report": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.ports.outbound.compliance_standard": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 1,
+          "afferent_classes": [
+            "StandardRepository"
+          ],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.ports.outbound.device": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.ports.outbound.evaluation": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.ports.outbound.report": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.services.asset": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.services.compliance_standard": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.services.device": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.services.evaluation": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        },
+        "core.services.report": {
+          "classes_defined": [],
+          "classes_count": 0,
+          "efferent_coupling_Ce": 0,
+          "efferent_classes": [],
+          "afferent_coupling_Ca": 0,
+          "afferent_classes": [],
+          "instability_index": 0.0,
+          "zone": "ottimo"
+        }
+      },
+      "dependency_edges": [
+        {
+          "from": "adapters.outbound.device",
+          "to": "core.domain.evaluation_standard"
+        },
+        {
+          "from": "adapters.outbound.device",
+          "to": "core.ports.outbound.compliance_standard"
+        },
+        {
+          "from": "core.domain.evaluation_engine",
+          "to": "core.domain.evaluation_object"
+        },
+        {
+          "from": "core.domain.evaluation_engine",
+          "to": "core.domain.evaluation_object.asset"
+        },
+        {
+          "from": "core.domain.evaluation_engine",
+          "to": "core.domain.evaluation_standard"
+        },
+        {
+          "from": "core.domain.evaluation_standard",
+          "to": "core.domain.evaluation_object.asset"
+        }
+      ],
+      "summary": {
+        "total_modules": 31,
+        "total_dependency_edges": 6,
+        "coefficient_of_coupling": 0.1935,
+        "coefficient_of_coupling_threshold": {
+          "acceptable": 0.4,
+          "optimal": 0.2
+        },
+        "average_efferent_coupling": 0.42,
+        "average_afferent_coupling": 0.39,
+        "average_instability": 0.0681,
+        "modules_in_pain_zone": 0
+      }
+    },
+    "code_smells": {
+      "summary": {
+        "total_violations": 0,
+        "source_loc": 651,
+        "density_per_100loc": 0.0,
+        "rules_violated": 0,
+        "top_rules": []
+      },
+      "per_file": {}
+    }
+  }
+}

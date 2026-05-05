@@ -1,5 +1,3 @@
-
-# requirement.py
 from dataclasses import dataclass, field
 from core.domain.evaluation_object.asset import AssetEvidence
 from .decision_tree import DecisionTree

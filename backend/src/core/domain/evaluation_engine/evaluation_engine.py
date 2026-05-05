@@ -4,7 +4,7 @@ from core.domain.evaluation_standard.compliance_standard import ComplianceStanda
 # from core.domain.evaluation_standard.requirement import Requirement
 from core.domain.evaluation_standard.evaluation_state import EvaluationState
 from core.domain.evaluation_engine.evaluation_result import (
-    RequirementResult,
+    RequirementEvaluationResult,
     AssetEvaluationResult,
     DeviceEvaluationResult,
 )
@@ -33,7 +33,7 @@ class EvaluationEngine:
     def _evaluate_asset(self, asset: Asset,
                         standard: ComplianceStandard) -> AssetEvaluationResult:
         """Cache subisce side effect, viene usata da _resolve per realizzare la memoizzazione"""
-        cache: dict[str, RequirementResult] = {}
+        cache: dict[str, RequirementEvaluationResult] = {}
 
         for requirement in standard.requirements:
             self._resolve(requirement.requirement_id, standard, asset, cache)
@@ -51,7 +51,7 @@ class EvaluationEngine:
     def _resolve(self, requirement_id: str,
                  standard: ComplianceStandard,
                  asset: Asset,
-                 cache: dict[str, RequirementResult]) -> RequirementResult:
+                 cache: dict[str, RequirementEvaluationResult]) -> RequirementEvaluationResult:
         """Cache subisce side effect, viene usata da _resolve per realizzare la memoizzazione"""
         if requirement_id in cache:
             return cache[requirement_id]
@@ -69,7 +69,7 @@ class EvaluationEngine:
         else:
             state = requirement.evaluate(evidence, dependencies)
 
-        result = RequirementResult(
+        result = RequirementEvaluationResult(
             requirement_id=requirement_id,
             justification=evidence.justification if evidence else "",
             node_choices=evidence.node_choices if evidence else MappingProxyType({}),
