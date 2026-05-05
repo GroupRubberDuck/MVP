@@ -28,21 +28,22 @@ jobs:
 
       - name: Install dependencies
         run: poetry install --no-interaction
-
-      - name: Run Ruff (Analisi Statica e Checkstyle)
-        # Genera il file checkstyle.xml. Se fallisce, blocca la PR.
-        run: poetry run ruff check . --output-format=checkstyle -o checkstyle.xml
-
+      
+      - name: Run Ruff (Analisi Statica)
+        run: poetry run ruff check . --output-format=junit -o ruff-report.xml
+      
+      
       - name: Run Unit Tests and Coverage
         # Genera coverage.xml e un file test-results.xml con l'esito dei test
         run: poetry run pytest tests/unit/ --cov=nome_cartella_app --cov-report=xml:coverage.xml --junitxml=test-results.xml
 
       - name: Salva i Report come Artifacts
-        if: always() # Fondamentale: salva i file anche se i test o il linter falliscono!
+        if: always() 
         uses: actions/upload-artifact@v4
         with:
           name: ci-reports
           path: |
-            checkstyle.xml
+            ruff-report.xml
             coverage.xml
             test-results.xml
+          retention-days: 30
