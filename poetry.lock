@@ -38,7 +38,7 @@ files = [
     {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
     {file = "colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"},
 ]
-markers = {main = "platform_system == \"Windows\"", dev = "sys_platform == \"win32\""}
+markers = {main = "platform_system == \"Windows\""}
 
 [[package]]
 name = "coverage"
@@ -360,6 +360,24 @@ files = [
     {file = "librt-0.9.0-cp39-cp39-win_amd64.whl", hash = "sha256:54d412e47c21b85865676ed0724e37a89e9593c2eee1e7367adf85bfad56ffb1"},
     {file = "librt-0.9.0.tar.gz", hash = "sha256:a0951822531e7aee6e0dfb556b30d5ee36bbe234faf60c20a16c01be3530869d"},
 ]
+
+[[package]]
+name = "mando"
+version = "0.7.1"
+description = "Create Python CLI apps with little to no effort at all!"
+optional = false
+python-versions = "*"
+groups = ["dev"]
+files = [
+    {file = "mando-0.7.1-py2.py3-none-any.whl", hash = "sha256:26ef1d70928b6057ee3ca12583d73c63e05c49de8972d620c278a7b206581a8a"},
+    {file = "mando-0.7.1.tar.gz", hash = "sha256:18baa999b4b613faefb00eac4efadcf14f510b59b924b66e08289aa1de8c3500"},
+]
+
+[package.dependencies]
+six = "*"
+
+[package.extras]
+restructuredtext = ["rst2ansi"]
 
 [[package]]
 name = "markupsafe"
@@ -828,6 +846,25 @@ files = [
 cli = ["click (>=5.0)"]
 
 [[package]]
+name = "radon"
+version = "6.0.1"
+description = "Code Metrics in Python"
+optional = false
+python-versions = "*"
+groups = ["dev"]
+files = [
+    {file = "radon-6.0.1-py2.py3-none-any.whl", hash = "sha256:632cc032364a6f8bb1010a2f6a12d0f14bc7e5ede76585ef29dc0cecf4cd8859"},
+    {file = "radon-6.0.1.tar.gz", hash = "sha256:d1ac0053943a893878940fedc8b19ace70386fc9c9bf0a09229a44125ebf45b5"},
+]
+
+[package.dependencies]
+colorama = {version = ">=0.4.1", markers = "python_version > \"3.4\""}
+mando = ">=0.6,<0.8"
+
+[package.extras]
+toml = ["tomli (>=2.0.1)"]
+
+[[package]]
 name = "ruff"
 version = "0.15.12"
 description = "An extremely fast Python linter and code formatter, written in Rust."
@@ -853,6 +890,18 @@ files = [
     {file = "ruff-0.15.12-py3-none-win_amd64.whl", hash = "sha256:c87a162d61ab3adca47c03f7f717c68672edec7d1b5499e652331780fe74950d"},
     {file = "ruff-0.15.12-py3-none-win_arm64.whl", hash = "sha256:a538f7a82d061cee7be55542aca1d86d1393d55d81d4fcc314370f4340930d4f"},
     {file = "ruff-0.15.12.tar.gz", hash = "sha256:ecea26adb26b4232c0c2ca19ccbc0083a68344180bba2a600605538ce51a40a6"},
+]
+
+[[package]]
+name = "six"
+version = "1.17.0"
+description = "Python 2 and 3 compatibility utilities"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
+groups = ["dev"]
+files = [
+    {file = "six-1.17.0-py2.py3-none-any.whl", hash = "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"},
+    {file = "six-1.17.0.tar.gz", hash = "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"},
 ]
 
 [[package]]
@@ -904,4 +953,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "65f8201795771b62e5cd51e2e4564f0f9148b34fc8bca1e86f00dc2c1378db01"
+content-hash = "66573ae8d38cc6d587a9054cb94ea76ddc59472813cc148db1cbd3c332b61cf8"
