@@ -1,105 +1,107 @@
-from bson import ObjectId
+from types import MappingProxyType
 from pymongo.collection import Collection
 
-from core.domain.evaluation_standard.compliance_standard import ComplianceStandard
-from core.domain.evaluation_standard.decision_tree import DecisionNode, DecisionTree, LeafNode, Node
-from core.domain.evaluation_standard.requirement import Requirement
-from core.domain.evaluation_standard.standard_verdict import StandardVerdict
-from core.ports.outbound.compliance_standard.standard_repository import StandardRepository
+from core.domain.evaluation_object.asset.asset import Asset
+from core.domain.evaluation_object.asset.asset_anagraphic import AssetAnagraphic
+from core.domain.evaluation_object.asset.asset_evidence import AssetEvidence
+from core.domain.evaluation_object.asset.asset_proprieties import AssetProprieties
+from core.domain.evaluation_object.asset.asset_type import AssetType
+from core.domain.evaluation_object.device import Device
+
+from core.ports.outbound.device.delete_device_port import DeleteDevicePort
+from core.ports.outbound.device.find_all_device_port import FindAllDevicePort, DeviceSummary
+from core.ports.outbound.device.find_device_port import FindDevicePort
+from core.ports.outbound.device.register_device_port import RegisterDevicePort
+from core.ports.outbound.device.save_device_port import SaveDevicePort
 
 
-class MongoStandardAdapter(StandardRepository):
-
+class MongoDeviceAdapter(
+    SaveDevicePort, RegisterDevicePort, DeleteDevicePort,
+    FindDevicePort, FindAllDevicePort,
+):
     def __init__(self, collection: Collection) -> None:
         self._collection = collection
 
-    def save(self, standard: ComplianceStandard) -> None:
-        doc = self._to_document(standard)
-        self._collection.replace_one(
-            {"_id": ObjectId(standard.id)}, doc, upsert=True
-        )
+    def register(self, device: Device) -> None:
+        doc = self._to_document(device)
+        doc["_id"] = device.id
+        self._collection.insert_one(doc)
 
-    def find_by_id(self, standard_id: str) -> ComplianceStandard:
-        doc = self._collection.find_one({"_id": ObjectId(standard_id)})
+    def save(self, device: Device) -> None:
+        doc = self._to_document(device)
+        self._collection.replace_one({"_id": device.id}, doc)
+
+    def delete(self, device_id: str) -> None:
+        self._collection.delete_one({"_id": device_id})
+
+    def find_by_id(self, device_id: str) -> Device:
+        doc = self._collection.find_one({"_id": device_id})
         if doc is None:
-            raise KeyError(f"Standard '{standard_id}' non trovato.")
+            raise KeyError(f"Device '{device_id}' non trovato.")
         return self._from_document(doc)
 
-
-    def _from_document(self, doc: dict) -> ComplianceStandard:
-        requirements = [
-            self._parse_requirement(req_doc)
-            for req_doc in doc.get("requirements", [])
+    def find_all(self) -> list[DeviceSummary]:
+        return [
+            DeviceSummary(
+                device_id=str(doc["_id"]),
+                name=doc["name"],
+                os=doc["os"],
+                description=doc["description"],
+                compliance_standard_id=doc["compliance_standard_id"],
+            )
+            for doc in self._collection.find({}, {"assets": 0})
         ]
-        return ComplianceStandard(
-            standard_id=str(doc["_id"]),
-            name=doc["name"],
-            version_number=doc["version"],
-            requirements=requirements,
-        )
 
-    def _parse_requirement(self, doc: dict) -> Requirement:
-        nodes: list[Node] = []
-        root_id = self._parse_node(doc["root_node"], nodes)
-        tree = DecisionTree(root=root_id, nodes=nodes)
-        return Requirement(
-            requirement_id=doc["id"],
-            name=doc["name"],
-            description=doc["description"]["norm_description"],
-            target_description=doc["description"]["target_description"],
-            dependency_ids=tuple(dep["id"] for dep in doc.get("dependencies", [])),
-            decision_tree=tree,
-        )
-
-    def _parse_node(self, doc: dict, nodes: list[Node]) -> str:
-        node_id = doc["id"]
-        if "result" in doc:
-            nodes.append(LeafNode(
-                node_id=node_id,
-                verdict_value=StandardVerdict(doc["result"]),
-            ))
-        else:
-            self._parse_node(doc["child_yes"], nodes)
-            self._parse_node(doc["child_no"], nodes)
-            nodes.append(DecisionNode(
-                node_id=node_id,
-                question=doc["description"],
-                child_on_true_id=doc["child_yes"]["id"],
-                child_on_false_id=doc["child_no"]["id"],
-            ))
-        return node_id
-
-    def _to_document(self, standard: ComplianceStandard) -> dict:
+    def _to_document(self, device: Device) -> dict:
         return {
-            "name": standard.name,
-            "version": standard.version_number,
-            "requirements": [
-                self._serialize_requirement(req)
-                for req in standard.requirements
+            "name": device.name,
+            "os": device.os,
+            "description": device.description,
+            "compliance_standard_id": device.standard_id,
+            "assets": [
+                {
+                    "id": asset.id,
+                    "name": asset.anagraphic.name,
+                    "type": asset.anagraphic.asset_type.value,
+                    "description": asset.anagraphic.description,
+                    "evaluations": [
+                        {
+                            "id": evidence.requirement_id,
+                            "evaluation_map": dict(evidence.node_choices),
+                            "justification": evidence.justification,
+                        }
+                        for evidence in asset.proprieties.evidences.values()
+                    ],
+                }
+                for asset in device.assets.values()
             ],
         }
 
-    def _serialize_requirement(self, req: Requirement) -> dict:
-        nodes_dict = req.decision_tree._nodes
-        root_id = req.decision_tree._root
-        return {
-            "id": req.requirement_id,
-            "name": req.name,
-            "description": {
-                "norm_description": req.description,
-                "target_description": req.target_description,
-            },
-            "root_node": self._serialize_node(root_id, nodes_dict),
-            "dependencies": [{"id": dep_id} for dep_id in req.dependency_ids],
-        }
-
-    def _serialize_node(self, node_id: str, nodes_dict: dict) -> dict:
-        node = nodes_dict[node_id]
-        if isinstance(node, LeafNode):
-            return {"id": node.node_id, "result": node.verdict.value}
-        return {
-            "id": node.node_id,
-            "description": node.question,
-            "child_yes": self._serialize_node(node.child_on_true_id, nodes_dict),
-            "child_no": self._serialize_node(node.child_on_false_id, nodes_dict),
-        }
+    def _from_document(self, doc: dict) -> Device:
+        assets = []
+        for asset_doc in doc.get("assets", []):
+            evidences = {
+                ev["id"]: AssetEvidence(
+                    requirement_id=ev["id"],
+                    node_choices=MappingProxyType(ev.get("evaluation_map", {})),
+                    justification=ev.get("justification", ""),
+                )
+                for ev in asset_doc.get("evaluations", [])
+            }
+            assets.append(Asset(
+                id=asset_doc["id"],
+                anagraphic=AssetAnagraphic(
+                    name=asset_doc["name"],
+                    asset_type=AssetType(asset_doc["type"]),
+                    description=asset_doc["description"],
+                ),
+                proprieties=AssetProprieties(evidences=evidences),
+            ))
+        return Device.create(
+            device_id=str(doc["_id"]),
+            standard_id=doc["compliance_standard_id"],
+            name=doc["name"],
+            os=doc["os"],
+            description=doc["description"],
+            assets=assets,
+        )
