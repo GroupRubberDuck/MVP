@@ -20,21 +20,43 @@ jobs:
         with:
           python-version: '3.11'
 
+      # 1. Recupera l'installazione di Poetry stessa dalla cache (se esiste)
+      - name: Load cached Poetry installation
+        id: cached-poetry
+        uses: actions/cache@v4
+        with:
+          path: ~/.local
+          key: poetry-1.8.2-python-3.11 
+
+      # 2. Installa Poetry SOLO se non lo ha trovato nella cache
       - name: Setup Poetry
+        if: steps.cached-poetry.outputs.cache-hit != 'true'
         uses: snok/install-poetry@v1
         with:
+          version: 1.8.2
           virtualenvs-create: true
           virtualenvs-in-project: true
 
+      # 3. Recupera l'ambiente virtuale con le tue librerie dalla cache
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          # La chiave magica che dipende dal file poetry.lock
+          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+
+      # 4. Installa le dipendenze SOLO se il file lock è cambiato
       - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction
       
       - name: Run Ruff (Analisi Statica)
         run: poetry run ruff check backend/ --output-format=junit -o ruff-report.xml
 
       - name: Run Unit Tests and Coverage
-        # Aggiorna il percorso della cartella test e quello della coverage
         run: poetry run pytest --junitxml=test-results.xml      
+        
       - name: Salva i Report come Artifacts
         if: always() 
         uses: actions/upload-artifact@v4
