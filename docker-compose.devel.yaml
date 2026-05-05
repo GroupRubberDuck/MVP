@@ -1,24 +1,32 @@
 name: poc
 
 services:
+  # ════════════════════════════════════════════════════════════════════════════
+  # BACKEND — Flask con debug auto-reload
+  # ════════════════════════════════════════════════════════════════════════════
   backend:
     build:
       dockerfile: backend/Dockerfile.devel
-    restart: always
+    restart: unless-stopped
+    init: true
     volumes:
       - ./:/app
     ports:
       - 5000:5000
-    links:
-      - mongo
     environment:
       DB_HOST: mongo
       DB_PORT: 27017
       DB_USER: root
       DB_PASSWORD: grouprubberduckpoc2026
+      # Impostare a "true" per caricare gli asset dal dev server Vite (porta 5173)
+      # invece che da /static/vue/. Utile solo col profilo "vite-dev".
+      VITE_DEV_MODE: "false"
     depends_on:
       - mongo
 
+  # ════════════════════════════════════════════════════════════════════════════
+  # MONGODB
+  # ════════════════════════════════════════════════════════════════════════════
   mongo:
     image: mongo
     restart: always
@@ -28,7 +36,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: grouprubberduckpoc2026
 
-  mongo-express:                            # optional web UI for MongoDB
+  mongo-express:
     image: mongo-express:latest
     ports:
       - "8081:8081"
@@ -37,15 +45,66 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: grouprubberduckpoc2026
       ME_CONFIG_BASICAUTH: "false"
-    links:
-      - mongo
     depends_on:
       - mongo
 
-  frontend:
+  # ════════════════════════════════════════════════════════════════════════════
+  # FRONTEND — Profilo "watch" (default)
+  #
+  # Compila i .vue → backend/static/vue/ ad ogni modifica dei sorgenti.
+  # Si riavvia automaticamente se cambia vite.config.js o package.json.
+  #
+  # Uso:  docker compose -f docker-compose.devel.yaml up
+  #       docker compose -f docker-compose.devel.yaml up --profile watch
+  # ════════════════════════════════════════════════════════════════════════════
+  vue-watcher:
     image: node:20-alpine
+    container_name: vue_watcher
     working_dir: /app/frontend
-    restart: always
+    restart: unless-stopped
+    init: true
+    profiles: ["", "watch"]
+
     volumes:
-      - ./:/app
-    command: sh -c "npm install && npm run watch"
+      - ./frontend:/app/frontend
+      - ./backend/static/vue:/app/backend/static/vue
+      - vue_node_modules:/app/frontend/node_modules
+
+    environment:
+      - FORCE_COLOR=1
+      - NODE_ENV=development
+
+    command: sh /app/frontend/watcher.sh
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # FRONTEND — Profilo "vite-dev"
+  #
+  # Avvia il dev server Vite con HMR (Hot Module Replacement).
+  # Il browser carica gli asset da http://localhost:5173.
+  # Richiede che i template Flask puntino al dev server (vedi VITE_DEV_MODE).
+  #
+  # Uso:  docker compose -f docker-compose.devel.yaml --profile vite-dev up
+  # ════════════════════════════════════════════════════════════════════════════
+  vue-devserver:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.devel
+    container_name: vue_devserver
+    restart: unless-stopped
+    init: true
+    profiles: ["vite-dev"]
+
+    volumes:
+      - ./frontend:/app
+      - vue_node_modules_dev:/app/node_modules
+
+    ports:
+      - "5173:5173"
+
+    environment:
+      - FORCE_COLOR=1
+      - NODE_ENV=development
+
+volumes:
+  vue_node_modules:
+  vue_node_modules_dev:

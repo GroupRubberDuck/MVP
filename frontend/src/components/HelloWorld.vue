@@ -8,6 +8,7 @@ const count = ref(0)
 </script>
 
 <template>
+  <h2>lilllllloooo</h2>
   <section id="center">
     <div class="hero">
       <img :src="viteLogo" class="base" width="170" height="179" alt="" />
