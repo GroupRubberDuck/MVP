@@ -7,7 +7,7 @@ from core.domain.evaluation_standard.evaluation_state import EvaluationState
 from core.domain.evaluation_engine.evaluation_result import (
     RequirementResult,
     AssetEvaluationResult,
-    DeviceEvaluationResult,
+    # DeviceEvaluationResult,
 )
 
 
