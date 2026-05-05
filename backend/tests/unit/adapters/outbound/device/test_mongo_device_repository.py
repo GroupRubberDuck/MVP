@@ -11,7 +11,7 @@ from core.domain.evaluation_object.device import Device
 
 from core.ports.outbound.device.find_all_device_port import DeviceSummary
 
-from adapters.outbound.device.mongo_device_repository import MongoDeviceAdapter
+from adapters.outbound.device_repository.mongo_device_repository import MongoDeviceAdapter, DuplicateDeviceError, DeviceNotFoundError
 
 
 def _make_asset(asset_id: str = "A1", evidences: dict | None = None) -> Asset:
@@ -173,8 +173,11 @@ class TestFindById:
 
     def test_raises_key_error_if_not_found(self, adapter, collection):
         collection.find_one.return_value = None
-        with pytest.raises(KeyError):
+        with pytest.raises(DeviceNotFoundError):
             adapter.find_by_id("INESISTENTE")
+
+
+
 
     def test_asset_is_reconstructed(self, adapter, collection):
         doc = _base_doc(assets=[_asset_doc()])
