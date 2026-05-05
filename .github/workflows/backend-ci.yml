@@ -30,13 +30,11 @@ jobs:
         run: poetry install --no-interaction
       
       - name: Run Ruff (Analisi Statica)
-        run: poetry run ruff check . --output-format=junit -o ruff-report.xml
-      
-      
-      - name: Run Unit Tests and Coverage
-        # Genera coverage.xml e un file test-results.xml con l'esito dei test
-        run: poetry run pytest backend/tests/unit/ --cov=nome_cartella_app --cov-report=xml:coverage.xml --junitxml=test-results.xml
+        run: poetry run ruff check backend/ --output-format=junit -o ruff-report.xml
 
+      - name: Run Unit Tests and Coverage
+        # Aggiorna il percorso della cartella test e quello della coverage
+        run: poetry run pytest backend/tests/unit/ --cov=backend/nome_tua_app --cov-report=xml:coverage.xml --junitxml=test-results.xml
       - name: Salva i Report come Artifacts
         if: always() 
         uses: actions/upload-artifact@v4
