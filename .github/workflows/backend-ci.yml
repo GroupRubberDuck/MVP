@@ -13,9 +13,6 @@ jobs:
   unit-tests:
     name: Unit Tests and Linting
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
 
     steps:
       - name: Checkout code
@@ -26,7 +23,6 @@ jobs:
         with:
           python-version: "3.12"
 
-      # 1. Installa Poetry (sempre — così la config è consistente)
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
@@ -34,21 +30,20 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      # 2. Cache del virtualenv basata su poetry.lock
+      # Cache del venv nella root (dove Poetry lo crea)
       - name: Load cached venv
         id: cached-venv
         uses: actions/cache@v4
         with:
-          path: backend/.venv
-          key: venv-${{ runner.os }}-python3.12-${{ hashFiles('backend/poetry.lock') }}
+          path: .venv
+          key: venv-${{ runner.os }}-python3.12-${{ hashFiles('poetry.lock') }}
 
-      # 3. Installa dipendenze solo se la cache è miss
       - name: Install dependencies
         if: steps.cached-venv.outputs.cache-hit != 'true'
         run: poetry install --no-interaction
 
       - name: Run Ruff (Analisi Statica)
-        run: poetry run ruff check . --output-format=junit -o ruff-report.xml
+        run: poetry run ruff check backend/ --output-format=junit -o ruff-report.xml
 
       - name: Run Unit Tests and Coverage
         run: poetry run pytest --junitxml=test-results.xml
@@ -59,7 +54,7 @@ jobs:
         with:
           name: ci-reports
           path: |
-            backend/ruff-report.xml
-            backend/coverage.xml
-            backend/test-results.xml
+            ruff-report.xml
+            coverage.xml
+            test-results.xml
           retention-days: 30
