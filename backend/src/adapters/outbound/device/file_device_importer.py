@@ -12,7 +12,6 @@ from core.domain.evaluation_object.device import Device
 from core.ports.outbound.device.file_device_importer_port import FileDeviceImporterPort
 
 from core.ports.outbound.device.exceptions import (
-    InvalidFileFormatError,
     MissingDeviceFieldError,
     InvalidAssetTypeError,
 )

@@ -11,7 +11,7 @@ from core.domain.evaluation_object.device import Device
 
 from core.ports.outbound.device.find_all_device_port import DeviceSummary
 
-from adapters.outbound.device.device_repository.mongo_device_repository import MongoDeviceAdapter, DuplicateDeviceError, DeviceNotFoundError
+from adapters.outbound.device.device_repository.mongo_device_repository import MongoDeviceAdapter, DeviceNotFoundError
 
 
 def _make_asset(asset_id: str = "A1", evidences: dict | None = None) -> Asset:
