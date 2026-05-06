@@ -10,3 +10,7 @@ class DeviceRegistrationFailure(Exception):
 class UpdateDeviceFailure(Exception):
     """Il dispositivo non può essere aggiornato (non trovato o dati non validi)."""
     pass
+
+class DeleteDeviceFailure(Exception):
+    """Il dispositivo non può essere eliminato (non trovato o errore interno)."""
+    pass
