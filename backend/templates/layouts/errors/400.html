@@ -1,0 +1,11 @@
+
+{% extends "layouts/base.html" %}
+ 
+{% block title %}400 - Richiesta non valida{% endblock %}
+{% block page_title %}Richiesta non valida{% endblock %}
+ 
+{% block content %}
+    <p>{{ message }}</p>
+    <a href="{{ url_for('devices.get_device_list') }}">Torna alla lista dispositivi</a>
+{% endblock %}
+ 

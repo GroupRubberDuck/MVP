@@ -6,3 +6,7 @@ class ImportDeviceFailure(Exception):
 class DeviceRegistrationFailure(Exception):
     """Errore durante la registrazione di un device."""
     pass
+
+class DeviceNotFoundFailure(Exception):
+    """Errore durante la ricerca di un device non esistente."""
+    pass
