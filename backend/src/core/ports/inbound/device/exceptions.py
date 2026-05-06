@@ -15,4 +15,7 @@ class UpdateDeviceFailure(Exception):
 
 class DeleteDeviceFailure(Exception):
     """Il dispositivo non può essere eliminato (non trovato o errore interno)."""
+
+class CreateDeviceFailure(Exception):
+    """Il dispositivo non può essere creato (dati non validi o errore di storage)."""
     pass

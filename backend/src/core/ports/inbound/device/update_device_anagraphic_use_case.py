@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from pydantic import BaseModel
 
 
-@dataclass(frozen=True)
-class UpdateDeviceCommand:
+class UpdateDeviceCommand(BaseModel):
     device_id: str
     device_name: str
     device_os: str
