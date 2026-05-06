@@ -1,4 +1,5 @@
-from flask import Blueprint, Response, jsonify, request
+from flask import Blueprint, jsonify, request
+from flask.typing import ResponseReturnValue
 
 from adapters.inbound.utilities.upload_file_controller import UploadFileController
 from core.ports.inbound.device.exceptions import (
@@ -21,7 +22,7 @@ class ImportDeviceController:
             methods=["POST"],
         )
 
-    def import_device(self) -> Response:
+    def import_device(self) -> ResponseReturnValue:
         if "file" not in request.files:
             return jsonify({"error": "Nessun file presente nella richiesta HTTP."}), 400
 

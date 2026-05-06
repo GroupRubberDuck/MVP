@@ -1,6 +1,6 @@
 import csv
 import io
-from typing import BinaryIO
+from typing import IO
 
 from adapters.outbound.device.file_device_importer import FileDeviceImporter
 from core.ports.outbound.device.exceptions import InvalidFileFormatError, EmptyFileError
@@ -8,10 +8,10 @@ from core.ports.outbound.device.exceptions import InvalidFileFormatError, EmptyF
 
 class CSVFileDeviceImporter(FileDeviceImporter):
 
-    def _check_metadata(self, device_file_content: BinaryIO) -> None:
+    def _check_metadata(self, device_file_content: IO[bytes]) -> None:
         pass
 
-    def _open_stream(self, device_file_content: BinaryIO) -> list[dict]:
+    def _open_stream(self, device_file_content: IO[bytes]) -> list[dict]:
         try:
             text = io.TextIOWrapper(device_file_content, encoding="utf-8")
             return list(csv.DictReader(text))

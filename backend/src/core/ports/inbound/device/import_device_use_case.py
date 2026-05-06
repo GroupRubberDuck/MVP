@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import StrEnum
-from typing import BinaryIO
+from typing import IO
 
 
 class AllowedDeviceFileExtension(StrEnum):
@@ -12,7 +12,7 @@ class AllowedDeviceFileExtension(StrEnum):
 
 @dataclass(frozen=True)
 class ImportDeviceCommand:
-    device_file_content: BinaryIO
+    device_file_content: IO[bytes]
     extension: AllowedDeviceFileExtension
 
 

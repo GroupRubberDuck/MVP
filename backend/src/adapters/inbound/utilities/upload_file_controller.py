@@ -1,4 +1,4 @@
-from typing import BinaryIO
+from typing import IO
 
 from werkzeug.datastructures import FileStorage
 
@@ -20,5 +20,5 @@ class UploadFileController:
             )
 
     @staticmethod
-    def get_http_file_payload(file_storage: FileStorage) -> BinaryIO:
-        return file_storage.stream
+    def get_http_file_payload(file: FileStorage) -> IO[bytes]:
+        return file.stream

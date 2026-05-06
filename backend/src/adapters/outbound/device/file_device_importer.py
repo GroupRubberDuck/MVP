@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Any, BinaryIO
+from typing import IO, Any
 from types import MappingProxyType
 
 from core.domain.evaluation_object.asset.asset import Asset
@@ -20,7 +20,7 @@ _REQUIRED_DEVICE_FIELDS = ("device_id", "standard_id", "name", "os", "descriptio
 
 
 class FileDeviceImporter(FileDeviceImporterPort):
-    def parse_device_file(self, device_file_content: BinaryIO) -> Device:
+    def parse_device_file(self, device_file_content: IO[bytes]) -> Device:
         self._check_metadata(device_file_content)
         raw = self._open_stream(device_file_content)
         data = self._parse_data(raw)
@@ -28,10 +28,10 @@ class FileDeviceImporter(FileDeviceImporterPort):
         return self._build_device(data)
 
     @abstractmethod
-    def _check_metadata(self, device_file_content: BinaryIO) -> None: ...
+    def _check_metadata(self, device_file_content: IO[bytes]) -> None: ...
 
     @abstractmethod
-    def _open_stream(self, device_file_content: BinaryIO) -> Any: ...
+    def _open_stream(self, device_file_content: IO[bytes]) -> Any: ...
 
     @abstractmethod
     def _parse_data(self, raw: Any) -> dict: ...

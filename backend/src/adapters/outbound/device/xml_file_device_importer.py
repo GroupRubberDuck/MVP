@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-from typing import BinaryIO
+from typing import IO
 
 from adapters.outbound.device.file_device_importer import FileDeviceImporter
 from core.ports.outbound.device.exceptions import InvalidFileFormatError
@@ -7,10 +7,10 @@ from core.ports.outbound.device.exceptions import InvalidFileFormatError
 
 class XMLFileDeviceImporter(FileDeviceImporter):
 
-    def _check_metadata(self, device_file_content: BinaryIO) -> None:
+    def _check_metadata(self, device_file_content: IO[bytes]) -> None:
         pass
 
-    def _open_stream(self, device_file_content: BinaryIO) -> ET.Element:
+    def _open_stream(self, device_file_content: IO[bytes]) -> ET.Element:
         try:
             return ET.parse(device_file_content).getroot()
         except ET.ParseError as e:
@@ -22,7 +22,7 @@ class XMLFileDeviceImporter(FileDeviceImporter):
             evaluations = []
             for ev_el in asset_el.findall("evaluations/evaluation"):
                 evaluation_map = {
-                    entry.get("node_id"): entry.text.strip().lower() == "true"
+                    entry.get("node_id"): (entry.text or "").strip().lower() == "true"
                     for entry in ev_el.findall("evaluation_map/entry")
                 }
                 evaluations.append({
