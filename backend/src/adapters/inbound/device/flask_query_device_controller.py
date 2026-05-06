@@ -53,7 +53,7 @@ class FlaskQueryDeviceController:
                 standard = self._get_compliance_standard_use_case.get_compliance_standard(
                         GetComplianceStandardCommand(standard_id=device.standard_id)
                 )
-                return render_template("device_detail.html", device=DeviceDetailDTO(
+                return render_template("layouts/device/device_detail.html", device=DeviceDetailDTO(
                     device_id=device.id,
                     name=device.name,
                     os=device.os,

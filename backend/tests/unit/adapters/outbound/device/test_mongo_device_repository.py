@@ -9,7 +9,7 @@ from core.domain.evaluation_object.asset.asset_proprieties import AssetProprieti
 from core.domain.evaluation_object.asset.asset_type import AssetType
 from core.domain.evaluation_object.device import Device
 
-from core.ports.outbound.device.find_all_device_port import DeviceSummary
+from core.domain.evaluation_object.device_summary import DeviceSummary
 
 from adapters.outbound.device.device_repository.mongo_device_repository import MongoDeviceAdapter, DuplicateDeviceError, DeviceNotFoundError
 

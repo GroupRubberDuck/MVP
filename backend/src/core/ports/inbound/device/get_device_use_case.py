@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
 from core.domain.evaluation_object.device import Device
-class GetDeviceDetailCommand:
-    def __init__(self, device_id: str) -> None:
-        self.device_id = device_id
+from pydantic import BaseModel
 
+class GetDeviceDetailCommand(BaseModel):
+    model_config = {"frozen": True}
+    device_id: str
 
 class GetDeviceDetailUseCase(ABC):
     @abstractmethod

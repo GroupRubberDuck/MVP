@@ -1,5 +1,6 @@
 from core.ports.inbound.device.get_device_list_use_case import GetDeviceListUseCase
-from core.ports.outbound.device.find_all_device_port import FindAllDevicePort, DeviceSummary
+from core.ports.outbound.device.find_all_device_port import FindAllDevicePort
+from core.domain.evaluation_object.device_summary import DeviceSummary
 
 
 class GetDeviceListService(GetDeviceListUseCase):

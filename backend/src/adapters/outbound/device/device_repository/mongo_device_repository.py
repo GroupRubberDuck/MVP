@@ -10,7 +10,8 @@ from core.domain.evaluation_object.asset.asset_type import AssetType
 from core.domain.evaluation_object.device import Device
 
 from core.ports.outbound.device.delete_device_port import DeleteDevicePort
-from core.ports.outbound.device.find_all_device_port import FindAllDevicePort, DeviceSummary
+from core.ports.outbound.device.find_all_device_port import FindAllDevicePort 
+from core.domain.evaluation_object.device_summary import DeviceSummary
 from core.ports.outbound.device.find_device_port import FindDevicePort
 from core.ports.outbound.device.register_device_port import RegisterDevicePort
 from core.ports.outbound.device.save_device_port import SaveDevicePort
