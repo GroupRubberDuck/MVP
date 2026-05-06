@@ -12,29 +12,37 @@ from core.domain.evaluation_object.device import Device
 from core.ports.outbound.device.file_device_importer_port import FileDeviceImporterPort
 
 from core.ports.outbound.device.exceptions import (
+    FileTooLargeError,
     MissingDeviceFieldError,
     InvalidAssetTypeError,
 )
 
 _REQUIRED_DEVICE_FIELDS = ("device_id", "standard_id", "name", "os", "description")
+_MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB
 
 
 class FileDeviceImporter(FileDeviceImporterPort):
     def parse_device_file(self, device_file_content: IO[bytes]) -> Device:
-        self._check_metadata(device_file_content)
-        raw = self._open_stream(device_file_content)
+        self._pre_validate(device_file_content)
+        raw = self._deserialize(device_file_content)
         data = self._parse_data(raw)
         self._close_stream()
         return self._build_device(data)
 
     @abstractmethod
-    def _check_metadata(self, device_file_content: IO[bytes]) -> None: ...
-
-    @abstractmethod
-    def _open_stream(self, device_file_content: IO[bytes]) -> Any: ...
+    def _deserialize(self, device_file_content: IO[bytes]) -> Any: ...
 
     @abstractmethod
     def _parse_data(self, raw: Any) -> dict: ...
+
+    def _pre_validate(self, device_file_content: IO[bytes]) -> None:
+        device_file_content.seek(0, 2)
+        size = device_file_content.tell()
+        device_file_content.seek(0)
+        if size > _MAX_FILE_SIZE_BYTES:
+            raise FileTooLargeError(
+                "Il file supera la dimensione massima consentita di 10 MB."
+            )
 
     def _close_stream(self) -> None:
         pass

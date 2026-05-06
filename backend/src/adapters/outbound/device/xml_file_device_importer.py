@@ -7,10 +7,7 @@ from core.ports.outbound.device.exceptions import InvalidFileFormatError
 
 class XMLFileDeviceImporter(FileDeviceImporter):
 
-    def _check_metadata(self, device_file_content: IO[bytes]) -> None:
-        pass
-
-    def _open_stream(self, device_file_content: IO[bytes]) -> ET.Element:
+    def _deserialize(self, device_file_content: IO[bytes]) -> ET.Element:
         try:
             return ET.parse(device_file_content).getroot()
         except ET.ParseError as e:
