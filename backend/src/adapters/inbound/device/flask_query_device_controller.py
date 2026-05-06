@@ -4,7 +4,7 @@ from core.ports.inbound.compliance_standard.get_compliance_standard_use_case imp
 
 from core.ports.inbound.compliance_standard.exceptions import StandardNotFoundFailure
 from core.ports.inbound.device.exceptions import DeviceNotFoundFailure
-
+from adapters.inbound.flask_controller_interface import FlaskController
 from flask import Blueprint,render_template
 from pydantic import BaseModel
 
@@ -20,7 +20,7 @@ class DeviceDetailDTO(BaseModel):
     compliance_standard_name: str
     compliance_standard_version: str
 
-class FlaskQueryDeviceController:
+class FlaskQueryDeviceController(FlaskController):
     def __init__(
         self,
         get_device_list_use_case: GetDeviceListUseCase,

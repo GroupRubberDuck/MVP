@@ -1,6 +1,7 @@
 import os
 import string
 import random
+
 from flask import Flask, jsonify
 from dotenv import load_dotenv
 
@@ -21,13 +22,13 @@ from adapters.inbound.device.flask_query_device_controller import FlaskQueryDevi
 
 # Routes
 from routes import register_routes, register_error_handlers
-from .routes import bp # type: ignore
 
 load_dotenv()
 
 
 def create_app() -> Flask:
     base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+
     app = Flask(
         __name__,
         template_folder=os.path.join(base_dir, 'backend', 'templates'),
@@ -42,7 +43,6 @@ def create_app() -> Flask:
         app.logger.error(f"DB CONNECTION ERROR: {e}")
         _register_fallback_routes(app, str(e), 503)
         return app
-
 
     # ── Adapter outbound ──
     device_adapter = MongoDeviceAdapter(db["devices"])
@@ -61,10 +61,19 @@ def create_app() -> Flask:
     )
 
     # ── Rotte ──
-    register_routes(app, query_device=query_device_controller)
+    register_routes(
+        app,
+        device_controllers=[query_device_controller],
+    )
     register_error_handlers(app)
 
     # ── Health check ──
+    _register_health_check(app, mongo_client, db)
+
+    return app
+
+
+def _register_health_check(app: Flask, mongo_client, db) -> None:
     @app.route("/health")
     def health():
         try:
@@ -73,10 +82,8 @@ def create_app() -> Flask:
         except Exception as e:
             return jsonify({"status": "error", "detail": str(e)}), 503
 
-    return app
 
-
-def _register_fallback_routes(app: Flask, error: str, status: int):
+def _register_fallback_routes(app: Flask, error: str, status: int) -> None:
     """Se il DB non è disponibile, ogni rotta risponde con l'errore."""
 
     @app.route("/health")

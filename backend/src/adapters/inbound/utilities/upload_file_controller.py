@@ -2,7 +2,7 @@ from typing import IO
 
 from werkzeug.datastructures import FileStorage
 
-from core.ports.inbound.device.import_device_use_case import AllowedDeviceFileExtension
+from core.services.device.allowed_device_extensions import AllowedDeviceFileExtension
 
 
 class UploadFileController:

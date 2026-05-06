@@ -4,7 +4,7 @@ from adapters.outbound.device.concrete_file_device_importer_factory import Concr
 from adapters.outbound.device.json_file_device_importer import JSONFileDeviceImporter
 from adapters.outbound.device.csv_file_device_importer import CSVFileDeviceImporter
 from adapters.outbound.device.xml_file_device_importer import XMLFileDeviceImporter
-from core.ports.inbound.device.import_device_use_case import AllowedDeviceFileExtension
+from core.services.device.allowed_device_extensions import AllowedDeviceFileExtension
 
 
 @pytest.fixture

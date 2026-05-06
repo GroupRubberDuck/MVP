@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from core.ports.inbound.device.import_device_use_case import AllowedDeviceFileExtension
+from core.services.device.allowed_device_extensions import AllowedDeviceFileExtension
 from core.ports.outbound.device.file_device_importer_port import FileDeviceImporterPort
 
 
