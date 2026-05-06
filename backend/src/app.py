@@ -21,6 +21,7 @@ from adapters.inbound.device.flask_query_device_controller import FlaskQueryDevi
 
 # Routes
 from routes import register_routes, register_error_handlers
+from .routes import bp # type: ignore
 
 load_dotenv()
 

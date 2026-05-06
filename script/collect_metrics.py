@@ -656,7 +656,7 @@ def main():
         print(f"    Regole violate:      {sm.get('rules_violated', 0)}")
         top = sm.get("top_rules", [])
         if top:
-            print(f"    Top violazioni:")
+            print("    Top violazioni:")
             for r in top[:5]:
                 print(f"      {r['rule']:10s}  ×{r['count']}")
 

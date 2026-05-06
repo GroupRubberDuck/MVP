@@ -51,3 +51,7 @@ markers = [
     "priority: priorità del test (high, medium, low)",
     "type: tipo di test (unità, integrazione, smoke, test di sistema)",
 ]
+
+[tool.mypy]
+mypy_path = "backend/src"
+explicit_package_bases = true

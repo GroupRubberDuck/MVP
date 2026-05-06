@@ -9,4 +9,6 @@ class DeviceRegistrationFailure(Exception):
 
 class DeviceNotFoundFailure(Exception):
     """Errore durante la ricerca di un device non esistente."""
+class UpdateDeviceFailure(Exception):
+    """Il dispositivo non può essere aggiornato (non trovato o dati non validi)."""
     pass
