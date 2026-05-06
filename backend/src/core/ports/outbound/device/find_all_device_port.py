@@ -1,14 +1,6 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from core.domain.evaluation_object.device_summary import DeviceSummary
 
-
-@dataclass(frozen=True)
-class DeviceSummary:
-    device_id: str
-    name: str
-    os: str
-    description: str
-    compliance_standard_id: str
 
 
 class FindAllDevicePort(ABC):
