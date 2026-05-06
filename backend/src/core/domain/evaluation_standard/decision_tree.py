@@ -106,3 +106,6 @@ class DecisionTree:
  
             current_node_id = next_node_id
  
+    @property
+    def nodes(self) -> MappingProxyType[str, Node]:
+        return MappingProxyType(self._nodes)

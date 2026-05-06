@@ -4,7 +4,7 @@ import random
 from flask import Flask
 from pymongo import MongoClient
 from dotenv import load_dotenv
-from .routes import bp
+from .routes import bp # type: ignore
 
 load_dotenv()
 

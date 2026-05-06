@@ -11,8 +11,8 @@ class Requirement:
     name: str
     description: str
     target_description: str
+    decision_tree: DecisionTree
     dependency_ids: tuple[str, ...] = field(default_factory=tuple)
-    decision_tree: DecisionTree | None = None
 
     def __post_init__(self):
         if not self.requirement_id:
