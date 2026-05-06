@@ -1,5 +1,6 @@
 from types import MappingProxyType
 from pymongo.collection import Collection
+from pymongo.errors import DuplicateKeyError
 
 from core.domain.evaluation_object.asset.asset import Asset
 from core.domain.evaluation_object.asset.asset_anagraphic import AssetAnagraphic
@@ -13,6 +14,7 @@ from core.ports.outbound.device.find_all_device_port import FindAllDevicePort, D
 from core.ports.outbound.device.find_device_port import FindDevicePort
 from core.ports.outbound.device.register_device_port import RegisterDevicePort
 from core.ports.outbound.device.save_device_port import SaveDevicePort
+from core.ports.outbound.device.exceptions import DeviceNotFoundError, DuplicateDeviceError
 
 
 class MongoDeviceAdapter(
@@ -25,19 +27,29 @@ class MongoDeviceAdapter(
     def register(self, device: Device) -> None:
         doc = self._to_document(device)
         doc["_id"] = device.id
-        self._collection.insert_one(doc)
+        try:
+            self._collection.insert_one(doc)
+        except DuplicateKeyError as e:
+            if "duplicate key error" in str(e):
+                raise DuplicateDeviceError(f"Device '{device.id}' è già presente nello storage.")
+            raise
 
     def save(self, device: Device) -> None:
         doc = self._to_document(device)
-        self._collection.replace_one({"_id": device.id}, doc)
+        result =self._collection.replace_one({"_id": device.id}, doc)
+        if result.matched_count == 0:
+            raise DeviceNotFoundError(f"Device '{device.id}' non trovato nello storage.")
+
 
     def delete(self, device_id: str) -> None:
-        self._collection.delete_one({"_id": device_id})
+        result=self._collection.delete_one({"_id": device_id})
+        if result.deleted_count == 0:
+            raise DeviceNotFoundError(f"Device '{device_id}' non trovato nello storage.")
 
     def find_by_id(self, device_id: str) -> Device:
         doc = self._collection.find_one({"_id": device_id})
         if doc is None:
-            raise KeyError(f"Device '{device_id}' non trovato.")
+            raise DeviceNotFoundError(f"Device '{device_id}' non trovato nello storage.")
         return self._from_document(doc)
 
     def find_all(self) -> list[DeviceSummary]:

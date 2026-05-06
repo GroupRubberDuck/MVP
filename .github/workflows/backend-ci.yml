@@ -92,27 +92,17 @@ jobs:
           git add badges/*.svg
           git diff --staged --quiet || git commit -m "ci: update badges [skip ci]" && git push
 
-      - name: Salva i Report come Artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ci-reports
-          path: |
-            ruff-report.xml
-            coverage.xml
-            test-results.xml
-          retention-days: 30
-
       - name: Collect all metrics
         if: always()
         run: python script/collect_metrics.py
 
-      - name: Salva i Report come Artifacts
+      - name: Salva tutti i Report e Metriche come Artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ci-reports
           path: |
+            coverage.xml
             metrics/metrics.json
             ruff-report.xml
             test-results.xml

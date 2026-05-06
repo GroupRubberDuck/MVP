@@ -3,6 +3,7 @@ from types import MappingProxyType
 
 from core.domain.evaluation_object.asset.asset_type import AssetType
 from core.domain.evaluation_standard.evaluation_state import EvaluationState
+from core.domain.evaluation_standard.decision_tree import Node
 
 
 @dataclass(frozen=True)
@@ -13,6 +14,7 @@ class RequirementEvaluationDetail:
     target: str
     justification: str
     node_choices: MappingProxyType[str, bool]
+    nodes: MappingProxyType[str, Node]
     state: EvaluationState
     dependencies: tuple[tuple[str, EvaluationState], ...]
 
