@@ -1,6 +1,6 @@
 from types import MappingProxyType
 from pymongo.collection import Collection
-from pymongo.errors import DuplicateKeyError
+from pymongo.errors import DuplicateKeyError, PyMongoError
 
 from core.domain.evaluation_object.asset.asset import Asset
 from core.domain.evaluation_object.asset.asset_anagraphic import AssetAnagraphic
