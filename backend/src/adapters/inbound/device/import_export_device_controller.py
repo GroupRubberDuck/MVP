@@ -1,4 +1,5 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request,render_template
+
 from flask.typing import ResponseReturnValue
 
 from adapters.inbound.flask_controller_interface import FlaskController
@@ -50,3 +51,7 @@ class ImportDeviceController(FlaskController):
                 return jsonify({"error": str(e)}), 409
 
             return jsonify({"message": "Dispositivo importato con successo."}), 201
+        
+        @blueprint.route("/devices/import", methods=["GET"])
+        def import_device_page() -> ResponseReturnValue:
+            return render_template("layouts/device/import_device.html")
