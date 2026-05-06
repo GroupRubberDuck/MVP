@@ -10,3 +10,7 @@ class DeviceRegistrationFailure(Exception):
 class UpdateDeviceFailure(Exception):
     """Il dispositivo non può essere aggiornato (non trovato o dati non validi)."""
     pass
+
+class CreateDeviceFailure(Exception):
+    """Il dispositivo non può essere creato (dati non validi o errore di storage)."""
+    pass

@@ -38,7 +38,7 @@ class MongoDeviceAdapter(
         doc = self._to_document(device)
         result =self._collection.replace_one({"_id": device.id}, doc)
         if result.matched_count == 0:
-            raise DeviceNotFoundError(f"Device '{device.id}' non trovato nello storage.")
+            raise DeviceNotFoundError(f"Device '{device.id}' non trovato nello storage, aggiornamento fallito.")
 
 
     def delete(self, device_id: str) -> None:
