@@ -5,4 +5,5 @@ class SessionNotFoundError(Exception):
 
 class AssetNotInSessionError(Exception):
     """L'asset richiesto non è presente nella sessione."""
+    """Impossibile trovare la sessione"""
     pass
