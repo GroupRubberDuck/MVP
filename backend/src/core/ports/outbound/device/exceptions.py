@@ -31,3 +31,7 @@ class EmptyFileError(DeviceImportError):
     """File privo di contenuto."""
     pass
 
+class FileTooLargeError(DeviceImportError):
+    pass
+
+
