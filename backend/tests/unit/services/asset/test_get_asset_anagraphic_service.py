@@ -22,6 +22,7 @@ def service(mock_session_port):
 @pytest.fixture
 def command():
     return GetAssetAnagraphicCommand(
+        device_id = "DEVICE-123",
         session_id="SESSION-123", 
         asset_id="ASSET-456"
     )
