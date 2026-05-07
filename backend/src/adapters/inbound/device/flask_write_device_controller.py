@@ -54,7 +54,7 @@ class FlaskWriteDeviceController(FlaskController):
             try:
                 self._update_device_use_case.update_device(command)
             except UpdateDeviceFailure as e:
-                return jsonify({"error": str(e)}), 400
+                return jsonify({"error": str(e)}), 404
             return "", 204
 
         @blueprint.route("/devices/<device_id>", methods=["DELETE"])
@@ -67,7 +67,7 @@ class FlaskWriteDeviceController(FlaskController):
             try:
                 self._delete_device_use_case.delete_device(command)
             except DeleteDeviceFailure as e:
-                return jsonify({"error": str(e)}), 400
+                return jsonify({"error": str(e)}), 404
             
             return "", 204
 

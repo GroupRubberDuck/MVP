@@ -156,7 +156,7 @@ class TestUpdateDevice:
                 "device_description": "Updated desc",
             },
         )
-        assert response.status_code == 400
+        assert response.status_code == 404
         assert "non trovato" in response.get_json()["error"]
 
 
@@ -177,5 +177,5 @@ class TestDeleteDevice:
     def test_returns_error_on_delete_failure(self, client, mock_delete_use_case):
         mock_delete_use_case.delete_device.side_effect = DeleteDeviceFailure("non trovato")
         response = client.delete("/devices/D-1")
-        assert response.status_code == 400
+        assert response.status_code == 404
         assert "non trovato" in response.get_json()["error"]
