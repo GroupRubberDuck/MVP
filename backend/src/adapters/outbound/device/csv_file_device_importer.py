@@ -8,10 +8,7 @@ from core.ports.outbound.device.exceptions import InvalidFileFormatError, EmptyF
 
 class CSVFileDeviceImporter(FileDeviceImporter):
 
-    def _check_metadata(self, device_file_content: IO[bytes]) -> None:
-        pass
-
-    def _open_stream(self, device_file_content: IO[bytes]) -> list[dict]:
+    def _deserialize(self, device_file_content: IO[bytes]) -> list[dict]:
         try:
             text = io.TextIOWrapper(device_file_content, encoding="utf-8")
             return list(csv.DictReader(text))

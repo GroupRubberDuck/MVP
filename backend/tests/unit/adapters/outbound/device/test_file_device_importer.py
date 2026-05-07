@@ -6,6 +6,7 @@ from core.domain.evaluation_object.asset.asset_type import AssetType
 from core.ports.outbound.device.exceptions import (
     InvalidAssetTypeError,
     MissingDeviceFieldError,
+    FileTooLargeError
 )
 
 
@@ -13,10 +14,10 @@ class _StubImporter(FileDeviceImporter):
     def __init__(self, data: dict):
         self._data = data
 
-    def _check_metadata(self, content) -> None:
+    def _pre_validate(self, content) -> None:
         pass
 
-    def _open_stream(self, content) -> dict:
+    def _deserialize(self, content) -> dict:
         return self._data
 
     def _parse_data(self, raw) -> dict:
@@ -109,3 +110,26 @@ class TestBuildAsset:
         data = _full_data(assets=[_asset_data(asset_type="unknown")])
         with pytest.raises(InvalidAssetTypeError):
             _StubImporter(data).parse_device_file(io.BytesIO())
+
+class TestPreValidate:
+
+    class _SizeCheckStub(FileDeviceImporter):
+        def _deserialize(self, content) -> dict:
+            return {}
+        def _parse_data(self, raw) -> dict:
+            return raw
+
+    @pytest.fixture
+    def importer(self):
+        return self._SizeCheckStub()
+
+    def test_raises_file_too_large_error_when_size_exceeds_limit(self, importer):
+        content = io.BytesIO(b"x" * (10 * 1024 * 1024 + 1))
+        with pytest.raises(FileTooLargeError):
+            importer.parse_device_file(content)
+
+    def test_accepts_file_exactly_at_size_limit(self, importer):
+        content = io.BytesIO(b"x" * (10 * 1024 * 1024))
+        with pytest.raises(Exception) as exc_info:
+            importer.parse_device_file(content)
+        assert not isinstance(exc_info.value, FileTooLargeError)
