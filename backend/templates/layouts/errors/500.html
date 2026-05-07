@@ -1,0 +1,10 @@
+{% extends "layouts/base.html" %}
+ 
+{% block title %}500 - Errore interno{% endblock %}
+{% block page_title %}Errore interno del server{% endblock %}
+ 
+{% block content %}
+    <p>{{ message }}</p>
+    <a href="{{ url_for('devices.get_device_list') }}">Torna alla lista dispositivi</a>
+{% endblock %}
+ 

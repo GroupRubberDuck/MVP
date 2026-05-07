@@ -1,0 +1,24 @@
+{# macros/navbar.html #}
+{% macro render_navbar(current) %}
+<nav>
+    <ul>
+        {% if request.endpoint == 'devices.get_device_list' %}
+            <li class="active">Dispositivi</li>
+        {% else %}
+            <li><a href="{{ url_for('devices.get_device_list') }}">Dispositivi</a></li>
+        {% endif %}
+
+        <!-- {% if current == "evaluation" %}
+            <li class="active">Valutazioni</li>
+        {% else %}
+            <li><a href="{{ url_for('evaluation.dashboard') }}">Valutazioni</a></li>
+        {% endif %}
+
+        {% if current == "report" %}
+            <li class="active">Report</li>
+        {% else %}
+            <li><a href="{{ url_for('report.list') }}">Report</a></li> 
+        {% endif %}-->
+    </ul>
+</nav>
+{% endmacro %}

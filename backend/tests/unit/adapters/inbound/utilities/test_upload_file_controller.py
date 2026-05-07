@@ -3,7 +3,7 @@ import pytest
 from unittest.mock import MagicMock
 
 from adapters.inbound.utilities.upload_file_controller import UploadFileController
-from core.ports.inbound.device.import_device_use_case import AllowedDeviceFileExtension
+from core.services.device.allowed_device_extensions import AllowedDeviceFileExtension
 
 
 class TestGetHttpFileExtension:

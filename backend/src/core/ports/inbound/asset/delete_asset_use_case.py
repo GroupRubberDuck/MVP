@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
+from pydantic import BaseModel
 
-@dataclass(frozen=True)
-class DeleteAssetCommand:
+class DeleteAssetCommand(BaseModel) :
+    device_id: str
     asset_id: str
+    session_id: str
 
 class DeleteAssetUseCase(ABC):
     @abstractmethod
-    def delete_asset(delete_command: DeleteAssetCommand) -> None: ...
+    def delete_asset(self, command: DeleteAssetCommand) -> None: ...

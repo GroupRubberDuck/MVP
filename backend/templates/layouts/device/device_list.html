@@ -1,0 +1,26 @@
+{# layouts/devices/device_list.html #}
+{% extends "layouts/base.html" %}
+
+{% block title %}Dispositivi{% endblock %}
+{% block page_title %}Dispositivi{% endblock %}
+
+{% block content %}
+    <div>
+        <a href="404">link ad aggiungi dispositivo  TODO</a>
+        <a href="404">link ad aggiungi importa dispositivo  TODO</a>
+    </div>
+
+    {% if devices|length > 0 %}
+        <ul>
+            {% for device in devices %}
+                <li>
+                    <a href="{{ url_for('devices.get_device_detail', device_id=device.device_id) }}">
+                        {{ device.name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nessun dispositivo trovato.</p>
+    {% endif %}
+{% endblock %}
