@@ -1,15 +1,10 @@
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 from flask import Flask
 
 from core.domain.evaluation_object.device_summary import DeviceSummary
-from core.ports.inbound.device.get_device_use_case import GetDeviceDetailCommand
-from core.ports.inbound.device.exceptions import DeviceNotFoundFailure
-from core.ports.inbound.compliance_standard.exceptions import StandardNotFoundFailure
-from core.ports.outbound.device.exceptions import DeviceNotFoundError
 
 from core.services.device.get_device_list_service import GetDeviceListService
-from core.services.device.get_device_detail_service import GetDeviceDetailService
 from adapters.inbound.device.flask_query_device_controller import FlaskQueryDeviceController
 
 

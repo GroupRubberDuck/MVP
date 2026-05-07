@@ -6,6 +6,7 @@ from core.domain.evaluation_engine.evaluation_detail import AssetEvaluationDetai
 
 @dataclass(frozen=True)
 class GetAssetDetailCommand:
+    device_id: str
     asset_id: str
     session_id: str
 
