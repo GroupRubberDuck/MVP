@@ -5,7 +5,7 @@ from core.domain.evaluation_standard.evaluation_state import EvaluationState
 from core.domain.evaluation_object.exceptions import AssetNotFoundError
 from core.ports.inbound.asset.exceptions import GetAssetDetailFailure
 from core.ports.inbound.asset.get_asset_detail_use_case import GetAssetDetailCommand
-from core.ports.outbound.evaluation.exceptions import SessionNotFoundError
+from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
 from core.services.asset.get_asset_detail_service import GetAssetDetailService
 
 
@@ -150,7 +150,7 @@ class TestGetAssetDetailFailures:
     def test_raises_failure_when_session_not_found(
         self, service, mock_session_port, command
     ):
-        mock_session_port.get_session.side_effect = SessionNotFoundError()
+        mock_session_port.get_session.side_effect = EvaluationSessionNotFoundError()
 
         with pytest.raises(GetAssetDetailFailure, match="SESSION-1"):
             service.get_asset(command)

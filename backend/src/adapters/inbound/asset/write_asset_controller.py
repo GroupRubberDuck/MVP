@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
-from ....core.ports.inbound.asset.create_asset_use_case import CreateAssetUseCase
-from ....core.services.asset.create_asset_command import CreateAssetCommand
+from ....core.ports.inbound.asset.create_asset_use_case import CreateAssetUseCase, CreateAssetCommand
+
 from ....core.domain.evaluation_object.asset.asset_type import AssetType
 
 asset_bp = Blueprint("asset", __name__, url_prefix="/api/devices/<string:device_id>/assets")

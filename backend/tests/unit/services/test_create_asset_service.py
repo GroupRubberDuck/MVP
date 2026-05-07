@@ -1,7 +1,6 @@
 import pytest
 from unittest.mock import MagicMock
-from src.core.services.asset.create_asset_service import CreateAssetService
-from src.core.services.asset.create_asset_command import CreateAssetCommand
+from src.core.services.asset.create_asset_service import CreateAssetService, CreateAssetCommand
 from src.core.domain.evaluation_object.asset.asset_type import AssetType
 from src.core.domain.evaluation_object.device import Device
 from src.core.domain.session.evaluation_session import EvaluationSession

@@ -1,9 +1,9 @@
-from ...ports.inbound.device.export_device_use_case import ExportDeviceUseCase
-from ...ports.outbound.device.find_device_port import FindDevicePort
-from ...ports.outbound.device.file_device_exporter_factory_port import FileDeviceExporterFactoryPort
-from core.ports.inbound.device.export_device_use_case import ExportDeviceCommand
-from .device_file_command import DeviceFileCommand
-
+from core.ports.inbound.device.export_device_use_case import ExportDeviceUseCase
+from core.ports.outbound.device.find_device_port import FindDevicePort
+from core.ports.outbound.device.file_device_exporter_factory_port import FileDeviceExporterFactoryPort
+from core.ports.inbound.device.export_device_use_case import ExportDeviceCommand, ExportedFile
+from core.ports.outbound.device.exceptions import DeviceNotFoundError , DeviceExportError
+from core.ports.inbound.device.exceptions import DeviceNotFoundFailure , ExportDeviceFailure
 
 class ExportDeviceService(ExportDeviceUseCase):
 
@@ -15,12 +15,21 @@ class ExportDeviceService(ExportDeviceUseCase):
         self._find_device = find_device
         self._exporter_factory = exporter_factory
 
-    def export(self, query: ExportDeviceCommand) -> bytes:
-        # Recupera il device tramite FindDevicePort
-        device = self._find_device.find_by_id(query.device_id)
+    def export_device(self, export_command: ExportDeviceCommand) -> ExportedFile:
+        
+        try: 
+            device = self._find_device.find_by_id(export_command.device_id)
+        except DeviceNotFoundError:
+            raise DeviceNotFoundFailure("Device not found")
 
-        # Ottiene l'exporter corretto dalla factory — restituisce FileDeviceExporterPort
-        exporter = self._exporter_factory.get_file_device_exporter(query.extension)
-
-        # Genera e restituisce i bytes del file
-        return exporter.generate_device_file(DeviceFileCommand(device=device))
+        exporter = self._exporter_factory.get_file_device_exporter(export_command.extension)
+        try:
+            content=exporter.generate_device_file(device)
+        except DeviceExportError:
+            raise ExportDeviceFailure("Unsupported export format")
+        
+        return ExportedFile(
+            content=content,
+            filename=f"device_{export_command.device_id}.{export_command.extension.value}",
+            media_type=export_command.extension.media_type,
+        )
