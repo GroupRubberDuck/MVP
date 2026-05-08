@@ -19,23 +19,23 @@ class XMLFileDeviceImporter(FileDeviceImporter):
             evaluations = []
             for ev_el in asset_el.findall("evaluations/evaluation"):
                 evaluation_map = {
-                    entry.get("node_id"): (entry.text or "").strip().lower() == "true"
-                    for entry in ev_el.findall("evaluation_map/entry")
+                    entry.get("node_id"): entry.get("value", "") == "true"
+                    for entry in ev_el.findall("evaluation_map/choice")
                 }
                 evaluations.append({
-                    "requirement_id": ev_el.findtext("requirement_id", ""),
+                    "requirement_id": ev_el.get("requirement_id", ""),
                     "evaluation_map": evaluation_map,
                     "justification": ev_el.findtext("justification", ""),
                 })
             assets.append({
-                "id": asset_el.findtext("id", ""),
+                "id": asset_el.get("id", ""),
                 "name": asset_el.findtext("name", ""),
                 "asset_type": asset_el.findtext("asset_type", ""),
                 "description": asset_el.findtext("description", ""),
                 "evaluations": evaluations,
             })
         return {
-            "device_id": raw.findtext("device_id", ""),
+            "device_id": raw.get("device_id", ""),
             "standard_id": raw.findtext("standard_id", ""),
             "name": raw.findtext("name", ""),
             "os": raw.findtext("os", ""),

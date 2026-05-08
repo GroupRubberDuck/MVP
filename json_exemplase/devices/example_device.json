@@ -1,0 +1,47 @@
+{
+  "_id": "DEV-001",
+  "name": "Smart Thermostat",
+  "os": "RTOS 3.2",
+  "description": "Termostato IoT connesso alla rete domestica",
+  "compliance_standard_id": "STD-EN303645",
+  "assets": [
+    {
+      "id": "ASSET-001",
+      "name": "Web Management Interface",
+      "type": "network",
+      "description": "Interfaccia web per la configurazione del dispositivo",
+      "evaluations": [
+        {
+          "id": "REQ-001",
+          "evaluation_map": {
+            "N1": true,
+            "N2": false
+          },
+          "justification": "L'interfaccia è accessibile solo dalla rete locale tramite credenziali"
+        },
+        {
+          "id": "REQ-002",
+          "evaluation_map": {
+            "N1": true
+          },
+          "justification": "Meccanismo di autenticazione con username e password"
+        }
+      ]
+    },
+    {
+      "id": "ASSET-002",
+      "name": "Firmware Update Module",
+      "type": "security",
+      "description": "Modulo responsabile dell'aggiornamento firmware via OTA",
+      "evaluations": [
+        {
+          "id": "REQ-001",
+          "evaluation_map": {
+            "N1": false
+          },
+          "justification": "Il modulo non è esposto direttamente alla rete"
+        }
+      ]
+    }
+  ]
+}

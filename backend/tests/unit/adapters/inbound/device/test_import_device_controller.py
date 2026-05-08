@@ -3,7 +3,7 @@ import pytest
 from unittest.mock import MagicMock
 from flask import Flask, Blueprint
 
-from adapters.inbound.device.import_export_device_controller import ImportDeviceController
+from adapters.inbound.device.import_device_controller import ImportDeviceController
 from core.ports.inbound.device.exceptions import DeviceRegistrationFailure, ImportDeviceFailure
 
 

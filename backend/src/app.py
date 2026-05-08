@@ -12,20 +12,23 @@ from infrastructure.database.exceptions import DatabaseConnectionError
 from adapters.outbound.device.device_repository.mongo_device_repository import MongoDeviceAdapter
 from adapters.outbound.compliance_standard.compliance_standard_repository.mongodb_compliance_standard_repository import MongoComplianceStandardAdapter
 from adapters.outbound.device.concrete_file_device_importer_factory import ConcreteFileDeviceImporterFactory
-from adapters.outbound.report.report_generator_adapter import ReportGeneratorAdapter
+from adapters.outbound.report.pdf_report_generator import PdfReportGenerator
+
+from adapters.outbound.evaluation.in_memory_evaluation_session_cache import InMemoryEvaluationSessionCache
+
+
 # Service
 from core.services.device.get_device_list_service import GetDeviceListService
 from core.services.device.get_device_detail_service import GetDeviceDetailService
 from core.services.device.import_device_service import ImportDeviceService
 from core.services.report.generate_report_service import GenerateReportService
 from core.services.compliance_standard.get_compliance_standard_service import GetComplianceStandardService
-from core.services.session.get_session_service import GetSessionService
-from core.services.evaluation.evaluation_service import EvaluationEngine
+from core.domain.evaluation_engine.evaluation_engine import EvaluationEngine
 
 # Controller (adapter inbound)
 from adapters.inbound.device.flask_query_device_controller import FlaskQueryDeviceController
-from adapters.inbound.device.import_export_device_controller import ImportDeviceController
 from adapters.inbound.report.report_controller import FlaskExportReportController
+from adapters.inbound.device.import_device_controller import ImportDeviceController
 
 # Routes
 from routes import register_routes, register_error_handlers
@@ -54,7 +57,10 @@ def create_app() -> Flask:
     # ── Adapter outbound ──
     device_adapter = MongoDeviceAdapter(db["devices"])
     standard_adapter = MongoComplianceStandardAdapter(db["compliance_standards"])
-    report_generator_adapter = ReportGeneratorAdapter()
+    report_generator_adapter = PdfReportGenerator()
+
+    get_session_service = InMemoryEvaluationSessionCache()
+
 
     # ── Service ──
     get_device_list_service = GetDeviceListService(device_adapter)
@@ -75,10 +81,9 @@ def create_app() -> Flask:
     import_device_controller = ImportDeviceController(
         import_device_service=import_device_service
     )
-    get_session_service = GetSessionService()
     evaluation_engine = EvaluationEngine()
     generate_report_service = GenerateReportService(
-        get_session_port=get_session_service,
+        get_evaluation_session_port=get_session_service,
         report_generator_port=report_generator_adapter,
         evaluation_engine=evaluation_engine,
     )
