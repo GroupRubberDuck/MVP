@@ -7,21 +7,21 @@ from core.ports.inbound.asset.get_requirement_evaluation_detail_use_case import 
     GetRequirementEvaluationDetailCommand,
     GetRequirementEvaluationDetailUseCase,
 )
-from core.ports.outbound.evaluation.exceptions import SessionNotFoundError
-from core.ports.outbound.evaluation.get_session_port import GetSessionPort
+from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
+from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
 
 
 class GetRequirementEvaluationDetailService(GetRequirementEvaluationDetailUseCase):
-    def __init__(self, get_session_port: GetSessionPort, evaluation_engine: EvaluationEngine) -> None:
-        self._get_session_port = get_session_port
+    def __init__(self, get_evaluation_session_port: GetEvaluationSessionPort, evaluation_engine: EvaluationEngine) -> None:
+        self._get_evaluation_session_port = get_evaluation_session_port
         self._evaluation_engine = evaluation_engine
 
     def get_evaluation_detail(
         self, command: GetRequirementEvaluationDetailCommand
     ) -> RequirementEvaluationDetail:
         try:
-            session = self._get_session_port.get_session(command.session_id)
-        except SessionNotFoundError:
+            session = self._get_evaluation_session_port.get_evaluation_session(command.session_id)
+        except EvaluationSessionNotFoundError:
             raise GetRequirementEvaluationDetailFailure(
                 f"Sessione '{command.session_id}' non trovata."
             )
