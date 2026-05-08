@@ -2,7 +2,7 @@ from core.ports.inbound.evaluation.evaluation_session.insert_justification_use_c
 from core.ports.outbound.evaluation.get_session_port import GetSessionPort
 from core.ports.outbound.evaluation.save_session_port import SaveSessionPort
 from core.services.evaluation.insert_justification_command import InsertJustificationCommand
- 
+from core.domain.evaluation_object.exceptions import AssetNotFoundError
  
 class EvaluationJustificationService(InsertJustificationUseCase):
  
@@ -16,13 +16,11 @@ class EvaluationJustificationService(InsertJustificationUseCase):
  
     def insert_justification(self, command: InsertJustificationCommand) -> None:
         session = self._get_session.get_session(command.session_id)
- 
-        session.insert_justification(
-            asset_id=command.asset_id,
-            requirement_id=command.requirement_id,
-            node_id=command.node_id,
-            justification=command.justification,
-        )
- 
+        try:
+            session.device.get_asset(command.asset_id).set_justification(
+                command.requirement_id, command.justification
+            )
+        except AssetNotFoundError as e:
+            raise SetJustificationFailure(f"Errore durante il recupero dell'asset: {str(e)}")
         self._save_session.save_session(session)
  

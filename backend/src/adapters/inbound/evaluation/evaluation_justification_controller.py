@@ -39,4 +39,4 @@ class EvaluationJustificationController:
  
         self._use_case.insert_justification(command)
  
-        return jsonify({"message": "Justification inserted successfully"}), 200
+        return jsonify({"message": "Justification inserted successfully"}, 200)
