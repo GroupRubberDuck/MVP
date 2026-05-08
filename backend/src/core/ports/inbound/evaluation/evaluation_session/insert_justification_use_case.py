@@ -1,11 +1,22 @@
 from abc import ABC, abstractmethod
- 
-from core.services.evaluation.insert_justification_command import InsertJustificationCommand
- 
- 
+from pydantic import BaseModel
+
+class InsertJustificationCommand(BaseModel):
+    def __init__(self, 
+                 session_id: str, 
+                 asset_id: str, 
+                 requirement_id: str, 
+                 justification: str
+                 ):
+        self.session_id = session_id
+        self.asset_id = asset_id
+        self.requirement_id= requirement_id
+        self.justification = justification
+
+
+
 class InsertJustificationUseCase(ABC):
- 
     @abstractmethod
     def insert_justification(self, command: InsertJustificationCommand) -> None:
-        raise NotImplementedError
- 
+        """Inserisce la giustificazione per un asset specifico e uno specifico requisito nella sessione di valutazione."""
+        ...

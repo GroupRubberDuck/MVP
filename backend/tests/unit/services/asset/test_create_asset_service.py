@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 from core.services.asset.create_asset_service import CreateAssetService, CreateAssetCommand
 from core.domain.evaluation_object.asset.asset_type import AssetType
 from core.domain.evaluation_object.device import Device
+from core.domain.evaluation_standard.compliance_standard import ComplianceStandard
 from core.domain.session.evaluation_session import EvaluationSession
 
 
@@ -19,9 +20,19 @@ def device():
     )
 
 @pytest.fixture
-def session(device):
+def standard():
+    return ComplianceStandard(
+        standard_id="standard-1",
+        name="Standard di test",
+        version_number="1.0",
+        requirements=[],
+    )   
+
+@pytest.fixture
+def session(device, standard):
     return EvaluationSession(
         session_id="session-1",
+        standard=standard,
         device=device,
         standard=MagicMock()
     )
@@ -47,6 +58,7 @@ def service(get_session_mock, save_session_mock):
 def valid_command():
     return CreateAssetCommand(
         name="Router",
+        device_id="device-1",
         asset_type=AssetType.NETWORK,
         description="Router di test",
         session_id="session-1",
@@ -94,6 +106,7 @@ def test_create_asset_sessione_non_trovata(save_session_mock):
     )
     command = CreateAssetCommand(
         name="Router",
+        device_id="device-1",
         asset_type=AssetType.NETWORK,
         description="",
         session_id="session-inesistente",

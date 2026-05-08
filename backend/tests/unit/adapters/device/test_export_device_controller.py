@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock
-from flask import Flask
+from flask import Flask, blueprints
 from adapters.inbound.device.export_device_controller import ExportDeviceController
 from core.domain.evaluation_object.allowed_device_file_extension import AllowedDeviceFileExtension
 
@@ -16,8 +16,10 @@ def app(export_uc_mock):
     # Crea l'app Flask di test con il blueprint del controller registrato
     app = Flask(__name__)
     app.config["TESTING"] = True
-    controller = ExportDeviceController(export_uc=export_uc_mock)
-    app.register_blueprint(controller.blueprint)
+    blueprint = blueprints.Blueprint("devices", __name__)
+    controller = ExportDeviceController(export_device_use_case=export_uc_mock)
+    controller.register_routes(blueprint)
+    app.register_blueprint(blueprint)
     return app
 
 @pytest.fixture

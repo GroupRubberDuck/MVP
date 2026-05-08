@@ -9,15 +9,11 @@ from core.domain.evaluation_object.asset.asset_anagraphic import AssetAnagraphic
 from core.domain.evaluation_object.asset.asset_proprieties import AssetProprieties
 from core.domain.evaluation_object.asset.asset_evidence import AssetEvidence
 from core.domain.evaluation_object.asset.asset_type import AssetType
-from core.domain.evaluation_object.allowed_device_file_extension import (
-    AllowedDeviceFileExtension,
-)
+from core.domain.evaluation_object.allowed_device_file_extension import AllowedDeviceFileExtension
 from adapters.outbound.device.xml_file_device_exporter import XMLFileDeviceExporter
 from adapters.outbound.device.json_file_device_exporter import JSONFileDeviceExporter
 from adapters.outbound.device.csv_file_device_exporter import CSVFileDeviceExporter
-from adapters.outbound.device.concrete_file_device_exporter_factory import (
-    ConcreteFileDeviceExporterFactory,
-)
+from adapters.outbound.device.concrete_file_device_exporter_factory import ConcreteFileDeviceExporterFactory
 from types import MappingProxyType
 
 

@@ -14,7 +14,7 @@ class EvaluationSessionSaveError(EvaluationSessionError):
     """Errore durante il salvataggio della sessione di valutazione."""
     pass
 
-class AssetNotInSessionError(EvaluationSessionError):
-    """L'asset richiesto non è presente nella sessione."""
-    """Impossibile trovare la sessione"""
-    pass
+# class AssetNotInSessionError(EvaluationSessionError):
+#     """L'asset richiesto non è presente nella sessione."""
+#     """Impossibile trovare la sessione"""
+#     pass
