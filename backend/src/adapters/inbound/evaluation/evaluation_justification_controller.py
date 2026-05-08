@@ -1,4 +1,4 @@
-from flask import Blueprint, Request, Response, request, jsonify
+from flask import Blueprint, Response, request, jsonify
  
 from core.ports.inbound.evaluation.evaluation_session.insert_justification_use_case import InsertJustificationUseCase
 from core.services.evaluation.insert_justification_command import InsertJustificationCommand

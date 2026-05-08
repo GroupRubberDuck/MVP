@@ -1,9 +1,9 @@
 import pytest
 from unittest.mock import MagicMock
-from src.core.services.asset.create_asset_service import CreateAssetService, CreateAssetCommand
-from src.core.domain.evaluation_object.asset.asset_type import AssetType
-from src.core.domain.evaluation_object.device import Device
-from src.core.domain.session.evaluation_session import EvaluationSession
+from core.services.asset.create_asset_service import CreateAssetService, CreateAssetCommand
+from core.domain.evaluation_object.asset.asset_type import AssetType
+from core.domain.evaluation_object.device import Device
+from core.domain.session.evaluation_session import EvaluationSession
 
 
 # fixtures 
@@ -22,8 +22,8 @@ def device():
 def session(device):
     return EvaluationSession(
         session_id="session-1",
-        standard_id="standard-1",
         device=device,
+        standard=MagicMock()
     )
 
 @pytest.fixture
@@ -56,9 +56,9 @@ def valid_command():
 # caso nominale 
 
 def test_create_asset_returns_true(service, valid_command):
-    # Il service deve restituire True a operazione completata
     result = service.create_asset(valid_command)
-    assert result is True
+    assert isinstance(result, str)
+    assert len(result) > 0
 
 def test_create_asset_aggiunge_asset_al_device(service, valid_command, session):
     # Il device deve avere esattamente 1 asset dopo la creazione

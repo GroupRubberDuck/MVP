@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import MagicMock
 from flask import Flask
-from src.adapters.inbound.device.export_device_controller import ExportDeviceController
-from src.core.domain.evaluation_object.allowed_device_file_extension import AllowedDeviceFileExtension
+from adapters.inbound.device.export_device_controller import ExportDeviceController
+from core.domain.evaluation_object.allowed_device_file_extension import AllowedDeviceFileExtension
 
 
 @pytest.fixture

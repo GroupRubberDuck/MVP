@@ -9,11 +9,6 @@ from core.domain.evaluation_standard.requirement import Requirement
 from core.ports.inbound.asset.exceptions import GetAssetDetailFailure
 from core.ports.inbound.asset.get_asset_detail_use_case import GetAssetDetailCommand, GetAssetDetailUseCase
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
-from core.ports.inbound.asset.get_asset_detail_use_case import (
-    GetAssetDetailCommand,
-    GetAssetDetailUseCase,
-)
-from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
 from core.ports.outbound.evaluation.get_session_port import GetSessionPort
 
 

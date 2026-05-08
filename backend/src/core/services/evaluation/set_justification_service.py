@@ -2,7 +2,7 @@ from core.ports.inbound.evaluation.set_justification_use_case import SetJustific
 
 from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
 from core.ports.outbound.evaluation.save_evaluation_session_port import SaveEvaluationSessionPort
-from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError, AssetNotInSessionError,EvaluationSessionSaveError
+from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError, EvaluationSessionSaveError
 from core.ports.inbound.evaluation.exceptions import SetJustificationFailure
 from core.domain.evaluation_object.exceptions import AssetNotFoundError
 

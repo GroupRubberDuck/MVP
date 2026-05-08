@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from ....domain.evaluation_object.allowed_device_file_extension import AllowedDeviceFileExtension
-from .file_device_exporter_port import FileDeviceExporterPort
+from core.domain.evaluation_object.allowed_device_file_extension import AllowedDeviceFileExtension
+from core.ports.outbound.device.file_device_exporter_port import FileDeviceExporterPort
 
 
 class FileDeviceExporterFactoryPort(ABC):

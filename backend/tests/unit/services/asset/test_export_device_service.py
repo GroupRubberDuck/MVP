@@ -1,9 +1,9 @@
 import pytest
 from unittest.mock import MagicMock
-from src.core.services.device.export_device_service import ExportDeviceService
+from core.services.device.export_device_service import ExportDeviceService, ExportedFile
 from core.ports.inbound.device.export_device_use_case import ExportDeviceCommand
-from src.core.domain.evaluation_object.allowed_device_file_extension import AllowedDeviceFileExtension
-from src.core.domain.evaluation_object.device import Device
+from core.domain.evaluation_object.allowed_device_file_extension import AllowedDeviceFileExtension
+from core.domain.evaluation_object.device import Device
 
 
 # fixtures 
@@ -55,32 +55,32 @@ def valid_command():
 
 # caso nominale
 
-def test_export_restituisce_bytes(service, valid_command):
-    # Il service deve restituire bytes
-    result = service.export(valid_command)
-    assert isinstance(result, bytes)
+def test_export_restituisce_file(service, valid_command):
+    # Verifica che il service incarti il risultato in un oggetto ExportedFile
+    result = service.export_device(valid_command)
+    assert isinstance(result, ExportedFile)
+
+def test_export_restituisce_output_dell_exporter(service, valid_command):
+    # Il contenuto del file esportato deve coincidere con quello generato dall'exporter
+    result = service.export_device(valid_command)
+    assert result.content == b"file_bytes"
 
 def test_export_chiama_find_by_id_con_device_id_corretto(service, valid_command, find_device_mock):
     # find_by_id deve essere chiamato con il device_id del command
-    service.export(valid_command)
+    service.export_device(valid_command)
     find_device_mock.find_by_id.assert_called_once_with("device-1")
 
 def test_export_chiama_factory_con_extension_corretta(service, valid_command, exporter_factory_mock):
     # La factory deve essere chiamata con l'extension del command
-    service.export(valid_command)
+    service.export_device(valid_command)
     exporter_factory_mock.get_file_device_exporter.assert_called_once_with(
         AllowedDeviceFileExtension.JSON
     )
 
-def test_export_chiama_generate_device_file(service, valid_command, exporter_mock):
-    # L'exporter deve essere chiamato con il DeviceFileCommand
-    service.export(valid_command)
-    exporter_mock.generate_device_file.assert_called_once()
-
-def test_export_restituisce_output_dell_exporter(service, valid_command):
-    # Il risultato deve essere quello restituito dall'exporter
-    result = service.export(valid_command)
-    assert result == b"file_bytes"
+def test_export_chiama_generate_device_file(service, valid_command, exporter_mock, device):
+    # L'exporter deve ricevere l'entità di dominio Device (grazie al nostro refactoring!)
+    service.export_device(valid_command)
+    exporter_mock.generate_device_file.assert_called_once_with(device)
 
 
 # casi di errore
@@ -98,7 +98,7 @@ def test_export_device_non_trovato_lancia_keyerror(exporter_factory_mock):
         extension=AllowedDeviceFileExtension.JSON,
     )
     with pytest.raises(KeyError):
-        service.export(command)
+        service.export_device(command)
 
 def test_export_extension_non_supportata_lancia_valueerror(find_device_mock):
     # Se l'extension non è supportata la factory deve propagare ValueError
@@ -113,4 +113,4 @@ def test_export_extension_non_supportata_lancia_valueerror(find_device_mock):
         extension=AllowedDeviceFileExtension.JSON,
     )
     with pytest.raises(ValueError):
-        service.export(command)
+        service.export_device(command)

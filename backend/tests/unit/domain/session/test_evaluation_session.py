@@ -42,50 +42,39 @@ class TestInsertJustification:
     def test_justification_viene_salvata(self):
         asset = make_asset()
         session = make_session(asset)
+        testo_giustificazione = "Il dispositivo soddisfa il requisito"
  
-        session.insert_justification(
-            asset_id="asset-1",
-            requirement_id="REQ-1",
-            node_id="NODE-1",
-            justification="Il dispositivo soddisfa il requisito",
-        )
+        # Azione: impostiamo la giustificazione
+        session.device.get_asset("asset-1").set_justification("req-1", testo_giustificazione)
  
-        evidence = session.device.get_asset("asset-1").get_evidence("REQ-1")
+        # Verifica: recuperiamo l'evidenza per controllare se il testo è salvato
+        evidence = session.device.get_asset("asset-1").get_evidence("req-1")
         assert evidence is not None
-        assert evidence.justification == "Il dispositivo soddisfa il requisito"
+        assert evidence.justification == testo_giustificazione
  
     def test_justification_vuota_viene_salvata(self):
         asset = make_asset()
         session = make_session(asset)
  
-        session.insert_justification(
-            asset_id="asset-1",
-            requirement_id="REQ-1",
-            node_id="NODE-1",
-            justification="",
-        )
+        # Azione: salviamo una stringa vuota
+        session.device.get_asset("asset-1").set_justification("req-1", "")
  
-        evidence = session.device.get_asset("asset-1").get_evidence("REQ-1")
+        # Verifica
+        evidence = session.device.get_asset("asset-1").get_evidence("req-1")
         assert evidence.justification == ""
  
     def test_justification_sovrascrive_precedente(self):
         asset = make_asset()
         session = make_session(asset)
+        
+        # Prima scrittura
+        session.device.get_asset("asset-1").set_justification("req-1", "testo vecchio")
+        
+        # Seconda scrittura (sovrascrittura)
+        session.device.get_asset("asset-1").set_justification("req-1", "versione aggiornata")
  
-        session.insert_justification(
-            asset_id="asset-1",
-            requirement_id="REQ-1",
-            node_id="NODE-1",
-            justification="prima versione",
-        )
-        session.insert_justification(
-            asset_id="asset-1",
-            requirement_id="REQ-1",
-            node_id="NODE-1",
-            justification="versione aggiornata",
-        )
- 
-        evidence = session.device.get_asset("asset-1").get_evidence("REQ-1")
+        # Verifica
+        evidence = session.device.get_asset("asset-1").get_evidence("req-1")
         assert evidence.justification == "versione aggiornata"
  
     def test_asset_non_trovato_solleva_eccezione(self):
@@ -93,9 +82,4 @@ class TestInsertJustification:
         session = make_session(asset)
  
         with pytest.raises(AssetNotFoundError):
-            session.insert_justification(
-                asset_id="non-esiste",
-                requirement_id="REQ-1",
-                node_id="NODE-1",
-                justification="testo",
-            )
+           session.device.get_asset("asset-inesistente").set_justification("req-1", "testo")

@@ -13,13 +13,19 @@ from core.services.evaluation.insert_justification_command import InsertJustific
 BASE_URL = "/sessions/session-1/assets/asset-1/requirements/REQ-1/nodes/NODE-1/justification"
  
  
-@pytest.fixture
-def app():
+@pytest.fixture(scope="module")
+def app_and_mock():
     mock_use_case = MagicMock()
     EvaluationJustificationController(mock_use_case)
     flask_app = Flask(__name__)
     flask_app.register_blueprint(evaluation_justification_blueprint)
     flask_app.config["TESTING"] = True
+    return flask_app, mock_use_case
+
+@pytest.fixture()
+def app(app_and_mock):
+    flask_app, mock_use_case = app_and_mock
+    mock_use_case.reset_mock()
     return flask_app, mock_use_case
  
  

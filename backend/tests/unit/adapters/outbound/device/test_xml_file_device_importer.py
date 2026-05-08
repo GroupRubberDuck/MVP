@@ -9,8 +9,7 @@ def _to_stream(xml: str) -> io.BytesIO:
     return io.BytesIO(xml.encode())
 
 
-_VALID_XML = """<device>
-    <device_id>DEV-001</device_id>
+_VALID_XML = """<device device_id="DEV-001">
     <standard_id>STD-001</standard_id>
     <name>Router</name>
     <os>Linux</os>
@@ -18,23 +17,20 @@ _VALID_XML = """<device>
     <assets></assets>
 </device>"""
 
-_XML_WITH_ASSET = """<device>
-    <device_id>DEV-001</device_id>
+_XML_WITH_ASSET = """<device device_id="DEV-001">
     <standard_id>STD-001</standard_id>
     <name>Router</name>
     <os>Linux</os>
     <description>Test</description>
     <assets>
-        <asset>
-            <id>A1</id>
+        <asset id="A1">
             <name>WiFi</name>
             <asset_type>network</asset_type>
             <description>desc</description>
             <evaluations>
-                <evaluation>
-                    <requirement_id>REQ-1</requirement_id>
+                <evaluation requirement_id="REQ-1">
                     <evaluation_map>
-                        <entry node_id="N1">true</entry>
+                        <choice node_id="N1" value="true"/>
                     </evaluation_map>
                     <justification>ok</justification>
                 </evaluation>

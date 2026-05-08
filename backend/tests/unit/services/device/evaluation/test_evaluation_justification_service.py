@@ -2,7 +2,6 @@ from unittest.mock import MagicMock
  
 from core.services.evaluation.evaluation_justification_service import EvaluationJustificationService
 from core.services.evaluation.insert_justification_command import InsertJustificationCommand
-from core.ports.inbound.evaluation.evaluation_session.insert_justification_use_case import InsertJustificationUseCase
  
  
 def make_command(**kwargs) -> InsertJustificationCommand:

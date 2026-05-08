@@ -1,6 +1,6 @@
 import pytest
 from flask import Flask
-from src.adapters.inbound.device.download_file_controller import DownloadFileController
+from adapters.inbound.device.download_file_controller import DownloadFileController
 
 
 @pytest.fixture
