@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from ....domain.session.evaluation_session import EvaluationSession
+from core.domain.session.evaluation_session import EvaluationSession
 
 class GetEvaluationSessionPort(ABC):
 

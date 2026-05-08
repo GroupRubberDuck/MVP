@@ -45,7 +45,7 @@ class CreateAssetService(CreateAssetUseCase):
             raise AssetCreationFailure("Failed to create asset") from e
         try:
             self._save_session.save_evaluation_session(session)
-        except EvaluationSessionSaveError:
-            raise AssetCreationFailure("Failed to save evaluation session") from None
+        except EvaluationSessionSaveError as e:
+            raise AssetCreationFailure("Failed to save evaluation session") from e
 
         return asset.id
