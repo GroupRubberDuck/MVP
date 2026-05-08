@@ -77,5 +77,11 @@ class Device:
         self.get_asset(asset_id)  # valida esistenza
         del self._assets[asset_id]
 
+    def update_asset(self, asset: Asset) -> None:
+        if asset.id not in self._assets:
+            raise AssetNotFoundError(
+                f"Asset '{asset.id}' non trovato nel device '{self.id}'")
+        self._assets[asset.id] = asset
+
 
 

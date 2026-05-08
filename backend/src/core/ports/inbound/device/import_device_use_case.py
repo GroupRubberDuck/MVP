@@ -1,13 +1,9 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from enum import StrEnum
+from core.services.device.allowed_device_extensions import AllowedDeviceFileExtension
 from typing import IO
 
 
-class AllowedDeviceFileExtension(StrEnum):
-    CSV = "csv"
-    XML = "xml"
-    JSON = "json"
 
 
 @dataclass(frozen=True)

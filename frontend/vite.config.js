@@ -19,6 +19,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         'helloworld': resolve(__dirname, 'src/main.js'),
+        'create-device': resolve(__dirname, 'src/main-create-device.js'),
       },
       output: {
         entryFileNames: `[name].js`,

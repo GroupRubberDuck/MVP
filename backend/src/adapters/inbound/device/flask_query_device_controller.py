@@ -3,7 +3,8 @@ from core.ports.inbound.device.get_device_use_case import GetDeviceDetailCommand
 from core.ports.inbound.compliance_standard.get_compliance_standard_use_case import GetComplianceStandardCommand, GetComplianceStandardUseCase
 from core.ports.inbound.compliance_standard.exceptions import StandardNotFoundFailure
 from core.ports.inbound.device.exceptions import DeviceNotFoundFailure
-from flask import Blueprint, render_template, abort
+from adapters.inbound.flask_controller_interface import FlaskController
+from flask import Blueprint,render_template
 from pydantic import BaseModel
 
 
@@ -20,8 +21,7 @@ class DeviceDetailDTO(BaseModel):
     compliance_standard_name: str
     compliance_standard_version: str
 
-
-class FlaskQueryDeviceController:
+class FlaskQueryDeviceController(FlaskController):
     def __init__(
         self,
         get_device_list_use_case: GetDeviceListUseCase,
@@ -69,27 +69,23 @@ class FlaskQueryDeviceController:
                 return render_template("error.html", message=str(e)), 404
             except StandardNotFoundFailure as e:
                 return render_template("error.html", message=str(e)), 404
-
-        @blueprint.route("/devices/new", methods=["GET"])
-        def get_add_device_form():
-            abort(501)
-
-        @blueprint.route("/devices/import", methods=["GET"])
-        def get_import_device_form():
-            abort(501)
-
+            
         @blueprint.route("/devices/<device_id>/edit", methods=["GET"])
-        def get_update_device_form(device_id):
-            abort(501)
-
-        @blueprint.route("/devices/<device_id>/delete", methods=["POST"])
-        def delete_device(device_id):
-            abort(501)
-
-        @blueprint.route("/devices/<device_id>/export", methods=["GET"])
-        def export_device(device_id):
-            abort(501)
-
-        @blueprint.route("/devices/<device_id>/evaluation/start", methods=["GET"])
-        def start_evaluation_session(device_id):
-            abort(501)
+        def edit_device_page(device_id):
+            command = GetDeviceDetailCommand(device_id=device_id)
+            try:
+                device = self._get_device_detail_use_case.get_device_detail(command)
+            except DeviceNotFoundFailure as e:
+                return render_template("error.html", message=str(e)), 404
+            return render_template("layouts/device/edit_device.html", device=DeviceDetailDTO(
+                    device_id=device.id,
+                    name=device.name,
+                    os=device.os,
+                    description=device.description,
+                    compliance_standard_name="",  # Non necessario per la pagina di modifica
+                    compliance_standard_version=""  # Non necessario per la pagina di modifica
+                )), 200
+        
+        @blueprint.route("/devices/create", methods=["GET"])
+        def create_device_page():
+            return render_template("layouts/device/create_device.html")

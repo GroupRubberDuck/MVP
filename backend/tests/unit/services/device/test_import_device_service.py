@@ -1,11 +1,10 @@
 import pytest
 from unittest.mock import MagicMock
 from typing import BinaryIO
+from core.services.device.allowed_device_extensions import AllowedDeviceFileExtension
 
-from core.ports.inbound.device.import_device_use_case import (
-    AllowedDeviceFileExtension,
-    ImportDeviceCommand,
-)
+from core.ports.inbound.device.import_device_use_case import ImportDeviceCommand
+
 from core.ports.outbound.device.file_device_importer_factory_port import FileDeviceImporterFactoryPort
 from core.ports.outbound.device.file_device_importer_port import FileDeviceImporterPort
 from core.ports.outbound.device.register_device_port import RegisterDevicePort
