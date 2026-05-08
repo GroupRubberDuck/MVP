@@ -33,25 +33,24 @@ def session(device, standard):
     return EvaluationSession(
         session_id="session-1",
         standard=standard,
-        device=device,
-        standard=MagicMock()
+        device=device
     )
 
 @pytest.fixture
-def get_session_mock(session):
+def get_evaluation_session_mock(session):
     mock = MagicMock()
     mock.get_evaluation_session.return_value = session
     return mock
 
 @pytest.fixture
-def save_session_mock():
+def save_evaluation_session_mock():
     return MagicMock()
 
 @pytest.fixture
-def service(get_session_mock, save_session_mock):
+def service(get_evaluation_session_mock, save_evaluation_session_mock):
     return CreateAssetService(
-        get_session=get_session_mock,
-        save_session=save_session_mock,
+        get_evaluation_session=get_evaluation_session_mock,
+        save_evaluation_session=save_evaluation_session_mock,
     )
 
 @pytest.fixture
@@ -89,20 +88,20 @@ def test_create_asset_tipo_corretto(service, valid_command, session):
     asset = list(session.device.assets.values())[0]
     assert asset.anagraphic.asset_type == AssetType.NETWORK
 
-def test_create_asset_salva_sessione(service, valid_command, save_session_mock, session):
+def test_create_asset_salva_sessione(service, valid_command, save_evaluation_session_mock, session):
     # La sessione aggiornata deve essere persistita esattamente una volta
     service.create_asset(valid_command)
-    save_session_mock.save_evaluation_session.assert_called_once_with(session)
+    save_evaluation_session_mock.save_evaluation_session.assert_called_once_with(session)
 
 
 # casi di errore 
-def test_create_asset_sessione_non_trovata(save_session_mock):
+def test_create_asset_sessione_non_trovata(save_evaluation_session_mock):
     # Se il session_id non esiste in cache deve propagare KeyError
-    get_session_mock = MagicMock()
-    get_session_mock.get_evaluation_session.side_effect = KeyError("Sessione non trovata")
+    get_evaluation_session_mock = MagicMock()
+    get_evaluation_session_mock.get_evaluation_session.side_effect = KeyError("Sessione non trovata")
     service = CreateAssetService(
-        get_session=get_session_mock,
-        save_session=save_session_mock,
+        get_evaluation_session=get_evaluation_session_mock,
+        save_evaluation_session=save_evaluation_session_mock,
     )
     command = CreateAssetCommand(
         name="Router",

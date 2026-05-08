@@ -5,7 +5,7 @@ from unittest.mock import MagicMock
 from core.domain.shared.exceptions import DomainError
 from core.ports.inbound.report.exceptions import ExportReportFailure
 from core.ports.inbound.report.generate_report_use_case import GenerateReportCommand
-from core.ports.outbound.evaluation.exceptions import SessionNotFoundError
+from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
 from core.services.report.generate_report_service import GenerateReportService
 from core.domain.evaluation_engine.evaluation_detail import DeviceEvaluationDetail
 
@@ -25,7 +25,7 @@ def mock_engine():
 @pytest.fixture
 def service(mock_session_port, mock_report_generator, mock_engine):
     return GenerateReportService(
-        get_session_port=mock_session_port,
+        get_evaluation_session_port=mock_session_port,
         report_generator_port=mock_report_generator,
         evaluation_engine=mock_engine,
     )
@@ -70,7 +70,7 @@ def _setup_happy_path(mock_session_port, mock_engine, mock_report_generator, com
     mock_session = MagicMock()
     mock_session.device = mock_device
     mock_session.standard = mock_standard
-    mock_session_port.get_session.return_value = mock_session
+    mock_session_port.get_evaluation_session.return_value = mock_session
 
     mock_req_result = MagicMock()
     mock_req_result.requirement_id = "REQ-1"
@@ -140,7 +140,7 @@ class TestExportReportFailures:
     def test_raises_failure_when_session_not_found(
         self, service, mock_session_port, command
     ):
-        mock_session_port.get_session.side_effect = SessionNotFoundError()
+        mock_session_port.get_evaluation_session.side_effect = EvaluationSessionNotFoundError()
 
         with pytest.raises(ExportReportFailure, match="SESSION-1"):
             service.export_report(command)

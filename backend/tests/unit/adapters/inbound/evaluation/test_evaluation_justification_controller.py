@@ -8,7 +8,7 @@ from adapters.inbound.evaluation.evaluation_justification_controller import (
 )
 from core.ports.inbound.evaluation.evaluation_session.insert_justification_use_case import InsertJustificationCommand
  
-BASE_URL = "/sessions/session-1/assets/asset-1/requirements/REQ-1/nodes/NODE-1/justification"
+BASE_URL = "/sessions/session-1/assets/asset-1/requirements/REQ-1/justification"
  
  
 @pytest.fixture(scope="module")

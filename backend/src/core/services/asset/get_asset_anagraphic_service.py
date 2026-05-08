@@ -5,18 +5,18 @@ from core.ports.inbound.asset.get_asset_anagraphic_use_case import (
     GetAssetAnagraphicCommand,
     GetAssetAnagraphicUseCase,
 )
-from core.ports.outbound.evaluation.exceptions import SessionNotFoundError
-from core.ports.outbound.evaluation.get_session_port import GetSessionPort
+from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
+from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
 
 
 class GetAssetAnagraphicService(GetAssetAnagraphicUseCase):
-    def __init__(self, get_session_port: GetSessionPort) -> None:
-        self._get_session_port = get_session_port
+    def __init__(self, get_evaluation_session_port: GetEvaluationSessionPort) -> None:
+        self._get_evaluation_session_port = get_evaluation_session_port
 
     def get_asset_anagraphic(self, command: GetAssetAnagraphicCommand) -> AssetAnagraphic:
         try:
-            session = self._get_session_port.get_session(command.session_id)
-        except SessionNotFoundError:
+            session = self._get_evaluation_session_port.get_evaluation_session(command.session_id)
+        except EvaluationSessionNotFoundError:
             raise GetAssetAnagraphicFailure(
                 f"Sessione '{command.session_id}' non trovata."
             )

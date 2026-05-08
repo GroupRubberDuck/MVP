@@ -9,23 +9,19 @@ from core.domain.evaluation_standard.requirement import Requirement
 from core.ports.inbound.asset.exceptions import GetAssetDetailFailure
 from core.ports.inbound.asset.get_asset_detail_use_case import GetAssetDetailCommand, GetAssetDetailUseCase
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
-<<<<<<< HEAD
-from core.ports.outbound.evaluation.get_session_port import GetSessionPort
-=======
 from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
->>>>>>> 557ff01a2ed040eb76cb77f4dd612be8fb66dfd7
 
 
 class GetAssetDetailService(GetAssetDetailUseCase):
     def __init__(
-        self, get_session_port: GetEvaluationSessionPort, evaluation_engine: EvaluationEngine
+        self, get_evaluation_session_port: GetEvaluationSessionPort, evaluation_engine: EvaluationEngine
     ) -> None:
-        self._get_session_port = get_session_port
+        self._get_evaluation_session_port = get_evaluation_session_port
         self._evaluation_engine = evaluation_engine
 
     def get_asset(self, command: GetAssetDetailCommand) -> AssetEvaluationDetail:
         try:
-            session = self._get_session_port.get_evaluation_session(command.session_id)
+            session = self._get_evaluation_session_port.get_evaluation_session(command.session_id)
         except EvaluationSessionNotFoundError:
             raise GetAssetDetailFailure(
                 f"Sessione '{command.session_id}' non trovata."

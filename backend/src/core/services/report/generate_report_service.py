@@ -1,7 +1,7 @@
 from core.ports.inbound.report.generate_report_use_case import GenerateReportUseCase, GenerateReportCommand
 from core.ports.inbound.report.exceptions import ExportReportFailure
-from core.ports.outbound.evaluation.get_session_port import GetSessionPort
-from core.ports.outbound.evaluation.exceptions import SessionNotFoundError
+from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
+from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
 from core.ports.outbound.report.report_generator_port import ReportGeneratorPort
 from core.domain.evaluation_engine.evaluation_engine import EvaluationEngine
 from core.domain.evaluation_engine.evaluation_detail import (
@@ -19,18 +19,18 @@ from typing import IO
 class GenerateReportService(GenerateReportUseCase):
     def __init__(
         self,
-        get_session_port: GetSessionPort,
+        get_evaluation_session_port: GetEvaluationSessionPort,
         report_generator_port: ReportGeneratorPort,
         evaluation_engine: EvaluationEngine,
     ) -> None:
-        self._get_session_port = get_session_port
+        self._get_evaluation_session_port = get_evaluation_session_port
         self._report_generator = report_generator_port
         self._evaluation_engine = evaluation_engine
 
     def export_report(self, command: GenerateReportCommand) -> IO[bytes]:
         try:
-            session = self._get_session_port.get_session(command.session_id)
-        except SessionNotFoundError as e:
+            session = self._get_evaluation_session_port.get_evaluation_session(command.session_id)
+        except EvaluationSessionNotFoundError as e:
             raise ExportReportFailure(
                 f"Sessione '{command.session_id}' non trovata."
             ) from e
