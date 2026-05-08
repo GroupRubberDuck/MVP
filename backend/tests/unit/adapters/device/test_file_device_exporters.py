@@ -3,18 +3,17 @@ import xml.etree.ElementTree as ET
 import json
 import csv
 import io
-from src.core.domain.evaluation_object.device import Device
-from src.core.domain.evaluation_object.asset.asset import Asset
-from src.core.domain.evaluation_object.asset.asset_anagraphic import AssetAnagraphic
-from src.core.domain.evaluation_object.asset.asset_proprieties import AssetProprieties
-from src.core.domain.evaluation_object.asset.asset_evidence import AssetEvidence
-from src.core.domain.evaluation_object.asset.asset_type import AssetType
-from src.core.domain.evaluation_object.allowed_device_file_extension import AllowedDeviceFileExtension
-from src.core.services.device.device_file_command import DeviceFileCommand
-from src.adapters.outbound.device.xml_file_device_exporter import XMLFileDeviceExporter
-from src.adapters.outbound.device.json_file_device_exporter import JSONFileDeviceExporter
-from src.adapters.outbound.device.csv_file_device_exporter import CSVFileDeviceExporter
-from src.adapters.outbound.device.concrete_file_device_exporter_factory import ConcreteFileDeviceExporterFactory
+from core.domain.evaluation_object.device import Device
+from core.domain.evaluation_object.asset.asset import Asset
+from core.domain.evaluation_object.asset.asset_anagraphic import AssetAnagraphic
+from core.domain.evaluation_object.asset.asset_proprieties import AssetProprieties
+from core.domain.evaluation_object.asset.asset_evidence import AssetEvidence
+from core.domain.evaluation_object.asset.asset_type import AssetType
+from core.domain.evaluation_object.allowed_device_file_extension import AllowedDeviceFileExtension
+from adapters.outbound.device.xml_file_device_exporter import XMLFileDeviceExporter
+from adapters.outbound.device.json_file_device_exporter import JSONFileDeviceExporter
+from adapters.outbound.device.csv_file_device_exporter import CSVFileDeviceExporter
+from adapters.outbound.device.concrete_file_device_exporter_factory import ConcreteFileDeviceExporterFactory
 from types import MappingProxyType
 
 

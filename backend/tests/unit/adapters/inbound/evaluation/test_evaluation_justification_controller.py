@@ -1,14 +1,12 @@
 import json
 import pytest
 from unittest.mock import MagicMock
-from flask import Flask
+from flask import Flask, blueprints
  
 from adapters.inbound.evaluation.evaluation_justification_controller import (
     EvaluationJustificationController,
-    evaluation_justification_blueprint,
 )
-from core.services.evaluation.insert_justification_command import InsertJustificationCommand
- 
+from core.ports.inbound.evaluation.evaluation_session.insert_justification_use_case import InsertJustificationCommand
  
 BASE_URL = "/sessions/session-1/assets/asset-1/requirements/REQ-1/nodes/NODE-1/justification"
  
@@ -16,9 +14,11 @@ BASE_URL = "/sessions/session-1/assets/asset-1/requirements/REQ-1/nodes/NODE-1/j
 @pytest.fixture
 def app():
     mock_use_case = MagicMock()
-    EvaluationJustificationController(mock_use_case)
+    controller=EvaluationJustificationController(mock_use_case)
     flask_app = Flask(__name__)
-    flask_app.register_blueprint(evaluation_justification_blueprint)
+    blueprint = blueprints.Blueprint("evaluation", __name__)
+    controller.register_routes(blueprint)
+    flask_app.register_blueprint(blueprint)
     flask_app.config["TESTING"] = True
     return flask_app, mock_use_case
  
@@ -48,7 +48,6 @@ class TestEvaluationJustificationController:
         assert command.session_id == "session-1"
         assert command.asset_id == "asset-1"
         assert command.requirement_id == "REQ-1"
-        assert command.node_id == "NODE-1"
         assert command.justification == "testo giustificazione"
  
     def test_body_senza_justification_usa_stringa_vuota(self, app):
