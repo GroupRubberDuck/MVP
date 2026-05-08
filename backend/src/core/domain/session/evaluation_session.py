@@ -7,3 +7,13 @@ class EvaluationSession:
     session_id: str
     standard: ComplianceStandard
     device: Device
+
+    def insert_justification(
+        self,
+        asset_id: str,
+        requirement_id: str,
+        node_id: str,
+        justification: str,
+    ) -> None:
+        asset = self.device.get_asset(asset_id)
+        asset.set_justification(requirement_id, justification)
