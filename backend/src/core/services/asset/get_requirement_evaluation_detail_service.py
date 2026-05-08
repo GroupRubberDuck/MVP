@@ -25,7 +25,10 @@ class GetRequirementEvaluationDetailService(GetRequirementEvaluationDetailUseCas
             raise GetRequirementEvaluationDetailFailure(
                 f"Sessione '{command.session_id}' non trovata."
             )
-
+        if session.device.id != command.device_id:
+            raise GetRequirementEvaluationDetailFailure(
+                f"Il dispositivo '{command.device_id}' non è associato alla sessione."
+            )
         device_result = self._evaluation_engine.evaluate(session.device, session.standard)
 
         asset_result = device_result.get_asset_result(command.asset_id)

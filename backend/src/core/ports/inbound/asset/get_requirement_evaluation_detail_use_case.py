@@ -8,6 +8,7 @@ from core.domain.evaluation_engine.evaluation_detail import RequirementEvaluatio
 class GetRequirementEvaluationDetailCommand:
     requirement_id: str
     asset_id: str
+    device_id: str
     session_id: str
 
 

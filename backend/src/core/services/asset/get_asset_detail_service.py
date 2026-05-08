@@ -27,7 +27,10 @@ class GetAssetDetailService(GetAssetDetailUseCase):
             session = self._get_session_port.get_session(command.session_id)
         except SessionNotFoundError:
             raise GetAssetDetailFailure(f"Sessione '{command.session_id}' non trovata.")
-
+        if session.device.id != command.device_id:
+            raise GetAssetDetailFailure(
+                f"Il dispositivo '{command.device_id}' non è associato alla sessione."
+            )
         device_result = self._evaluation_engine.evaluate(
             session.device, session.standard
         )
