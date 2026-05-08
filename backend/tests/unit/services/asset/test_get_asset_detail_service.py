@@ -22,7 +22,7 @@ def mock_engine():
 @pytest.fixture
 def service(mock_session_port, mock_engine):
     return GetAssetDetailService(
-        get_session_port=mock_session_port,
+        get_evaluation_session_port=mock_session_port,
         evaluation_engine=mock_engine,
     )
 
@@ -63,7 +63,7 @@ class TestGetAssetDetail:
     def test_returns_asset_detail_with_correct_id(
         self, service, mock_session_port, mock_engine, command
     ):
-        mock_session_port.get_session.return_value = _make_mock_session()
+        mock_session_port.get_evaluation_session.return_value = _make_mock_session()
         mock_engine.evaluate.return_value = _make_mock_device_result()
 
         result = service.get_asset(command)
@@ -73,7 +73,7 @@ class TestGetAssetDetail:
     def test_returns_asset_detail_with_correct_name(
         self, service, mock_session_port, mock_engine, command
     ):
-        mock_session_port.get_session.return_value = _make_mock_session()
+        mock_session_port.get_evaluation_session.return_value = _make_mock_session()
         mock_engine.evaluate.return_value = _make_mock_device_result()
 
         result = service.get_asset(command)
@@ -83,7 +83,7 @@ class TestGetAssetDetail:
     def test_returns_asset_detail_with_pass_verdict(
         self, service, mock_session_port, mock_engine, command
     ):
-        mock_session_port.get_session.return_value = _make_mock_session()
+        mock_session_port.get_evaluation_session.return_value = _make_mock_session()
         mock_engine.evaluate.return_value = _make_mock_device_result(verdict=EvaluationState.PASS)
 
         result = service.get_asset(command)
@@ -93,7 +93,7 @@ class TestGetAssetDetail:
     def test_returns_asset_detail_with_fail_verdict(
         self, service, mock_session_port, mock_engine, command
     ):
-        mock_session_port.get_session.return_value = _make_mock_session()
+        mock_session_port.get_evaluation_session.return_value = _make_mock_session()
         mock_engine.evaluate.return_value = _make_mock_device_result(verdict=EvaluationState.FAIL)
 
         result = service.get_asset(command)
@@ -103,7 +103,7 @@ class TestGetAssetDetail:
     def test_returns_empty_requirement_details_when_no_requirements(
         self, service, mock_session_port, mock_engine, command
     ):
-        mock_session_port.get_session.return_value = _make_mock_session()
+        mock_session_port.get_evaluation_session.return_value = _make_mock_session()
         mock_engine.evaluate.return_value = _make_mock_device_result(requirement_results=())
 
         result = service.get_asset(command)
@@ -113,18 +113,18 @@ class TestGetAssetDetail:
     def test_calls_port_with_correct_session_id(
         self, service, mock_session_port, mock_engine, command
     ):
-        mock_session_port.get_session.return_value = _make_mock_session()
+        mock_session_port.get_evaluation_session.return_value = _make_mock_session()
         mock_engine.evaluate.return_value = _make_mock_device_result()
 
         service.get_asset(command)
 
-        mock_session_port.get_session.assert_called_once_with("SESSION-1")
+        mock_session_port.get_evaluation_session.assert_called_once_with("SESSION-1")
 
     def test_calls_engine_with_session_device_and_standard(
         self, service, mock_session_port, mock_engine, command
     ):
         mock_session = _make_mock_session()
-        mock_session_port.get_session.return_value = mock_session
+        mock_session_port.get_evaluation_session.return_value = mock_session
         mock_engine.evaluate.return_value = _make_mock_device_result()
 
         service.get_asset(command)
@@ -136,7 +136,7 @@ class TestGetAssetDetail:
     def test_calls_device_result_with_correct_asset_id(
         self, service, mock_session_port, mock_engine, command
     ):
-        mock_session_port.get_session.return_value = _make_mock_session()
+        mock_session_port.get_evaluation_session.return_value = _make_mock_session()
         mock_device_result = _make_mock_device_result()
         mock_engine.evaluate.return_value = mock_device_result
 
@@ -150,7 +150,7 @@ class TestGetAssetDetailFailures:
     def test_raises_failure_when_session_not_found(
         self, service, mock_session_port, command
     ):
-        mock_session_port.get_session.side_effect = EvaluationSessionNotFoundError()
+        mock_session_port.get_evaluation_session.side_effect = EvaluationSessionNotFoundError()
 
         with pytest.raises(GetAssetDetailFailure, match="SESSION-1"):
             service.get_asset(command)
@@ -158,7 +158,7 @@ class TestGetAssetDetailFailures:
     def test_raises_failure_when_asset_not_in_device_result(
         self, service, mock_session_port, mock_engine, command
     ):
-        mock_session_port.get_session.return_value = _make_mock_session()
+        mock_session_port.get_evaluation_session.return_value = _make_mock_session()
         mock_device_result = MagicMock()
         mock_device_result.get_asset_result.return_value = None
         mock_engine.evaluate.return_value = mock_device_result
@@ -171,7 +171,7 @@ class TestGetAssetDetailFailures:
     ):
         mock_session = _make_mock_session()
         mock_session.device.get_asset.side_effect = AssetNotFoundError()
-        mock_session_port.get_session.return_value = mock_session
+        mock_session_port.get_evaluation_session.return_value = mock_session
         mock_engine.evaluate.return_value = _make_mock_device_result()
 
         with pytest.raises(GetAssetDetailFailure, match="ASSET-1"):

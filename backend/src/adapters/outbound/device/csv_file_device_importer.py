@@ -3,7 +3,7 @@ import io
 from typing import IO
 
 from adapters.outbound.device.file_device_importer import FileDeviceImporter
-from core.ports.outbound.device.exceptions import InvalidFileFormatError, EmptyFileError
+from core.ports.outbound.device.exceptions import InvalidFileFormatError
 
 
 class CSVFileDeviceImporter(FileDeviceImporter):

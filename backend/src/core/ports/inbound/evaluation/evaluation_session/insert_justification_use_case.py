@@ -2,16 +2,10 @@ from abc import ABC, abstractmethod
 from pydantic import BaseModel
 
 class InsertJustificationCommand(BaseModel):
-    def __init__(self, 
-                 session_id: str, 
-                 asset_id: str, 
-                 requirement_id: str, 
-                 justification: str
-                 ):
-        self.session_id = session_id
-        self.asset_id = asset_id
-        self.requirement_id= requirement_id
-        self.justification = justification
+    session_id: str
+    asset_id: str
+    requirement_id: str
+    justification: str
 
 
 

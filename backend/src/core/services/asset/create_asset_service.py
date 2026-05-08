@@ -13,15 +13,15 @@ class CreateAssetService(CreateAssetUseCase):
 
     def __init__(
         self,
-        get_session: GetEvaluationSessionPort,
-        save_session: SaveEvaluationSessionPort,
+        get_evaluation_session: GetEvaluationSessionPort,
+        save_evaluation_session: SaveEvaluationSessionPort,
     ):
-        self._get_session = get_session
-        self._save_session = save_session
+        self._get_evaluation_session = get_evaluation_session
+        self._save_evaluation_session = save_evaluation_session
 
     def create_asset(self, command: CreateAssetCommand) -> str:
         try:
-            session: EvaluationSession = self._get_session.get_evaluation_session(
+            session: EvaluationSession = self._get_evaluation_session.get_evaluation_session(
                 command.session_id
             )
         except EvaluationSessionNotFoundError:
@@ -44,7 +44,7 @@ class CreateAssetService(CreateAssetUseCase):
         except Exception as e:
             raise AssetCreationFailure("Failed to create asset") from e
         try:
-            self._save_session.save_evaluation_session(session)
+            self._save_evaluation_session.save_evaluation_session(session)
         except EvaluationSessionSaveError as e:
             raise AssetCreationFailure("Failed to save evaluation session") from e
 

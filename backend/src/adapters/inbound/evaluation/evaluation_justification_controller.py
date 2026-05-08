@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-from flask import Blueprint, Response, request, jsonify
- 
-from core.ports.inbound.evaluation.evaluation_session.insert_justification_use_case import InsertJustificationUseCase
-from core.services.evaluation.insert_justification_command import InsertJustificationCommand
- 
-evaluation_justification_blueprint = Blueprint("evaluation_justification", __name__)
- 
- 
-class EvaluationJustificationController:
- 
-=======
 from flask import Blueprint, request, jsonify
 from flask.typing import ResponseReturnValue
 from pydantic import ValidationError
@@ -24,7 +12,6 @@ from core.ports.inbound.evaluation.exceptions import InsertJustificationFailure
 
 class EvaluationJustificationController(FlaskController):
 
->>>>>>> 557ff01a2ed040eb76cb77f4dd612be8fb66dfd7
     def __init__(self, insert_justification_use_case: InsertJustificationUseCase) -> None:
         self._use_case = insert_justification_use_case
 
