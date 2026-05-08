@@ -1,26 +1,60 @@
-{# layouts/devices/device_list.html #}
+{# layouts/device/device_list.html #}
 {% extends "layouts/base.html" %}
 
 {% block title %}Dispositivi{% endblock %}
-{% block page_title %}Dispositivi{% endblock %}
+{% block page_title %}{% endblock %}
 
 {% block content %}
-    <div>
-        <a href="404">link ad aggiungi dispositivo  TODO</a>
-        <a href="404">link ad aggiungi importa dispositivo  TODO</a>
+  <div class="page-header">
+    <div class="page-header__text">
+      <h1>Dispositivi</h1>
+      <p>Gestione e valuta conformità EN 18031</p>
     </div>
+    <div class="page-header__actions">
+      <a class="btn btn--outline"
+         href="{{ url_for('devices.get_device_list') }}"> 
+        Importa Dispositivo
+      </a>
+      <a class="btn btn--primary"
+         href="{{ url_for('devices.get_add_device_form') }}"> 
+        + Nuovo Dispositivo
+      </a>
+    </div>
+  </div>
 
-    {% if devices|length > 0 %}
-        <ul>
-            {% for device in devices %}
-                <li>
-                    <a href="{{ url_for('devices.get_device_detail', device_id=device.device_id) }}">
-                        {{ device.name }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Nessun dispositivo trovato.</p>
-    {% endif %}
+  {% if devices|length > 0 %}
+    <ul class="device-list">
+      {% for device in devices %}
+        <li class="device-item">
+          <span class="device-item__name">{{ device.name }}</span>
+          <div class="device-item__actions">
+            <form class="inline-form"
+                  action="*" 
+                  method="post"
+                  onsubmit="return confirm('Eliminare {{ device.name }}?')"> 
+              <button class="btn btn--danger btn--sm" type="submit">Elimina</button>
+            </form>
+            <a class="btn btn--primary btn--sm"
+               href="{{ url_for('devices.get_device_detail', device_id=device.device_id) }}"> <!--  -->
+              Dettagli Dispositivo
+            </a>
+            <a class="btn btn--outline btn--sm"
+               href="{{ url_for('evaluation.start_session', device_id=device.device_id) }}"> <!--  -->
+              Vai alla Valutazione
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+
+  {% else %}
+    <div class="empty-state">
+      <p class="empty-state__title">Nessun dispositivo registrato</p>
+      <p class="empty-state__desc">
+        Non hai ancora aggiunto alcun dispositivo al sistema. Inizia creando
+        manualmente un nuovo dispositivo o importando un file di
+        configurazione per procedere con la valutazione.
+      </p>
+    </div>
+  {% endif %}
 {% endblock %}
