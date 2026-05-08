@@ -16,4 +16,5 @@ class EvaluationSessionSaveError(EvaluationSessionError):
 
 class AssetNotInSessionError(EvaluationSessionError):
     """L'asset richiesto non è presente nella sessione."""
+    """Impossibile trovare la sessione"""
     pass

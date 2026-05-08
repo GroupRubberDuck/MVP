@@ -32,10 +32,10 @@ class SetJustificationService(SetJustificationUseCase):
         try:
             asset.set_justification(command.requirement_id, command.justification)
         except Exception as e:
-            raise EvaluationSessionSaveError(f"Errore durante l'impostazione della giustificazione: {str(e)}")
+            raise SetJustificationFailure(f"Errore durante l'impostazione della giustificazione: {str(e)}")
         
         # Salva la sessione aggiornata
         try:
             self.save_evaluation_session_port.save_evaluation_session(session)
-        except Exception as e:
-            raise EvaluationSessionSaveError(f"Errore durante il salvataggio della sessione: {str(e)}")
+        except EvaluationSessionSaveError as e:
+            raise SetJustificationFailure(f"Errore durante il salvataggio della sessione: {str(e)}")
