@@ -35,3 +35,10 @@ class FileTooLargeError(DeviceImportError):
     pass
 
 
+class DeviceExportError(Exception):
+    """Errore durante l'esportazione di un device."""
+    pass
+
+class UnsupportedExportFormatError(DeviceExportError):
+    """Formato di esportazione non supportato."""
+    pass

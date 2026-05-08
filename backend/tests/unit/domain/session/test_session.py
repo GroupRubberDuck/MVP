@@ -8,7 +8,9 @@ def handler() -> SessionHandler:
 
 
 def test_can_open_session_when_no_active_session_exists(handler: SessionHandler):
-    result = handler.can_open_session(active_session_exists=False)
+    result = handler.can_open_session(
+        active_session_exists=False
+    )
     assert result is True
 
 
