@@ -1,14 +1,14 @@
-# ── Eccezioni di dominio ──────────────────────────────
+from core.domain.shared.exceptions import DomainError
 
-class DuplicateAssetError(Exception):
+class DuplicateAssetError(DomainError):
     pass
 
-class AssetNotFoundError(Exception):
+class AssetNotFoundError(DomainError):
     pass
 
-class EvidenceNotFoundError(Exception):
+class EvidenceNotFoundError(DomainError):
     pass
 
-class RequirementAlreadyExistsError(Exception):
+class RequirementAlreadyExistsError(DomainError):
     pass
 
