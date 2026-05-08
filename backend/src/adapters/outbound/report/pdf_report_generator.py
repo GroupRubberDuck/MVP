@@ -20,16 +20,16 @@ _STATE_COLORS: dict[EvaluationState, tuple[int, int, int]] = {
 
 
 class PdfReportGenerator(ReportGeneratorPort):
-    def generate_report(self, detail: DeviceEvaluationDetail) -> IO[bytes]:
+    def generate_report(self, device_evaluation: DeviceEvaluationDetail) -> IO[bytes]:
         pdf = FPDF()
         pdf.set_auto_page_break(auto=True, margin=15)
         pdf.add_page()
-        self._format_header(pdf, detail)
-        self._print_asset_evaluations(pdf, detail)
+        self._format_header(pdf, device_evaluation)
+        self._print_asset_evaluations(pdf, device_evaluation)
         self._format_footer(pdf)
         return io.BytesIO(bytes(pdf.output()))
 
-    def _format_header(self, pdf: FPDF, detail: DeviceEvaluationDetail) -> None:
+    def _format_header(self, pdf: FPDF, device_evaluation: DeviceEvaluationDetail) -> None:
         pdf.set_font("Helvetica", "B", 20)
         pdf.cell(0, 12, "Compliance Report", new_x="LMARGIN", new_y="NEXT", align="C")
         pdf.ln(4)
@@ -37,13 +37,13 @@ class PdfReportGenerator(ReportGeneratorPort):
         pdf.set_font("Helvetica", "B", 12)
         pdf.cell(0, 8, "Dispositivo", new_x="LMARGIN", new_y="NEXT")
         pdf.set_font("Helvetica", "", 11)
-        pdf.cell(0, 7, f"Nome: {detail.name}", new_x="LMARGIN", new_y="NEXT")
-        pdf.cell(0, 7, f"Sistema operativo: {detail.operating_system}", new_x="LMARGIN", new_y="NEXT")
-        pdf.cell(0, 7, f"Descrizione: {detail.description}", new_x="LMARGIN", new_y="NEXT")
-        pdf.cell(0, 7, f"Standard: {detail.standard_id}", new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(0, 7, f"Nome: {device_evaluation.name}", new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(0, 7, f"Sistema operativo: {device_evaluation.operating_system}", new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(0, 7, f"Descrizione: {device_evaluation.description}", new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(0, 7, f"Standard: {device_evaluation.standard_id}", new_x="LMARGIN", new_y="NEXT")
         pdf.ln(3)
 
-        self._print_state_badge(pdf, "Verdetto complessivo", detail.verdict)
+        self._print_state_badge(pdf, "Verdetto complessivo", device_evaluation.verdict)
         pdf.ln(6)
 
     def _print_asset_evaluations(self, pdf: FPDF, detail: DeviceEvaluationDetail) -> None:
