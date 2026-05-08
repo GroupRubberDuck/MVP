@@ -66,9 +66,9 @@ class FlaskQueryDeviceController:
                     ),
                 ), 200
             except DeviceNotFoundFailure as e:
-                return render_template("error.html", message=str(e)), 404
+                return render_template("layouts/errors/404.html", message=str(e)), 404
             except StandardNotFoundFailure as e:
-                return render_template("error.html", message=str(e)), 404
+                return render_template("layouts/errors/404.html", message=str(e)), 404
 
         @blueprint.route("/devices/new", methods=["GET"])
         def get_add_device_form():

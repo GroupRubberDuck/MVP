@@ -7,7 +7,6 @@
   {# ── Topbar: titolo + badge + azioni ── #}
   <div class="device-header">
     <h1 class="device-header__title">{{ device.name }}</h1>
-    <span class="badge badge--fail">FAIL</span>{# TODO: calcolare da dati reali #}
 
     <div class="device-header__actions">
       <a class="btn btn--outline"
@@ -62,56 +61,7 @@
       </div>
     </div>
 
-    {# ── Colonna destra: Lista Asset ── #}
-    <div class="card">
-      <div class="card__header">
-        <h2 class="card__title">Lista Asset</h2>
-        <a class="btn btn--success btn--sm"
-           href="{{ url_for('devices.get_add_asset_form', device_id=device.device_id) }}"> 
-          + Aggiungi Asset
-        </a>
-      </div>
 
-      {% if assets %}
-        <ul class="asset-list">
-          {% for asset in assets %}
-            <li class="asset-item">
-              <div class="asset-item__info">
-                <div class="asset-item__name">{{ asset.name }}</div>
-                <div class="asset-item__type">{{ asset.asset_type }}</div>
-              </div>
-
-              {% if asset.status == "PASS" %}
-                <span class="badge badge--pass">PASS</span>
-              {% elif asset.status == "FAIL" %}
-                <span class="badge badge--fail">FAIL</span>
-              {% else %}
-                <span class="badge badge--na">NA</span>
-              {% endif %}
-
-              <div class="asset-item__actions">
-                <a class="btn btn--secondary btn--sm"
-                   href="{{ url_for('devices.get_asset_detail', device_id=device.device_id, asset_id=asset.asset_id) }}"> <!--  -->
-                  Visualizza
-                </a>
-                <a class="btn btn--outline btn--sm"
-                   href="{{ url_for('devices.get_update_asset_form', device_id=device.device_id, asset_id=asset.asset_id) }}"> <!--  -->
-                  Modifica
-                </a>
-                <form class="inline-form"
-                      action="{{ url_for('devices.delete_asset', device_id=device.device_id, asset_id=asset.asset_id) }}"
-                      method="post"
-                      onsubmit="return confirm('Eliminare l\'asset {{ asset.name }}?')">
-                  <button class="btn btn--danger btn--sm" type="submit">Elimina</button>
-                </form>
-              </div>
-            </li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        <p class="info-text">Nessun asset associato.</p>
-      {% endif %}
-    </div>
 
   </div>
 {% endblock %}
