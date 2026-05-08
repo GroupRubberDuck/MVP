@@ -1,8 +1,8 @@
 from unittest.mock import MagicMock
  
-from core.services.evaluation.set_justification_service import SetJustificationService
+from core.services.evaluation.evaluation_justification_service import EvaluationJustificationService
 from core.services.evaluation.insert_justification_command import InsertJustificationCommand
-from core.ports.inbound.evaluation.evaluation_session.insert_justification_use_case import SetJustificationService
+from core.ports.inbound.evaluation.evaluation_session.insert_justification_use_case import InsertJustificationUseCase
  
  
 def make_command(**kwargs) -> InsertJustificationCommand:
@@ -21,7 +21,7 @@ def make_service():
     mock_save = MagicMock()  # simula SaveSessionPort
     mock_session = MagicMock()
     mock_get.get_session.return_value = mock_session
-    service = SetJustificationService(mock_get, mock_save)
+    service = EvaluationJustificationService(mock_get, mock_save)
     return service, mock_get, mock_save, mock_session
  
  

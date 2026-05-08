@@ -1,7 +1,19 @@
-class DeleteAssetFailure(Exception):
+class AssetFailure(Exception):
+    """Errore generico relativo agli asset."""
+    pass
+
+class DeleteAssetFailure(AssetFailure):
     """Impossibile rimuovere l'asset."""
     pass
 
-class GetAssetDetailFailure(Exception):
+class GetAssetDetailFailure(AssetFailure):
     """L'asset detail non può essere recuperato (sessione non trovata o asset non presente)."""
+    pass
+
+class UpdateAssetFailure(AssetFailure):
+    """Impossibile aggiornare l'asset."""
+    pass
+
+class CreateAssetFailure(AssetFailure):
+    """Impossibile creare l'asset."""
     pass

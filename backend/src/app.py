@@ -21,7 +21,7 @@ from core.services.compliance_standard.get_compliance_standard_service import Ge
 
 # Controller (adapter inbound)
 from adapters.inbound.device.flask_query_device_controller import FlaskQueryDeviceController
-from adapters.inbound.device.import_export_device_controller import ImportDeviceController
+from adapters.inbound.device.import_device_controller import ImportDeviceController
 
 # Routes
 from routes import register_routes, register_error_handlers
