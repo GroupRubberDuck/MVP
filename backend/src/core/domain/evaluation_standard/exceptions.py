@@ -1,8 +1,10 @@
-class CycleDetectedError(Exception):
+from core.domain.shared.exceptions import DomainError
+
+class CycleDetectedError(DomainError):
     pass
 
-class MissingDecisionTreeError(Exception):
+class MissingDecisionTreeError(DomainError):
     pass
 
-class RequirementNotFoundError(Exception):
+class RequirementNotFoundError(DomainError):
     pass

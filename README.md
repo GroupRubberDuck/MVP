@@ -8,7 +8,7 @@
 
 
 
-Per avviare l'applicazione è sufficiente aver docker e docker compose installati, aver impostato le due variabili di ambiente `DB_USERNAME` e `DB_PASSWORD`, ed eseguire il seguente comando:
+Per avviare l'applicazione è sufficiente aver docker e docker compose installati, aver impostato le due variabili di ambiente `DB_USER` e `DB_PASSWORD`, ed eseguire il seguente comando:
 ```bash
 docker compose up --build -d
 ```

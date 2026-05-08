@@ -1,49 +1,39 @@
-from flask import Flask, Blueprint, redirect, url_for,render_template
-"""
-Definisce tutte le rotte dell'applicazione, organizzate in blueprint per modulo funzionale.
+from flask import Flask, Blueprint, redirect, url_for, render_template
+from adapters.inbound.flask_controller_interface import FlaskController
 
-Gli if servono a registrare solo i blueprint per cui è stato passato un controller, in modo da poter gestire dinamicamente la disponibilità di funzionalità in base alla configurazione o allo stato dell'applicazione (es. errori di connessione al database).
-Permettono di sviluppare e testare più facilmente
-Idealmente rimossi al termine dello sviluppo
-"""
 
-def register_routes(app: Flask, **controllers) -> None:
-    """Registra tutti i blueprint e le rotte globali."""
+def register_routes(
+    app: Flask,
+    device_controllers: list[FlaskController] | None = None,
+    standard_controllers: list[FlaskController] | None = None,
+    evaluation_controllers: list[FlaskController] | None = None,
+    report_controllers: list[FlaskController] | None = None,
+) -> None:
 
-    # ── Rotta index ──
     @app.route("/")
     def index():
         return redirect(url_for("devices.get_device_list"))
 
-    # ── Blueprint devices ──
-    device_bp = Blueprint("devices", __name__)
-    if "query_device" in controllers:
-        controllers["query_device"].register_routes(device_bp)
-    if "import_export_device" in controllers:
-        controllers["import_export_device"].register_routes(device_bp)
-    app.register_blueprint(device_bp)
-
-    # ── Blueprint compliance standards ──
-    if "import_export_standard" in controllers:
-        standard_bp = Blueprint("standards", __name__)
-        controllers["import_export_standard"].register_routes(standard_bp)
-        app.register_blueprint(standard_bp)
-
-    # ── Blueprint evaluation ──
-    if "evaluation" in controllers:
-        evaluation_bp = Blueprint("evaluation", __name__)
-        controllers["evaluation"].register_routes(evaluation_bp)
-        app.register_blueprint(evaluation_bp)
-
-    # ── Blueprint report ──
-    if "report" in controllers:
-        report_bp = Blueprint("report", __name__)
-        controllers["report"].register_routes(report_bp)
-        app.register_blueprint(report_bp)
+    _register_blueprint(app, "devices", device_controllers)
+    _register_blueprint(app, "standards", standard_controllers)
+    _register_blueprint(app, "evaluation", evaluation_controllers)
+    _register_blueprint(app, "report", report_controllers)
 
 
+def _register_blueprint(
+    app: Flask,
+    name: str,
+    controllers: list[FlaskController] | None,
+) -> None:
+    if not controllers:
+        return
+    bp = Blueprint(name, __name__)
+    for controller in controllers:
+        controller.register_routes(bp)
+    app.register_blueprint(bp)
 
-def register_error_handlers(app: Flask):
+
+def register_error_handlers(app: Flask) -> None:
 
     @app.errorhandler(400)
     def bad_request(e):

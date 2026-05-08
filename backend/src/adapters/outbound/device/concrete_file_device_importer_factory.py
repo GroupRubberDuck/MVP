@@ -1,4 +1,4 @@
-from core.ports.inbound.device.import_device_use_case import AllowedDeviceFileExtension
+from core.services.device.allowed_device_extensions import AllowedDeviceFileExtension
 from core.ports.outbound.device.file_device_importer_factory_port import FileDeviceImporterFactoryPort
 from core.ports.outbound.device.file_device_importer_port import FileDeviceImporterPort
 from adapters.outbound.device.json_file_device_importer import JSONFileDeviceImporter

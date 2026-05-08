@@ -1,9 +1,9 @@
 import io
 import pytest
 from unittest.mock import MagicMock
-from flask import Flask
+from flask import Flask, Blueprint
 
-from adapters.inbound.device.import_export_device_controller import ImportDeviceController
+from adapters.inbound.device.import_device_controller import ImportDeviceController
 from core.ports.inbound.device.exceptions import DeviceRegistrationFailure, ImportDeviceFailure
 
 
@@ -15,9 +15,13 @@ def mock_service():
 @pytest.fixture
 def client(mock_service):
     app = Flask(__name__)
-    controller = ImportDeviceController(mock_service)
-    app.register_blueprint(controller.blueprint)
     app.config["TESTING"] = True
+
+    controller = ImportDeviceController(mock_service)
+    bp = Blueprint("devices", __name__)
+    controller.register_routes(bp)
+    app.register_blueprint(bp)
+
     return app.test_client()
 
 
@@ -53,33 +57,25 @@ class TestImportDeviceController:
 
     def test_returns_201_when_import_succeeds(self, client, mock_service):
         mock_service.import_device.return_value = None
-
         response = _post_file(client, "device.json")
-
         assert response.status_code == 201
         assert "successo" in response.get_json()["message"]
 
     def test_calls_service_with_correct_extension(self, client, mock_service):
         mock_service.import_device.return_value = None
-
         _post_file(client, "device.json")
-
         command = mock_service.import_device.call_args[0][0]
-        from core.ports.inbound.device.import_device_use_case import AllowedDeviceFileExtension
+        from core.services.device.allowed_device_extensions import AllowedDeviceFileExtension
         assert command.extension == AllowedDeviceFileExtension.JSON
 
     def test_returns_422_on_import_device_failure(self, client, mock_service):
         mock_service.import_device.side_effect = ImportDeviceFailure("File non valido.")
-
         response = _post_file(client, "device.json")
-
         assert response.status_code == 422
         assert "File non valido." in response.get_json()["error"]
 
     def test_returns_409_on_device_registration_failure(self, client, mock_service):
         mock_service.import_device.side_effect = DeviceRegistrationFailure("Dispositivo già esistente.")
-
         response = _post_file(client, "device.json")
-
         assert response.status_code == 409
         assert "già esistente" in response.get_json()["error"]
