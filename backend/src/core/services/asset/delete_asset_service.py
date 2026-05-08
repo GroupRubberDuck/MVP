@@ -3,10 +3,8 @@ from core.ports.inbound.asset.delete_asset_use_case import (
     DeleteAssetCommand,
     DeleteAssetUseCase,
 )
-from core.ports.outbound.evaluation.session_cache_port import (
-    GetSessionPort,
-    SaveSessionPort,
-)
+from core.ports.outbound.evaluation.get_session_port import GetSessionPort
+from core.ports.outbound.evaluation.save_session_port import SaveSessionPort
 from core.ports.outbound.evaluation.exceptions import SessionNotFoundError
 from core.domain.evaluation_object.exceptions import AssetNotFoundError
 
@@ -33,4 +31,4 @@ class DeleteAssetService(DeleteAssetUseCase):
             raise DeleteAssetFailure(
                 f"Impossibile eliminare: Asset '{command.asset_id}' non trovato nel dispositivo."
             ) from e
-        self._save_session_port.save(session)
+        self._save_session_port.save_session(session)
