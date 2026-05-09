@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 
 class EvaluateDecisionNodeCommand(BaseModel):
     session_id: str
+    device_id: str
     asset_id: str
     requirement_id: str
     node_id: str

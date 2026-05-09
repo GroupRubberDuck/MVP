@@ -14,6 +14,7 @@ from core.domain.evaluation_object.exceptions import AssetNotFoundError
 
 def make_command(
     session_id="session-1",
+    device_id="device-1",
     asset_id="asset-1",
     requirement_id="REQ-1",
     node_id="node-1",
@@ -21,6 +22,7 @@ def make_command(
 ) -> EvaluateDecisionNodeCommand:
     return EvaluateDecisionNodeCommand(
         session_id=session_id,
+        device_id=device_id,
         asset_id=asset_id,
         requirement_id=requirement_id,
         node_id=node_id,
