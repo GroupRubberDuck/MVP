@@ -42,3 +42,7 @@ class DeviceExportError(Exception):
 class UnsupportedExportFormatError(DeviceExportError):
     """Formato di esportazione non supportato."""
     pass
+
+class DeviceSaveError(Exception):
+    """Eccezione sollevata dall'adapter quando fallisce il salvataggio persistente (es. su MongoDB) del Device."""
+    pass

@@ -23,4 +23,4 @@ class UpdateDeviceService(UpdateDeviceUseCase):
             os=command.device_os,
             description=command.device_description,
         )
-        self._save_device_port.save(device)
+        self._save_device_port.save_device(device)
