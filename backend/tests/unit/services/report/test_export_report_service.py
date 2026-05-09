@@ -8,7 +8,7 @@ from core.ports.inbound.report.generate_report_use_case import GenerateReportCom
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
 from core.services.report.generate_report_service import GenerateReportService
 from core.domain.evaluation_engine.evaluation_detail import DeviceEvaluationDetail
-
+from core.ports.inbound.report.generate_report_use_case import ReportFormat
 
 @pytest.fixture
 def mock_session_port():
@@ -32,7 +32,7 @@ def service(mock_session_port, mock_report_generator, mock_engine):
 
 @pytest.fixture
 def command():
-    return GenerateReportCommand(session_id="SESSION-1", report_format="pdf")
+    return GenerateReportCommand(session_id="SESSION-1", device_id="DEV-1", report_format=ReportFormat.PDF)
 
 
 def _setup_happy_path(mock_session_port, mock_engine, mock_report_generator, command):
@@ -105,7 +105,7 @@ class TestExportReportSuccess:
 
         result = service.export_report(command)
 
-        assert result.read() == b"PDF CONTENT"
+        assert result.content.read() == b"PDF CONTENT"
 
     def test_builds_correct_device_evaluation_detail(
         self, service, mock_session_port, mock_engine, mock_report_generator, command
