@@ -5,7 +5,6 @@ from types import SimpleNamespace
 from flask import Flask, Blueprint
 
 from adapters.inbound.report.report_controller import FlaskExportReportController
-from core.ports.inbound.report.generate_report_use_case import GenerateReportCommand
 from core.ports.inbound.report.exceptions import ExportReportFailure
 
 
