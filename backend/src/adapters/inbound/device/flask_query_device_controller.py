@@ -4,7 +4,7 @@ from core.ports.inbound.compliance_standard.get_compliance_standard_use_case imp
 from core.ports.inbound.compliance_standard.exceptions import StandardNotFoundFailure
 from core.ports.inbound.device.exceptions import DeviceNotFoundFailure
 from adapters.inbound.flask_controller_interface import FlaskController
-from flask import Blueprint,render_template
+from flask import Blueprint, render_template
 from pydantic import BaseModel
 
 
@@ -20,6 +20,7 @@ class DeviceDetailDTO(BaseModel):
     description: str
     compliance_standard_name: str
     compliance_standard_version: str
+
 
 class FlaskQueryDeviceController(FlaskController):
     def __init__(
@@ -66,9 +67,9 @@ class FlaskQueryDeviceController(FlaskController):
                     ),
                 ), 200
             except DeviceNotFoundFailure as e:
-                return render_template("error.html", message=str(e)), 404
+                return render_template("errors/404.html", message=str(e)), 404
             except StandardNotFoundFailure as e:
-                return render_template("error.html", message=str(e)), 404
+                return render_template("errors/404.html", message=str(e)), 404
             
         @blueprint.route("/devices/<device_id>/edit", methods=["GET"])
         def edit_device_page(device_id):
@@ -76,7 +77,8 @@ class FlaskQueryDeviceController(FlaskController):
             try:
                 device = self._get_device_detail_use_case.get_device_detail(command)
             except DeviceNotFoundFailure as e:
-                return render_template("error.html", message=str(e)), 404
+                return render_template("errors/404.html", message=str(e)), 404
+            
             return render_template("layouts/device/edit_device.html", device=DeviceDetailDTO(
                     device_id=device.id,
                     name=device.name,

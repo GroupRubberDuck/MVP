@@ -16,6 +16,8 @@ from adapters.outbound.device.concrete_file_device_importer_factory import Concr
 # --- Service (Query) ---
 from core.services.device.get_device_list_service import GetDeviceListService
 from core.services.device.get_device_detail_service import GetDeviceDetailService
+from core.services.device.import_device_service import ImportDeviceService
+
 from core.services.compliance_standard.get_compliance_standard_service import GetComplianceStandardService
 
 # --- Service (Write) ---
@@ -60,6 +62,11 @@ def create_app() -> Flask:
     # Servizi Query
     get_device_list_service = GetDeviceListService(device_adapter)
     get_device_detail_service = GetDeviceDetailService(device_adapter)
+    import_device_service = ImportDeviceService(
+        register_device_port=device_adapter,
+        device_importer_factory=ConcreteFileDeviceImporterFactory()
+    )
+
     get_compliance_standard_service = GetComplianceStandardService(standard_adapter)
 
     # Servizi Write
@@ -76,6 +83,9 @@ def create_app() -> Flask:
         get_device_list_use_case=get_device_list_service,
         get_device_detail_use_case=get_device_detail_service,
         get_compliance_standard_use_case=get_compliance_standard_service,
+    )
+    import_device_controller = ImportDeviceController(
+        import_device_service=import_device_service
     )
 
     # Iniezione dei Use Case nel Write Controller
@@ -114,7 +124,10 @@ def _register_health_check(app: Flask, mongo_client, db) -> None:
         except Exception as e:
             return jsonify({"status": "error", "detail": str(e)}), 503
 
+
 def _register_fallback_routes(app: Flask, error: str, status: int) -> None:
+    """Se il DB non è disponibile, ogni rotta risponde con l'errore."""
+
     @app.route("/health")
     def health_fallback():
         return jsonify({"status": "error", "detail": error}), status

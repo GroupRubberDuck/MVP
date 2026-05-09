@@ -29,7 +29,7 @@ def connect(
     port = port or os.environ.get("DB_PORT", "27017")
     user = user or os.environ.get("DB_USER", "")
     password = password or os.environ.get("DB_PASSWORD", "")
-    db_name = db_name or os.environ.get("DB_NAME", "poc_db")
+    db_name = db_name or os.environ.get("DB_NAME", "mvp_db")
 
     uri = f"mongodb://{user}:{password}@{host}:{port}/"
     client = MongoClient(
