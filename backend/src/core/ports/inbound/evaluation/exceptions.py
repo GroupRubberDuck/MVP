@@ -4,4 +4,10 @@ class InsertJustificationFailure(Exception):
 
 class EvaluateNodeFailure(Exception):
     """Eccezione sollevata quando la valutazione di un nodo decisionale fallisce per regole di business."""
+class CommitSessionFailure(Exception):
+    """Eccezione sollevata quando il commit della sessione fallisce per logica di business o problemi infrastrutturali."""
+    pass
+
+class GetEvaluationDetailFailure(Exception):
+    """Lanciata quando non è possibile recuperare il dettaglio della valutazione."""
     pass
