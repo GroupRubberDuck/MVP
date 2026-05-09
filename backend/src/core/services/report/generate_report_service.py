@@ -22,10 +22,12 @@ class GenerateReportService(GenerateReportUseCase):
         self,
         get_evaluation_session_port: GetEvaluationSessionPort,
         report_generator_port: ReportGeneratorPort,
-        evaluation_engine: EvaluationEngine = EvaluationEngine(),
+        evaluation_engine: EvaluationEngine | None = None,
     ) -> None:
         self._get_evaluation_session_port = get_evaluation_session_port
         self._report_generator = report_generator_port
+        if evaluation_engine is None:
+            evaluation_engine = EvaluationEngine()
         self._evaluation_engine = evaluation_engine
 
     def export_report(self, command: GenerateReportCommand) -> ExportedFile:
