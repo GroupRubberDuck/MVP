@@ -5,10 +5,12 @@ from core.ports.outbound.compliance_standard.exceptions import StandardNotFoundE
 
 from core.domain.evaluation_standard.compliance_standard import ComplianceStandard
 from core.domain.evaluation_standard.requirement import Requirement
+from core.domain.evaluation_standard.standard_verdict import StandardVerdict
 from core.domain.evaluation_standard.decision_tree import (
     DecisionNode,
     DecisionTree,
     LeafNode,
+    Node
 )
 
 
@@ -28,7 +30,7 @@ class MongoComplianceStandardAdapter(FindStandardPort):
         requirements = []
         for req_doc in doc.get("requirements", []):
             root = req_doc["decision_tree"]["root_node_id"]
-            nodes = []
+            nodes: list[Node] = []
             for node_doc in req_doc["decision_tree"]["nodes"]:
                 if node_doc["node_type"] == "decision_node":
                     nodes.append(
@@ -43,7 +45,9 @@ class MongoComplianceStandardAdapter(FindStandardPort):
                     nodes.append(
                         LeafNode(
                             node_id=node_doc["node_id"],
-                            verdict_value=node_doc["verdict"],
+                            verdict_value=StandardVerdict(
+                                node_doc["verdict"]
+                            ),
                         )
                     )
             requirements.append(
@@ -53,7 +57,7 @@ class MongoComplianceStandardAdapter(FindStandardPort):
                     description=req_doc["description"]["norm_description"],
                     target_description=req_doc["description"]["target_description"],
                     decision_tree=DecisionTree(root=root, nodes=nodes),
-                    dependency_ids=req_doc.get("dependency_ids", []),
+                    dependency_ids=tuple(req_doc.get("dependency_ids", ()))
                 )
             )
         return ComplianceStandard(

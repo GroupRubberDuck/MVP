@@ -6,9 +6,10 @@ from core.domain.evaluation_object.asset.asset_type import AssetType
 
 @dataclass(frozen=True)
 class UpdateAssetCommand:
+    device_id: str
     asset_id: str
     name: str
-    type: AssetType
+    asset_type: AssetType
     description: str
     session_id: str
 

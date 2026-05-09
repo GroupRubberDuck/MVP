@@ -1,0 +1,2 @@
+class ExportReportFailure(Exception):
+    pass
