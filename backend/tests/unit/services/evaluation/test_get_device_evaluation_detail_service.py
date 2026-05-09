@@ -9,7 +9,7 @@ from core.domain.evaluation_object.asset.asset_type import AssetType
 
 
 def make_command(session_id="session-123") -> GetDeviceEvaluationDetailCommand:
-    return GetDeviceEvaluationDetailCommand(session_id=session_id)
+    return GetDeviceEvaluationDetailCommand(session_id=session_id,device_id="device-123")
 
 def make_service():
     mock_get_session_port = MagicMock()
