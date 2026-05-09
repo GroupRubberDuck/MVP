@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div>
-      <h2>Informazioni Dispositivo</h2>
+      <h2>{{ isEditMode ? 'Modifica Dispositivo' : 'Informazioni Dispositivo' }}</h2>
     </div>
 
     <!-- Messaggio di errore dinamico dal Backend -->
@@ -69,10 +69,9 @@
         :disabled="isSubmitting" 
         @click="submit"
       >
-        {{ isSubmitting ? 'Salvataggio...' : 'Crea Dispositivo' }}
+        {{ isSubmitting ? 'Salvataggio...' : (isEditMode ? 'Salva Modifiche' : 'Crea Dispositivo') }}
       </button>
-      
-      <a href="/devices" class="btn btn--outline">
+      <a :href="isEditMode ? `/devices/${deviceId}` : '/devices'" class="btn btn--outline">
         Annulla
       </a>
     </div>
@@ -80,13 +79,13 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed, onMounted } from 'vue'
 
 const form = reactive({
   device_name: '',
   device_os: '',
   device_description: '',
-  standard_id: "60b9c8d7e6f5a4b3c2d1e0f9" 
+  standard_id: "STD-EN303645" 
 })
 
 const errors = reactive({
@@ -96,6 +95,35 @@ const errors = reactive({
 
 const isSubmitting = ref(false)
 const errorMessage = ref('')
+
+// --- GESTIONE MODALITÀ MODIFICA ---
+const deviceId = ref(null)
+const isEditMode = computed(() => deviceId.value !== null)
+
+onMounted(() => {
+  // Cerca un ID tra /devices/ e /edit
+  const match = window.location.pathname.match(/\/devices\/([^\/]+)\/edit/);
+  
+  if (match && match[1]) {
+    deviceId.value = match[1];
+    loadDeviceData(); 
+  }
+})
+
+function loadDeviceData() {
+  // Legge i dati iniettati dal file edit_device.html tramite Jinja
+  if (window.DEVICE_DATA) {
+    form.device_name = window.DEVICE_DATA.device_name || '';
+    form.device_os = window.DEVICE_DATA.device_os || '';
+    form.device_description = window.DEVICE_DATA.device_description || '';
+    
+    if (window.DEVICE_DATA.standard_id) {
+      form.standard_id = window.DEVICE_DATA.standard_id;
+    }
+  } else {
+    errorMessage.value = "Errore: Dati del dispositivo non trovati nella pagina.";
+  }
+}
 
 function validate() {
   errors.device_name = ''
@@ -121,8 +149,12 @@ async function submit() {
 
   isSubmitting.value = true
   try {
-    const response = await fetch('/devices', {
-      method: 'POST',
+    // Sceglie metodo e URL in base alla modalità (Crea = POST, Modifica = PUT)
+    const url = isEditMode.value ? `/devices/${deviceId.value}` : '/devices'
+    const method = isEditMode.value ? 'PUT' : 'POST'
+
+    const response = await fetch(url, {
+      method: method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         device_name: form.device_name.trim(),
@@ -132,12 +164,17 @@ async function submit() {
       })
     })
 
-    if (response.status === 201) {
-      const data = await response.json()
-      window.location.href = `/devices/${data.device_id}`
+    if (response.status === 201 || response.status === 204 || response.status === 200) {
+      // Se è una creazione, prendiamo l'ID nuovo. Se è modifica, usiamo l'ID corrente.
+      let targetId = deviceId.value
+      if (!isEditMode.value) {
+        const data = await response.json()
+        targetId = data.device_id
+      }
+      window.location.href = `/devices/${targetId}`
     } else {
       const data = await response.json().catch(() => ({}))
-      errorMessage.value = data.error || 'Errore durante la creazione del dispositivo.'
+      errorMessage.value = data.error || 'Errore durante il salvataggio del dispositivo.'
     }
   } catch (error) {
     errorMessage.value = 'Errore di rete. Impossibile contattare il server.'
@@ -148,7 +185,6 @@ async function submit() {
 </script>
 
 <style scoped>
-
 .card {
   max-width: 640px;
   margin: 0 auto;
@@ -159,8 +195,6 @@ async function submit() {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
-
-
 
 .section-label {
   font-size: 0.75rem;
@@ -204,6 +238,7 @@ async function submit() {
   transition: border-color 0.2s, box-shadow 0.2s;
   box-sizing: border-box;
 }
+
 .form-input-error {
   border-color: #ef4444;
 }
@@ -234,5 +269,4 @@ async function submit() {
   gap: 12px;
   margin-top: 24px;
 }
-
 </style>
