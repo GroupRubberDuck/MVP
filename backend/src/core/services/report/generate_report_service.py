@@ -13,8 +13,9 @@ from core.domain.evaluation_engine.evaluation_result import (
 from core.domain.evaluation_standard.compliance_standard import ComplianceStandard
 from core.domain.evaluation_standard.requirement import Requirement
 from core.domain.shared.exceptions import DomainError
-from typing import IO
+from core.domain.ExportedFile import ExportedFile
 
+from core.domain.evaluation_object.device import Device
 
 class GenerateReportService(GenerateReportUseCase):
     def __init__(
@@ -27,7 +28,7 @@ class GenerateReportService(GenerateReportUseCase):
         self._report_generator = report_generator_port
         self._evaluation_engine = evaluation_engine
 
-    def export_report(self, command: GenerateReportCommand) -> IO[bytes]:
+    def export_report(self, command: GenerateReportCommand) -> ExportedFile:
         try:
             session = self._get_evaluation_session_port.get_evaluation_session(command.session_id)
         except EvaluationSessionNotFoundError as e:
@@ -41,14 +42,18 @@ class GenerateReportService(GenerateReportUseCase):
         except DomainError as e:
             raise ExportReportFailure(str(e)) from e
 
-        detail = self._build_device_detail(device_result, session.device, session.standard)
-        return self._report_generator.generate_report(detail)
+        detail = self._build_device_detail(device_result, session.device, session.standard) 
+        return ExportedFile(
+            self._report_generator.generate_report(detail),
+            media_type=command.report_format.media_type,
+            filename=f"{session.device.name}_report.{command.report_format.value}"
+            )
 
     def _build_device_detail(
-        self, result: DeviceEvaluationResult, device, standard: ComplianceStandard
+        self, result: DeviceEvaluationResult, device:Device, standard: ComplianceStandard
     ) -> DeviceEvaluationDetail:
         asset_details = tuple(
-            self._build_asset_detail(ar, device, standard)
+            self._build_asset_detail(ar, device, standard )
             for ar in result.asset_results
         )
         return DeviceEvaluationDetail(
@@ -62,7 +67,7 @@ class GenerateReportService(GenerateReportUseCase):
         )
 
     def _build_asset_detail(
-        self, result: AssetEvaluationResult, device, standard: ComplianceStandard
+        self, result: AssetEvaluationResult, device:Device, standard: ComplianceStandard
     ) -> AssetEvaluationDetail:
         asset = device.get_asset(result.asset_id)
         requirement_details = tuple(
