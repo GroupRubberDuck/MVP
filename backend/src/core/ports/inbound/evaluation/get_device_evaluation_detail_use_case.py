@@ -4,6 +4,7 @@ from core.domain.evaluation_engine.evaluation_detail import DeviceEvaluationDeta
 
 class GetDeviceEvaluationDetailCommand(BaseModel):
     session_id: str
+    device_id: str
 
 class GetDeviceEvaluationDetailUseCase(ABC):    
     @abstractmethod
