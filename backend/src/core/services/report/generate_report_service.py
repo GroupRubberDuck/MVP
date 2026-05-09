@@ -22,7 +22,7 @@ class GenerateReportService(GenerateReportUseCase):
         self,
         get_evaluation_session_port: GetEvaluationSessionPort,
         report_generator_port: ReportGeneratorPort,
-        evaluation_engine: EvaluationEngine,
+        evaluation_engine: EvaluationEngine = EvaluationEngine(),
     ) -> None:
         self._get_evaluation_session_port = get_evaluation_session_port
         self._report_generator = report_generator_port
