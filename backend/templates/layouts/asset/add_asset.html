@@ -1,0 +1,96 @@
+{# layouts/asset/add_asset.html #}
+{% extends "layouts/base.html" %}
+{% block title %}Aggiungi asset{% endblock %}
+{% block page_title %}Aggiungi asset{% endblock %}
+
+{% block scripts %}
+{% if config.VITE_DEV_MODE %}
+<!-- Dev: carica dal dev server Vite con HMR -->
+<script type="module" src="http://localhost:5173/@vite/client"></script>
+<script type="module" src="http://localhost:5173/src/main.js"></script>
+{% else %}
+<!-- Prod/Watch: carica i file compilati -->
+<script type="module" src="/static/vue/addassetform.js"></script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<!-- Monte Vue sull'intero blocco -->
+<div id="add-asset-app">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="{{ url_for('devices') }}">Dispositivi</a>
+        <span>›</span>
+        <a href="{{ url_for('device_detail', device_id=device.id) }}">{{ device.name }}</a>
+        <span>›</span>
+        Aggiungi Asset
+    </nav>
+
+    <!-- Sottotitolo -->
+    <p class="page-subtitle">Compila i campi sottostanti per associare un nuovo componente al dispositivo corrente.</p>
+
+    <hr class="divider">
+
+    <!-- Card form -->
+    <div class="card">
+
+        <!-- Errore API globale -->
+        <div v-if="apiError" class="alert alert--error">
+            [[ apiError ]]
+        </div>
+
+        <!-- Nome Asset -->
+        <div class="form-group">
+            <label class="form-label" for="name">
+                Nome Asset <span class="required">*</span>
+            </label>
+            <input type="text" id="name" v-model.trim="form.name"
+                :class="['form-control', errors.name ? 'is-invalid' : '']"
+                placeholder="Es. Modulo Autenticazione Utente" maxlength="32" @input="clearError('name')">
+            <p class="form-hint">La lunghezza del nome deve essere compresa tra 1 e 32 caratteri.</p>
+            <p v-if="errors.name" class="form-error">[[ errors.name ]]</p>
+        </div>
+
+        <!-- Tipo Asset -->
+        <div class="form-group">
+            <label class="form-label" for="asset_type">
+                Tipo Asset <span class="required">*</span>
+            </label>
+            <select id="asset_type" v-model="form.asset_type"
+                :class="['form-control', errors.asset_type ? 'is-invalid' : '']" @change="clearError('asset_type')">
+                <option value="" disabled>Seleziona la tipologia dell'asset...</option>
+                <option value="security">Security Asset</option>
+                <option value="network">Network Asset</option>
+            </select>
+            <p v-if="errors.asset_type" class="form-error">[[ errors.asset_type ]]</p>
+        </div>
+
+        <!-- Descrizione -->
+        <div class="form-group">
+            <label class="form-label" for="description">
+                Descrizione <span class="required">*</span>
+            </label>
+            <textarea id="description" v-model.trim="form.description"
+                :class="['form-control', errors.description ? 'is-invalid' : '']"
+                placeholder="Fornisci una breve descrizione della funzione di questo asset..."
+                @input="clearError('description')"></textarea>
+            <p v-if="errors.description" class="form-error">[[ errors.description ]]</p>
+        </div>
+
+        <!-- Bottoni azione -->
+        <div class="action-bar">
+            <a href="{{ url_for('device_detail', device_id=device.id) }}" class="btn btn--secondary">
+                Annulla
+            </a>
+            <button class="btn btn--success" :disabled="loading" @click="submitForm">
+                <span v-if="loading" class="spinner"></span>
+                [[ loading ? 'Salvataggio...' : 'Aggiungi Asset' ]]
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
