@@ -1,0 +1,75 @@
+{% extends "layouts/base.html" %}
+ 
+{% block title %}Operazione bloccata{% endblock %}
+{% block page_title %}Operazione bloccata{% endblock %}
+
+{% block content %}
+
+<!-- Breadcrumb -->
+<nav class="breadcrumb">
+    <a href="{{ url_for('devices') }}">Dispositivi</a>
+    <span>›</span>
+    <a href="{{ url_for('device_detail', device_id=device.id) }}">{{ device.name }}</a>
+    <span>›</span>
+    Operazione bloccata
+</nav>
+
+<hr class="divider">
+
+<div class="card error-card">
+
+    <!-- Icona -->
+    <div class="error-icon-wrap">
+        <svg class="error-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+    </div>
+
+    <!-- Titolo errore -->
+    <h2 class="error-title">Operazione non disponibile</h2>
+    <p class="error-subtitle">Non è possibile procedere con l'operazione richiesta.</p>
+
+    <hr class="divider">
+
+    <!-- Caso 1: nessuna sessione -->
+    <div class="error-case">
+        <div class="error-case__header">
+            <span class="error-badge error-badge--missing">Sessione assente</span>
+        </div>
+        <p class="error-case__text">
+            Non è presente alcuna sessione di valutazione attiva per questo dispositivo.
+            Prima di aggiungere o modificare asset è necessario avviare una nuova sessione di valutazione
+            dalla dashboard del dispositivo.
+        </p>
+    </div>
+
+    <div class="error-separator">oppure</div>
+
+    <!-- Caso 2: sessione bloccante -->
+    <div class="error-case">
+        <div class="error-case__header">
+            <span class="error-badge error-badge--locked">Sessione bloccante attiva</span>
+        </div>
+        <p class="error-case__text">
+            È presente una sessione di valutazione in corso che impedisce modifiche agli asset.
+            Attendi il completamento della sessione corrente oppure contatta l'amministratore
+            per sbloccarla manualmente.
+        </p>
+    </div>
+
+    <!-- Azioni -->
+    <div class="action-bar">
+        <a href="{{ url_for('device_detail', device_id=device.id) }}" class="btn btn--secondary">
+            Torna al Dispositivo
+        </a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn--primary">
+            Vai alla Dashboard
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -451,3 +451,126 @@ textarea.form-control {
   gap: 10px;
   padding-top: 8px;
 }
+
+/* ── Breadcrumb ───────────────────────────────────────────── */
+.breadcrumb {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.breadcrumb a {
+  color: #888;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: #1a73e8;
+}
+
+.breadcrumb span {
+  margin: 0 4px;
+}
+
+/* ── Divider ──────────────────────────────────────────────── */
+.divider {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 0 0 24px;
+}
+
+/* ── Error card ───────────────────────────────────────────── */
+.error-card {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* ── Icona ────────────────────────────────────────────────── */
+.error-icon-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #fde8e8;
+  margin: 0 auto 20px;
+}
+
+.error-icon {
+  width: 32px;
+  height: 32px;
+  color: #c0392b;
+}
+
+/* ── Titolo e sottotitolo ─────────────────────────────────── */
+.error-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 6px;
+}
+
+.error-subtitle {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 24px;
+}
+
+/* ── Casi di errore ───────────────────────────────────────── */
+.error-case {
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.error-case__header {
+  margin-bottom: 8px;
+}
+
+.error-case__text {
+  font-size: 14px;
+  color: #444;
+  line-height: 1.65;
+}
+
+/* ── Badge stato sessione ─────────────────────────────────── */
+.error-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.error-badge--missing {
+  background-color: #fff4e5;
+  color: #b45309;
+  border: 1px solid #fcd34d;
+}
+
+.error-badge--locked {
+  background-color: #fde8e8;
+  color: #c0392b;
+  border: 1px solid #f5c6c6;
+}
+
+/* ── Separatore "oppure" ──────────────────────────────────── */
+.error-separator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: #aaa;
+  font-style: italic;
+  margin: 4px 0 20px;
+}
+
+.error-separator::before,
+.error-separator::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid #e0e0e0;
+}
