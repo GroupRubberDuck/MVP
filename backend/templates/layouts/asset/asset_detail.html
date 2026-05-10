@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="{{ url_for('devices') }}">Dispositivi</a>
+        <span>›</span>
+        <a href="{{ url_for('device_detail', device_id=device.id) }}">{{ device.name }}</a>
+        <span>›</span>
+        Asset
+    </nav>
+
+    <!-- Card con i dettagli dell'asset -->
+    <div class="card">
+
+        <div>
+            <p class="section-label">Nome dell'Asset</p>
+            <p class="info-text" style="color: #222; font-size: 15px;">{{ asset.name }}</p>
+        </div>
+
+        <hr class="divider">
+
+        <div>
+            <p class="section-label">Tipologia</p>
+            <span class="badge badge--asset-type">{{ asset.type }}</span>
+        </div>
+
+        <hr class="divider">
+
+        <div>
+            <p class="section-label">Descrizione e Funzionalità</p>
+            <p class="info-text">{{ asset.description }}</p>
+        </div>
+
+    </div>
+
+    <!-- Bottoni azione -->
+    <div class="action-bar">
+        <a href="{{ url_for('dashboard') }}" class="btn btn--secondary">
+            Torna alla Dashboard
+        </a>
+        <a href="{{ url_for('edit_asset', asset_id=asset.id) }}" class="btn btn--primary">
+            Modifica Asset
+        </a>
+    </div>
+
+{% endblock %}
