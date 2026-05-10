@@ -9,7 +9,8 @@ class OpenEvaluationSessionCommand(BaseModel):
 class OpenEvaluationSessionUseCase(ABC):
         @abstractmethod
         def open_evaluation_session(
-                self
+                self,
+                command: OpenEvaluationSessionCommand
         )-> str:
                 """
                 Opens a new evaluation session and returns the session ID.

@@ -18,3 +18,11 @@ class EvaluationSessionSaveError(EvaluationSessionError):
 #     """L'asset richiesto non è presente nella sessione."""
 #     """Impossibile trovare la sessione"""
 #     pass
+
+class EvaluationSessionCommitError(EvaluationSessionError):
+    """Errore durante il commit della sessione di valutazione."""
+    pass
+
+class EvaluationSessionOpenError(EvaluationSessionError):
+    """Errore durante l'apertura di una nuova sessione di valutazione."""
+    pass
