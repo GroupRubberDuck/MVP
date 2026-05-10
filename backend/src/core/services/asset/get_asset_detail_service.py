@@ -2,6 +2,7 @@ from core.domain.evaluation_engine.evaluation_detail import (
     AssetEvaluationDetail,
     RequirementEvaluationDetail,
 )
+from core.domain.utilities.evaluation_detail_builder import EvaluationDetailBuilder
 from core.domain.evaluation_engine.evaluation_engine import EvaluationEngine
 from core.domain.evaluation_engine.evaluation_result import RequirementEvaluationResult
 from core.domain.evaluation_object.exceptions import AssetNotFoundError
@@ -63,18 +64,7 @@ class GetAssetDetailService(GetAssetDetailUseCase):
     def _make_requirement_detail(
         self, r: RequirementEvaluationResult, req: Requirement
     ) -> RequirementEvaluationDetail:
-        if req.decision_tree is None:
-            raise GetAssetDetailFailure(
-                f"Il requisito '{req.requirement_id}' non ha un albero decisionale."
-            )
-        return RequirementEvaluationDetail(
-            requirement_id=r.requirement_id,
-            name=req.name,
-            description=req.description,
-            target=req.target_description,
-            justification=r.justification,
-            node_choices=r.node_choices,
-            nodes=req.decision_tree.nodes,
-            state=r.state,
-            dependencies=r.dependencies,
+        return EvaluationDetailBuilder().build_requirement_detail(
+            req=req,
+            result=r
         )

@@ -3,6 +3,7 @@ from core.domain.evaluation_engine.evaluation_detail import (
     AssetEvaluationDetail,
     RequirementEvaluationDetail,
 )
+from core.domain.utilities.evaluation_detail_builder import EvaluationDetailBuilder
 from core.domain.evaluation_engine.evaluation_engine import EvaluationEngine
 from core.domain.evaluation_engine.evaluation_result import (
     AssetEvaluationResult,
@@ -82,16 +83,7 @@ class GetDeviceEvaluationDetailService(GetDeviceEvaluationDetailUseCase):
     def _make_requirement_detail(
         self, r: RequirementEvaluationResult, req: Requirement
     ) -> RequirementEvaluationDetail:
-        nodes = req.decision_tree.nodes if req.decision_tree else {}
-        
-        return RequirementEvaluationDetail(
-            requirement_id=r.requirement_id,
-            name=req.name,
-            description=req.description,
-            target=req.target_description,
-            justification=r.justification,
-            node_choices=r.node_choices,
-            nodes=nodes,
-            state=r.state,
-            dependencies=r.dependencies,
+        return EvaluationDetailBuilder().build_requirement_detail(
+            req=req,
+            result=r
         )
