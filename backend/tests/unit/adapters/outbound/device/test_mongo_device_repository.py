@@ -139,16 +139,16 @@ class TestRegister:
 class TestSave:
 
     def test_calls_replace_one(self, adapter, collection, device_senza_asset):
-        adapter.save(device_senza_asset)
+        adapter.save_device(device_senza_asset)
         collection.replace_one.assert_called_once()
 
     def test_filters_by_id(self, adapter, collection, device_senza_asset):
-        adapter.save(device_senza_asset)
+        adapter.save_device(device_senza_asset)
         filtro = collection.replace_one.call_args[0][0]
         assert filtro == {"_id": "DEV-1"}
 
     def test_document_has_no_redundant_id(self, adapter, collection, device_senza_asset):
-        adapter.save(device_senza_asset)
+        adapter.save_device(device_senza_asset)
         doc = collection.replace_one.call_args[0][1]
         assert "_id" not in doc
 
