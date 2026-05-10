@@ -33,7 +33,7 @@ class FlaskQueryDashboardController(FlaskController):
     def register_routes(self, blueprint: Blueprint) -> None:
 
         @blueprint.route("/devices/<device_id>/dashboard", methods=["GET"])
-        def get_device_list(device_id: str) -> ResponseReturnValue:
+        def get_device_dashboard(device_id: str) -> ResponseReturnValue:
             command = GetDeviceDashboardCommand(device_id=device_id)
             device_dashboard = self._get_device_dashboard_use_case.get_device_dashboard(command)
             device_dashboard_dto = DeviceDashboardDTO(
