@@ -50,7 +50,9 @@
   color: #fff;
 }
 
-.btn--primary:hover { background: #1558b0; }
+.btn--primary:hover {
+  background: #1558b0;
+}
 
 .btn--outline {
   background: #fff;
@@ -58,7 +60,9 @@
   color: #1a73e8;
 }
 
-.btn--outline:hover { background: #f0f6ff; }
+.btn--outline:hover {
+  background: #f0f6ff;
+}
 
 .btn--secondary {
   background: #fff;
@@ -66,14 +70,18 @@
   color: #555;
 }
 
-.btn--secondary:hover { background: #f5f5f5; }
+.btn--secondary:hover {
+  background: #f5f5f5;
+}
 
 .btn--success {
   background: #27ae60;
   color: #fff;
 }
 
-.btn--success:hover { background: #1e8449; }
+.btn--success:hover {
+  background: #1e8449;
+}
 
 .btn--danger {
   background: #fff;
@@ -81,9 +89,13 @@
   color: #e74c3c;
 }
 
-.btn--danger:hover { background: #fdf0ef; }
+.btn--danger:hover {
+  background: #fdf0ef;
+}
 
-.inline-form { display: inline; }
+.inline-form {
+  display: inline;
+}
 
 /* ── Badge ── */
 .badge {
@@ -198,7 +210,9 @@
 }
 
 @media (max-width: 768px) {
-  .device-body { grid-template-columns: 1fr; }
+  .device-body {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ── Card ── */
@@ -232,7 +246,9 @@
   margin: 16px 0 6px;
 }
 
-.section-label:first-child { margin-top: 0; }
+.section-label:first-child {
+  margin-top: 0;
+}
 
 .info-row {
   font-size: 14px;
@@ -240,7 +256,9 @@
   margin: 4px 0;
 }
 
-.info-row strong { font-weight: 600; }
+.info-row strong {
+  font-weight: 600;
+}
 
 .info-text {
   font-size: 14px;
@@ -270,7 +288,9 @@
   gap: 12px;
 }
 
-.asset-item__info { flex: 1; }
+.asset-item__info {
+  flex: 1;
+}
 
 .asset-item__name {
   font-size: 15px;
@@ -286,4 +306,148 @@
 .asset-item__actions {
   display: flex;
   gap: 6px;
+}
+
+/* ── Breadcrumb ───────────────────────────────────────────── */
+.breadcrumb {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.breadcrumb a {
+  color: #888;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: #1a73e8;
+}
+
+.breadcrumb span {
+  margin: 0 4px;
+}
+
+/* ── Page title ───────────────────────────────────────────── */
+h1.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 4px;
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: #1a73e8;
+  margin: 0 0 20px;
+}
+
+/* ── Divider ──────────────────────────────────────────────── */
+.divider {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 0 0 24px;
+}
+
+/* ── Form layout ──────────────────────────────────────────── */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 6px;
+}
+
+.form-label .required {
+  color: #e74c3c;
+  margin-left: 2px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  font-family: inherit;
+}
+
+.form-control:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+}
+
+.form-control.is-invalid {
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.10);
+}
+
+.form-control::placeholder {
+  color: #aaa;
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-hint {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.form-error {
+  font-size: 12px;
+  color: #e74c3c;
+  margin-top: 4px;
+}
+
+/* ── Alert ────────────────────────────────────────────────── */
+.alert {
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.alert--error {
+  background: #fde8e8;
+  color: #c0392b;
+  border: 1px solid #f5c6c6;
+}
+
+/* ── Spinner ──────────────────────────────────────────────── */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Action bar ───────────────────────────────────────────── */
+.action-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 8px;
 }
