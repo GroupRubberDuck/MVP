@@ -7,7 +7,8 @@ from core.ports.inbound.asset.get_requirement_evaluation_detail_use_case import 
 )
 from core.domain.evaluation_standard.decision_tree import DecisionNode,LeafNode
 from core.domain.evaluation_engine.evaluation_detail import (
-        RequirementEvaluationDetail
+        RequirementEvaluationDetail,
+        NodeDetail
 )
 from flask import Blueprint, render_template
 from flask.typing import ResponseReturnValue
@@ -17,6 +18,7 @@ from core.domain.evaluation_standard.standard_verdict import StandardVerdict
 
 from core.ports.inbound.asset.exceptions import GetRequirementEvaluationDetailFailure
 from typing import Annotated, Literal, Union
+from types import MappingProxyType
 from pydantic import BaseModel, Field, ValidationError
 from collections.abc import Mapping
 # DTOs
@@ -68,88 +70,79 @@ class FlaskRequirementEvaluationDetail(FlaskController):
         def __init__(self, _get_requirement_ev_detail_use_case:GetRequirementEvaluationDetailUseCase) -> None:
                 self.__get_requirement_ev_detail_use_case=_get_requirement_ev_detail_use_case
 
+        def _make_node_dto(self, node: NodeDetail) -> AnyNodeDTO:
+            if node.node_type == "decision":
+                return DecisionNodeDTO(
+                    parent_id=node.parent_id,
+                    question=node.question,
+                    yes_child_id=node.child_on_true_id,
+                    no_child_id=node.child_on_false_id,
+                )
+            return LeafNodeDTO(
+                parent_id=node.parent_id,
+                verdict=node.verdict,
+            )
+
+
         def _make_dto(self, detail: RequirementEvaluationDetail) -> RequirementEvaluationDTO:
+            nodes_dto = {
+                node_id: self._make_node_dto(node)
+                for node_id, node in detail.nodes.items()
+            }
+        
+            return RequirementEvaluationDTO(
+                name=detail.name,
+                norm_description=detail.description,
+                target_description=detail.target,
+                evaluation=detail.state,
+                dependencies=tuple(
+                    DependencySummaryDTO(id=dep_id, evaluation=dep_state)
+                    for dep_id, dep_state in detail.dependencies
+                ),
+                answer=detail.node_choices,
+                decision_tree=DecisionTreeDTO(
+                    root_node_id=detail.root_id,
+                    nodes=nodes_dto,
+                ),
+            )
 
-                        # 1. Mappatura delle dipendenze
-                        deps_dto = tuple(
-                                DependencySummaryDTO(id=dep_id, evaluation=dep_state) 
-                                for dep_id, dep_state in detail.dependencies
-                        )
-
-                        # 2. Creazione della Parent Map
-                        parent_map: dict[str, str] = {}
-                        for node_id, domain_node in detail.nodes.items():
-                                # L'equivalente Python di "domain_node instanceof DecisionNode"
-                                        if (yes_child := domain_node.next(True)) is not None: 
-                                                parent_map[yes_child] = node_id
-                                        if (no_child :=domain_node.next(False)) is not None: 
-                                                parent_map[no_child] = node_id      
-                        # 3. Mappatura dei Nodi
-                        nodes_dto = {}
-                        for node_id, domain_node in detail.nodes.items():
-
-                                # ATTENZIONE: Usiamo .get() invece di parent_map[node_id] 
-                                # perché per il nodo Root questa chiave non esisterà, e .get() 
-                                # restituirà elegantemente None invece di lanciare KeyError.
-                                calculated_parent_id = parent_map.get(node_id)
-
-                                if isinstance(domain_node, DecisionNode):  
-                                        nodes_dto[node_id] = DecisionNodeDTO(
-                                                parent_id=calculated_parent_id,
-                                                # Nessun downcast necessario, Python sa che ha .question
-                                                question=domain_node.question, 
-                                                yes_child_id=domain_node.next(True),
-                                                no_child_id=domain_node.next(False)
-                                        )
-                                elif isinstance(domain_node, LeafNode): 
-                                        nodes_dto[node_id] = LeafNodeDTO(
-                                                # Ricorda: il domain_node non ha parent_id, 
-                                                # dobbiamo usare quello calcolato!
-                                                parent_id=calculated_parent_id, 
-                                                verdict=domain_node.verdict
-                                        )
-
-                        # 4. Creazione dell'Albero Decisionale DTO
-                        tree_dto = DecisionTreeDTO(
-                                root_node_id=detail.root_id,
-                                nodes=nodes_dto
-                        )
-
-                        # 5. Assembliamo e ritorniamo il DTO finale
-                        return RequirementEvaluationDTO(
-                                name=detail.name,
-                                norm_description=detail.description,
-                                target_description=detail.target,
-                                evaluation=detail.state,
-                                dependencies=deps_dto,
-                                decision_tree=tree_dto,
-                                answer=detail.node_choices
-                        )     
         
         def register_routes(self, blueprint: Blueprint) -> None:
-                        # 1. Aggiunto lo slash mancante
-                        @blueprint.route("/session/<session_id>/devices/<device_id>/assets/<asset_id>/requirements/<requirement_id>", methods=["GET"])
-                        # Cambiato il nome della funzione per chiarezza
-                        def get_requirement_evaluation_detail(session_id:str, device_id:str, asset_id:str, requirement_id:str)-> ResponseReturnValue:
-                                
-                                try:
-                                        command=GetRequirementEvaluationDetailCommand(
-                                                        requirement_id=requirement_id,
-                                                        asset_id=asset_id,
-                                                        device_id=device_id,
-                                                        session_id=session_id
-                                        )
-                                except ValidationError as e:   
-                                        return render_template("errors/400.html", message=f"I parametri forniti non sono validi: {e}"), 400
-        
-                                try:
-                                        requirement = self.__get_requirement_ev_detail_use_case.get_evaluation_detail(command)
-                                
-                                except GetRequirementEvaluationDetailFailure as e: 
-                                        return render_template("errors/500.html", message=f"Si è verificato un errore inaspettato: {e}"), 500
-        
-                                
-                                dto = self._make_dto(requirement)
-                                return render_template("layouts/requirement_detail.html", requirement=dto), 200
-                        
-                        
+     
+            @blueprint.route(
+                "/sessions/<session_id>/devices/<device_id>/assets/<asset_id>/requirements/<requirement_id>",
+                methods=["GET"],
+            )
+            def get_requirement_evaluation_detail(
+                session_id: str,
+                device_id: str,
+                asset_id: str,
+                requirement_id: str,
+            ) -> ResponseReturnValue:
+                try:
+                    command = GetRequirementEvaluationDetailCommand(
+                        requirement_id=requirement_id,
+                        asset_id=asset_id,
+                        device_id=device_id,
+                        session_id=session_id,
+                    )
+                except ValidationError as e:
+                    return render_template(
+                        "errors/400.html",
+                        message=f"I parametri forniti non sono validi: {e}",
+                    ), 400
+     
+                try:
+                    detail = self.__get_requirement_ev_detail_use_case.get_evaluation_detail(command)
+                except GetRequirementEvaluationDetailFailure as e:
+                    return render_template(
+                        "errors/500.html",
+                        message=f"Si è verificato un errore: {e}",
+                    ), 500
+     
+                dto = self._make_dto(detail)
+                return render_template(
+                    "layouts/requirement_detail.html", requirement=dto
+                ), 200
+     
+    
