@@ -35,7 +35,7 @@ class MongoDeviceAdapter(
                 raise DuplicateDeviceError(f"Device '{device.id}' è già presente nello storage.")
             raise
 
-    def save(self, device: Device) -> None:
+    def save_device(self, device: Device) -> None:
         doc = self._to_document(device)
         result =self._collection.replace_one({"_id": device.id}, doc)
         if result.matched_count == 0:

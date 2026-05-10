@@ -61,7 +61,7 @@ class TestUpdateDeviceService:
             description="Router aggiornato"
         )
         
-        mock_save_device_port.save.assert_called_once_with(mock_device)
+        mock_save_device_port.save_device.assert_called_once_with(mock_device)
 
     def test_update_device_raises_failure_when_not_found(
         self,
@@ -87,4 +87,4 @@ class TestUpdateDeviceService:
 
         assert "DEV-INVALID" in str(exc_info.value)
         
-        mock_save_device_port.save.assert_not_called()
+        mock_save_device_port.save_device.assert_not_called()
