@@ -1,12 +1,11 @@
 import json
 import pytest
 from unittest.mock import MagicMock
-from flask import Flask
-
+from flask import Flask, Blueprint
 from adapters.inbound.evaluation.evaluation_session_controller import (
-    EvaluationSessionController,
-    evaluation_session_blueprint,
-)
+    EvaluationSessionController
+    ) 
+
 
 
 @pytest.fixture
@@ -15,9 +14,11 @@ def app():
     mock_close = MagicMock()
     mock_save = MagicMock()
     mock_commit = MagicMock()
-    EvaluationSessionController(mock_open, mock_close, mock_save, mock_commit)
+    mock_controller=EvaluationSessionController(mock_open, mock_close, mock_commit)
     flask_app = Flask(__name__)
-    flask_app.register_blueprint(evaluation_session_blueprint)
+    bp=Blueprint("evaluation_session",__name__)
+    mock_controller.register_routes(bp)
+    flask_app.register_blueprint(bp)
     flask_app.config["TESTING"] = True
     return flask_app, mock_open, mock_close, mock_save, mock_commit
 

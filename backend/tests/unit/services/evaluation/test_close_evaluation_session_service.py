@@ -17,4 +17,4 @@ class TestCloseEvaluationSessionService:
 
         service.close_evaluation_session(command)
 
-        mock_delete.delete_session.assert_called_once_with("session-1")
+        mock_delete.close_evaluation_session.assert_called_once_with("session-1")
