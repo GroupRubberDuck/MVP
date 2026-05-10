@@ -25,6 +25,7 @@ from adapters.outbound.evaluation.in_memory_evaluation_session_cache import InMe
 # Device Query Service 
 from core.services.device.get_device_list_service import GetDeviceListService
 from core.services.device.get_device_detail_service import GetDeviceDetailService
+from core.services.device.get_device_dashboard_service import GetDeviceDashboardService
 # Device Write Service 
 from core.services.device.import_device_service import ImportDeviceService
 from core.services.device.create_device_service import CreateDeviceService
@@ -57,6 +58,7 @@ from core.services.asset.get_requirement_evaluation_detail_service import GetReq
 from adapters.inbound.device.flask_query_device_controller import FlaskQueryDeviceController
 from adapters.inbound.report.report_controller import FlaskExportReportController
 from adapters.inbound.device.import_device_controller import ImportDeviceController
+from adapters.inbound.device.flask_query_dashboard_controller import FlaskQueryDashboardController
 
 # Routes
 from routes import register_routes, register_error_handlers
@@ -97,6 +99,7 @@ def create_app() -> Flask:
         register_device_port=device_adapter,
         device_importer_factory=ConcreteFileDeviceImporterFactory()
     )
+    get_device_dashboard_service = GetDeviceDashboardService()
 
     get_compliance_standard_service = GetComplianceStandardService(standard_adapter)
 
@@ -116,11 +119,14 @@ def create_app() -> Flask:
     export_report_controller = FlaskExportReportController(
         generate_report_use_case=generate_report_service
     )
+    query_dashboard_controller = FlaskQueryDashboardController(
+        get_device_dashboard_use_case=get_device_dashboard_service
+    )
 
     # ── Rotte ──
     register_routes(
         app,
-        device_controllers=[query_device_controller, import_device_controller],
+        device_controllers=[query_device_controller, import_device_controller, query_dashboard_controller],
         report_controllers=[export_report_controller],
     )
     register_error_handlers(app)
