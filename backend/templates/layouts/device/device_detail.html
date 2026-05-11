@@ -47,21 +47,39 @@
       </p>
       <p class="info-row"><strong>Versione Standard:</strong> {{ device.compliance_standard_version }}</p>
 
-      <div style="margin-top: 20px; display: flex; gap: 8px;">
-        <a class="btn btn--secondary btn--sm"
-           href="{{ url_for('devices.export_device', device_id=device.device_id) }}"> 
-          Esporta dispositivo
-        </a>
-         <form class="inline-form"
-              action="{{ url_for('devices.delete_device', device_id=device.device_id) }}"
-              method="post"
-              onsubmit="return confirm('Eliminare il dispositivo {{ device.name }}?')">
-          <button class="btn btn--danger btn--sm" type="submit">Elimina</button>
-        </form> 
+      <div style="margin-top: 20px;" id="device-detail-app">
+        <button class="btn btn--danger btn--sm" @click="showDelete = true">Elimina</button>
+        <delete-device-modal
+          v-if="showDelete"
+          device-id="{{ device.device_id }}"
+          device-name="{{ device.name }}"
+          @close="showDelete = false"
+          @deleted="onDeleted"></delete-device-modal>
       </div>
+
     </div>
-
-
-
   </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="importmap">
+  { "imports": { "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js" } }
+</script>
+<script type="module">
+  import { createApp, ref } from 'vue'
+  import DeleteDeviceModal  from "{{ url_for('static', filename='vue/deletedevicemodal.js') }}"
+
+  createApp({
+    components: { DeleteDeviceModal },
+    setup() {
+      const showDelete = ref(false)
+
+      function onDeleted() {
+        window.location.href = '/devices'
+      }
+
+      return { showDelete, onDeleted }
+    }
+  }).mount('#device-detail-app')
+</script>
 {% endblock %}
