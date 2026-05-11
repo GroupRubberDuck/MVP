@@ -3,8 +3,19 @@ from types import MappingProxyType
 from collections.abc import Mapping
 from core.domain.evaluation_object.asset.asset_type import AssetType
 from core.domain.evaluation_standard.evaluation_state import EvaluationState
-from core.domain.evaluation_standard.decision_tree import Node
+from core.domain.evaluation_standard.standard_verdict import StandardVerdict
 
+
+
+@dataclass(frozen=True)
+class NodeDetail:
+    node_id: str
+    node_type: str  # "decision" | "leaf"
+    question: str | None  # solo per decision
+    child_on_true_id: str | None  # solo per decision
+    child_on_false_id: str | None  # solo per decision
+    verdict: StandardVerdict | None  # solo per leaf
+    parent_id: str | None
 
 @dataclass(frozen=True)
 class RequirementEvaluationDetail:
@@ -13,8 +24,9 @@ class RequirementEvaluationDetail:
     description: str
     target: str
     justification: str
+    root_id:str
     node_choices: MappingProxyType[str, bool]
-    nodes: Mapping[str, Node]
+    nodes: Mapping[str, NodeDetail]
     state: EvaluationState
     dependencies: tuple[tuple[str, EvaluationState], ...]
 
