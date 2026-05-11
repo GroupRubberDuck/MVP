@@ -1,7 +1,7 @@
 from core.ports.inbound.device.get_device_use_case import GetDeviceDetailCommand, GetDeviceDetailUseCase
 
 
-from core.ports.outbound.device.find_device_port import FindDevicePort 
+from core.ports.outbound.device.repository.find_device_port import FindDevicePort 
 
 from core.domain.evaluation_object.device import Device
 

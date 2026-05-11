@@ -1,5 +1,5 @@
 from unittest.mock import MagicMock
-from core.services.evaluation.close_evaluation_session_service import CloseEvaluationSessionService
+from core.services.evaluation.evaluation_session.close_evaluation_session_service import CloseEvaluationSessionService
 from core.ports.inbound.evaluation.evaluation_session.close_evaluation_session_use_case import CloseEvaluationSessionCommand
 
 

@@ -4,7 +4,7 @@ from core.ports.inbound.evaluation.evaluation_session.commit_evaluation_session_
 )
 from core.ports.inbound.evaluation.exceptions import CommitSessionFailure
 from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
-from core.ports.outbound.device.save_device_port import SaveDevicePort
+from core.ports.outbound.device.repository.save_device_port import SaveDevicePort
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
 from core.ports.outbound.device.exceptions import DeviceSaveError
 

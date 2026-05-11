@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 from core.domain.evaluation_standard.evaluation_state import EvaluationState
 from core.domain.evaluation_object.exceptions import AssetNotFoundError
 from core.ports.inbound.asset.exceptions import GetAssetDetailFailure
-from core.ports.inbound.asset.get_asset_detail_use_case import GetAssetDetailCommand
+from core.ports.inbound.asset.get_asset_evaluation_detail_use_case import GetAssetDetailCommand
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
 from core.services.asset.get_asset_detail_service import GetAssetDetailService
 

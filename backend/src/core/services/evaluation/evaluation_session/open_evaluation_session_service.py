@@ -8,8 +8,8 @@ from core.ports.inbound.evaluation.evaluation_session.open_evaluation_session_us
 from .session_coordinator import SessionCoordinator
 
 
-from core.ports.outbound.evaluation.create_evaluation_session_port import CreateEvaluationSessionPort
-from core.ports.outbound.device.find_device_port import FindDevicePort
+from core.ports.outbound.evaluation.evaluation_session.create_evaluation_session_port import CreateEvaluationSessionPort
+from core.ports.outbound.device.repository.find_device_port import FindDevicePort
 from core.ports.outbound.device.exceptions import DeviceNotFoundError 
 from core.ports.outbound.compliance_standard.find_standard_port import FindStandardPort
 from core.ports.outbound.compliance_standard.exceptions import StandardNotFoundError

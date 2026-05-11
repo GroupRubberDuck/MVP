@@ -2,7 +2,7 @@ import pytest
 import io
 from unittest.mock import MagicMock
 from flask import Flask, blueprints
-from adapters.inbound.device.export_device_controller import ExportDeviceController
+from adapters.inbound.device.flask_export_device_controller import FlaskExportDeviceController
 from core.domain.evaluation_object.allowed_device_file_extension import AllowedDeviceFileExtension
 from core.ports.inbound.device.exceptions import DeviceNotFoundFailure
 
@@ -24,7 +24,7 @@ def app(export_uc_mock):
     app = Flask(__name__)
     app.config["TESTING"] = True
     blueprint = blueprints.Blueprint("devices", __name__)
-    controller = ExportDeviceController(export_device_use_case=export_uc_mock)
+    controller = FlaskExportDeviceController(export_device_use_case=export_uc_mock)
     controller.register_routes(blueprint)
     app.register_blueprint(blueprint)
     return app

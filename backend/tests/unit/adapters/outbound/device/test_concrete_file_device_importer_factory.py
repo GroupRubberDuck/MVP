@@ -1,9 +1,9 @@
 import pytest
 
-from adapters.outbound.device.concrete_file_device_importer_factory import ConcreteFileDeviceImporterFactory
-from adapters.outbound.device.json_file_device_importer import JSONFileDeviceImporter
-from adapters.outbound.device.csv_file_device_importer import CSVFileDeviceImporter
-from adapters.outbound.device.xml_file_device_importer import XMLFileDeviceImporter
+from adapters.outbound.device.importer.concrete_file_device_importer_factory import ConcreteFileDeviceImporterFactory
+from adapters.outbound.device.importer.json_file_device_importer import JSONFileDeviceImporter
+from adapters.outbound.device.importer.csv_file_device_importer import CSVFileDeviceImporter
+from adapters.outbound.device.importer.xml_file_device_importer import XMLFileDeviceImporter
 from core.services.device.allowed_device_extensions import AllowedDeviceFileExtension
 
 

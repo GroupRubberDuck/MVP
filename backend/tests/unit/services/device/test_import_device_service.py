@@ -5,9 +5,9 @@ from core.services.device.allowed_device_extensions import AllowedDeviceFileExte
 
 from core.ports.inbound.device.import_device_use_case import ImportDeviceCommand
 
-from core.ports.outbound.device.file_device_importer_factory_port import FileDeviceImporterFactoryPort
-from core.ports.outbound.device.file_device_importer_port import FileDeviceImporterPort
-from core.ports.outbound.device.register_device_port import RegisterDevicePort
+from core.ports.outbound.device.importer.file_device_importer_factory_port import FileDeviceImporterFactoryPort
+from core.ports.outbound.device.importer.file_device_importer_port import FileDeviceImporterPort
+from core.ports.outbound.device.repository.register_device_port import RegisterDevicePort
 from core.services.device.import_device_service import ImportDeviceService
 
 
