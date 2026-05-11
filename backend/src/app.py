@@ -25,10 +25,15 @@ from adapters.outbound.evaluation.in_memory_evaluation_session_cache import InMe
 # Device Query Service 
 from core.services.device.get_device_list_service import GetDeviceListService
 from core.services.device.get_device_detail_service import GetDeviceDetailService
-# Device Write Service 
-from core.services.device.import_device_service import ImportDeviceService
 
 #file import export device service
+from core.services.device.import_device_service import ImportDeviceService
+from core.services.device.export_device_service import ExportDeviceService
+# Device Write Service 
+
+from core.services.device.create_device_service import CreateDeviceService
+from core.services.device.delete_device_service import DeleteDeviceService
+from core.services.device.update_device_service import UpdateDeviceService
 
 # report service
 from core.services.report.generate_report_service import GenerateReportService
@@ -36,12 +41,19 @@ from core.services.report.generate_report_service import GenerateReportService
 # compliance standard service
 from core.services.compliance_standard.get_compliance_standard_service import GetComplianceStandardService
 
-# --- Service (Write) ---
+# asset service
+from core.services.asset.create_asset_service import CreateAssetService
+from core.services.asset.update_asset_service import UpdateAssetService
+from core.services.asset.delete_asset_service import DeleteAssetService
+
+
 
 # --- Controller (adapter inbound) ---
 from adapters.inbound.device.flask_query_device_controller import FlaskQueryDeviceController
 from adapters.inbound.device.flask_write_device_controller import FlaskWriteDeviceController 
-from adapters.inbound.device.flask_import_device_controller import ImportDeviceController
+from adapters.inbound.device.flask_import_device_controller import FlaskImportDeviceController
+
+
 #evaluation session service
 # from core.services
 
@@ -109,7 +121,7 @@ def create_app() -> Flask:
         get_device_detail_use_case=get_device_detail_service,
         get_compliance_standard_use_case=get_compliance_standard_service,
     )
-    import_device_controller = ImportDeviceController(
+    import_device_controller = FlaskImportDeviceController(
         import_device_service=import_device_service
     )
     generate_report_service = GenerateReportService(
@@ -127,7 +139,7 @@ def create_app() -> Flask:
         delete_device_use_case=delete_device_service,
     )
 
-    import_device_controller = ImportDeviceController(
+    import_device_controller = FlaskImportDeviceController(
         import_device_service=import_device_service
     )
 
