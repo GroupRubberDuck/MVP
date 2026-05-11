@@ -35,6 +35,7 @@ from core.services.device.create_device_service import CreateDeviceService
 from core.services.device.delete_device_service import DeleteDeviceService
 from core.services.device.update_device_service import UpdateDeviceService
 
+
 # report service
 from core.services.report.generate_report_service import GenerateReportService
 

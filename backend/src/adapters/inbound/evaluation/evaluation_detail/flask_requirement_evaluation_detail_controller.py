@@ -5,7 +5,6 @@ from core.ports.inbound.asset.get_requirement_evaluation_detail_use_case import 
         GetRequirementEvaluationDetailUseCase
 
 )
-from core.domain.evaluation_standard.decision_tree import DecisionNode,LeafNode
 from core.domain.evaluation_engine.evaluation_detail import (
         RequirementEvaluationDetail,
         NodeDetail
@@ -18,7 +17,6 @@ from core.domain.evaluation_standard.standard_verdict import StandardVerdict
 
 from core.ports.inbound.asset.exceptions import GetRequirementEvaluationDetailFailure
 from typing import Annotated, Literal, Union
-from types import MappingProxyType
 from pydantic import BaseModel, Field, ValidationError
 from collections.abc import Mapping
 # DTOs
@@ -48,7 +46,7 @@ AnyNodeDTO = Annotated[Union[DecisionNodeDTO, LeafNodeDTO], Field(discriminator=
 
 class DecisionTreeDTO(BaseModel):
     root_node_id: str
-    nodes: Mapping[str, AnyNodeDTO] # <-- Usiamo l'Annotated Type qui!
+    nodes: Mapping[str, AnyNodeDTO]
 
 class DependencySummaryDTO(BaseModel):
     id: str
@@ -67,8 +65,8 @@ class RequirementEvaluationDTO(BaseModel):
 #controller
 
 class FlaskRequirementEvaluationDetail(FlaskController):
-        def __init__(self, _get_requirement_ev_detail_use_case:GetRequirementEvaluationDetailUseCase) -> None:
-                self.__get_requirement_ev_detail_use_case=_get_requirement_ev_detail_use_case
+        def __init__(self, get_requirement_ev_detail_use_case:GetRequirementEvaluationDetailUseCase) -> None:
+                self._get_requirement_ev_detail_use_case = get_requirement_ev_detail_use_case
 
         def _make_node_dto(self, node: NodeDetail) -> AnyNodeDTO:
             if node.node_type == "decision":
@@ -78,11 +76,12 @@ class FlaskRequirementEvaluationDetail(FlaskController):
                     yes_child_id=node.child_on_true_id,
                     no_child_id=node.child_on_false_id,
                 )
-            return LeafNodeDTO(
-                parent_id=node.parent_id,
-                verdict=node.verdict,
-            )
-
+            if node.node_type == "leaf":
+                return LeafNodeDTO(
+                    parent_id=node.parent_id,
+                    verdict=node.verdict,
+                )
+            raise ValueError(f"Tipo di nodo sconosciuto: {node.node_type}")
 
         def _make_dto(self, detail: RequirementEvaluationDetail) -> RequirementEvaluationDTO:
             nodes_dto = {
@@ -133,16 +132,16 @@ class FlaskRequirementEvaluationDetail(FlaskController):
                     ), 400
      
                 try:
-                    detail = self.__get_requirement_ev_detail_use_case.get_evaluation_detail(command)
+                    detail = self._get_requirement_ev_detail_use_case.get_evaluation_detail(command)
                 except GetRequirementEvaluationDetailFailure as e:
                     return render_template(
-                        "errors/500.html",
-                        message=f"Si è verificato un errore: {e}",
-                    ), 500
+                        "errors/404.html",
+                        message=f"Risorsa non trovata: {e}",
+                    ), 404
      
                 dto = self._make_dto(detail)
                 return render_template(
-                    "layouts/requirement_detail.html", requirement=dto
+                    "layouts/requirement_detail.html", requirement=dto.model_dump()
                 ), 200
      
     

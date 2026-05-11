@@ -3,7 +3,6 @@ from types import MappingProxyType
 from collections.abc import Mapping
 from core.domain.evaluation_object.asset.asset_type import AssetType
 from core.domain.evaluation_standard.evaluation_state import EvaluationState
-from core.domain.evaluation_standard.decision_tree import Node
 from core.domain.evaluation_standard.standard_verdict import StandardVerdict
 
 
