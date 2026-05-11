@@ -25,6 +25,7 @@ from adapters.outbound.evaluation.in_memory_evaluation_session_cache import InMe
 # Device Query Service 
 from core.services.device.get_device_list_service import GetDeviceListService
 from core.services.device.get_device_detail_service import GetDeviceDetailService
+from core.services.device.get_device_evaluation_detail_service import GetDeviceEvaluationDetailService
 
 #file import export device service
 from core.services.device.import_device_service import ImportDeviceService
@@ -46,6 +47,11 @@ from core.services.compliance_standard.get_compliance_standard_service import Ge
 from core.services.asset.create_asset_service import CreateAssetService
 from core.services.asset.update_asset_service import UpdateAssetService
 from core.services.asset.delete_asset_service import DeleteAssetService
+
+from core.services.asset.get_asset_detail_service import GetAssetDetailService
+
+from core.services.asset.get_asset_anagraphic_service import GetAssetAnagraphicService
+from core.services.asset.get_requirement_evaluation_detail_service import GetRequirementEvaluationDetailService
 
 
 
