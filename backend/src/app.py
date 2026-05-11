@@ -73,6 +73,7 @@ def create_app() -> Flask:
         static_folder=os.path.join(base_dir, 'backend', 'static'),
     )
     app.secret_key = "".join(random.choices(string.ascii_letters + string.digits, k=32))
+    app.config["TEMPLATES_AUTO_RELOAD"] = True
 
     # ── Database ──
     try:
@@ -154,3 +155,4 @@ def _register_fallback_routes(app: Flask, error: str, status: int) -> None:
             "error": "Servizio non disponibile",
             "detail": f"Database non accessibile: {error}",
         }), status
+

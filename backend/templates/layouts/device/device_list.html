@@ -4,19 +4,211 @@
 {% block title %}Dispositivi{% endblock %}
 {% block page_title %}{% endblock %}
 
+{% block head %}
+  <style>
+    /* ── Modal overlay ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: 12px;
+      padding: 28px 32px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+
+    .modal__title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #111;
+      margin: 0 0 8px;
+    }
+
+    .modal__body {
+      font-size: 14px;
+      color: #444;
+      line-height: 1.6;
+      margin: 0 0 20px;
+    }
+
+    .modal__footer {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    /* ── Upload area ── */
+    .upload-area {
+      border: 2px dashed #1a73e8;
+      border-radius: 10px;
+      background: #f0f6ff;
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      margin-bottom: 12px;
+    }
+
+    .upload-area:hover,
+    .upload-area--dragover {
+      background: #dceeff;
+      border-color: #1558b0;
+    }
+
+    .upload-area__icon { font-size: 36px; margin-bottom: 8px; }
+
+    .upload-area__title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a73e8;
+      margin: 0 0 4px;
+    }
+
+    .upload-area__hint { font-size: 12px; color: #666; margin: 0; }
+
+    /* ── File preview ── */
+    .file-preview {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+
+    .file-preview__icon { font-size: 24px; flex-shrink: 0; }
+    .file-preview__info { flex: 1; }
+
+    .file-preview__name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #111;
+      margin: 0;
+    }
+
+    .file-preview__size { font-size: 11px; color: #888; margin: 2px 0 0; }
+
+    .file-preview__remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: #e74c3c;
+      padding: 4px;
+      line-height: 1;
+    }
+
+    /* ── Sezione esportazione ── */
+    .export-section {
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+
+    .export-section__title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #333;
+      margin: 0 0 10px;
+    }
+
+    .export-format-group { display: flex; gap: 8px; }
+
+    .export-format-btn {
+      flex: 1;
+      padding: 7px 0;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid #ccc;
+      background: #fff;
+      color: #444;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+      text-align: center;
+    }
+
+    .export-format-btn--active {
+      border-color: #1a73e8;
+      background: #e8f0fe;
+      color: #1a73e8;
+    }
+
+    .export-format-btn:hover:not(.export-format-btn--active) {
+      border-color: #aaa;
+      background: #f0f0f0;
+    }
+
+    .export-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    /* ── Alert inline ── */
+    .alert-inline {
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
+    .alert-inline--success {
+      background: #e6f9f0;
+      color: #1a7a4a;
+      border: 1px solid #a8e6c8;
+    }
+
+    .alert-inline--error {
+      background: #fde8e8;
+      color: #c0392b;
+      border: 1px solid #f5c6c6;
+    }
+
+    /* ── Spinner ── */
+    .spinner {
+      display: inline-block;
+      width: 13px;
+      height: 13px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+{% endblock %}
+
 {% block content %}
+<div id="device-list-app">
+
   <div class="page-header">
     <div class="page-header__text">
       <h1>Dispositivi</h1>
       <p>Gestione e valuta conformità EN 18031</p>
     </div>
     <div class="page-header__actions">
-      <a class="btn btn--outline"
-         href="{{ url_for('devices.get_device_list') }}"> 
+      <!-- Issue #70: apre ImportDeviceModal -->
+      <button class="btn btn--outline" @click="showImport = true">
         Importa Dispositivo
-      </a>
-      <a class="btn btn--primary"
-         href="{{ url_for('devices.get_add_device_form') }}"> 
+      </button>
+      <a class="btn btn--primary" href="{{ url_for('devices.create_device_page') }}">
         + Nuovo Dispositivo
       </a>
     </div>
@@ -28,33 +220,219 @@
         <li class="device-item">
           <span class="device-item__name">{{ device.name }}</span>
           <div class="device-item__actions">
-            <form class="inline-form"
-                  action="*" 
-                  method="post"
-                  onsubmit="return confirm('Eliminare {{ device.name }}?')"> 
-              <button class="btn btn--danger btn--sm" type="submit">Elimina</button>
-            </form>
+            <!-- Issue #74: apre DeleteDeviceModal con id e nome del device corrente -->
+            <button
+              class="btn btn--danger btn--sm"
+              @click="openDelete('{{ device.device_id }}', '{{ device.name }}')"
+            >
+              Elimina
+            </button>
             <a class="btn btn--primary btn--sm"
-               href="{{ url_for('devices.get_device_detail', device_id=device.device_id) }}"> <!--  -->
+               href="{{ url_for('devices.get_device_detail', device_id=device.device_id) }}">
               Dettagli Dispositivo
             </a>
-            <a class="btn btn--outline btn--sm"
-               href=""> 
+            <a class="btn btn--outline btn--sm" href="#">
               Vai alla Valutazione
             </a>
           </div>
         </li>
       {% endfor %}
     </ul>
-
   {% else %}
     <div class="empty-state">
       <p class="empty-state__title">Nessun dispositivo registrato</p>
       <p class="empty-state__desc">
         Non hai ancora aggiunto alcun dispositivo al sistema. Inizia creando
-        manualmente un nuovo dispositivo o importando un file di
-        configurazione per procedere con la valutazione.
+        manualmente un nuovo dispositivo o importando un file di configurazione.
       </p>
     </div>
   {% endif %}
+
+  <!-- ImportDeviceModal (Issue #70) -->
+  <import-device-modal
+    v-if="showImport"
+    @close="showImport = false"
+    @imported="onImported"
+  ></import-device-modal>
+
+  <!-- DeleteDeviceModal (Issue #74) -->
+  <delete-device-modal
+    v-if="deleteTarget"
+    :device-id="deleteTarget.id"
+    :device-name="deleteTarget.name"
+    @close="deleteTarget = null"
+    @deleted="onDeleted"
+  ></delete-device-modal>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+{% raw %}
+<script>
+  const { createApp, ref } = Vue
+
+  // Importa Device
+  const ImportDeviceModal = {
+    emits: ['close', 'imported'],
+    setup(_, { emit }) {
+      const importFile    = ref(null)
+      const isDragging    = ref(false)
+      const isImporting   = ref(false)
+      const importSuccess = ref('')
+      const importError   = ref('')
+      const fileInputRef  = ref(null)
+
+      const ALLOWED_EXT = ['json', 'csv', 'xml']
+      const MAX_BYTES   = 10 * 1024 * 1024
+
+      const fileIcon = Vue.computed(() => {
+        if (!importFile.value) return ''
+        const ext = importFile.value.name.split('.').pop().toLowerCase()
+        return ext === 'json' ? '📄' : ext === 'xml' ? '📋' : '📊'
+      })
+
+      const fileSizeLabel = Vue.computed(() => {
+        if (!importFile.value) return ''
+        const b = importFile.value.size
+        return b < 1024 ? `${b} B`
+          : b < 1024 * 1024 ? `${(b / 1024).toFixed(1)} KB`
+          : `${(b / (1024 * 1024)).toFixed(2)} MB`
+      })
+
+      function validateFile(file) {
+        const ext = file.name.split('.').pop().toLowerCase()
+        if (!ALLOWED_EXT.includes(ext))
+          return `Formato ".${ext}" non supportato. Usa JSON, CSV o XML.`
+        if (file.size > MAX_BYTES)
+          return 'Il file supera il limite di 10 MB.'
+        return null
+      }
+
+      function setFile(file) {
+        importError.value = importSuccess.value = ''
+        const err = validateFile(file)
+        if (err) { importError.value = err; return }
+        importFile.value = file
+      }
+
+      function onFileSelected(e) {
+        if (e.target.files[0]) setFile(e.target.files[0])
+        e.target.value = ''
+      }
+
+      function onDrop(e) {
+        isDragging.value = false
+        if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0])
+      }
+
+      function removeFile() {
+        importFile.value = null
+        importError.value = importSuccess.value = ''
+      }
+
+      function closeModal() {
+        if (!isImporting.value) emit('close')
+      }
+
+      async function submitImport() {
+        if (!importFile.value || isImporting.value) return
+        isImporting.value = true
+        importError.value = importSuccess.value = ''
+
+        const formData = new FormData()
+        formData.append('file', importFile.value)
+
+        try {
+          const res  = await fetch('/api/devices/import', { method: 'POST', body: formData })
+          const data = await res.json()
+          if (res.ok) {
+            importSuccess.value = data.message || 'Dispositivo importato con successo.'
+            importFile.value = null
+            setTimeout(() => emit('imported'), 1200)
+          } else {
+            importError.value = data.error || `Errore ${res.status}.`
+          }
+        } catch {
+          importError.value = 'Errore di rete.'
+        } finally {
+          isImporting.value = false
+        }
+      }
+
+      return {
+        importFile, isDragging, isImporting, importSuccess, importError,
+        fileIcon, fileSizeLabel, fileInputRef,
+        onFileSelected, onDrop, removeFile, closeModal, submitImport,
+      }
+    },
+    template: `
+      <div class="modal-overlay" @click.self="closeModal">
+        <div class="modal" role="dialog" aria-modal="true">
+          <h2 class="modal__title">Importa Dispositivo</h2>
+          <p class="modal__body">
+            Carica un file di configurazione per aggiungere un dispositivo.<br>
+            Formati supportati: <strong>JSON, CSV, XML</strong> — max 10 MB.
+          </p>
+
+          <div v-if="!importFile"
+               class="upload-area"
+               :class="{ 'upload-area--dragover': isDragging }"
+               @dragover.prevent="isDragging = true"
+               @dragleave.prevent="isDragging = false"
+               @drop.prevent="onDrop"
+               @click="$refs.fileInput.click()">
+            <div class="upload-area__icon">📂</div>
+            <p class="upload-area__title">Trascina qui il file o clicca per selezionarlo</p>
+            <p class="upload-area__hint">.json &nbsp;·&nbsp; .csv &nbsp;·&nbsp; .xml</p>
+          </div>
+
+          <input ref="fileInput" type="file" accept=".json,.csv,.xml"
+                 style="display:none" @change="onFileSelected" />
+
+          <div v-if="importFile" class="file-preview">
+            <span class="file-preview__icon">{{ fileIcon }}</span>
+            <div class="file-preview__info">
+              <p class="file-preview__name">{{ importFile.name }}</p>
+              <p class="file-preview__size">{{ fileSizeLabel }}</p>
+            </div>
+            <button class="file-preview__remove" @click="removeFile">✕</button>
+          </div>
+
+          <div v-if="importSuccess" class="alert-inline alert-inline--success" style="margin-bottom:12px">
+              {{ importSuccess }}
+          </div>
+          <div v-if="importError" class="alert-inline alert-inline--error" style="margin-bottom:12px">
+              {{ importError }}
+          </div>
+
+          <div class="modal__footer">
+            <button class="btn btn--outline" @click="closeModal" :disabled="isImporting">Annulla</button>
+            <button class="btn btn--primary" @click="submitImport" :disabled="!importFile || isImporting">
+              <span v-if="isImporting" class="spinner"></span>
+              {{ isImporting ? 'Importazione…' : 'Importa' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  
+  // ── Monta l'app principale ──────────────────────────────────────
+  createApp({
+    components: { ImportDeviceModal },
+    setup() {
+      const showImport   = ref(false)
+      function onImported() {
+        showImport.value = false
+        window.location.reload()
+      }
+
+      return { showImport, onImported }
+    }
+  }).mount('#device-list-app')
+</script>
+{% endraw %}
 {% endblock %}
