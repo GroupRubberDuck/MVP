@@ -1,7 +1,7 @@
 import io
 import pytest
 
-from adapters.outbound.device.csv_file_device_importer import CSVFileDeviceImporter
+from adapters.outbound.device.importer.csv_file_device_importer import CSVFileDeviceImporter
 from core.ports.outbound.device.exceptions import EmptyFileError, InvalidFileFormatError
 
 

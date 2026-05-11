@@ -5,7 +5,7 @@ from core.domain.evaluation_object.asset.asset_proprieties import AssetProprieti
 from core.domain.session.evaluation_session import EvaluationSession
 from core.ports.inbound.asset.create_asset_use_case import CreateAssetUseCase, CreateAssetCommand
 from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
-from core.ports.outbound.evaluation.save_evaluation_session_port import SaveEvaluationSessionPort
+from core.ports.outbound.evaluation.evaluation_session.save_evaluation_session_port import SaveEvaluationSessionPort
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError, EvaluationSessionSaveError
 from core.services.asset.exceptions import AssetCreationFailure
 

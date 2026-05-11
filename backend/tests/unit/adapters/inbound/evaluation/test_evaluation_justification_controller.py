@@ -6,7 +6,7 @@ from flask import Flask, blueprints
 from adapters.inbound.evaluation.evaluation_justification_controller import (
     EvaluationJustificationController,
 )
-from core.ports.inbound.evaluation.evaluation_session.insert_justification_use_case import InsertJustificationCommand
+from core.ports.inbound.evaluation.insert_justification_use_case import InsertJustificationCommand
  
 BASE_URL = "/sessions/session-1/assets/asset-1/requirements/REQ-1/justification"
  

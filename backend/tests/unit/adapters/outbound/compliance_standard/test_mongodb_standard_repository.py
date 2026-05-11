@@ -1,10 +1,8 @@
 import pytest
 from unittest.mock import Mock
-from adapters.outbound.compliance_standard.compliance_standard_repository.mongodb_compliance_standard_repository import MongoComplianceStandardAdapter
+from adapters.outbound.compliance_standard.mongodb_compliance_standard_repository import MongoComplianceStandardAdapter
 from core.ports.outbound.compliance_standard.exceptions import StandardNotFoundError
 from core.domain.evaluation_standard.compliance_standard import ComplianceStandard
-# from core.domain.evaluation_standard.decision_tree import DecisionNode, LeafNode
-# from core.domain.evaluation_standard.standard_verdict import StandardVerdict
 
 
 # ── Fixtures ──

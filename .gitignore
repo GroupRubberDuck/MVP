@@ -234,3 +234,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Pytest & Coverage
+htmlcov/
+.coverage*
+test-results.xml
+test-report.json
+test_report.html

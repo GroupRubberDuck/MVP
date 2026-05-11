@@ -3,7 +3,7 @@ from flask.typing import ResponseReturnValue
 from pydantic import ValidationError
 
 from adapters.inbound.flask_controller_interface import FlaskController
-from core.ports.inbound.evaluation.evaluation_session.insert_justification_use_case import (
+from core.ports.inbound.evaluation.insert_justification_use_case import (
     InsertJustificationUseCase,
     InsertJustificationCommand,
 )
