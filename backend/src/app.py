@@ -27,9 +27,6 @@ from core.services.device.get_device_list_service import GetDeviceListService
 from core.services.device.get_device_detail_service import GetDeviceDetailService
 # Device Write Service 
 from core.services.device.import_device_service import ImportDeviceService
-from core.services.device.create_device_service import CreateDeviceService
-from core.services.device.update_device_service import UpdateDeviceService
-from core.services.device.delete_device_service import DeleteDeviceService
 
 #file import export device service
 
