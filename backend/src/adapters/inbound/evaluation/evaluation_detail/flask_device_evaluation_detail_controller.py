@@ -3,7 +3,7 @@ from flask.typing import ResponseReturnValue
 from pydantic import BaseModel, ValidationError
 
 from adapters.inbound.flask_controller_interface import FlaskController
-from core.ports.inbound.evaluation.get_device_evaluation_detail_use_case import (
+from core.ports.inbound.device.get_device_evaluation_detail_use_case import (
     GetDeviceEvaluationDetailUseCase,
     GetDeviceEvaluationDetailCommand
 )
