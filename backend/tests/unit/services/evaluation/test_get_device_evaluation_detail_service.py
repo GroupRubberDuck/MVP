@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import MagicMock
 
-from core.services.evaluation.get_device_evaluation_detail_service import GetDeviceEvaluationDetailService
-from core.ports.inbound.evaluation.get_device_evaluation_detail_use_case import GetDeviceEvaluationDetailCommand
+from core.services.device.get_device_evaluation_detail_service import GetDeviceEvaluationDetailService
+from core.ports.inbound.device.get_device_evaluation_detail_use_case import GetDeviceEvaluationDetailCommand
 from core.ports.inbound.evaluation.exceptions import GetEvaluationDetailFailure
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
 from core.domain.evaluation_object.asset.asset_type import AssetType

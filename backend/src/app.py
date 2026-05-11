@@ -10,11 +10,11 @@ from infrastructure.database.exceptions import DatabaseConnectionError
 
 # Adapter outbound
 # device Repository 
-from adapters.outbound.device.device_repository.mongo_device_repository import MongoDeviceAdapter
+from adapters.outbound.device.repository.mongo_device_repository import MongoDeviceAdapter
 # compliance standard Repository
-from adapters.outbound.compliance_standard.compliance_standard_repository.mongodb_compliance_standard_repository import MongoComplianceStandardAdapter
+from adapters.outbound.compliance_standard.mongodb_compliance_standard_repository import MongoComplianceStandardAdapter
 # device importer factory
-from adapters.outbound.device.concrete_file_device_importer_factory import ConcreteFileDeviceImporterFactory
+from adapters.outbound.device.importer.concrete_file_device_importer_factory import ConcreteFileDeviceImporterFactory
 # report generator
 from adapters.outbound.report.pdf_report_generator import PdfReportGenerator
 # session cache
@@ -44,7 +44,7 @@ from core.services.compliance_standard.get_compliance_standard_service import Ge
 # --- Controller (adapter inbound) ---
 from adapters.inbound.device.flask_query_device_controller import FlaskQueryDeviceController
 from adapters.inbound.device.flask_write_device_controller import FlaskWriteDeviceController 
-from adapters.inbound.device.import_device_controller import ImportDeviceController
+from adapters.inbound.device.flask_import_device_controller import ImportDeviceController
 #evaluation session service
 # from core.services
 
