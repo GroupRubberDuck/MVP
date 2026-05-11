@@ -1,0 +1,1 @@
+export const DEFAULT_STANDARD_ID = "STD-EN303645";

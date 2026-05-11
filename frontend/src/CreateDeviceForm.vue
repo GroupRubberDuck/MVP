@@ -79,13 +79,14 @@
 </template>
 
 <script setup>
+import { DEFAULT_STANDARD_ID } from '../constants.js'
 import { reactive, ref, computed, onMounted } from 'vue'
 
 const form = reactive({
   device_name: '',
   device_os: '',
   device_description: '',
-  standard_id: "STD-EN303645" 
+  standard_id: DEFAULT_STANDARD_ID
 })
 
 const errors = reactive({
