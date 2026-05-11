@@ -24,11 +24,30 @@ export const useDecisionTreeStore = defineStore('decisionTree', () => {
   /** @type {import('vue').Ref<import('../layout/D3LayoutEngine.js').LayoutResult|null>} */
   const layoutResult = ref(null);
 
+  /**
+   * Stato di valutazione calcolato dal backend.
+   * Valori possibili: 'pass' | 'fail' | 'not_applicable' | 'pending' | 'not_evaluated' | null
+   * @type {import('vue').Ref<string|null>}
+   */
+  const evaluationState = ref(null);
+
+  /**
+   * Testo della giustificazione associata al requisito.
+   * @type {import('vue').Ref<string>}
+   */
+  const justification = ref('');
+
+  /**
+   * Flag per mostrare lo stato di salvataggio della giustificazione.
+   * @type {import('vue').Ref<'idle'|'saving'|'saved'|'error'>}
+   */
+  const justificationStatus = ref('idle');
+
   /** @type {import('../api/EvaluationApiClient.js').EvaluationApiClient|null} */
   let apiClient = null;
 
-  /** Contesto della valutazione corrente */
-  let evaluationContext = { deviceId: '', assetId: '', requirementId: '' };
+  /** Contesto della valutazione corrente (include sessionId) */
+  let evaluationContext = { sessionId: '', deviceId: '', assetId: '', requirementId: '' };
 
   // --- Private ---
   function refreshPath() {
@@ -47,17 +66,22 @@ export const useDecisionTreeStore = defineStore('decisionTree', () => {
 
   /**
    * Inizializza lo store con i dati dell'albero e le risposte salvate.
-   * @param {{ treeData: Object, savedAnswers?: Record<string, boolean>, apiClient?: import('../api/EvaluationApiClient.js').EvaluationApiClient, context?: { deviceId: string, assetId: string, requirementId: string } }} opts
+   * @param {{ treeData: Object, savedAnswers?: Record<string, boolean>, evaluationState?: string, justification?: string, apiClient?: import('../api/EvaluationApiClient.js').EvaluationApiClient, context?: { sessionId: string, deviceId: string, assetId: string, requirementId: string } }} opts
    */
-  function init({ treeData, savedAnswers = {}, apiClient: client = null, context = {} }) {
+  function init({ treeData, savedAnswers = {}, evaluationState: initialState = null, justification: initialJustification = '', apiClient: client = null, context = {} }) {
     const tree = new TreeStructure(treeData);
     evaluationEngine.value = new EvaluationEngine(tree);
 
     // Ripristina risposte salvate
     answers.value = new Map(Object.entries(savedAnswers));
 
+    // Stato di valutazione e giustificazione dal backend
+    evaluationState.value = initialState;
+    justification.value = initialJustification;
+    justificationStatus.value = 'idle';
+
     apiClient = client;
-    evaluationContext = { deviceId: '', assetId: '', requirementId: '', ...context };
+    evaluationContext = { sessionId: '', deviceId: '', assetId: '', requirementId: '', ...context };
 
     calculateLayout();
     refreshPath();
@@ -125,6 +149,38 @@ export const useDecisionTreeStore = defineStore('decisionTree', () => {
     selectedNodeId.value = null;
   }
 
+  /**
+   * Salva la giustificazione tramite API e aggiorna lo stato locale.
+   * @param {string} text
+   */
+  async function saveJustification(text) {
+    justification.value = text;
+
+    if (!apiClient) return;
+
+    justificationStatus.value = 'saving';
+    try {
+      await apiClient.saveJustification({
+        sessionId: evaluationContext.sessionId,
+        assetId: evaluationContext.assetId,
+        requirementId: evaluationContext.requirementId,
+        justification: text,
+      });
+      justificationStatus.value = 'saved';
+    } catch (err) {
+      console.error('Failed to save justification:', err);
+      justificationStatus.value = 'error';
+    }
+  }
+
+  /**
+   * Aggiorna lo stato di valutazione (tipicamente dopo una risposta API).
+   * @param {string} state
+   */
+  function setEvaluationState(state) {
+    evaluationState.value = state;
+  }
+
   // --- Getters ---
   const selectedNodeData = computed(() => {
     if (!evaluationEngine.value || !selectedNodeId.value) return null;
@@ -139,11 +195,16 @@ export const useDecisionTreeStore = defineStore('decisionTree', () => {
     activePath,
     layoutResult,
     evaluationEngine,
+    evaluationState,
+    justification,
+    justificationStatus,
     // actions
     init,
     setAnswer,
     selectNode,
     closeSideBar,
+    saveJustification,
+    setEvaluationState,
     // getters
     selectedNodeData,
   };

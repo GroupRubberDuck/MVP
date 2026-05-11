@@ -4,6 +4,8 @@ export { default as TreeCanvas } from './components/TreeCanvas.vue';
 export { default as TreeSidebar } from './components/TreeSidebar.vue';
 export { default as UiDecisionNode } from './components/UiDecisionNode.vue';
 export { default as UiLeafNode } from './components/UiLeafNode.vue';
+export { default as EvaluationBadge } from './components/EvaluationBadge.vue';
+export { default as JustificationForm } from './components/JustificationForm.vue';
 
 // Store
 export { useDecisionTreeStore } from './stores/decisionTreeStore.js';

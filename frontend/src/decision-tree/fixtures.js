@@ -34,3 +34,45 @@ export const sampleTree = {
     { node_id: 'L3', node_type: 'leaf_node', verdict: 'fail' },
   ],
 };
+
+/**
+ * Stesso albero nel formato che arriva dal backend Flask (DecisionTreeDTO).
+ * nodes è una mappa {nodeId: nodeDTO}, node_type è "decision"/"leaf",
+ * i campi usano yes_child_id / no_child_id / parent_id.
+ */
+export const sampleTreeBackendFormat = {
+  root_node_id: 'N1',
+  nodes: {
+    N1: {
+      node_type: 'decision',
+      question: 'Is the public accessibility of the equipment\'s intended equipment functionality?',
+      parent_id: null,
+      yes_child_id: 'N2',
+      no_child_id: 'L1',
+    },
+    N2: {
+      node_type: 'decision',
+      question: 'Do the physical or logical measures limit accessibility?',
+      parent_id: 'N1',
+      yes_child_id: 'L1',
+      no_child_id: 'N3',
+    },
+    N3: {
+      node_type: 'decision',
+      question: 'Do legal implications not allow access control mechanisms?',
+      parent_id: 'N2',
+      yes_child_id: 'L2',
+      no_child_id: 'N4',
+    },
+    N4: {
+      node_type: 'decision',
+      question: 'Are there access control mechanisms?',
+      parent_id: 'N3',
+      yes_child_id: 'L1',
+      no_child_id: 'L3',
+    },
+    L1: { node_type: 'leaf', parent_id: 'N1', verdict: 'pass' },
+    L2: { node_type: 'leaf', parent_id: 'N3', verdict: 'not_applicable' },
+    L3: { node_type: 'leaf', parent_id: 'N4', verdict: 'fail' },
+  },
+};
