@@ -32,8 +32,6 @@ from core.services.device.update_device_service import UpdateDeviceService
 from core.services.device.delete_device_service import DeleteDeviceService
 
 #file import export device service
-from core.services.device.import_device_service import ImportDeviceService
-from core.services.device.export_device_service import ExportDeviceService
 
 # report service
 from core.services.report.generate_report_service import GenerateReportService
@@ -42,10 +40,6 @@ from core.services.report.generate_report_service import GenerateReportService
 from core.services.compliance_standard.get_compliance_standard_service import GetComplianceStandardService
 
 # --- Service (Write) ---
-from core.services.device.create_device_service import CreateDeviceService
-from core.services.device.update_device_service import UpdateDeviceService
-from core.services.device.delete_device_service import DeleteDeviceService
-from core.services.device.import_device_service import ImportDeviceService
 
 # --- Controller (adapter inbound) ---
 from adapters.inbound.device.flask_query_device_controller import FlaskQueryDeviceController
@@ -55,18 +49,11 @@ from adapters.inbound.device.import_device_controller import ImportDeviceControl
 # from core.services
 
 #interactive evaluation service
-from core.services.evaluation.evaluation_justification_service import EvaluationJustificationService
 
 # evaluation detail service
-from core.services.asset.get_asset_detail_service import (
-    GetAssetDetailService as GetAssetEvaluationDetailService
-    )
-from core.services.asset.get_requirement_evaluation_detail_service import GetRequirementEvaluationDetailService
 
 # Controller (adapter inbound)
-from adapters.inbound.device.flask_query_device_controller import FlaskQueryDeviceController
 from adapters.inbound.report.report_controller import FlaskExportReportController
-from adapters.inbound.device.import_device_controller import ImportDeviceController
 
 # --- Routes ---
 from routes import register_routes, register_error_handlers
