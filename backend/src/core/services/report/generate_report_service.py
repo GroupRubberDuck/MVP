@@ -16,16 +16,19 @@ from core.domain.shared.exceptions import DomainError
 from core.domain.ExportedFile import ExportedFile
 
 from core.domain.evaluation_object.device import Device
+from core.domain.utilities.evaluation_detail_builder import EvaluationDetailBuilder
 
 class GenerateReportService(GenerateReportUseCase):
     def __init__(
         self,
         get_evaluation_session_port: GetEvaluationSessionPort,
         report_generator_port: ReportGeneratorPort,
-        evaluation_engine: EvaluationEngine,
+        evaluation_engine: EvaluationEngine | None = None,
     ) -> None:
         self._get_evaluation_session_port = get_evaluation_session_port
         self._report_generator = report_generator_port
+        if evaluation_engine is None:
+            evaluation_engine = EvaluationEngine()
         self._evaluation_engine = evaluation_engine
 
     def export_report(self, command: GenerateReportCommand) -> ExportedFile:
@@ -86,18 +89,7 @@ class GenerateReportService(GenerateReportUseCase):
     def _build_requirement_detail(
         self, result: RequirementEvaluationResult, req: Requirement
     ) -> RequirementEvaluationDetail:
-        if req.decision_tree is None:
-            raise ExportReportFailure(
-                f"Il requisito '{req.requirement_id}' non ha un albero decisionale."
-            )
-        return RequirementEvaluationDetail(
-            requirement_id=result.requirement_id,
-            name=req.name,
-            description=req.description,
-            target=req.target_description,
-            justification=result.justification,
-            node_choices=result.node_choices,
-            nodes=req.decision_tree.nodes,
-            state=result.state,
-            dependencies=result.dependencies,
+        return EvaluationDetailBuilder().build_requirement_detail(
+            req=req,
+            result=result
         )

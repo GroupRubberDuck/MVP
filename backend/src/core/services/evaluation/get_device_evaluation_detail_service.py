@@ -1,50 +1,69 @@
 from core.domain.evaluation_engine.evaluation_detail import (
+    DeviceEvaluationDetail,
     AssetEvaluationDetail,
     RequirementEvaluationDetail,
 )
 from core.domain.utilities.evaluation_detail_builder import EvaluationDetailBuilder
 from core.domain.evaluation_engine.evaluation_engine import EvaluationEngine
-from core.domain.evaluation_engine.evaluation_result import RequirementEvaluationResult
-from core.domain.evaluation_object.exceptions import AssetNotFoundError
+from core.domain.evaluation_engine.evaluation_result import (
+    AssetEvaluationResult,
+    RequirementEvaluationResult,
+)
+from core.domain.session.evaluation_session import EvaluationSession
 from core.domain.evaluation_standard.requirement import Requirement
-from core.ports.inbound.asset.exceptions import GetAssetDetailFailure
-from core.ports.inbound.asset.get_asset_detail_use_case import GetAssetDetailCommand, GetAssetDetailUseCase
+from core.ports.inbound.evaluation.get_device_evaluation_detail_use_case import (
+    GetDeviceEvaluationDetailCommand,
+    GetDeviceEvaluationDetailUseCase,
+)
+
+from core.ports.inbound.evaluation.exceptions import GetEvaluationDetailFailure
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
 from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
 
 
-class GetAssetDetailService(GetAssetDetailUseCase):
+class GetDeviceEvaluationDetailService(GetDeviceEvaluationDetailUseCase):
     def __init__(
-        self, get_evaluation_session_port: GetEvaluationSessionPort, evaluation_engine: EvaluationEngine
+        self, 
+        get_evaluation_session_port: GetEvaluationSessionPort, 
+        evaluation_engine: EvaluationEngine
     ) -> None:
         self._get_evaluation_session_port = get_evaluation_session_port
         self._evaluation_engine = evaluation_engine
 
-    def get_asset(self, command: GetAssetDetailCommand) -> AssetEvaluationDetail:
+    def get_device_evaluation_detail(
+        self, command: GetDeviceEvaluationDetailCommand
+    ) -> DeviceEvaluationDetail:
         try:
             session = self._get_evaluation_session_port.get_evaluation_session(command.session_id)
         except EvaluationSessionNotFoundError:
-            raise GetAssetDetailFailure(
+            raise GetEvaluationDetailFailure(
                 f"Sessione '{command.session_id}' non trovata."
             )
-
+        
         device_result = self._evaluation_engine.evaluate(
             session.device, session.standard
         )
 
-        asset_result = device_result.get_asset_result(command.asset_id)
-        if asset_result is None:
-            raise GetAssetDetailFailure(
-                f"Asset '{command.asset_id}' non trovato nel dispositivo."
-            )
+        asset_details = tuple(
+            self._make_asset_detail(asset_result, session)
+            for asset_result in device_result.asset_results
+        )
 
-        try:
-            asset = session.device.get_asset(command.asset_id)
-        except AssetNotFoundError:
-            raise GetAssetDetailFailure(
-                f"Asset '{command.asset_id}' non trovato nel dispositivo."
-            )
+        return DeviceEvaluationDetail(
+            device_id=session.device.id,
+            name=session.device.name,
+            operating_system=session.device.os,
+            description=session.device.description,
+            standard_id=session.device.standard_id,
+            asset_details=asset_details,
+            verdict=device_result.verdict,
+        )
 
+    def _make_asset_detail(
+        self, asset_result: AssetEvaluationResult, session: EvaluationSession
+    ) -> AssetEvaluationDetail:
+        asset = session.device.get_asset(asset_result.asset_id)
+        
         requirement_details = tuple(
             self._make_requirement_detail(
                 r, session.standard.get_requirement(r.requirement_id)

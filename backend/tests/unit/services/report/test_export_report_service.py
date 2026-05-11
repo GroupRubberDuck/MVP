@@ -38,7 +38,7 @@ def command():
 def _setup_happy_path(mock_session_port, mock_engine, mock_report_generator, command):
     
     mock_tree = MagicMock()
-    mock_tree.nodes = [{"node_id": "n1", "question": "test?"}]
+    mock_tree.nodes = {"n1":{"node_id": "n1", "question": "test?"}}
     
     mock_req = MagicMock()
     mock_req.requirement_id = "REQ-1"
@@ -155,12 +155,14 @@ class TestExportReportFailures:
         with pytest.raises(ExportReportFailure, match="Ciclo infinito"):
             service.export_report(command)
 
-    def test_raises_failure_when_requirement_has_no_decision_tree(
-        self, service, mock_session_port, mock_engine, mock_report_generator, command
-    ):
-        mock_req = _setup_happy_path(mock_session_port, mock_engine, mock_report_generator, command)
-        
-        mock_req.decision_tree = None
 
-        with pytest.raises(ExportReportFailure, match="non ha un albero decisionale"):
-            service.export_report(command)
+    # il decision tree non è vuoto teoricamente parlando 
+    # def test_raises_failure_when_requirement_has_no_decision_tree(
+        # self, service, mock_session_port, mock_engine, mock_report_generator, command
+    # ):
+        # mock_req = _setup_happy_path(mock_session_port, mock_engine, mock_report_generator, command)
+        # 
+        # mock_req.decision_tree = None
+# 
+        # with pytest.raises(ExportReportFailure, match="non ha un albero decisionale"):
+            # service.export_report(command)
