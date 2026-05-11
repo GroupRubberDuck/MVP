@@ -20,6 +20,7 @@ export default defineConfig({
       input: {
         'helloworld': resolve(__dirname, 'src/main.js'),
         'create-device': resolve(__dirname, 'src/main-create-device.js'),
+        'decision-tree': resolve(__dirname, 'src/main-decision-tree.js'),
       },
       output: {
         entryFileNames: `[name].js`,
