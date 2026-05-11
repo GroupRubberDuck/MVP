@@ -55,21 +55,18 @@ class FlaskQueryDeviceController(FlaskController):
                 standard = self._get_compliance_standard_use_case.get_compliance_standard(
                     GetComplianceStandardCommand(standard_id=device.standard_id)
                 )
-                return render_template(
-                    "layouts/device/device_detail.html",
-                    device=DeviceDetailDTO(
-                        device_id=device.id,
-                        name=device.name,
-                        os=device.os,
-                        description=device.description,
-                        compliance_standard_name=standard.name,
-                        compliance_standard_version=standard.version_number,
-                    ),
-                ), 200
-            except DeviceNotFoundFailure as e:
-                return render_template("errors/404.html", message=str(e)), 404
-            except StandardNotFoundFailure as e:
-                return render_template("errors/404.html", message=str(e)), 404
+                return render_template("layouts/device/device_detail.html", device=DeviceDetailDTO(
+                    device_id=device.id,
+                    name=device.name,
+                    os=device.os,
+                    description=device.description,
+                    compliance_standard_name=standard.name,
+                    compliance_standard_version=standard.version_number
+                )), 200
+            except (DeviceNotFoundFailure) as e:
+                return render_template("error.html", message=str(e)), 404
+            except (StandardNotFoundFailure) as e:  
+                return render_template("error.html", message=str(e)), 404
             
         @blueprint.route("/devices/<device_id>/edit", methods=["GET"])
         def edit_device_page(device_id):
