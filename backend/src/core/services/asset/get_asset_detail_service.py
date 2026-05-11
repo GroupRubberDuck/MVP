@@ -7,7 +7,7 @@ from core.domain.evaluation_engine.evaluation_result import RequirementEvaluatio
 from core.domain.evaluation_object.exceptions import AssetNotFoundError
 from core.domain.evaluation_standard.requirement import Requirement
 from core.ports.inbound.asset.exceptions import GetAssetDetailFailure
-from core.ports.inbound.asset.get_asset_detail_use_case import GetAssetDetailCommand, GetAssetDetailUseCase
+from core.ports.inbound.asset.get_asset_evaluation_detail_use_case import GetAssetDetailCommand, GetAssetDetailUseCase
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
 from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
 

@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock
 
-from core.services.evaluation.commit_evaluation_session_service import CommitEvaluationSessionService
+from core.services.evaluation.evaluation_session.commit_evaluation_session_service import CommitEvaluationSessionService
 from core.ports.inbound.evaluation.evaluation_session.commit_evaluation_session_use_case import CommitEvaluationSessionCommand
 from core.ports.inbound.evaluation.exceptions import CommitSessionFailure
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError

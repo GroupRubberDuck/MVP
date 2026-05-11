@@ -2,7 +2,7 @@ import io
 import json
 import pytest
 
-from adapters.outbound.device.json_file_device_importer import JSONFileDeviceImporter
+from adapters.outbound.device.importer.json_file_device_importer import JSONFileDeviceImporter
 from core.ports.outbound.device.exceptions import InvalidFileFormatError
 
 

@@ -1,7 +1,20 @@
-{% extends "layouts/base.html" %} 
-{% block title %}404 - Non trovato{% endblock %} 
-{% block page_title %}Pagina non trovata{% endblock %} 
+{% extends "layouts/base.html" %}
+ 
+{% block title %}404 - Non trovato{% endblock %}
+{% block page_title %}Pagina non trovata{% endblock %}
+ 
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/404.css') }}">
+{% endblock %}
+ 
 {% block content %}
-
-{{ message }}
-Torna alla lista dispositivi {% endblock %} 
+<div class="error-container">
+  <p class="error-code">404</p>
+  <h2 class="error-title">Pagina non trovata</h2>
+  <p class="error-message">{{ message }}</p>
+  <a href="{{ url_for('devices.get_device_list') }}" class="btn btn--outline">
+    ← Torna alla lista dispositivi
+  </a>
+</div>
+{% endblock %}
+ 

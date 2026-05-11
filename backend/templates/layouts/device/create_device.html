@@ -1,0 +1,26 @@
+{# layouts/device/create_device.html #}
+{% extends "layouts/base.html" %}
+
+{% block title %}Nuovo Dispositivo{% endblock %}
+{% block page_title %}{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='vue/create-device.css') }}">
+{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <div class="page-header__text">
+      <h1>Nuovo Dispositivo</h1>
+      <p>Compila i campi per registrare un nuovo dispositivo nel sistema.</p>
+    </div>
+  </div>
+
+  {# Punto di innesto per Vue #}
+  <div id="create-device-app"></div>
+{% endblock %}
+
+{% block scripts %}
+  {# Carica il file Javascript compilato #}
+  <script type="module" src="{{ url_for('static', filename='vue/create-device.js') }}"></script>
+{% endblock %}

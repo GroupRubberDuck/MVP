@@ -1,12 +1,12 @@
 import pytest
 
-from adapters.outbound.device.json_file_device_exporter import JSONFileDeviceExporter
-from adapters.outbound.device.json_file_device_importer import JSONFileDeviceImporter
-from adapters.outbound.device.xml_file_device_exporter import XMLFileDeviceExporter
-from adapters.outbound.device.xml_file_device_importer import XMLFileDeviceImporter
+from adapters.outbound.device.exporter.json_file_device_exporter import JSONFileDeviceExporter
+from adapters.outbound.device.importer.json_file_device_importer import JSONFileDeviceImporter
+from adapters.outbound.device.exporter.xml_file_device_exporter import XMLFileDeviceExporter
+from adapters.outbound.device.importer.xml_file_device_importer import XMLFileDeviceImporter
 
-from adapters.outbound.device.csv_file_device_exporter import CSVFileDeviceExporter
-from adapters.outbound.device.csv_file_device_importer import CSVFileDeviceImporter
+from adapters.outbound.device.exporter.csv_file_device_exporter import CSVFileDeviceExporter
+from adapters.outbound.device.importer.csv_file_device_importer import CSVFileDeviceImporter
 from core.domain.evaluation_object.device import Device
 from core.domain.evaluation_object.asset.asset import Asset
 from core.domain.evaluation_object.asset.asset_anagraphic import AssetAnagraphic

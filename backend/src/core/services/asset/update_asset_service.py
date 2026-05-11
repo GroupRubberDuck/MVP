@@ -3,7 +3,7 @@ from core.ports.inbound.asset.update_asset_use_case import (
     UpdateAssetUseCase,
 )
 from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
-from core.ports.outbound.evaluation.save_evaluation_session_port import SaveEvaluationSessionPort
+from core.ports.outbound.evaluation.evaluation_session.save_evaluation_session_port import SaveEvaluationSessionPort
 from core.ports.inbound.asset.exceptions import UpdateAssetFailure
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionSaveError, EvaluationSessionNotFoundError
 from core.domain.evaluation_object.exceptions import AssetNotFoundError

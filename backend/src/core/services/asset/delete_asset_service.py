@@ -7,7 +7,7 @@ from core.ports.outbound.evaluation.get_evaluation_session_port import (
     GetEvaluationSessionPort,
 
 )
-from core.ports.outbound.evaluation.save_evaluation_session_port import (
+from core.ports.outbound.evaluation.evaluation_session.save_evaluation_session_port import (
     SaveEvaluationSessionPort
 )
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError

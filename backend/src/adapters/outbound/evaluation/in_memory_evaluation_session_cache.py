@@ -3,10 +3,10 @@ from copy import deepcopy
 from core.domain.evaluation_object.device import Device
 from core.domain.evaluation_standard.compliance_standard import ComplianceStandard
 from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
-from core.ports.outbound.evaluation.save_evaluation_session_port import SaveEvaluationSessionPort
-from core.ports.outbound.evaluation.create_evaluation_session_port import CreateEvaluationSessionPort
+from core.ports.outbound.evaluation.evaluation_session.save_evaluation_session_port import SaveEvaluationSessionPort
+from core.ports.outbound.evaluation.evaluation_session.create_evaluation_session_port import CreateEvaluationSessionPort
 from core.ports.outbound.evaluation.evaluation_session_exists_port import EvaluationSessionExistsPort
-from core.ports.outbound.evaluation.close_evaluation_session_port import CloseEvaluationSessionPort
+from core.ports.outbound.evaluation.evaluation_session.close_evaluation_session_port import CloseEvaluationSessionPort
 from core.domain.session.evaluation_session import EvaluationSession
 
 from core.ports.outbound.evaluation.exceptions import (
