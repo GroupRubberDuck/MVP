@@ -27,13 +27,8 @@ from core.services.device.get_device_list_service import GetDeviceListService
 from core.services.device.get_device_detail_service import GetDeviceDetailService
 # Device Write Service 
 from core.services.device.import_device_service import ImportDeviceService
-from core.services.device.create_device_service import CreateDeviceService
-from core.services.device.update_device_service import UpdateDeviceService
-from core.services.device.delete_device_service import DeleteDeviceService
 
 #file import export device service
-from core.services.device.import_device_service import ImportDeviceService
-from core.services.device.export_device_service import ExportDeviceService
 
 # report service
 from core.services.report.generate_report_service import GenerateReportService
@@ -45,13 +40,8 @@ from core.services.compliance_standard.get_compliance_standard_service import Ge
 # from core.services
 
 #interactive evaluation service
-from core.services.evaluation.evaluation_justification_service import EvaluationJustificationService
 
 # evaluation detail service
-from core.services.asset.get_asset_detail_service import (
-    GetAssetDetailService as GetAssetEvaluationDetailService
-    )
-from core.services.asset.get_requirement_evaluation_detail_service import GetRequirementEvaluationDetailService
 
 # Controller (adapter inbound)
 from adapters.inbound.device.flask_query_device_controller import FlaskQueryDeviceController
