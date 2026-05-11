@@ -1,5 +1,3 @@
-# adapters/inbound/evaluation/flask_device_evaluation_detail_controller.py
-
 from flask import Blueprint, render_template
 from flask.typing import ResponseReturnValue
 from pydantic import BaseModel, ValidationError
@@ -50,14 +48,14 @@ class FlaskDeviceEvaluationDetailController(FlaskController):
         )
 
     def register_routes(self, blueprint: Blueprint) -> None:
-        @blueprint.route("/session/<session_id>/devices/<device_id>", methods=["GET"])
+        @blueprint.route("/sessions/<session_id>/devices/<device_id>", methods=["GET"])
         def get_device_evaluation_detail(session_id: str, device_id: str) -> ResponseReturnValue:
             try:
                 command = GetDeviceEvaluationDetailCommand(
                     session_id=session_id, 
                     device_id=device_id
                 )
-            except ValidationError as e: # Sostituisci ValueError con ValidationError se usi Pydantic
+            except ValidationError as e:
                 return render_template(
                     "errors/400.html", 
                     message=f"I parametri forniti non sono validi: {e}"
@@ -67,7 +65,7 @@ class FlaskDeviceEvaluationDetailController(FlaskController):
             try:
                 device_eval_detail = self._get_device_ev_detail_use_case.get_device_evaluation_detail(command)
             except GetEvaluationDetailFailure as e:
-                return render_template("errors/500.html", message=f"Si è verificato un errore inaspettato: {e}"), 500
+                return render_template("errors/404.html", message=f"Risorsa non trovata: {e}"), 404
             
             dto = self._make_dto(device_eval_detail)
-            return render_template("layouts/device_eval_detail.html", device_detail=dto), 200
+            return render_template("layouts/device_eval_detail.html", device_detail=dto.model_dump()), 200
