@@ -20,4 +20,4 @@ class ConcreteFileDeviceExporterFactory(FileDeviceExporterFactoryPort):
         cls = self._exporters.get(extension)
         if cls is None:
             raise ValueError(f"Formato non supportato: {extension}")
-        return cls()
+        return cls() # type: ignore

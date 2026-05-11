@@ -28,6 +28,10 @@ from core.services.device.get_device_detail_service import GetDeviceDetailServic
 # Device Write Service 
 from core.services.device.import_device_service import ImportDeviceService
 
+from core.services.device.create_device_service import CreateDeviceService
+from core.services.device.update_device_service import UpdateDeviceService
+from core.services.device.delete_device_service import DeleteDeviceService
+
 #file import export device service
 
 # report service
@@ -41,7 +45,7 @@ from core.services.compliance_standard.get_compliance_standard_service import Ge
 # --- Controller (adapter inbound) ---
 from adapters.inbound.device.flask_query_device_controller import FlaskQueryDeviceController
 from adapters.inbound.device.flask_write_device_controller import FlaskWriteDeviceController 
-from adapters.inbound.device.flask_import_device_controller import ImportDeviceController
+from adapters.inbound.device.flask_import_device_controller import FlaskImportDeviceController
 #evaluation session service
 # from core.services
 
@@ -109,7 +113,7 @@ def create_app() -> Flask:
         get_device_detail_use_case=get_device_detail_service,
         get_compliance_standard_use_case=get_compliance_standard_service,
     )
-    import_device_controller = ImportDeviceController(
+    import_device_controller = FlaskImportDeviceController(
         import_device_service=import_device_service
     )
     generate_report_service = GenerateReportService(
@@ -127,7 +131,7 @@ def create_app() -> Flask:
         delete_device_use_case=delete_device_service,
     )
 
-    import_device_controller = ImportDeviceController(
+    import_device_controller = FlaskImportDeviceController(
         import_device_service=import_device_service
     )
 

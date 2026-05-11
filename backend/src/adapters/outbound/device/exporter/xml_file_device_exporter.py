@@ -4,7 +4,7 @@ from adapters.outbound.device.exporter.file_device_exporter import FileDeviceExp
 
 
 class XMLFileDeviceExporter(FileDeviceExporter):
-    def __init__(self):
+    def __init__(self) -> None:
         self._root: ET.Element | None = None
 
     def _prepare_structure(self, device: Device) -> None:
