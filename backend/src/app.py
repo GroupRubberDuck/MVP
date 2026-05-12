@@ -109,7 +109,7 @@ from adapters.inbound.evaluation.evaluation_session_controller import Evaluation
 
 from adapters.inbound.report.report_controller import FlaskExportReportController
 
-
+from adapters.inbound.asset.flask_write_asset_controller import FlaskWriteAssetController
 
 
 # Controller (adapter inbound)
