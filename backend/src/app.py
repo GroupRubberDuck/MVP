@@ -15,6 +15,7 @@ from adapters.outbound.device.repository.mongo_device_repository import MongoDev
 from adapters.outbound.compliance_standard.mongodb_compliance_standard_repository import MongoComplianceStandardAdapter
 # device importer factory
 from adapters.outbound.device.importer.concrete_file_device_importer_factory import ConcreteFileDeviceImporterFactory
+from adapters.outbound.device.exporter.concrete_file_device_exporter_factory import ConcreteFileDeviceExporterFactory
 # report generator
 from adapters.outbound.report.pdf_report_generator import PdfReportGenerator
 # session cache
@@ -53,23 +54,39 @@ from core.services.asset.get_asset_detail_service import GetAssetDetailService
 from core.services.asset.get_asset_anagraphic_service import GetAssetAnagraphicService
 from core.services.asset.get_requirement_evaluation_detail_service import GetRequirementEvaluationDetailService
 
+from core.services.evaluation.evaluation_session.close_evaluation_session_service import CloseEvaluationSessionService
+from core.services.evaluation.evaluation_session.commit_evaluation_session_service import CommitEvaluationSessionService
+from core.services.evaluation.evaluation_session.open_evaluation_session_service import OpenEvaluationSessionService
+from core.services.evaluation.evaluation_session.session_coordinator import SessionCoordinator,SessionHandler
+
+
+from core.services.evaluation.evaluate_decision_node_service import EvaluateDecisionNodeService
+from core.services.evaluation.evaluate_justification_service import EvaluationJustificationService
 
 
 # --- Controller (adapter inbound) ---
 from adapters.inbound.device.flask_query_device_controller import FlaskQueryDeviceController
 from adapters.inbound.device.flask_write_device_controller import FlaskWriteDeviceController 
 from adapters.inbound.device.flask_import_device_controller import FlaskImportDeviceController
+from adapters.inbound.device.flask_export_device_controller import FlaskExportDeviceController
+
+from adapters.inbound.asset.flask_write_asset_controller import FlaskWriteAssetController
 
 
-#evaluation session service
-# from core.services
+from adapters.inbound.evaluation.evaluation_detail.flask_asset_evaluation_detail_controller import FlaskAssetEvaluationDetailController
+from adapters.inbound.evaluation.evaluation_detail.flask_device_evaluation_detail_controller import FlaskDeviceEvaluationDetailController
+from adapters.inbound.evaluation.evaluation_detail.flask_requirement_evaluation_detail_controller import FlaskRequirementEvaluationDetailController
+from adapters.inbound.evaluation.evaluation_justification_controller import EvaluationJustificationController
+from adapters.inbound.evaluation.evaluate_decision_node_controller import FlaskEvaluateDecisionNodeController
+from adapters.inbound.evaluation.evaluation_session_controller import EvaluationSessionController
 
-#interactive evaluation service
+from adapters.inbound.report.report_controller import FlaskExportReportController
 
-# evaluation detail service
+
+
+from core.domain.evaluation_engine.evaluation_engine import EvaluationEngine
 
 # Controller (adapter inbound)
-from adapters.inbound.report.report_controller import FlaskExportReportController
 
 # --- Routes ---
 from routes import register_routes, register_error_handlers
@@ -99,7 +116,7 @@ def create_app() -> Flask:
     standard_adapter = MongoComplianceStandardAdapter(db["compliance_standards"])
     report_generator_adapter = PdfReportGenerator()
 
-    get_session_service = InMemoryEvaluationSessionCache()
+    session_cache = InMemoryEvaluationSessionCache()
 
 
     
@@ -122,6 +139,77 @@ def create_app() -> Flask:
         device_importer_factory=ConcreteFileDeviceImporterFactory()
     )
 
+    get_device_evaluation_detail_service=GetDeviceEvaluationDetailService(
+        get_evaluation_session_port=session_cache,
+        evaluation_engine=EvaluationEngine()
+    )
+
+    export_device_service=ExportDeviceService(
+        find_device=device_adapter,
+        exporter_factory=ConcreteFileDeviceExporterFactory()
+    )
+
+    create_asset_service=CreateAssetService(
+        save_evaluation_session=session_cache,
+        get_evaluation_session=session_cache
+    )
+
+    update_asset_service=UpdateAssetService(
+        save_evaluation_session_port=session_cache,
+        get_evaluation_session_port=session_cache
+    )
+
+    delete_asset_service=DeleteAssetService(
+        save_evaluation_session_port=session_cache,
+        get_evaluation_session_port=session_cache
+    )
+    get_asset_detail_service=GetAssetDetailService(
+        get_evaluation_session_port=session_cache,
+        evaluation_engine=EvaluationEngine()
+    )
+    get_asset_anagraphic_service=GetAssetAnagraphicService(
+        get_evaluation_session_port=session_cache
+    )
+
+    get_requirement_evalaution_detail_service=GetRequirementEvaluationDetailService(
+        get_evaluation_session_port=session_cache,
+        evaluation_engine=EvaluationEngine()
+    )
+
+    close_evaluation_session_service=CloseEvaluationSessionService(
+        delete_session_port=session_cache
+    )
+
+    commit_evaluation_session_service=CommitEvaluationSessionService(
+        get_evaluation_session_port=session_cache,
+        save_device_port=device_adapter
+    )
+    session_coordinator=SessionCoordinator(
+        exist_port=session_cache,
+        session_handler=SessionHandler()
+    )
+    open_evaluation_session_service=OpenEvaluationSessionService(
+        session_coordinator=session_coordinator,
+        create_session_port=session_cache,
+        find_device_port=device_adapter,
+        find_standard_port=standard_adapter
+    )
+
+    evaluate_decision_node_service=EvaluateDecisionNodeService(
+        get_evaluation_session_port=session_cache,
+        save_evaluation_session_port=session_cache
+    )
+
+    evaluation_justification_service=EvaluationJustificationService(
+        get_evaluation_session_port=session_cache,
+        save_evaluation_session_port=session_cache        
+    )
+
+#  service report
+    generate_report_service = GenerateReportService(
+        get_evaluation_session_port=session_cache,
+        report_generator_port=report_generator_adapter,
+    )
     # ── Istanze Controller (adapter inbound) ──
     query_device_controller = FlaskQueryDeviceController(
         get_device_list_use_case=get_device_list_service,
@@ -130,10 +218,6 @@ def create_app() -> Flask:
     )
     import_device_controller = FlaskImportDeviceController(
         import_device_service=import_device_service
-    )
-    generate_report_service = GenerateReportService(
-        get_evaluation_session_port=get_session_service,
-        report_generator_port=report_generator_adapter,
     )
     export_report_controller = FlaskExportReportController(
         generate_report_use_case=generate_report_service
@@ -150,14 +234,59 @@ def create_app() -> Flask:
         import_device_service=import_device_service
     )
 
+    export_device_controller=FlaskExportDeviceController(export_device_service)
+
+    asset_evaluation_detail_controller=FlaskAssetEvaluationDetailController(
+        get_asset_ev_detail_use_case=get_asset_detail_service
+    )
+
+    device_evaluation_detail_controller=FlaskDeviceEvaluationDetailController(
+        get_device_ev_detail_use_case=get_device_evaluation_detail_service
+    )
+
+    requirement_evaluation_detail_controller=FlaskRequirementEvaluationDetailController(
+        get_requirement_ev_detail_use_case=get_requirement_evalaution_detail_service
+    )
+
+    evaluation_justification_controller=EvaluationJustificationController(
+        insert_justification_use_case=evaluation_justification_service
+    )
+
+    evaluate_decision_node_controller=FlaskEvaluateDecisionNodeController(
+        evaluate_decision_node_use_case=evaluate_decision_node_service
+    )
+
+    evaluation_session_controller=EvaluationSessionController(
+        open_use_case=open_evaluation_session_service,
+        close_use_case=close_evaluation_session_service,
+        commit_use_case=commit_evaluation_session_service
+    )
+
+    write_asset_controller=FlaskWriteAssetController(
+        create_asset_use_case=create_asset_service,
+        update_asset_use_case=update_asset_service,
+        delete_asset_use_case=delete_asset_service
+    )
+
+
     # ── Registrazione Rotte ──
     register_routes(
         app,
         device_controllers=[
             query_device_controller, 
             write_device_controller, 
-            import_device_controller
+            import_device_controller,
+            export_device_controller,
         ],
+        evaluation_controllers=[
+            asset_evaluation_detail_controller,
+            device_evaluation_detail_controller,
+            requirement_evaluation_detail_controller,
+            evaluation_justification_controller,
+            evaluate_decision_node_controller,
+            evaluation_session_controller,
+            write_asset_controller
+            ],
         report_controllers=[export_report_controller],
     )
     register_error_handlers(app)
