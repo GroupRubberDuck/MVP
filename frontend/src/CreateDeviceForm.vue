@@ -79,7 +79,7 @@
 </template>
 
 <script setup>
-import { DEFAULT_STANDARD_ID } from '../constants.js'
+import {DEFAULT_STANDARD_ID} from '../constants.js'
 import { reactive, ref, computed, onMounted } from 'vue'
 
 const form = reactive({

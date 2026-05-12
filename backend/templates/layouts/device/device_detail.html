@@ -10,7 +10,7 @@
 
     <div class="device-header__actions">
       <a class="btn btn--outline"
-         href="{{ url_for('devices.start_evaluation_session', device_id=device.device_id) }}">
+         href="{{ url_for('evaluation.open_session', device_id=device.device_id) }}">
         Avvia Valutazione
       </a>
       <a class="btn btn--primary"
@@ -28,7 +28,7 @@
       <div class="card__header">
         <h2 class="card__title">Anagrafica Dispositivo</h2>
         <a class="btn btn--primary btn--sm"
-           href="{{ url_for('devices.get_update_device_form', device_id=device.device_id) }}"> 
+           href="{{ url_for('devices.update_device', device_id=device.device_id) }}"> 
           Modifica Dispositivo
         </a>
       </div>
