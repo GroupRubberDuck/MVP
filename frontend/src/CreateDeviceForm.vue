@@ -17,77 +17,82 @@
       <div class="card-header">
         <h2>{{ isEditMode ? 'Modifica Dispositivo' : 'Informazioni Dispositivo' }}</h2>
       </div>
+ 
+      <form @submit.prevent="submit" novalidate>
+        
+        <div v-if="errorMessage" class="alert-error">
+          {{ errorMessage }}
+        </div>
 
-      <div v-if="errorMessage" class="alert-error">
-        {{ errorMessage }}
-      </div>
+        <p class="section-label">Informazioni Generali</p>
 
-      <p class="section-label">Informazioni Generali</p>
+        <div class="form-group">
+          <label class="form-label" for="device-name">Nome Dispositivo *</label>
+          <input
+            id="device-name"
+            v-model="form.device_name"
+            class="form-input"
+            :class="{ 'form-input-error': errors.device_name }"
+            type="text"
+            maxlength="64"
+            placeholder="es. Router principale"
+          />
+          <span class="form-hint">
+            Max 64 caratteri ({{ form.device_name.length }}/64)
+          </span>
+          <span v-if="errors.device_name" class="form-error">
+            {{ errors.device_name }}
+          </span>
+        </div>
 
-      <div class="form-group">
-        <label class="form-label" for="device-name">Nome Dispositivo *</label>
-        <input
-          id="device-name"
-          v-model="form.device_name"
-          class="form-input"
-          :class="{ 'form-input-error': errors.device_name }"
-          type="text"
-          maxlength="64"
-          placeholder="es. Router principale"
-        />
-        <span class="form-hint">
-          Max 64 caratteri ({{ form.device_name.length }}/64)
-        </span>
-        <span v-if="errors.device_name" class="form-error">
-          {{ errors.device_name }}
-        </span>
-      </div>
+        <div class="form-group">
+          <label class="form-label" for="device-os">Sistema Operativo *</label>
+          <input
+            id="device-os"
+            v-model="form.device_os"
+            class="form-input"
+            :class="{ 'form-input-error': errors.device_os }"
+            type="text"
+            maxlength="64"
+            placeholder="es. Linux, Windows"
+          />
+          <span v-if="errors.device_os" class="form-error">
+            {{ errors.device_os }}
+          </span>
+        </div>
 
-      <div class="form-group">
-        <label class="form-label" for="device-os">Sistema Operativo *</label>
-        <input
-          id="device-os"
-          v-model="form.device_os"
-          class="form-input"
-          :class="{ 'form-input-error': errors.device_os }"
-          type="text"
-          maxlength="64"
-          placeholder="es. Linux, Windows"
-        />
-        <span v-if="errors.device_os" class="form-error">
-          {{ errors.device_os }}
-        </span>
-      </div>
+        <p class="section-label">Descrizione e Funzionalità</p>
 
-      <p class="section-label">Descrizione e Funzionalità</p>
+        <div class="form-group">
+          <label class="form-label" for="device-description">Descrizione</label>
+          <textarea
+            id="device-description"
+            v-model="form.device_description"
+            class="form-input form-textarea"
+            maxlength="512"
+            placeholder="Aggiungi dettagli sul dispositivo..."
+            rows="4"
+          ></textarea>
+          <span class="form-hint">
+            Facoltativo – max 512 caratteri ({{ form.device_description.length }}/512)
+          </span>
+        </div>
 
-      <div class="form-group">
-        <label class="form-label" for="device-description">Descrizione</label>
-        <textarea
-          id="device-description"
-          v-model="form.device_description"
-          class="form-input form-textarea"
-          maxlength="512"
-          placeholder="Aggiungi dettagli sul dispositivo..."
-          rows="4"
-        ></textarea>
-        <span class="form-hint">
-          Facoltativo – max 512 caratteri ({{ form.device_description.length }}/512)
-        </span>
-      </div>
-
-      <div class="form-actions">
-        <button 
-          class="btn btn--primary"
-          :disabled="isSubmitting" 
-          @click="submit"
-        >
-          {{ isSubmitting ? 'Salvataggio...' : (isEditMode ? 'Salva Modifiche' : 'Crea Dispositivo') }}
-        </button>
-        <a :href="isEditMode ? `/devices/${deviceId}` : '/devices'" class="btn btn--outline">
-          Annulla
-        </a>
-      </div>
+        <div class="form-actions">
+          <button 
+            type="submit"
+            class="btn btn--primary"
+            :disabled="isSubmitting" 
+          >
+            {{ isSubmitting ? 'Salvataggio...' : (isEditMode ? 'Salva Modifiche' : 'Crea Dispositivo') }}
+          </button>
+          
+          <a :href="isEditMode ? `/devices/${deviceId}` : '/devices'" class="btn btn--outline">
+            Annulla
+          </a>
+        </div>
+        
+      </form>
     </div>
   </div>
 </template>
