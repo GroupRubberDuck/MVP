@@ -10,6 +10,11 @@ class AssetEvidence:
     )
     justification: str = ""
 
+    def __deepcopy__(self, memo):
+        # Poiché l'oggetto è completamente immutabile, 
+        # restituire self è sicuro al 100% ed estremamente efficiente.
+        return self
+
     def with_node_choice(self, node_id: str, value: bool) -> "AssetEvidence":
         new_choices = dict(self.node_choices)
         new_choices[node_id] = value
@@ -25,3 +30,4 @@ class AssetEvidence:
             node_choices=self.node_choices,
             justification=justification,
         )
+    

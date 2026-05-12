@@ -27,11 +27,19 @@ const allowExit = () => {
 // 4. Azioni collegate ai pulsanti della Dashboard 
 const dashboardAction = {
   // SALVA (PUT)
-  save: async () => {
+save: async () => {
     if (!sessionId) return alert("Errore: ID sessione non trovato.");
+    
+
+    
     try {
-      const response = await fetch(`/sessions/${sessionId}`, { method: 'PUT' });
-      if (!response.ok) throw new Error("Errore nel salvataggio dei dati sul server.");
+      const response = await fetch(`/sessions/${sessionId}/commit`, { method: 'POST' });
+      
+      if (!response.ok) {
+        // Estrai il corpo della risposta come testo
+        const errorText = await response.text(); 
+        throw new Error(`Errore nel salvataggio sul server: ${errorText}`);
+      }
       
       alert("Sessione salvata con successo!");
     } catch (e) {

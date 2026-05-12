@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template
 from flask.typing import ResponseReturnValue
-from pydantic import ValidationError
+from pydantic import ValidationError,BaseModel
 
 from adapters.inbound.flask_controller_interface import FlaskController
 from core.ports.inbound.asset.create_asset_use_case import (
@@ -112,24 +112,5 @@ class FlaskWriteAssetController(FlaskController):
 
             return "", 204
         
-def register_routes(self, blueprint: Blueprint) -> None:
 
-    @blueprint.route("/sessions/<session_id>/devices/<device_id>/assets", methods=["GET"])
-    def create_asset_page(session_id: str, device_id: str): 
-        return render_template(
-            "asset/create_asset.html",
-            session_id=session_id,
-            device_id=device_id,
-            asset=None
-        ), 200
 
-    @blueprint.route("/sessions/<session_id>/devices/<device_id>/assets/<asset_id>/edit", methods=["GET"])
-    def edit_asset_page(session_id: str, device_id: str, asset_id: str):
-        return render_template(
-            "asset/create_asset.html",
-            session_id=session_id,
-            device_id=device_id,
-            asset={"asset_id": asset_id}
-        ), 200
-
-   

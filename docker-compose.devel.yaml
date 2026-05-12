@@ -37,6 +37,10 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: grouprubberduckpoc2026
+    volumes:
+      - mongo_data:/data/db
+      # 👇 AGGIUNGI QUESTA RIGA 👇
+      - ./mongo-init/init.js:/docker-entrypoint-initdb.d/init.js:ro
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')", "--username", "root", "--password", "grouprubberduckpoc2026", "--quiet"]
       interval: 5s
@@ -117,3 +121,4 @@ services:
 volumes:
   vue_node_modules:
   vue_node_modules_dev:
+  mongo_data:

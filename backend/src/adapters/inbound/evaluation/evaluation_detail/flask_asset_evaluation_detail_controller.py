@@ -1,7 +1,7 @@
 from adapters.inbound.flask_controller_interface import FlaskController
 
 
-from core.ports.inbound.asset.get_asset_detail_use_case import (
+from core.ports.inbound.asset.get_asset_evaluation_detail_use_case import (
     GetAssetDetailCommand,
     GetAssetDetailUseCase,
 )

@@ -6,7 +6,7 @@ from core.domain.evaluation_object.exceptions import AssetNotFoundError
 from core.ports.inbound.asset.exceptions import GetAssetDetailFailure
 from core.ports.inbound.asset.get_asset_evaluation_detail_use_case import GetAssetDetailCommand
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
-from core.services.asset.get_asset_detail_service import GetAssetDetailService
+from core.services.asset.get_asset_evaluation_detail_service import GetAssetEvaluationDetailService
 
 
 @pytest.fixture
@@ -21,7 +21,7 @@ def mock_engine():
 
 @pytest.fixture
 def service(mock_session_port, mock_engine):
-    return GetAssetDetailService(
+    return GetAssetEvaluationDetailService(
         get_evaluation_session_port=mock_session_port,
         evaluation_engine=mock_engine,
     )
