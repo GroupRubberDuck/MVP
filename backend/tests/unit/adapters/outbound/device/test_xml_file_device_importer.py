@@ -1,7 +1,7 @@
 import io
 import pytest
 
-from adapters.outbound.device.xml_file_device_importer import XMLFileDeviceImporter
+from adapters.outbound.device.importer.xml_file_device_importer import XMLFileDeviceImporter
 from core.ports.outbound.device.exceptions import InvalidFileFormatError
 
 

@@ -4,7 +4,7 @@ from unittest.mock import Mock
 from core.ports.inbound.device.exceptions import DeleteDeviceFailure
 from core.ports.inbound.device.delete_device_use_case import DeleteDeviceCommand
 from core.ports.outbound.device.exceptions import DeviceNotFoundError
-from core.ports.outbound.device.delete_device_port import DeleteDevicePort
+from core.ports.outbound.device.repository.delete_device_port import DeleteDevicePort
 from core.services.device.delete_device_service import DeleteDeviceService
 
 

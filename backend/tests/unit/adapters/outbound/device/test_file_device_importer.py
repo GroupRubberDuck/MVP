@@ -1,7 +1,7 @@
 import io
 import pytest
 
-from adapters.outbound.device.file_device_importer import FileDeviceImporter
+from adapters.outbound.device.importer.file_device_importer import FileDeviceImporter
 from core.domain.evaluation_object.asset.asset_type import AssetType
 from core.ports.outbound.device.exceptions import (
     InvalidAssetTypeError,

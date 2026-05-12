@@ -3,7 +3,7 @@ import pytest
 from unittest.mock import MagicMock
 from flask import Flask, Blueprint
 
-from adapters.inbound.device.import_device_controller import ImportDeviceController
+from adapters.inbound.device.flask_import_device_controller import FlaskImportDeviceController
 from core.ports.inbound.device.exceptions import DeviceRegistrationFailure, ImportDeviceFailure
 
 
@@ -17,7 +17,7 @@ def client(mock_service):
     app = Flask(__name__)
     app.config["TESTING"] = True
 
-    controller = ImportDeviceController(mock_service)
+    controller = FlaskImportDeviceController(mock_service)
     bp = Blueprint("devices", __name__)
     controller.register_routes(bp)
     app.register_blueprint(bp)

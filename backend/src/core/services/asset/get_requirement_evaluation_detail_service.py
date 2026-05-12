@@ -11,57 +11,58 @@ from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundE
 from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
 
 
+from core.domain.utilities.evaluation_detail_builder import EvaluationDetailBuilder
+
 class GetRequirementEvaluationDetailService(GetRequirementEvaluationDetailUseCase):
-    def __init__(self, get_evaluation_session_port: GetEvaluationSessionPort, evaluation_engine: EvaluationEngine) -> None:
+ 
+    def __init__(
+        self,
+        get_evaluation_session_port: GetEvaluationSessionPort,
+        evaluation_engine: EvaluationEngine,
+    ) -> None:
         self._get_evaluation_session_port = get_evaluation_session_port
         self._evaluation_engine = evaluation_engine
-
+ 
     def get_evaluation_detail(
         self, command: GetRequirementEvaluationDetailCommand
     ) -> RequirementEvaluationDetail:
         try:
-            session = self._get_evaluation_session_port.get_evaluation_session(command.session_id)
+            session = self._get_evaluation_session_port.get_evaluation_session(
+                command.session_id
+            )
         except EvaluationSessionNotFoundError:
             raise GetRequirementEvaluationDetailFailure(
                 f"Sessione '{command.session_id}' non trovata."
             )
+ 
         if session.device.id != command.device_id:
             raise GetRequirementEvaluationDetailFailure(
                 f"Il dispositivo '{command.device_id}' non è associato alla sessione."
             )
-        device_result = self._evaluation_engine.evaluate(session.device, session.standard)
-
+ 
+        device_result = self._evaluation_engine.evaluate(
+            session.device, session.standard
+        )
+ 
         asset_result = device_result.get_asset_result(command.asset_id)
         if asset_result is None:
             raise GetRequirementEvaluationDetailFailure(
                 f"Asset '{command.asset_id}' non trovato nel dispositivo."
             )
-
+ 
         requirement_result = asset_result.get_requirement_result(command.requirement_id)
         if requirement_result is None:
             raise GetRequirementEvaluationDetailFailure(
                 f"Requisito '{command.requirement_id}' non trovato nell'asset."
             )
-
+ 
         req = session.standard.get_requirement(command.requirement_id)
-
         return self._build_detail(requirement_result, req)
-
+ 
     def _build_detail(
         self, r: RequirementEvaluationResult, req: Requirement
     ) -> RequirementEvaluationDetail:
-        if req.decision_tree is None:
-            raise GetRequirementEvaluationDetailFailure(
-                f"Il requisito '{req.requirement_id}' non ha un albero decisionale."
-            )
-        return RequirementEvaluationDetail(
-            requirement_id=r.requirement_id,
-            name=req.name,
-            description=req.description,
-            target=req.target_description,
-            justification=r.justification,
-            node_choices=r.node_choices,
-            nodes=req.decision_tree.nodes,
-            state=r.state,
-            dependencies=r.dependencies,
+        return EvaluationDetailBuilder().build_requirement_detail(
+            result=r,
+            req=req
         )

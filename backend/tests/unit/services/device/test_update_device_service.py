@@ -4,8 +4,8 @@ from unittest.mock import Mock
 from core.ports.inbound.device.exceptions import UpdateDeviceFailure
 from core.ports.inbound.device.update_device_anagraphic_use_case import UpdateDeviceCommand
 from core.ports.outbound.device.exceptions import DeviceNotFoundError
-from core.ports.outbound.device.find_device_port import FindDevicePort
-from core.ports.outbound.device.save_device_port import SaveDevicePort
+from core.ports.outbound.device.repository.find_device_port import FindDevicePort
+from core.ports.outbound.device.repository.save_device_port import SaveDevicePort
 from core.services.device.update_device_service import UpdateDeviceService
 
 

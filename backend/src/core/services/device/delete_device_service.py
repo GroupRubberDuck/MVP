@@ -4,7 +4,7 @@ from core.ports.inbound.device.delete_device_use_case import (
     DeleteDeviceUseCase,
 )
 from core.ports.outbound.device.exceptions import DeviceNotFoundError
-from core.ports.outbound.device.delete_device_port import DeleteDevicePort
+from core.ports.outbound.device.repository.delete_device_port import DeleteDevicePort
 
 
 class DeleteDeviceService(DeleteDeviceUseCase):
