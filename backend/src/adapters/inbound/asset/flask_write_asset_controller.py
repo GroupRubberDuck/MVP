@@ -1,8 +1,11 @@
-from flask import Blueprint, request, jsonify, render_template
+from flask import Blueprint, request, jsonify
 from flask.typing import ResponseReturnValue
 from pydantic import ValidationError
 
 from adapters.inbound.flask_controller_interface import FlaskController
+
+from core.domain.evaluation_object.asset import AssetType 
+
 from core.ports.inbound.asset.create_asset_use_case import (
     CreateAssetUseCase,
     CreateAssetCommand,
@@ -20,7 +23,6 @@ from core.ports.inbound.asset.exceptions import (
     UpdateAssetFailure,
     DeleteAssetFailure,
 )
-
 
 class FlaskWriteAssetController(FlaskController):
 
@@ -46,15 +48,19 @@ class FlaskWriteAssetController(FlaskController):
                 return jsonify({"error": "Body JSON mancante o non valido."}), 400
 
             try:
+               
+                raw_type = body.get("asset_type")
+                typed_asset_type = AssetType(raw_type) if raw_type else None
+
                 command = CreateAssetCommand(
                     session_id=session_id,
                     device_id=device_id,
                     name=body.get("name", ""),
-                    asset_type=body.get("asset_type", ""),
+                    asset_type=typed_asset_type, 
                     description=body.get("description", ""),
                 )
-            except ValidationError as e:
-                return jsonify({"error": str(e)}), 400
+            except (ValidationError, ValueError) as e:
+                return jsonify({"error": f"Dati non validi: {str(e)}"}), 400
 
             try:
                 asset_id = self._create_asset_use_case.create_asset(command)
@@ -73,16 +79,20 @@ class FlaskWriteAssetController(FlaskController):
                 return jsonify({"error": "Body JSON mancante o non valido."}), 400
 
             try:
+                
+                raw_type = body.get("asset_type")
+                typed_asset_type = AssetType(raw_type) if raw_type else None
+
                 command = UpdateAssetCommand(
                     session_id=session_id,
                     device_id=device_id,
                     asset_id=asset_id,
                     name=body.get("name", ""),
-                    asset_type=body.get("asset_type", ""),
+                    asset_type=typed_asset_type, 
                     description=body.get("description", ""),
                 )
-            except ValidationError as e:
-                return jsonify({"error": str(e)}), 400
+            except (ValidationError, ValueError) as e:
+                return jsonify({"error": f"Tipologia asset non valida: {str(e)}"}), 400
 
             try:
                 self._update_asset_use_case.update_asset(command)
@@ -111,25 +121,3 @@ class FlaskWriteAssetController(FlaskController):
                 return jsonify({"error": str(e)}), 400
 
             return "", 204
-        
-def register_routes(self, blueprint: Blueprint) -> None:
-
-    @blueprint.route("/sessions/<session_id>/devices/<device_id>/assets", methods=["GET"])
-    def create_asset_page(session_id: str, device_id: str): 
-        return render_template(
-            "asset/create_asset.html",
-            session_id=session_id,
-            device_id=device_id,
-            asset=None
-        ), 200
-
-    @blueprint.route("/sessions/<session_id>/devices/<device_id>/assets/<asset_id>/edit", methods=["GET"])
-    def edit_asset_page(session_id: str, device_id: str, asset_id: str):
-        return render_template(
-            "asset/create_asset.html",
-            session_id=session_id,
-            device_id=device_id,
-            asset={"asset_id": asset_id}
-        ), 200
-
-   

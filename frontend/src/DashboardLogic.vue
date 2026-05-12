@@ -28,16 +28,19 @@ const allowExit = () => {
 
 // 4. Azioni Dashboard
 const dashboardAction = {
- save: async () => {
+  // SALVA (PUT)
+save: async () => {
     if (!sessionId) return alert("Errore: ID sessione non trovato.");
+    
+
+    
     try {
-      // URL corretto con /commit e metodo POST allineato al controller
-      const response = await fetch(`/sessions/${sessionId}/commit`, { method: 'POST' }); 
+      const response = await fetch(`/sessions/${sessionId}/commit`, { method: 'POST' });
       
       if (!response.ok) {
-        // Leggiamo l'errore esatto mandato da Flask
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `Errore HTTP ${response.status}`);
+        // Estrai il corpo della risposta come testo
+        const errorText = await response.text(); 
+        throw new Error(`Errore nel salvataggio sul server: ${errorText}`);
       }
       
       alert("Sessione salvata con successo!");

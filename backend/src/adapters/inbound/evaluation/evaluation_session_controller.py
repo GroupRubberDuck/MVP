@@ -48,7 +48,7 @@ class EvaluationSessionController(FlaskController):
             device_id=body.get("device_id", ""),
         )
         session_id = self._open.open_evaluation_session(command)
-        return jsonify({"session_id": session_id}), 201
+        return jsonify({"session_id": session_id}), 200
 
     def close_session(self, session_id: str) -> ResponseReturnValue:
         command = CloseEvaluationSessionCommand(session_id=session_id)

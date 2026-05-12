@@ -35,12 +35,17 @@ from core.services.device.get_device_evaluation_detail_service import GetDeviceE
 from core.services.asset.create_asset_service import CreateAssetService
 from core.services.asset.update_asset_service import UpdateAssetService
 from core.services.asset.delete_asset_service import DeleteAssetService
+from core.services.asset.get_asset_evaluation_detail_service import GetAssetEvaluationDetailService
+from core.services.asset.get_asset_anagraphic_service import GetAssetAnagraphicService
+from core.services.asset.get_requirement_evaluation_detail_service import GetRequirementEvaluationDetailService
 
 # Evaluation & Session
 from core.services.evaluation.evaluation_session.session_coordinator import SessionCoordinator
 from core.services.evaluation.evaluation_session.open_evaluation_session_service import OpenEvaluationSessionService
 from core.services.evaluation.evaluation_session.close_evaluation_session_service import CloseEvaluationSessionService
 from core.services.evaluation.evaluation_session.commit_evaluation_session_service import CommitEvaluationSessionService
+from core.services.evaluation.evaluate_decision_node_service import EvaluateDecisionNodeService
+from core.services.evaluation.evaluate_justification_service import EvaluationJustificationService
 
 # Report & Compliance
 from core.services.report.generate_report_service import GenerateReportService
@@ -51,8 +56,14 @@ from adapters.inbound.device.flask_query_device_controller import FlaskQueryDevi
 from adapters.inbound.device.flask_write_device_controller import FlaskWriteDeviceController 
 from adapters.inbound.device.flask_import_device_controller import FlaskImportDeviceController
 from adapters.inbound.device.flask_export_device_controller import FlaskExportDeviceController
+from adapters.inbound.device.flask_query_dashboard_controller import FlaskQueryDashboardController
 from adapters.inbound.asset.flask_write_asset_controller import FlaskWriteAssetController
+from adapters.inbound.asset.flask_query_asset_controller import FlaskQueryAssetController
+from adapters.inbound.evaluation.evaluation_detail.flask_asset_evaluation_detail_controller import FlaskAssetEvaluationDetailController
 from adapters.inbound.evaluation.evaluation_detail.flask_device_evaluation_detail_controller import FlaskDeviceEvaluationDetailController
+from adapters.inbound.evaluation.evaluation_detail.flask_requirement_evaluation_detail_controller import FlaskRequirementEvaluationDetailController
+from adapters.inbound.evaluation.evaluation_justification_controller import EvaluationJustificationController
+from adapters.inbound.evaluation.evaluate_decision_node_controller import FlaskEvaluateDecisionNodeController
 from adapters.inbound.evaluation.evaluation_session_controller import EvaluationSessionController
 from adapters.inbound.report.report_controller import FlaskExportReportController
 
@@ -88,6 +99,7 @@ def create_app() -> Flask:
     session_cache_adapter = InMemoryEvaluationSessionCache()
 
     # ── 3. SERVIZI (Application Core) ──
+    evaluation_engine = EvaluationEngine()
     
     # Session Management
     session_handler = SessionHandler() 
@@ -102,11 +114,20 @@ def create_app() -> Flask:
     create_device_service = CreateDeviceService(device_adapter)
     update_device_service = UpdateDeviceService(device_adapter, device_adapter)
     delete_device_service = DeleteDeviceService(device_adapter)
-    import_device_service = ImportDeviceService(importer_factory, device_adapter)
-    export_device_service = ExportDeviceService(device_adapter, exporter_factory)
+    
+    import_device_service = ImportDeviceService(
+        register_device_port=device_adapter,
+        device_importer_factory=importer_factory
+    )
+    export_device_service = ExportDeviceService(
+        find_device=device_adapter,
+        exporter_factory=exporter_factory
+    )
+
+    # Compliance Service
+    get_compliance_standard_service = GetComplianceStandardService(standard_adapter)
     
     # Evaluation Services
-    evaluation_engine = EvaluationEngine()
     get_device_evaluation_detail_service = GetDeviceEvaluationDetailService(
         get_evaluation_session_port=session_cache_adapter,
         evaluation_engine=evaluation_engine
@@ -124,6 +145,14 @@ def create_app() -> Flask:
         get_evaluation_session_port=session_cache_adapter,
         save_device_port=device_adapter
     )
+    evaluate_decision_node_service = EvaluateDecisionNodeService(
+        get_evaluation_session_port=session_cache_adapter,
+        save_evaluation_session_port=session_cache_adapter
+    )
+    evaluation_justification_service = EvaluationJustificationService(
+        get_evaluation_session_port=session_cache_adapter,
+        save_evaluation_session_port=session_cache_adapter        
+    )
 
     # Asset Services
     create_asset_service = CreateAssetService(
@@ -138,68 +167,115 @@ def create_app() -> Flask:
         save_evaluation_session_port=session_cache_adapter,
         get_evaluation_session_port=session_cache_adapter
     )
+    get_asset_detail_service = GetAssetEvaluationDetailService(
+        get_evaluation_session_port=session_cache_adapter,
+        evaluation_engine=evaluation_engine
+    )
+    get_asset_anagraphic_service = GetAssetAnagraphicService(
+        get_evaluation_session_port=session_cache_adapter
+    )
+    get_requirement_evaluation_detail_service = GetRequirementEvaluationDetailService(
+        get_evaluation_session_port=session_cache_adapter,
+        evaluation_engine=evaluation_engine
+    )
 
-    # Report & Compliance Services
-    generate_report_service = GenerateReportService(session_cache_adapter, report_generator_adapter)
-    get_compliance_standard_service = GetComplianceStandardService(standard_adapter)
+    # Report Service
+    generate_report_service = GenerateReportService(
+        get_evaluation_session_port=session_cache_adapter,
+        report_generator_port=report_generator_adapter
+    )
 
     # ── 4. CONTROLLERS (Inbound Adapters) ──
-    
     query_device_controller = FlaskQueryDeviceController(
         get_device_list_use_case=get_device_list_service,
         get_device_detail_use_case=get_device_detail_service,
         get_compliance_standard_use_case=get_compliance_standard_service,
     )
-
     write_device_controller = FlaskWriteDeviceController(
         create_device_use_case=create_device_service,
         update_device_use_case=update_device_service,
         delete_device_use_case=delete_device_service,
     )
+    import_device_controller = FlaskImportDeviceController(
+        import_device_service=import_device_service
+    )
+    export_device_controller = FlaskExportDeviceController(
+        export_device_use_case=export_device_service
+    )
+    query_dashboard_controller = FlaskQueryDashboardController(
+        get_device_evaluation_detail_use_case=get_device_evaluation_detail_service
+    )
 
-    import_device_controller = FlaskImportDeviceController(import_device_service=import_device_service)
-    export_device_controller = FlaskExportDeviceController(export_device_use_case=export_device_service)
-
+    # Asset Controllers
     write_asset_controller = FlaskWriteAssetController(
         create_asset_use_case=create_asset_service,
         update_asset_use_case=update_asset_service,
         delete_asset_use_case=delete_asset_service
     )
+    query_asset_controller = FlaskQueryAssetController(
+        get_asset_anagraphic_use_case=get_asset_anagraphic_service
+    )
 
+    # Evaluation Controllers
+    asset_evaluation_detail_controller = FlaskAssetEvaluationDetailController(
+        get_asset_ev_detail_use_case=get_asset_detail_service
+    )
     device_evaluation_detail_controller = FlaskDeviceEvaluationDetailController(
         get_device_ev_detail_use_case=get_device_evaluation_detail_service
     )
-    
+    requirement_evaluation_detail_controller = FlaskRequirementEvaluationDetailController(
+        get_requirement_ev_detail_use_case=get_requirement_evaluation_detail_service
+    )
+    evaluation_justification_controller = EvaluationJustificationController(
+        insert_justification_use_case=evaluation_justification_service
+    )
+    evaluate_decision_node_controller = FlaskEvaluateDecisionNodeController(
+        evaluate_decision_node_use_case=evaluate_decision_node_service
+    )
     session_controller = EvaluationSessionController(
         open_use_case=open_session_service,
         close_use_case=close_session_service,
         commit_use_case=commit_session_service
     )
 
+    # Report Controller
     export_report_controller = FlaskExportReportController(
         generate_report_use_case=generate_report_service
     )
 
     # ── 5. REGISTRAZIONE ROTTE ──
+    @app.route("/sessions", methods=["GET"])
+    def active_session():
+        if session_cache_adapter._session is not None:
+            return jsonify(session_cache_adapter._session.session_id, session_cache_adapter._session.device.id)
+        return jsonify("No active session")
+
     register_routes(
         app,
         device_controllers=[
             query_device_controller, 
             write_device_controller, 
             import_device_controller,
-            export_device_controller  
+            export_device_controller,
+            query_dashboard_controller
         ],
         asset_controllers=[ 
-            write_asset_controller
+            write_asset_controller,
+            query_asset_controller
         ],
         report_controllers=[export_report_controller],
         evaluation_controllers=[
-            device_evaluation_detail_controller, 
+            asset_evaluation_detail_controller,
+            device_evaluation_detail_controller,
+            requirement_evaluation_detail_controller,
+            evaluation_justification_controller,
+            evaluate_decision_node_controller,
             session_controller 
         ] 
     )
     register_error_handlers(app)
 
+    # ── Health check ──
     _register_health_check(app, mongo_client, db)
 
     return app
@@ -214,7 +290,10 @@ def _register_health_check(app: Flask, mongo_client, db) -> None:
         except Exception as e:
             return jsonify({"status": "error", "detail": str(e)}), 503
 
+
 def _register_fallback_routes(app: Flask, error: str, status: int) -> None:
+    """Se il DB non è disponibile, ogni rotta risponde con l'errore."""
+
     @app.route("/health")
     def health_fallback():
         return jsonify({"status": "error", "detail": error}), status
