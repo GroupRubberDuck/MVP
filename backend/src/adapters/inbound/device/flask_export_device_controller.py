@@ -1,3 +1,4 @@
+import io
 from flask import Blueprint, request, send_file, jsonify
 from flask.typing import ResponseReturnValue
 
@@ -22,13 +23,13 @@ class FlaskExportDeviceController(FlaskController):
 
         @blueprint.route("/api/devices/<device_id>/export", methods=["GET"])
         def export_device(device_id: str) -> ResponseReturnValue:
-            extension_param = request.args.get("extension", "json")
+            extension_raw = request.args.get("extension", "json")
+            extension_param = extension_raw.lower()
 
             try:
                 extension = AllowedDeviceFileExtension(extension_param)
             except ValueError:
-                return jsonify({"error": f"Formato non supportato: '{extension_param}'."}), 400
-
+                return jsonify({"error": f"Formato non supportato: '{extension_raw}'."}), 400
             command = ExportDeviceCommand(
                 device_id=device_id,
                 extension=extension,
@@ -36,13 +37,18 @@ class FlaskExportDeviceController(FlaskController):
 
             try:
                 exported = self._use_case.export_device(command)
+                return send_file(
+                    exported.content,
+                    mimetype=exported.media_type,
+                    as_attachment=True,
+                    download_name=exported.filename
+                )
+
             except DeviceNotFoundFailure as e:
                 return jsonify({"error": str(e)}), 404
             except ExportDeviceFailure as e:
                 return jsonify({"error": str(e)}), 422
-
-            return send_file(
-                exported.content,
-                mimetype=exported.media_type,
-                download_name=exported.filename,
-            )
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                return jsonify({"error": f"Errore interno del server: {str(e)}"}), 500

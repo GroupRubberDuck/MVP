@@ -31,7 +31,7 @@
 .btn {
   padding: 8px 20px;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   text-decoration: none;
@@ -40,8 +40,8 @@
 }
 
 .btn--sm {
-  padding: 4px 12px;
-  font-size: 13px;
+  padding: 8px 20px;
+  font-size: 16px;
   border-radius: 5px;
 }
 
@@ -174,13 +174,13 @@
   align-items: center;
   gap: 12px;
   padding-bottom: 16px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 0.5px solid #e0e0e0;
   margin-bottom: 24px;
 }
 
 .device-header__title {
   font-size: 28px;
-  font-weight: 700;
+  font-weight: 500;
   color: #111;
   margin: 0;
 }
@@ -188,13 +188,14 @@
 .device-header__actions {
   margin-left: auto;
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .device-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: 1.25rem;
+  max-width: 100%;
 }
 
 @media (max-width: 768px) {
@@ -203,54 +204,56 @@
 
 /* ── Card ── */
 .card {
-  background: #f8f9fa;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
-  padding: 24px;
+  background: #ffffff;
+  border: 0.5px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 2rem;
 }
 
 .card__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 0.5px solid #e0e0e0;
 }
 
 .card__title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #111;
+  font-size: 23px;
+  font-weight: 500;
+  color: #0f54a1;
   margin: 0;
 }
 
 .section-label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #888;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  color: #696767;
   text-transform: uppercase;
-  margin: 16px 0 6px;
+  margin: 20px 0 8px;
 }
 
 .section-label:first-child { margin-top: 0; }
 
 .info-row {
-  font-size: 14px;
+  font-size: 17px;
   color: #222;
-  margin: 4px 0;
+  margin: 6px 0;
 }
 
-.info-row strong { font-weight: 600; }
+.info-row strong { font-weight: 500; }
 
 .info-text {
-  font-size: 14px;
-  color: #444;
-  line-height: 1.6;
+  font-size: 17px;
+  color: #666;
+  line-height: 1.7;
   margin: 4px 0 0;
 }
 
 .info-link {
-  color: #1a73e8;
+  color: #185fa5;
   text-decoration: none;
 }
 
@@ -318,4 +321,69 @@
   color: #e03131;
   font-size: 0.95rem;
   margin: 0;
+}
+
+/* Stili specifici per la tabella della Dashboard */
+.asset-table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.asset-table th {
+  padding: 12px 8px;
+  border-bottom: 2px solid #e5e7eb;
+  font-weight: 600;
+  color: #374151; /* Un grigio scuro per staccare dal nero puro */
+}
+
+.asset-table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+/* Effetto hover sulla riga per far capire che è cliccabile/interattiva */
+.asset-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Style per il breadcrumb */
+.breadcrumb {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.breadcrumb__list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: #666;
+}
+
+.breadcrumb__item {
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb__item a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.breadcrumb__item a:hover {
+    text-decoration: underline;
+}
+
+.separator {
+    margin: 0 8px;
+    color: #ccc;
+    user-select: none;
+}
+
+.breadcrumb__item span[aria-current="page"] {
+    color: #333;
+    font-weight: 500;
 }

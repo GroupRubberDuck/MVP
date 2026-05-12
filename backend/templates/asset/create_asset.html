@@ -1,0 +1,28 @@
+{# layouts/asset/create_asset.html #}
+{% extends "layouts/base.html" %}
+
+{% block title %}
+    {% if asset %}Modifica Asset{% else %}Nuovo Asset{% endif %}
+{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='vue/create-asset.css') }}">
+{% endblock %}
+
+{% block content %}
+  {# 
+    Passiamo i dati da Jinja a Vue tramite attributi data-*.
+    Se 'asset' non esiste (creazione), passiamo stringhe vuote.
+  #}
+  <div id="create-asset-app"
+       data-session-id="{{ session_id }}"
+       data-asset-id="{{ asset.asset_id if asset else '' }}"
+       data-asset-name="{{ asset.asset_name if asset else '' }}"
+       data-asset-type="{{ asset.asset_type if asset else '' }}"
+       data-asset-description="{{ asset.asset_description if asset else '' }}">
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ url_for('static', filename='vue/create-asset.js') }}"></script>
+{% endblock %}

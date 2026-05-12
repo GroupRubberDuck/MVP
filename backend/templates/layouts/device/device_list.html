@@ -2,6 +2,13 @@
 {% extends "layouts/base.html" %}
 
 {% block title %}Dispositivi{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='vue/delete-device.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vue/export-device.css') }}"> 
+  <link rel="stylesheet" href="{{ url_for('static', filename='vue/import-device.css') }}"> 
+{% endblock %}
+
 {% block page_title %}{% endblock %}
 
 {% block content %}
@@ -11,14 +18,19 @@
       <p>Gestione e valuta conformità EN 18031</p>
     </div>
     <div class="page-header__actions">
-      <a class="btn btn--outline"
-        href="{{ url_for('devices.get_device_list') }}"> 
+      
+      <button class="btn btn--outline" onclick="window.openImportModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: middle;">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
         Importa Dispositivo
+      </button>
+
+      <a class="btn btn--primary" href="{{ url_for('devices.create_device_page') }}">
+        + Nuovo Dispositivo
       </a>
-      <a class="btn btn--primary" 
-     href="{{ url_for('devices.create_device_page') }}">
-    + Nuovo Dispositivo
-  </a>
     </div>
   </div>
 
@@ -28,19 +40,15 @@
         <li class="device-item">
           <span class="device-item__name">{{ device.name }}</span>
           <div class="device-item__actions">
-            <form class="inline-form"
-                  action="*" 
-                  method="post"
-                  onsubmit="return confirm('Eliminare {{ device.name }}?')"> 
-              <button class="btn btn--danger btn--sm" type="submit">Elimina</button>
-            </form>
+            
+            <button class="btn btn--danger btn--sm inline-form" type="button" 
+                    onclick="window.openDeleteModal('{{ device.device_id }}', '{{ device.name|e }}')">
+              Elimina
+            </button>
+            
             <a class="btn btn--primary btn--sm"
-               href="{{ url_for('devices.get_device_detail', device_id=device.device_id) }}"> <!--  -->
-              Dettagli Dispositivo
-            </a>
-            <a class="btn btn--outline btn--sm"
-               href=""> 
-              Vai alla Valutazione
+               href="{{ url_for('devices.get_device_detail', device_id=device.device_id) }}"> 
+               Dettagli Dispositivo
             </a>
           </div>
         </li>
@@ -53,8 +61,19 @@
       <p class="empty-state__desc">
         Non hai ancora aggiunto alcun dispositivo al sistema. Inizia creando
         manualmente un nuovo dispositivo o importando un file di
-        configurazione per procedere con la valutazione.
+        configazione per procedere con la valutazione.
       </p>
     </div>
   {% endif %}
+
+  <div id="delete-device-app"></div>
+  <div id="export-device-app"></div>
+  <div id="import-device-app"></div>
+
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ url_for('static', filename='vue/delete-device.js') }}"></script>
+  <script type="module" src="{{ url_for('static', filename='vue/export-device.js') }}"></script>
+  <script type="module" src="{{ url_for('static', filename='vue/import-device.js') }}"></script>
 {% endblock %}

@@ -1,85 +1,100 @@
 <template>
-  <div class="card">
-    <div>
-      <h2>{{ isEditMode ? 'Modifica Dispositivo' : 'Informazioni Dispositivo' }}</h2>
+  <div class="create-device-container">
+    
+    <div class="page-header">
+      <div class="page-header__text">
+        <h1>{{ isEditMode ? 'Modifica Dispositivo' : 'Nuovo Dispositivo' }}</h1>
+        <p>
+          {{ isEditMode 
+            ? 'Aggiorna le informazioni del dispositivo nel sistema.' 
+            : 'Compila i campi per registrare un nuovo dispositivo nel sistema.' 
+          }}
+        </p>
+      </div>
     </div>
 
-    <!-- Messaggio di errore dinamico dal Backend -->
-    <div v-if="errorMessage" class="alert-error">
-      {{ errorMessage }}
-    </div>
+    <div class="card">
+      <div class="card-header">
+        <h2>{{ isEditMode ? 'Modifica Dispositivo' : 'Informazioni Dispositivo' }}</h2>
+      </div>
 
-    <p class="section-label">Informazioni Generali</p>
+      <div v-if="errorMessage" class="alert-error">
+        {{ errorMessage }}
+      </div>
 
-    <div class="form-group">
-      <label class="form-label" for="device-name">Nome Dispositivo *</label>
-      <input
-        id="device-name"
-        v-model="form.device_name"
-        class="form-input"
-        :class="{ 'form-input-error': errors.device_name }"
-        type="text"
-        maxlength="64"
-        placeholder="es. Router principale"
-      />
-      <span class="form-hint">
-        Max 64 caratteri ({{ form.device_name.length }}/64)
-      </span>
-      <span v-if="errors.device_name" class="form-error">
-        {{ errors.device_name }}
-      </span>
-    </div>
+      <p class="section-label">Informazioni Generali</p>
 
-    <div class="form-group">
-      <label class="form-label" for="device-os">Sistema Operativo *</label>
-      <input
-        id="device-os"
-        v-model="form.device_os"
-        class="form-input"
-        :class="{ 'form-input-error': errors.device_os }"
-        type="text"
-        maxlength="64"
-        placeholder="es. Linux, Windows"
-      />
-      <span v-if="errors.device_os" class="form-error">
-        {{ errors.device_os }}
-      </span>
-    </div>
+      <div class="form-group">
+        <label class="form-label" for="device-name">Nome Dispositivo *</label>
+        <input
+          id="device-name"
+          v-model="form.device_name"
+          class="form-input"
+          :class="{ 'form-input-error': errors.device_name }"
+          type="text"
+          maxlength="64"
+          placeholder="es. Router principale"
+        />
+        <span class="form-hint">
+          Max 64 caratteri ({{ form.device_name.length }}/64)
+        </span>
+        <span v-if="errors.device_name" class="form-error">
+          {{ errors.device_name }}
+        </span>
+      </div>
 
-    <p class="section-label">Descrizione e Funzionalità</p>
+      <div class="form-group">
+        <label class="form-label" for="device-os">Sistema Operativo *</label>
+        <input
+          id="device-os"
+          v-model="form.device_os"
+          class="form-input"
+          :class="{ 'form-input-error': errors.device_os }"
+          type="text"
+          maxlength="64"
+          placeholder="es. Linux, Windows"
+        />
+        <span v-if="errors.device_os" class="form-error">
+          {{ errors.device_os }}
+        </span>
+      </div>
 
-    <div class="form-group">
-      <label class="form-label" for="device-description">Descrizione</label>
-      <textarea
-        id="device-description"
-        v-model="form.device_description"
-        class="form-input form-textarea"
-        maxlength="512"
-        placeholder="Aggiungi dettagli sul dispositivo..."
-        rows="4"
-      ></textarea>
-      <span class="form-hint">
-        Facoltativo – max 512 caratteri ({{ form.device_description.length }}/512)
-      </span>
-    </div>
+      <p class="section-label">Descrizione e Funzionalità</p>
 
-    <div class="form-actions">
-      <button 
-        class="btn btn--primary"
-        :disabled="isSubmitting" 
-        @click="submit"
-      >
-        {{ isSubmitting ? 'Salvataggio...' : (isEditMode ? 'Salva Modifiche' : 'Crea Dispositivo') }}
-      </button>
-      <a :href="isEditMode ? `/devices/${deviceId}` : '/devices'" class="btn btn--outline">
-        Annulla
-      </a>
+      <div class="form-group">
+        <label class="form-label" for="device-description">Descrizione</label>
+        <textarea
+          id="device-description"
+          v-model="form.device_description"
+          class="form-input form-textarea"
+          maxlength="512"
+          placeholder="Aggiungi dettagli sul dispositivo..."
+          rows="4"
+        ></textarea>
+        <span class="form-hint">
+          Facoltativo – max 512 caratteri ({{ form.device_description.length }}/512)
+        </span>
+      </div>
+
+      <div class="form-actions">
+        <button 
+          class="btn btn--primary"
+          :disabled="isSubmitting" 
+          @click="submit"
+        >
+          {{ isSubmitting ? 'Salvataggio...' : (isEditMode ? 'Salva Modifiche' : 'Crea Dispositivo') }}
+        </button>
+        <a :href="isEditMode ? `/devices/${deviceId}` : '/devices'" class="btn btn--outline">
+          Annulla
+        </a>
+      </div>
     </div>
   </div>
 </template>
 
+
 <script setup>
-import { DEFAULT_STANDARD_ID } from '../constants.js'
+import { DEFAULT_STANDARD_ID } from './constants.js'
 import { reactive, ref, computed, onMounted } from 'vue'
 
 const form = reactive({
@@ -111,18 +126,25 @@ onMounted(() => {
   }
 })
 
-function loadDeviceData() {
-  // Legge i dati iniettati dal file edit_device.html tramite Jinja
-  if (window.DEVICE_DATA) {
-    form.device_name = window.DEVICE_DATA.device_name || '';
-    form.device_os = window.DEVICE_DATA.device_os || '';
-    form.device_description = window.DEVICE_DATA.device_description || '';
+async function loadDeviceData() {
+  try {
+    // Chiediamo al server i dati del dispositivo (ritornati come JSON)
+    const response = await fetch(`/api/devices/${deviceId.value}`); 
     
-    if (window.DEVICE_DATA.standard_id) {
-      form.standard_id = window.DEVICE_DATA.standard_id;
+    if (response.ok) {
+      const data = await response.json();
+      form.device_name = data.name || '';
+      form.device_os = data.os || '';
+      form.device_description = data.description || '';
+      
+      if (data.standard_id) {
+        form.standard_id = data.standard_id;
+      }
+    } else {
+      errorMessage.value = "Impossibile recuperare i dati del dispositivo.";
     }
-  } else {
-    errorMessage.value = "Errore: Dati del dispositivo non trovati nella pagina.";
+  } catch (error) {
+    errorMessage.value = "Errore di rete durante il caricamento.";
   }
 }
 

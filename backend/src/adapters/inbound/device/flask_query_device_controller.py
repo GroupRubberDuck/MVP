@@ -4,7 +4,7 @@ from core.ports.inbound.compliance_standard.get_compliance_standard_use_case imp
 from core.ports.inbound.compliance_standard.exceptions import StandardNotFoundFailure
 from core.ports.inbound.device.exceptions import DeviceNotFoundFailure
 from adapters.inbound.flask_controller_interface import FlaskController
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, jsonify
 from pydantic import BaseModel
 
 
@@ -68,23 +68,35 @@ class FlaskQueryDeviceController(FlaskController):
             except (StandardNotFoundFailure) as e:  
                 return render_template("error.html", message=str(e)), 404
             
+        
         @blueprint.route("/devices/<device_id>/edit", methods=["GET"])
         def edit_device_page(device_id):
             command = GetDeviceDetailCommand(device_id=device_id)
             try:
-                device = self._get_device_detail_use_case.get_device_detail(command)
+                
+                self._get_device_detail_use_case.get_device_detail(command)
+                return render_template("layouts/device/create_device.html"), 200
             except DeviceNotFoundFailure as e:
-                return render_template("errors/404.html", message=str(e)), 404
-            
-            return render_template("layouts/device/edit_device.html", device=DeviceDetailDTO(
-                    device_id=device.id,
-                    name=device.name,
-                    os=device.os,
-                    description=device.description,
-                    compliance_standard_name="",  # Non necessario per la pagina di modifica
-                    compliance_standard_version=""  # Non necessario per la pagina di modifica
-                )), 200
+                return render_template("error.html", message=str(e)), 404
+
+        
+        @blueprint.route("/api/devices/<device_id>", methods=["GET"])
+        def get_device_json(device_id):
+            command = GetDeviceDetailCommand(device_id=device_id)
+            try:
+                device = self._get_device_detail_use_case.get_device_detail(command)
+                return jsonify({
+                    "id": device.id,
+                    "name": device.name,
+                    "os": device.os,
+                    "description": device.description,
+                    "standard_id": device.standard_id
+                }), 200
+            except DeviceNotFoundFailure:
+                return jsonify({"error": "Device non trovato"}), 404
         
         @blueprint.route("/devices/create", methods=["GET"])
         def create_device_page():
             return render_template("layouts/device/create_device.html")
+        
+   

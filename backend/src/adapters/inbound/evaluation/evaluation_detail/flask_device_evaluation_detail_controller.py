@@ -3,7 +3,7 @@ from flask.typing import ResponseReturnValue
 from pydantic import BaseModel, ValidationError
 
 from adapters.inbound.flask_controller_interface import FlaskController
-from core.ports.inbound.evaluation.get_device_evaluation_detail_use_case import (
+from core.ports.inbound.device.get_device_evaluation_detail_use_case import (
     GetDeviceEvaluationDetailUseCase,
     GetDeviceEvaluationDetailCommand
 )
@@ -12,7 +12,7 @@ from core.domain.evaluation_object.asset import AssetType
 from core.domain.evaluation_engine.evaluation_result import EvaluationState
 from core.ports.inbound.evaluation.exceptions import GetEvaluationDetailFailure
 
-# --- DTOs ---
+# --- DTOs (Rimangono invariati) ---
 class AssetEvaluationSummaryDTO(BaseModel):
     asset_id: str
     asset_name: str
@@ -48,7 +48,8 @@ class FlaskDeviceEvaluationDetailController(FlaskController):
         )
 
     def register_routes(self, blueprint: Blueprint) -> None:
-        @blueprint.route("/sessions/<session_id>/devices/<device_id>", methods=["GET"])
+        
+        @blueprint.route("/dashboard/sessions/<session_id>/devices/<device_id>", methods=["GET"])
         def get_device_evaluation_detail(session_id: str, device_id: str) -> ResponseReturnValue:
             try:
                 command = GetDeviceEvaluationDetailCommand(
@@ -68,4 +69,7 @@ class FlaskDeviceEvaluationDetailController(FlaskController):
                 return render_template("errors/404.html", message=f"Risorsa non trovata: {e}"), 404
             
             dto = self._make_dto(device_eval_detail)
-            return render_template("layouts/device_eval_detail.html", device_detail=dto.model_dump()), 200
+            return render_template(
+                "layouts/dashboard/dashboard.html",
+                device_detail=dto.model_dump()
+            ), 200
