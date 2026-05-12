@@ -5,7 +5,6 @@ from adapters.outbound.device.exporter.xml_file_device_exporter import XMLFileDe
 from adapters.outbound.device.exporter.json_file_device_exporter import JSONFileDeviceExporter
 from adapters.outbound.device.exporter.csv_file_device_exporter import CSVFileDeviceExporter
 
-
 class ConcreteFileDeviceExporterFactory(FileDeviceExporterFactoryPort):
 
     _exporters = {

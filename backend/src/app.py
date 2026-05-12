@@ -209,10 +209,12 @@ def create_app() -> Flask:
         get_evaluation_session_port=session_cache,
         save_device_port=device_adapter
     )
+
     session_coordinator=SessionCoordinator(
         exist_port=session_cache,
         session_handler=SessionHandler()
     )
+    
     open_evaluation_session_service=OpenEvaluationSessionService(
         session_coordinator=session_coordinator,
         create_session_port=session_cache,
@@ -295,8 +297,11 @@ def create_app() -> Flask:
         update_asset_use_case=update_asset_service,
         delete_asset_use_case=delete_asset_service
     )
-
-
+    @app.route("/sessions",methods=["GET"])
+    def active_session():
+        if session_cache._session is not None:
+            return jsonify(session_cache._session.session_id,session_cache._session.device.id)
+        return jsonify("No active session")
     # ── Registrazione Rotte ──
     register_routes(
         app,

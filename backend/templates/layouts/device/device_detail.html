@@ -1,34 +1,41 @@
 {# layouts/device/device_detail.html #}
 {% extends "layouts/base.html" %}
+{% block breadcrumbs %}
+  <li class="breadcrumb__item">
+    <a href="{{ url_for('devices.get_device_list') }}">Dispositivi</a>
+  </li>
+  <li class="breadcrumb__item">
+    <span class="separator">/</span>
+    <span aria-current="page">{{ device.name }}</span>
+  </li>
+{% endblock %}
+
 {% block title %}{{ device.name }}{% endblock %}
-{% block page_title %}{% endblock %}{# nasconde l'h1 del base, gestiamo noi il titolo #}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='vue/delete-device.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vue/export-device.css') }}"> 
+  {% endblock %}
+
+{% block page_title %}{% endblock %}
 
 {% block content %}
-  {# ── Topbar: titolo + badge + azioni ── #}
   <div class="device-header">
     <h1 class="device-header__title">{{ device.name }}</h1>
-
     <div class="device-header__actions">
-      <a class="btn btn--outline"
-         href="{{ url_for('evaluation.open_session', device_id=device.device_id) }}">
+      <button class="btn btn--outline" type="button"
+              onclick="window.openSessionAction('{{ device.device_id }}')">
         Avvia Valutazione
-      </a>
-      <a class="btn btn--primary"
-         href="#">
-        Visualizza Report
-      </a>{# TODO: url_for('report.view', device_id=device.device_id) #}
+      </button>
+      <a class="btn btn--primary" href="#">Visualizza Report</a>
     </div>
   </div>
 
-  {# ── Corpo a due colonne ── #}
   <div class="device-body">
-
-    {# ── Colonna sinistra: Anagrafica ── #}
     <div class="card">
       <div class="card__header">
         <h2 class="card__title">Anagrafica Dispositivo</h2>
-        <a class="btn btn--primary btn--sm"
-           href="{{ url_for('devices.update_device', device_id=device.device_id) }}"> 
+        <a class="btn btn--primary btn--sm" href="{{ url_for('devices.edit_device_page', device_id=device.device_id) }}">
           Modifica Dispositivo
         </a>
       </div>
@@ -48,20 +55,25 @@
       <p class="info-row"><strong>Versione Standard:</strong> {{ device.compliance_standard_version }}</p>
 
       <div style="margin-top: 20px; display: flex; gap: 8px;">
-        <a class="btn btn--secondary btn--sm"
-           href="{{ url_for('devices.export_device', device_id=device.device_id) }}"> 
+        <button class="btn btn--secondary btn--sm" type="button"
+                onclick="window.openExportModal('{{ device.device_id }}', '{{ device.name|e }}')">
           Esporta dispositivo
-        </a>
-         <form class="inline-form"
-              action="{{ url_for('devices.delete_device', device_id=device.device_id) }}"
-              method="post"
-              onsubmit="return confirm('Eliminare il dispositivo {{ device.name }}?')">
-          <button class="btn btn--danger btn--sm" type="submit">Elimina</button>
-        </form> 
+        </button>
+        
+        <button class="btn btn--danger btn--sm inline-form" type="button"
+                onclick="window.openDeleteModal('{{ device.device_id }}', '{{ device.name|e }}')">
+          Elimina
+        </button>
       </div>
     </div>
-
-
-
   </div>
+
+  <div id="delete-device-app"></div>
+  <div id="export-device-app"></div>
+  <div id="open-session-app"></div> {% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ url_for('static', filename='vue/delete-device.js') }}"></script>
+  <script type="module" src="{{ url_for('static', filename='vue/export-device.js') }}"></script>
+  <script type="module" src="{{ url_for('static', filename='vue/open-session.js') }}"></script>
 {% endblock %}
