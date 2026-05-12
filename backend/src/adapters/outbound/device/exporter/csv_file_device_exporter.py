@@ -2,16 +2,17 @@ import csv
 import io
 from core.domain.evaluation_object.device import Device
 from adapters.outbound.device.exporter.file_device_exporter import FileDeviceExporter
+from typing import Any
 
 
 class CSVFileDeviceExporter(FileDeviceExporter):
-    def __init__(self):
+    def __init__(self) -> None:
         self._output: io.StringIO | None = None
-        self._writer: csv.writer | None = None
+        self._writer: Any | None = None
 
     def _prepare_structure(self, device: Device) -> None:
         self._output = io.StringIO()
-        self._writer = csv.writer(self._output)
+        self._writer = csv.writer(self._output) 
 
     def _write_data(self, device: Device) -> None:
         if self._writer is None:

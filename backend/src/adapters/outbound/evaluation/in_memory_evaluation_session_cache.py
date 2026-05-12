@@ -12,7 +12,6 @@ from core.domain.session.evaluation_session import EvaluationSession
 from core.ports.outbound.evaluation.exceptions import (
     EvaluationSessionAlreadyExistsError,
     EvaluationSessionNotFoundError,
-    # EvaluationSessionSaveError,
 )
 
 
@@ -23,7 +22,7 @@ class InMemoryEvaluationSessionCache(
     EvaluationSessionExistsPort,
     CloseEvaluationSessionPort,
 ):
-    def __init__(self):
+    def __init__(self) -> None:
         self._session: EvaluationSession | None = None
 
     def create_evaluation_session(

@@ -13,7 +13,7 @@ from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundE
 from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
 
 
-class GetAssetDetailService(GetAssetDetailUseCase):
+class GetAssetEvaluationDetailService(GetAssetDetailUseCase):
     def __init__(
         self, get_evaluation_session_port: GetEvaluationSessionPort, evaluation_engine: EvaluationEngine
     ) -> None:

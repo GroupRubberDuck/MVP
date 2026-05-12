@@ -32,11 +32,6 @@ class EvaluationSessionController(FlaskController):
             methods=["DELETE"],
         )
         blueprint.add_url_rule(
-            "/sessions/<session_id>",
-            view_func=self.save_session,
-            methods=["PUT"],
-        )
-        blueprint.add_url_rule(
             "/sessions/<session_id>/commit",
             view_func=self.commit_session,
             methods=["POST"],
@@ -59,11 +54,6 @@ class EvaluationSessionController(FlaskController):
         command = CloseEvaluationSessionCommand(session_id=session_id)
         self._close.close_evaluation_session(command)
         return jsonify({"message": "Sessione chiusa"}), 200
-
-    def save_session(self, session_id: str) -> ResponseReturnValue:
-        command = CommitEvaluationSessionCommand(session_id=session_id)
-        self._commit.commit(command)
-        return jsonify({"message": "Sessione salvata con successo"}), 200
 
     def commit_session(self, session_id: str) -> ResponseReturnValue:
         command = CommitEvaluationSessionCommand(session_id=session_id)

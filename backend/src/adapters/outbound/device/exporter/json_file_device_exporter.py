@@ -4,7 +4,7 @@ from core.domain.evaluation_object.device import Device
 
 class JSONFileDeviceExporter(FileDeviceExporter):
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._data: dict = {}
 
     def _prepare_structure(self, device: Device) -> None:

@@ -73,14 +73,14 @@ class FlaskRequirementEvaluationDetailController(FlaskController):
             if node.node_type == "decision":
                 return DecisionNodeDTO(
                     parent_id=node.parent_id,
-                    question=node.question,
+                    question=node.question or "",
                     yes_child_id=node.child_on_true_id,
                     no_child_id=node.child_on_false_id,
                 )
             if node.node_type == "leaf":
                 return LeafNodeDTO(
                     parent_id=node.parent_id,
-                    verdict=node.verdict,
+                    verdict=node.verdict, # type: ignore[arg-type]
                 )
             raise ValueError(f"Tipo di nodo sconosciuto: {node.node_type}")
 
