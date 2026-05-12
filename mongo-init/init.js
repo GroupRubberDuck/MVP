@@ -4,7 +4,7 @@ db = db.getSiblingDB('mvp_db');
 // Inserisci i dati di partenza in una collection (es. 'utenti' o 'configurazioni')
 db.compliance_standards.insertOne(
         {
-  "_id": "STD-EN303645",
+  "_id": "STD-EN303645------------",
   "name": "ETSI EN 303 645",
   "version_number": "2.1.1",
   "requirements": [

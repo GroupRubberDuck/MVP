@@ -1,0 +1,70 @@
+{# layouts/dashboard.html #}
+{% extends "layouts/base.html" %}
+
+{% block title %}Valutazione - {{ name }} {% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+
+{% block content %}
+  <h1>{{asset.name}}</h1>
+  <div>
+    <h2>Summary</h2>
+    <dl>
+      <dt>Stato aggregato della valutazione</dt>
+      <dd>{{asset.evaluation}}</dd>
+      <dt>Tipo di asset</dt>
+      <dd>{{asset.type}}</dd>
+    </dl>
+    <dl>Descrizione</dl>
+    <dt>{{asset.description}}</dt>
+  </div>
+  <div>
+    <h2>Lista dei requisiti</h2>
+    <ul>
+      {% for req in asset.requirements%}
+      <li>
+        <span>{{req.id}}</span>
+        <span>{{req.evaluation}}</span>
+        <span><a href="{{
+          url_for(
+            'evaluation.get_requirement_evaluation_detail',
+            session_id=session_id,
+            device_id=device_id,
+            asset_id=asset_id,
+            requirement_id=req.id
+            )
+        }}">Vai al requisito</a></span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div>
+                <a class="btn btn--primary btn--sm" 
+                  href="{{ url_for('evaluation.edit_asset_page', session_id=session_id, device_id=device_id, asset_id=asset.asset_id) }}"
+                  onclick="window.dashboardAction.allowExit()">
+                  Modifica
+                </a>
+
+  </div>
+  <div
+  id="asset-delete-widget"
+  data-delete-url="{{ url_for('evaluation.delete_asset', 
+  asset_id=asset_id,
+  device_id=device_id,
+  session_id=session_id
+  ) }}"
+  data-redirect-url="{{ url_for(
+    'evaluation.get_device_evaluation_detail',
+    session_id=session_id,
+    device_id=device_id
+    ) }}"
+  ></div>
+
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ url_for('static', filename='vue/dashboard-logic.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='vue/asset-delete-widget.js') }}"></script>
+{% endblock %}

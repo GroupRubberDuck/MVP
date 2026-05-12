@@ -3,7 +3,7 @@
   "name": "Smart Thermostat",
   "os": "RTOS 3.2",
   "description": "Termostato IoT connesso alla rete domestica",
-  "compliance_standard_id": "STD-EN303645",
+  "compliance_standard_id": "STD-EN303645------------",
   "assets": [
     {
       "id": "ASSET-001",

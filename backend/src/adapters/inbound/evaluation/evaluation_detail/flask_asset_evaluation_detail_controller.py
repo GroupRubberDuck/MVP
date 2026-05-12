@@ -84,4 +84,9 @@ class FlaskAssetEvaluationDetailController(FlaskController):
 
             asset_dto = self._make_dto(asset)
 
-            return render_template("layouts/asset_detail.html", asset=asset_dto.model_dump()), 200
+            return render_template("asset/asset_evaluation_detail.html", 
+                                   asset=asset_dto.model_dump(),
+                                   session_id=session_id,
+                                   device_id=device_id,
+                                   asset_id=asset_id
+                                   ), 200

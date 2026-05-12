@@ -70,7 +70,14 @@
                   </span>
                 </td>
                 <td style="display: flex; gap: 8px;">
-                  <a class="btn btn--outline btn--sm" href="">
+                  <a class="btn btn--outline btn--sm" href="{{
+                    url_for(
+                      'evaluation.get_asset_evaluation_detail',
+                      session_id=session_id,
+                      device_id=device_id,
+                      asset_id=asset.asset_id
+                    )
+                  }}">
                     Valuta
                   </a>
                   

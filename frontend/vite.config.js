@@ -26,6 +26,7 @@ export default defineConfig({
         'open-session': resolve(__dirname, 'src/main-open-session.js'),
         'dashboard-logic': resolve(__dirname, 'src/main-dashboard.js'),
         'create-asset': resolve(__dirname, 'src/main-create-asset.js'),
+        'asset-delete-widget': resolve(__dirname, 'src/widgets/asset-delete/main.js')
       },
       output: {
         entryFileNames: `[name].js`,
