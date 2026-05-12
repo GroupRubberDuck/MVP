@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from infrastructure.database.connection import connect
 from infrastructure.database.exceptions import DatabaseConnectionError
 
-# --- Adapter outbound ---
+# --- ADAPTER OUTBOUND ---
 from adapters.outbound.device.repository.mongo_device_repository import MongoDeviceAdapter
 from adapters.outbound.compliance_standard.mongodb_compliance_standard_repository import MongoComplianceStandardAdapter
 from adapters.outbound.device.importer.concrete_file_device_importer_factory import ConcreteFileDeviceImporterFactory
@@ -16,11 +16,11 @@ from adapters.outbound.device.exporter.concrete_file_device_exporter_factory imp
 from adapters.outbound.report.pdf_report_generator import PdfReportGenerator
 from adapters.outbound.evaluation.in_memory_evaluation_session_cache import InMemoryEvaluationSessionCache
 
-# --- Domain ---
+# --- DOMAIN ---
 from core.domain.session.session_handler import SessionHandler
 from core.domain.evaluation_engine.evaluation_engine import EvaluationEngine
 
-# --- Service (Application Core) ---
+# --- SERVICES (Application Core) ---
 # Device
 from core.services.device.get_device_list_service import GetDeviceListService
 from core.services.device.get_device_detail_service import GetDeviceDetailService
@@ -29,14 +29,14 @@ from core.services.device.update_device_service import UpdateDeviceService
 from core.services.device.delete_device_service import DeleteDeviceService
 from core.services.device.import_device_service import ImportDeviceService
 from core.services.device.export_device_service import ExportDeviceService
+from core.services.device.get_device_evaluation_detail_service import GetDeviceEvaluationDetailService
 
 # Asset
 from core.services.asset.create_asset_service import CreateAssetService
 from core.services.asset.update_asset_service import UpdateAssetService
 from core.services.asset.delete_asset_service import DeleteAssetService
 
-# Evaluation Services
-from core.services.device.get_device_evaluation_detail_service import GetDeviceEvaluationDetailService
+# Evaluation & Session
 from core.services.evaluation.evaluation_session.session_coordinator import SessionCoordinator
 from core.services.evaluation.evaluation_session.open_evaluation_session_service import OpenEvaluationSessionService
 from core.services.evaluation.evaluation_session.close_evaluation_session_service import CloseEvaluationSessionService
@@ -46,37 +46,32 @@ from core.services.evaluation.evaluation_session.commit_evaluation_session_servi
 from core.services.report.generate_report_service import GenerateReportService
 from core.services.compliance_standard.get_compliance_standard_service import GetComplianceStandardService
 
-# --- Controller (Adapter inbound) ---
-# Device
+# --- CONTROLLERS (Inbound Adapters) ---
 from adapters.inbound.device.flask_query_device_controller import FlaskQueryDeviceController
 from adapters.inbound.device.flask_write_device_controller import FlaskWriteDeviceController 
 from adapters.inbound.device.flask_import_device_controller import FlaskImportDeviceController
 from adapters.inbound.device.flask_export_device_controller import FlaskExportDeviceController
-
-# Asset
 from adapters.inbound.asset.flask_write_asset_controller import FlaskWriteAssetController
-
-# Evaluation & Report
 from adapters.inbound.evaluation.evaluation_detail.flask_device_evaluation_detail_controller import FlaskDeviceEvaluationDetailController
 from adapters.inbound.evaluation.evaluation_session_controller import EvaluationSessionController
 from adapters.inbound.report.report_controller import FlaskExportReportController
 
-# --- Routes ---
+# --- ROUTES ---
 from routes import register_routes, register_error_handlers
 
 load_dotenv()
 
 def create_app() -> Flask:
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
     app = Flask(
         __name__,
-        template_folder=os.path.join(base_dir, 'backend', 'templates'),
-        static_folder=os.path.join(base_dir, 'backend', 'static'),
+        template_folder=os.path.join(base_dir, "backend", "templates"),
+        static_folder=os.path.join(base_dir, "backend", "static"),
     )
     app.secret_key = "".join(random.choices(string.ascii_letters + string.digits, k=32))
 
-    # ── Database ──
+    # ── 1. DATABASE ──
     try:
         mongo_client, db = connect()
     except DatabaseConnectionError as e:
@@ -84,76 +79,71 @@ def create_app() -> Flask:
         _register_fallback_routes(app, str(e), 503)
         return app
 
-    # ── Adapter outbound ──
+    # ── 2. ADAPTER OUTBOUND (Infrastructure) ──
     device_adapter = MongoDeviceAdapter(db["devices"])
     standard_adapter = MongoComplianceStandardAdapter(db["compliance_standards"])
     report_generator_adapter = PdfReportGenerator()
-    
     importer_factory = ConcreteFileDeviceImporterFactory()
     exporter_factory = ConcreteFileDeviceExporterFactory()
-
     session_cache_adapter = InMemoryEvaluationSessionCache()
 
-    # ── Servizi (Application Core) ──
+    # ── 3. SERVIZI (Application Core) ──
     
+    # Session Management
     session_handler = SessionHandler() 
     session_coordinator = SessionCoordinator(
         exist_port=session_cache_adapter,
         session_handler=session_handler
     )
 
-    open_session_service = OpenEvaluationSessionService(
-        session_coordinator=session_coordinator,
-        create_session_port=session_cache_adapter,
-        find_device_port=device_adapter,
-        find_standard_port=standard_adapter
-    )
-
-    close_session_service = CloseEvaluationSessionService(
-        delete_session_port=session_cache_adapter
-    )
-
-    commit_session_service = CommitEvaluationSessionService(
-        get_evaluation_session_port=session_cache_adapter,
-        save_device_port=device_adapter
-    )
-
+    # Device Services
     get_device_list_service = GetDeviceListService(device_adapter)
     get_device_detail_service = GetDeviceDetailService(device_adapter)
-    get_compliance_standard_service = GetComplianceStandardService(standard_adapter)
-    
-    evaluation_engine = EvaluationEngine()
-
-    get_device_evaluation_detail_service = GetDeviceEvaluationDetailService(
-        get_evaluation_session_port=session_cache_adapter,
-        evaluation_engine=evaluation_engine
-    )
-
     create_device_service = CreateDeviceService(device_adapter)
     update_device_service = UpdateDeviceService(device_adapter, device_adapter)
     delete_device_service = DeleteDeviceService(device_adapter)
     import_device_service = ImportDeviceService(importer_factory, device_adapter)
     export_device_service = ExportDeviceService(device_adapter, exporter_factory)
     
-    # 7. CRUD Asset (AGGIORNATI CON I NOMI ESATTI DELLE TUE CLASSI)
+    # Evaluation Services
+    evaluation_engine = EvaluationEngine()
+    get_device_evaluation_detail_service = GetDeviceEvaluationDetailService(
+        get_evaluation_session_port=session_cache_adapter,
+        evaluation_engine=evaluation_engine
+    )
+    open_session_service = OpenEvaluationSessionService(
+        session_coordinator=session_coordinator,
+        create_session_port=session_cache_adapter,
+        find_device_port=device_adapter,
+        find_standard_port=standard_adapter
+    )
+    close_session_service = CloseEvaluationSessionService(
+        delete_session_port=session_cache_adapter
+    )
+    commit_session_service = CommitEvaluationSessionService(
+        get_evaluation_session_port=session_cache_adapter,
+        save_device_port=device_adapter
+    )
+
+    # Asset Services
     create_asset_service = CreateAssetService(
         get_evaluation_session=session_cache_adapter,
         save_evaluation_session=session_cache_adapter
     )
-    
     update_asset_service = UpdateAssetService(
         get_evaluation_session_port=session_cache_adapter,
         save_evaluation_session_port=session_cache_adapter
     )
-    
     delete_asset_service = DeleteAssetService(
         save_evaluation_session_port=session_cache_adapter,
         get_evaluation_session_port=session_cache_adapter
     )
 
+    # Report & Compliance Services
     generate_report_service = GenerateReportService(session_cache_adapter, report_generator_adapter)
+    get_compliance_standard_service = GetComplianceStandardService(standard_adapter)
 
-    # ── Istanze Controller (Inbound Adapters) ──
+    # ── 4. CONTROLLERS (Inbound Adapters) ──
     
     query_device_controller = FlaskQueryDeviceController(
         get_device_list_use_case=get_device_list_service,
@@ -186,9 +176,11 @@ def create_app() -> Flask:
         commit_use_case=commit_session_service
     )
 
-    export_report_controller = FlaskExportReportController(generate_report_use_case=generate_report_service)
+    export_report_controller = FlaskExportReportController(
+        generate_report_use_case=generate_report_service
+    )
 
-    # ── Registrazione Rotte ──
+    # ── 5. REGISTRAZIONE ROTTE ──
     register_routes(
         app,
         device_controllers=[
@@ -211,6 +203,7 @@ def create_app() -> Flask:
     _register_health_check(app, mongo_client, db)
 
     return app
+
 
 def _register_health_check(app: Flask, mongo_client, db) -> None:
     @app.route("/health")
