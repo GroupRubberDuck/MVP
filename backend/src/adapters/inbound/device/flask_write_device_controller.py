@@ -1,6 +1,6 @@
 from adapters.inbound.flask_controller_interface import FlaskController
 from core.ports.inbound.device.create_device_use_case import CreateDeviceUseCase, CreateDeviceCommand
-from core.ports.inbound.device.update_device_anagraphic_use_case import UpdateDeviceUseCase, UpdateDeviceCommand
+from core.ports.inbound.device.update_device_use_case import UpdateDeviceUseCase, UpdateDeviceCommand
 from core.ports.inbound.device.delete_device_use_case import DeleteDeviceUseCase, DeleteDeviceCommand
 from core.ports.inbound.device.exceptions import (
     CreateDeviceFailure,

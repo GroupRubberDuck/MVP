@@ -76,8 +76,13 @@ from adapters.inbound.device.flask_import_device_controller import (
 from adapters.inbound.device.flask_query_dashboard_controller import (
     FlaskQueryDashboardController,
 )
+
 # evaluation session service
-# from core.services
+from core.services.evaluation.get_active_session_service import GetActiveSessionService
+from core.services.evaluation.evaluation_session.open_evaluation_session_service import OpenEvaluationSessionService
+from core.services.evaluation.evaluation_session.close_evaluation_session_service import CloseEvaluationSessionService
+from core.services.evaluation.evaluation_session.commit_evaluation_session_service import CommitEvaluationSessionService
+from adapters.inbound.evaluation.evaluation_session_controller import EvaluationSessionController
 
 # interactive evaluation service
 
@@ -126,6 +131,23 @@ def create_app() -> Flask:
     )
 
     get_compliance_standard_service = GetComplianceStandardService(standard_adapter)
+
+    get_active_session_service = GetActiveSessionService(
+        get_active_session_port=get_session_service
+    )
+    open_session_service = OpenEvaluationSessionService(
+        get_compliance_standard_port=standard_adapter,
+        get_device_port=device_adapter,
+        create_evaluation_session_port=get_session_service,
+    )
+    close_session_service = CloseEvaluationSessionService(
+        close_evaluation_session_port=get_session_service,
+    )
+    commit_session_service = CommitEvaluationSessionService(
+        get_evaluation_session_port=get_session_service,
+        save_evaluation_session_port=get_session_service,
+    )
+    
 
     # Servizi Write
     create_device_service = CreateDeviceService(device_adapter)

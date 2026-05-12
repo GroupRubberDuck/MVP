@@ -1,26 +1,42 @@
 from flask import Blueprint, request, jsonify
 from adapters.inbound.flask_controller_interface import FlaskController
-from core.ports.inbound.evaluation.evaluation_session.open_evaluation_session_use_case import OpenEvaluationSessionUseCase, OpenEvaluationSessionCommand
-from core.ports.inbound.evaluation.evaluation_session.close_evaluation_session_use_case import CloseEvaluationSessionUseCase, CloseEvaluationSessionCommand
-from core.ports.inbound.evaluation.evaluation_session.commit_evaluation_session_use_case import CommitEvaluationSessionUseCase, CommitEvaluationSessionCommand
+from core.ports.inbound.evaluation.evaluation_session.open_evaluation_session_use_case import (
+    OpenEvaluationSessionUseCase,
+    OpenEvaluationSessionCommand,
+)
+from core.ports.inbound.evaluation.evaluation_session.close_evaluation_session_use_case import (
+    CloseEvaluationSessionUseCase,
+    CloseEvaluationSessionCommand,
+)
+from core.ports.inbound.evaluation.evaluation_session.commit_evaluation_session_use_case import (
+    CommitEvaluationSessionUseCase,
+    CommitEvaluationSessionCommand,
+)
+from core.ports.inbound.evaluation.get_active_session_use_case import (
+    GetActiveSessionUseCase,
+)
 from flask.typing import ResponseReturnValue
 
 
-
 class EvaluationSessionController(FlaskController):
-
     def __init__(
         self,
         open_use_case: OpenEvaluationSessionUseCase,
         close_use_case: CloseEvaluationSessionUseCase,
         commit_use_case: CommitEvaluationSessionUseCase,
+        get_active_session_use_case: GetActiveSessionUseCase,
     ) -> None:
         self._open = open_use_case
         self._close = close_use_case
         self._commit = commit_use_case
+        self._get_active_session = get_active_session_use_case
 
-
-    def register_routes(self,blueprint: Blueprint) -> None:
+    def register_routes(self, blueprint: Blueprint) -> None:
+        blueprint.add_url_rule(
+            "/sessions/active",
+            view_func=self.get_active_session,
+            methods=["GET"],
+        )
         blueprint.add_url_rule(
             "/sessions",
             view_func=self.open_session,
@@ -41,6 +57,14 @@ class EvaluationSessionController(FlaskController):
             view_func=self.commit_and_close,
             methods=["POST"],
         )
+
+    def get_active_session(self) -> ResponseReturnValue:
+        info = self._get_active_session.get_active_session()
+        if info is None:
+            return "", 204
+        return jsonify(
+            {"session_id": info.session_id, "device_id": info.device_id}
+        ), 200
 
     def open_session(self) -> ResponseReturnValue:
         body = request.get_json(silent=True) or {}
