@@ -110,6 +110,7 @@ from adapters.inbound.evaluation.evaluation_session_controller import Evaluation
 from adapters.inbound.report.report_controller import FlaskExportReportController
 
 from adapters.inbound.asset.flask_write_asset_controller import FlaskWriteAssetController
+from adapters.inbound.asset.flask_query_asset_controller import FlaskQueryAssetController
 
 
 # Controller (adapter inbound)
@@ -297,6 +298,10 @@ def create_app() -> Flask:
         update_asset_use_case=update_asset_service,
         delete_asset_use_case=delete_asset_service
     )
+
+    query_asset_controller=FlaskQueryAssetController(
+        get_asset_anagraphic_use_case=get_asset_anagraphic_service
+    )
     @app.route("/sessions",methods=["GET"])
     def active_session():
         if session_cache._session is not None:
@@ -319,7 +324,8 @@ def create_app() -> Flask:
             evaluation_justification_controller,
             evaluate_decision_node_controller,
             evaluation_session_controller,
-            write_asset_controller
+            write_asset_controller,
+            query_asset_controller
             ],
         report_controllers=[export_report_controller],
     )

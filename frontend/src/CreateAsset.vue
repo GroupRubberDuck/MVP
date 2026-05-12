@@ -34,8 +34,8 @@
             style="width: 100%; padding: 8px;"
           >
             <option value="" disabled>Seleziona una tipologia</option>
-            <option value="Security">Security</option>
-            <option value="Network">Network</option>
+            <option value="security">Security</option>
+            <option value="network">Network</option>
           </select>
           <span v-if="errors.asset_type" style="color: #dc3545; font-size: 0.85em; display: block; margin-top: 5px;">
             {{ errors.asset_type }}
@@ -165,7 +165,7 @@ const submitForm = async () => {
     }
     
     // Reindirizzamento alla dashboard del dispositivo
-    window.location.href = `/sessions/${sessionId.value}/devices/${deviceId.value}`;
+    window.location.href = `/dashboard/sessions/${sessionId.value}/devices/${deviceId.value}`;
 
   } catch (error) {
     alert("Attenzione: " + error.message);
