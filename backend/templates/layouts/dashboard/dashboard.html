@@ -4,28 +4,31 @@
 {% block title %}Valutazione - {{ device_detail.device_name }}{% endblock %}
 
 {% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 {% endblock %}
 
 {% block content %}
+<div class="page-container">
   <div class="page-header">
     <div class="page-header__text">
+      <p class="breadcrumbs">
+        <a href="{{ url_for('devices.get_device_list') }}">Dispositivi</a> / 
+        <a href="{{ url_for('devices.get_device_detail', device_id=device_id) }}">{{ device_detail.device_name }}</a> / Dashboard
+      </p>
       <h1>Valutazione: {{ device_detail.device_name }}</h1>
       <p>OS: {{ device_detail.device_os }} | Esito Globale: <strong>{{ device_detail.device_evaluation_result }}</strong></p>
     </div>
     
     <div class="page-header__actions">
-      <!-- Salvataggio (PUT) -->
       <button class="btn btn--outline" onclick="window.dashboardAction.save()">
         Salva Sessione
       </button>
       
-      <!-- Chiusura (DELETE) -->
       <button class="btn btn--danger inline-form" onclick="window.dashboardAction.close()">
         Chiudi Sessione
       </button>
 
-      <!-- Generazione Report -->
       <button class="btn btn--primary" onclick="window.dashboardAction.generateReport()">
         Genera Report PDF
       </button>
@@ -33,16 +36,15 @@
   </div>
 
   <div class="device-body">
-    <div class="card">
+    <div class="card shadow-sm">
       <div class="card__header" style="display: flex; justify-content: space-between; align-items: center;">
         <h2 class="card__title">Gestione Asset</h2>
         
-        <!-- AGGIUNTA ASSET: Punta alla rotta UI definita in routes.py -->
         <a class="btn btn--success" 
-           href="{{ url_for('create_asset_page', device_id=device_detail.device_id, session_id=session_id) }}"
-           onclick="window.dashboardAction.allowExit()">
-          + Aggiungi Asset
-        </a>
+       href="{{ url_for('assets.create_asset', session_id=session_id, device_id=device_id) }}"
+       onclick="window.dashboardAction.allowExit()">
+      + Aggiungi Asset
+    </a>
       </div>
 
       <p class="section-label">Lista Asset Analizzati</p>
@@ -63,41 +65,37 @@
                 <td><strong>{{ asset.asset_name }}</strong></td>
                 <td>{{ asset.asset_type }}</td>
                 <td>
-                  <span class="badge {{ 'badge--success' if asset.asset_evaluation == 'Conforme' else 'badge--warning' }}">
+                  <span class="badge {{ 'badge--pass' if asset.asset_evaluation == 'Conforme' else 'badge--fail' }}">
                     {{ asset.asset_evaluation }}
                   </span>
                 </td>
                 <td style="display: flex; gap: 8px;">
-                  <!-- VAI ALLA VALUTAZIONE -->
                   <a class="btn btn--outline btn--sm" href="#">
                     Valuta
                   </a>
                   
-                  <!-- MODIFICA ASSET: Punta alla rotta UI di modifica in routes.py -->
                   <a class="btn btn--primary btn--sm" 
-                     href="{{ url_for('edit_asset_page', device_id=device_detail.device_id, session_id=session_id, asset_id=asset.asset_id) }}"
-                     onclick="window.dashboardAction.allowExit()">
-                    Modifica
-                  </a>
+                  href="{{ url_for('assets.edit_asset_page', session_id=session_id, device_id=device_id, asset_id=asset.asset_id) }}"
+                  onclick="window.dashboardAction.allowExit()">
+                  Modifica
+                </a>
                 </td>
               </tr>
             {% endfor %}
           </tbody>
         </table>
       {% else %}
-        <div class="empty-state" style="margin-top: 20px;">
+        <div class="empty-state-small" style="margin-top: 20px;">
           <p class="info-text">Nessun asset presente. Clicca su "+ Aggiungi Asset" per iniziare.</p>
         </div>
       {% endif %}
     </div>
   </div>
+</div>
 
-  <!-- Punti di aggancio per i componenti Vue della Dashboard -->
-  <div id="dashboard-logic-app"></div>
-
+<div id="dashboard-logic-app"></div>
 {% endblock %}
 
 {% block scripts %}
-  <!-- Gestisce il "lucchetto" e i tasti Salva/Chiudi -->
   <script type="module" src="{{ url_for('static', filename='vue/dashboard-logic.js') }}"></script>
 {% endblock %}
