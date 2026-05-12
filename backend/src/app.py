@@ -9,48 +9,77 @@ from infrastructure.database.connection import connect
 from infrastructure.database.exceptions import DatabaseConnectionError
 
 # Adapter outbound
-# device Repository 
-from adapters.outbound.device.repository.mongo_device_repository import MongoDeviceAdapter
+# device Repository
+from adapters.outbound.device.repository.mongo_device_repository import (
+    MongoDeviceAdapter,
+)
+
 # compliance standard Repository
-from adapters.outbound.compliance_standard.mongodb_compliance_standard_repository import MongoComplianceStandardAdapter
+from adapters.outbound.compliance_standard.mongodb_compliance_standard_repository import (
+    MongoComplianceStandardAdapter,
+)
+
 # device importer factory
-from adapters.outbound.device.importer.concrete_file_device_importer_factory import ConcreteFileDeviceImporterFactory
+from adapters.outbound.device.importer.concrete_file_device_importer_factory import (
+    ConcreteFileDeviceImporterFactory,
+)
+
 # report generator
 from adapters.outbound.report.pdf_report_generator import PdfReportGenerator
+
 # session cache
-from adapters.outbound.evaluation.in_memory_evaluation_session_cache import InMemoryEvaluationSessionCache
+from adapters.outbound.evaluation.in_memory_evaluation_session_cache import (
+    InMemoryEvaluationSessionCache,
+)
+
+# evaluation engine
+from core.domain.evaluation_engine.evaluation_engine import EvaluationEngine
 
 
 # Service
-# Device Query Service 
+# Device Query Service
 from core.services.device.get_device_list_service import GetDeviceListService
 from core.services.device.get_device_detail_service import GetDeviceDetailService
-from core.services.device.get_device_dashboard_service import GetDeviceDashboardService
-# Device Write Service 
+from core.services.device.get_device_evaluation_detail_service import (
+    GetDeviceEvaluationDetailService,
+)
+
+# Device Write Service
 from core.services.device.import_device_service import ImportDeviceService
 
 from core.services.device.create_device_service import CreateDeviceService
 from core.services.device.update_device_service import UpdateDeviceService
 from core.services.device.delete_device_service import DeleteDeviceService
 
-#file import export device service
+# file import export device service
 
 # report service
 from core.services.report.generate_report_service import GenerateReportService
 
 # compliance standard service
-from core.services.compliance_standard.get_compliance_standard_service import GetComplianceStandardService
+from core.services.compliance_standard.get_compliance_standard_service import (
+    GetComplianceStandardService,
+)
 
 # --- Service (Write) ---
 
 # --- Controller (adapter inbound) ---
-from adapters.inbound.device.flask_query_device_controller import FlaskQueryDeviceController
-from adapters.inbound.device.flask_write_device_controller import FlaskWriteDeviceController 
-from adapters.inbound.device.flask_import_device_controller import FlaskImportDeviceController
-#evaluation session service
+from adapters.inbound.device.flask_query_device_controller import (
+    FlaskQueryDeviceController,
+)
+from adapters.inbound.device.flask_write_device_controller import (
+    FlaskWriteDeviceController,
+)
+from adapters.inbound.device.flask_import_device_controller import (
+    FlaskImportDeviceController,
+)
+from adapters.inbound.device.flask_query_dashboard_controller import (
+    FlaskQueryDashboardController,
+)
+# evaluation session service
 # from core.services
 
-#interactive evaluation service
+# interactive evaluation service
 
 # evaluation detail service
 
@@ -62,13 +91,14 @@ from routes import register_routes, register_error_handlers
 
 load_dotenv()
 
+
 def create_app() -> Flask:
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
     app = Flask(
         __name__,
-        template_folder=os.path.join(base_dir, 'backend', 'templates'),
-        static_folder=os.path.join(base_dir, 'backend', 'static'),
+        template_folder=os.path.join(base_dir, "backend", "templates"),
+        static_folder=os.path.join(base_dir, "backend", "static"),
     )
     app.secret_key = "".join(random.choices(string.ascii_letters + string.digits, k=32))
 
@@ -87,16 +117,13 @@ def create_app() -> Flask:
 
     get_session_service = InMemoryEvaluationSessionCache()
 
-
-    
     # Servizi Query
     get_device_list_service = GetDeviceListService(device_adapter)
     get_device_detail_service = GetDeviceDetailService(device_adapter)
-    import_device_service = ImportDeviceService(
-        register_device_port=device_adapter,
-        device_importer_factory=ConcreteFileDeviceImporterFactory()
+    get_device_evaluation_detail_service = GetDeviceEvaluationDetailService(
+        get_evaluation_session_port=get_session_service,
+        evaluation_engine=EvaluationEngine(),
     )
-    get_device_dashboard_service = GetDeviceDashboardService()
 
     get_compliance_standard_service = GetComplianceStandardService(standard_adapter)
 
@@ -106,7 +133,7 @@ def create_app() -> Flask:
     delete_device_service = DeleteDeviceService(device_adapter)
     import_device_service = ImportDeviceService(
         register_device_port=device_adapter,
-        device_importer_factory=ConcreteFileDeviceImporterFactory()
+        device_importer_factory=ConcreteFileDeviceImporterFactory(),
     )
 
     # ── Istanze Controller (adapter inbound) ──
@@ -114,9 +141,6 @@ def create_app() -> Flask:
         get_device_list_use_case=get_device_list_service,
         get_device_detail_use_case=get_device_detail_service,
         get_compliance_standard_use_case=get_compliance_standard_service,
-    )
-    import_device_controller = FlaskImportDeviceController(
-        import_device_service=import_device_service
     )
     generate_report_service = GenerateReportService(
         get_evaluation_session_port=get_session_service,
@@ -126,7 +150,7 @@ def create_app() -> Flask:
         generate_report_use_case=generate_report_service
     )
     query_dashboard_controller = FlaskQueryDashboardController(
-        get_device_dashboard_use_case=get_device_dashboard_service
+        get_device_evaluation_detail_use_case=get_device_evaluation_detail_service
     )
 
     # Iniezione dei Use Case nel Write Controller
@@ -144,9 +168,10 @@ def create_app() -> Flask:
     register_routes(
         app,
         device_controllers=[
-            query_device_controller, 
-            write_device_controller, 
-            import_device_controller
+            query_device_controller,
+            write_device_controller,
+            import_device_controller,
+            query_dashboard_controller,
         ],
         report_controllers=[export_report_controller],
     )
@@ -156,6 +181,7 @@ def create_app() -> Flask:
     _register_health_check(app, mongo_client, db)
 
     return app
+
 
 def _register_health_check(app: Flask, mongo_client, db) -> None:
     @app.route("/health")
@@ -176,7 +202,9 @@ def _register_fallback_routes(app: Flask, error: str, status: int) -> None:
 
     @app.errorhandler(404)
     def fallback_404(e):
-        return jsonify({
-            "error": "Servizio non disponibile",
-            "detail": f"Database non accessibile: {error}",
-        }), status
+        return jsonify(
+            {
+                "error": "Servizio non disponibile",
+                "detail": f"Database non accessibile: {error}",
+            }
+        ), status
