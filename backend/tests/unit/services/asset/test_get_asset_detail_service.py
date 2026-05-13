@@ -4,9 +4,9 @@ from unittest.mock import MagicMock
 from core.domain.evaluation_standard.evaluation_state import EvaluationState
 from core.domain.evaluation_object.exceptions import AssetNotFoundError
 from core.ports.inbound.asset.exceptions import GetAssetDetailFailure
-from core.ports.inbound.asset.get_asset_evaluation_detail_use_case import GetAssetDetailCommand
+from core.ports.inbound.asset.get_asset_evaluation_detail_use_case import GetAssetEvaluationDetailCommand
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
-from core.services.asset.get_asset_evaluation_detail_service import GetAssetEvaluationDetailService
+from core.services.asset.get_asset_evaluation_detail_service import GetAssetEvaluationDetailUseCaseService
 
 
 @pytest.fixture
@@ -21,7 +21,7 @@ def mock_engine():
 
 @pytest.fixture
 def service(mock_session_port, mock_engine):
-    return GetAssetEvaluationDetailService(
+    return GetAssetEvaluationDetailUseCaseService(
         get_evaluation_session_port=mock_session_port,
         evaluation_engine=mock_engine,
     )
@@ -29,7 +29,7 @@ def service(mock_session_port, mock_engine):
 
 @pytest.fixture
 def command():
-    return GetAssetDetailCommand(device_id="DEVICE-1", asset_id="ASSET-1", session_id="SESSION-1")
+    return GetAssetEvaluationDetailCommand(device_id="DEVICE-1", asset_id="ASSET-1", session_id="SESSION-1")
 
 
 def _make_mock_session(asset_id: str = "ASSET-1") -> MagicMock:

@@ -5,12 +5,12 @@ from core.domain.evaluation_engine.evaluation_detail import AssetEvaluationDetai
 
 
 @dataclass(frozen=True)
-class GetAssetDetailCommand:
+class GetAssetEvaluationDetailCommand:
     device_id: str
     asset_id: str
     session_id: str
 
 
-class GetAssetDetailUseCase(ABC):
+class GetAssetEvaluationDetailUseCase(ABC):
     @abstractmethod
-    def get_asset(self, command: GetAssetDetailCommand) -> AssetEvaluationDetail: ...
+    def get_asset(self, command: GetAssetEvaluationDetailCommand) -> AssetEvaluationDetail: ...
