@@ -85,31 +85,30 @@
 
 .inline-form { display: inline; }
 
+
 /* ── Badge ── */
 .badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.85rem; 
+  font-weight: 700;
+  text-transform: uppercase; 
+  letter-spacing: 0.05em; 
+  white-space: nowrap; 
+  text-decoration: underline;
+  text-underline-offset: 3px; 
 }
 
 .badge--pass {
-  background-color: #e6f9f0;
   color: #1a7a4a;
-  border: 1px solid #a8e6c8;
 }
 
 .badge--fail {
-  background-color: #fde8e8;
   color: #c0392b;
-  border: 1px solid #f5c6c6;
 }
 
 .badge--na {
-  background-color: #e0f0ff;
   color: #2980b9;
-  border: 1px solid #b0d4f1;
 }
 
 /* ── Lista dispositivi ── */
@@ -179,9 +178,9 @@
 }
 
 .device-header__title {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 500;
-  color: #111;
+  color: #000311;
   margin: 0;
 }
 
@@ -220,7 +219,8 @@
 }
 
 .card__title {
-  font-size: 23px;
+  font-size: 24px;
+  font-weight: bold;
   font-weight: 500;
   color: #0f54a1;
   margin: 0;
@@ -387,3 +387,7 @@
     color: #333;
     font-weight: 500;
 }
+
+
+
+

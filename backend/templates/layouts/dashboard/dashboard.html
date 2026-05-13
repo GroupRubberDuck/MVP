@@ -12,12 +12,8 @@
 <div class="page-container">
   <div class="page-header">
     <div class="page-header__text">
-      <p class="breadcrumbs">
-        <a href="{{ url_for('devices.get_device_list') }}">Dispositivi</a> / 
-        <a href="{{ url_for('devices.get_device_detail', device_id=device_id) }}">{{ device_detail.device_name }}</a> / Dashboard
-      </p>
-      <h1>Valutazione: {{ device_detail.device_name }}</h1>
-      <p>OS: {{ device_detail.device_os }} | Esito Globale: <strong>{{ device_detail.device_evaluation_result }}</strong></p>
+      <h1>Valutazione del dispositivo: {{ device_detail.device_name }}</h1>
+      <p>Sistema Operativo: {{ device_detail.device_os }} | Esito Globale: <strong>{{ device_detail.device_evaluation_result }}</strong></p>
     </div>
     
     <div class="page-header__actions">

@@ -3,10 +3,9 @@ block title %} {% if device %}Modifica {{ device.name }}{% else %}Nuovo
 Dispositivo{% endif %} {% endblock %} {% block head %}
 <link
   rel="stylesheet"
-  href="{{ url_for('static', filename='vue/create-device.css') }}"
+  href="{{ url_for('static', filename='create-device.css') }}"
 />
-{% endblock %} {% block content %} {# Lasciamo solo il div di innesto. Tutto il
-resto (Titolo e Form) lo gestisce Vue #}
+{% endblock %} {% block content %} 
 <div class="create-device-container">
   <div class="page-header">
     <div class="page-header__text">

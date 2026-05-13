@@ -13,7 +13,7 @@
 {% block title %}{{ device.name }}{% endblock %}
 
 {% block head %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='vue/delete-device.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='delete-device.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='vue/export-device.css') }}"> 
   {% endblock %}
 
@@ -21,7 +21,7 @@
 
 {% block content %}
   <div class="device-header">
-    <h1 class="device-header__title">{{ device.name }}</h1>
+    <h1 class="device-header__title">Dispositivo: {{ device.name }}</h1>
     <div class="device-header__actions">
       <button class="btn btn--outline" type="button"
               onclick="window.openSessionAction('{{ device.device_id }}')">
