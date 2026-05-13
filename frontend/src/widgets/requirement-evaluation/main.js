@@ -7,6 +7,7 @@ import RequirementEvaluationWidget from './RequirementEvaluationWidget.vue'
 const mountPoint = document.getElementById('requirement-evaluation-widget')
 
 if (mountPoint) {
+  
   const {
     treeData,
     savedAnswers,
@@ -16,7 +17,8 @@ if (mountPoint) {
     answerUrl,
     justificationUrl,
     detailUrl,
-    stateUrl
+    stateUrl,
+    requirementsUrl
   } = mountPoint.dataset
 
   const app = createApp(RequirementEvaluationWidget, {
@@ -24,14 +26,14 @@ if (mountPoint) {
     savedAnswers: JSON.parse(savedAnswers),
     evaluationState,
     justification: justification || '',
+requirementsUrl: requirementsUrl,    
     urls: {
       answer: answerUrl,
       justification: justificationUrl,
       detail: detailUrl,
-      state: stateUrl
+      state: stateUrl,
     },
   })
-
   app.use(createPinia())
   app.mount(mountPoint)
 }

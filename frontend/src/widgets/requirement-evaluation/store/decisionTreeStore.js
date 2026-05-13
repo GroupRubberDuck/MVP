@@ -19,7 +19,7 @@ export const useDecisionTreeStore = defineStore('decisionTree', () => {
   const evaluationState = ref(null)
   const justification = ref('')
   const justificationStatus = ref('idle')
-
+  const requirementsUrl = ref('')
 
   function refreshPath() {
     if (!evaluationEngine) return
@@ -33,7 +33,14 @@ export const useDecisionTreeStore = defineStore('decisionTree', () => {
     layoutResult.value = engine.calculateLayout(tree.getAllNodes(), tree.getRootId())
   }
 
-  function init({ treeData, savedAnswers = {}, evaluationState: initialState = null, justification: initialJustification = '', apiClient: client = null }) {
+  function init({ 
+    treeData, 
+    savedAnswers = {}, 
+    evaluationState: initialState = null, 
+    justification: initialJustification = '',
+    apiClient: client = null,
+    requirementsUrl: url = ''
+    }) {
     const tree = new TreeStructure(treeData)
     evaluationEngine = new EvaluationEngine(tree)
 
@@ -41,7 +48,7 @@ export const useDecisionTreeStore = defineStore('decisionTree', () => {
     evaluationState.value = initialState
     justification.value = initialJustification
     justificationStatus.value = 'idle'
-
+    requirementsUrl.value = url
     apiClient = client
 
     calculateLayout()
@@ -130,6 +137,7 @@ async function setAnswer(nodeId, answer) {
     evaluationState,
     justification,
     justificationStatus,
+    requirementsUrl,
     init,
     setAnswer,
     selectNode,

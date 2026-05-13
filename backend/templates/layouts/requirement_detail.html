@@ -47,12 +47,18 @@
   data-justification-url="{{ url_for('evaluation.insert_justification',
     session_id=session_id, asset_id=asset_id,
     requirement_id=requirement_id) }}"
+
   data-detail-url="{{ url_for('evaluation.get_requirement_evaluation_json',
     session_id=session_id, device_id=device_id,
     asset_id=asset_id, requirement_id=requirement_id) }}"
-    data-state-url="{{ url_for('evaluation.get_requirement_evaluation_state',
+
+  data-state-url="{{ url_for('evaluation.get_requirement_evaluation_state',
   session_id=session_id, device_id=device_id,
   asset_id=asset_id, requirement_id=requirement_id) }}"
+
+  data-requirements-url="{{ url_for('evaluation.get_asset_evaluation_detail',
+  session_id=session_id, device_id=device_id,
+  asset_id=asset_id) }}"
 ></div>
 
 

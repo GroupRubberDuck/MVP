@@ -86,6 +86,11 @@ function close() {
           <div class="result-badge" :class="`result-${currentNode.resultState}`">
             {{ formatResult(currentNode.resultState) }}
           </div>
+          <div>
+            <a :href=store.requirementsUrl>
+              Torna alla lista Requisiti
+            </a>
+          </div>
         </template>
       </div>
 
