@@ -12,7 +12,7 @@ from core.domain.evaluation_engine.evaluation_detail import (
 )
 from core.ports.inbound.asset.exceptions import GetRequirementEvaluationDetailFailure
 
-from adapters.inbound.evaluation.evaluation_detail.flask_requirement_evaluation_detail_controller import FlaskRequirementEvaluationDetail
+from adapters.inbound.evaluation.evaluation_detail.flask_requirement_evaluation_detail_controller import FlaskRequirementEvaluationDetailController
 
 def create_mock_validation_error() -> ValidationError:
     """Crea un finto ValidationError di Pydantic per testare il ramo 400."""
