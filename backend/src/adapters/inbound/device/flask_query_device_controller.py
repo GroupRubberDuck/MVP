@@ -74,8 +74,16 @@ class FlaskQueryDeviceController(FlaskController):
             command = GetDeviceDetailCommand(device_id=device_id)
             try:
                 
-                self._get_device_detail_use_case.get_device_detail(command)
-                return render_template("layouts/device/create_device.html"), 200
+                device=self._get_device_detail_use_case.get_device_detail(command)
+                return render_template("layouts/device/edit_device.html",
+                    device=DeviceDetailDTO(
+                    device_id=device.id,
+                    name=device.name,
+                    os=device.os,
+                    description=device.description,
+                    compliance_standard_name="",
+                    compliance_standard_version=""
+                )), 200
             except DeviceNotFoundFailure as e:
                 return render_template("error.html", message=str(e)), 404
 

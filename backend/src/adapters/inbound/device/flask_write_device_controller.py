@@ -7,7 +7,7 @@ from core.ports.inbound.device.exceptions import (
     UpdateDeviceFailure,
     DeleteDeviceFailure
 )
-from flask import request, jsonify
+from flask import request, jsonify,url_for
 from pydantic import ValidationError 
 
 class FlaskWriteDeviceController(FlaskController):
@@ -38,7 +38,10 @@ class FlaskWriteDeviceController(FlaskController):
             except CreateDeviceFailure as e:
                 return jsonify({"error": str(e)}), 409
 
-            return jsonify({"device_id": device_id}), 201
+            return jsonify({
+                "device_id": device_id,
+                "redirect_url":url_for('devices.get_device_detail',device_id=device_id)
+                }), 201
 
         @blueprint.route("/devices/<device_id>", methods=["PUT"])
         def update_device(device_id):
@@ -55,7 +58,9 @@ class FlaskWriteDeviceController(FlaskController):
                 self._update_device_use_case.update_device(command)
             except UpdateDeviceFailure as e:
                 return jsonify({"error": str(e)}), 404
-            return "", 204
+            return jsonify({
+                "redirect_url": url_for("devices.get_device_detail", device_id=device_id)
+            }), 200
 
         @blueprint.route("/devices/<device_id>", methods=["DELETE"])
         def delete_device(device_id):

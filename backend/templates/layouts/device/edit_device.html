@@ -10,26 +10,28 @@ resto (Titolo e Form) lo gestisce Vue #}
 <div class="create-device-container">
   <div class="page-header">
     <div class="page-header__text">
-      <h1>Nuovo Dispositivo</h1>
-      <p>Compila i campi per registrare un nuovo dispositivo nel sistema.</p>
+      <h1>Modifica Dispositivo</h1>
+      <p>Aggiorna le informazioni del dispositivo nel sistema.</p>
     </div>
   </div>
   <div class="card">
     <div class="card-header">
-      <h2>Informazioni Dispositivo</h2>
+      <h2>Modifica Dispositivo</h2>
     </div>
-    <div
-      id="create-device-app"
-      data-submit-url="{{url_for('devices.create_device')}}"
-      ,
-      data-cancel-url="{{url_for('devices.get_device_list')}}"
-      ,
-    ></div>
+<div
+  id="device-edit-widget"
+  data-submit-url="{{ url_for('devices.update_device', device_id=device.device_id) }}"
+  data-cancel-url="{{ url_for('devices.get_device_detail', device_id=device.device_id) }}"
+  data-default-standard-id="{{ device.standard_id }}"
+  data-initial-name="{{ device.name }}"
+  data-initial-os="{{ device.os }}"
+  data-initial-description="{{ device.description }}"
+></div>
   </div>
 </div>
 {% endblock %} {% block scripts %}
 <script
   type="module"
-  src="{{ url_for('static', filename='vue/create-device.js') }}"
+  src="{{ url_for('static', filename='vue/edit-device.js') }}"
 ></script>
 {% endblock %}

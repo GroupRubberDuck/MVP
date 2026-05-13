@@ -18,7 +18,8 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        'create-device': resolve(__dirname, 'src/main-create-device.js'),
+        'create-device': resolve(__dirname, 'src/widgets/device-create/main.js'),
+        'edit-device': resolve(__dirname, 'src/widgets/device-edit/main.js'),
         'decision-tree': resolve(__dirname, 'src/main-decision-tree.js'),
         'delete-device': resolve(__dirname, 'src/main-delete-device.js'),
         'export-device': resolve(__dirname, 'src/main-export-device.js'),
