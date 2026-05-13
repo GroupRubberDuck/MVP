@@ -14,6 +14,8 @@
 
 <script setup>
 import AsyncButton from '../../components/AsyncButton.vue'
+import BaseModal from '../../components/BaseModal.vue'
+import { ref } from 'vue'
 
 const props = defineProps({
   /** URL dell'endpoint DELETE, iniettato dal Livello 3 */
@@ -28,6 +30,16 @@ const props = defineProps({
   },
 })
 
+
+const isModalOpen = ref(false)
+
+function openModal() {
+  isModalOpen.value = true
+}
+
+function closeModal() {
+  isModalOpen.value = false
+}
 /**
  * Esegue la chiamata DELETE.
  * Questa funzione viene passata come prop `action` ad AsyncButton.
@@ -52,10 +64,27 @@ function onSuccess() {
 </script>
 
 <template>
-  <AsyncButton
-    :action="deleteAsset"
-    label="Elimina"
-    loading-label="Eliminazione..."
-    @success="onSuccess"
-  />
+
+  <div>
+    <button v-if="!isModalOpen" @click="openModal">
+      Elimina
+    </button>
+
+    <BaseModal
+      v-else
+      @close="closeModal"
+    >
+      <p>Sei sicuro di voler eliminare questo asset?</p>
+      <AsyncButton
+        :action="deleteAsset"
+        label="Conferma eliminazione"
+        loading-label="Eliminazione..."
+        @success="onSuccess"
+      />
+      <button @click="closeModal">
+        Annulla
+      </button>
+    </BaseModal>
+
+  </div>
 </template>

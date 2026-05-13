@@ -41,7 +41,7 @@
         <h2 class="card__title">Gestione Asset</h2>
         
         <a class="btn btn--success" 
-        href="{{ url_for('assets.create_asset_page', session_id=session_id, device_id=device_id) }}"
+        href="{{ url_for('evaluation.create_asset_page', session_id=session_id, device_id=device_id) }}"
        onclick="window.dashboardAction.allowExit()">
       + Aggiungi Asset
     </a>
@@ -82,7 +82,7 @@
                   </a>
                   
                   <a class="btn btn--primary btn--sm" 
-                  href="{{ url_for('assets.edit_asset_page', session_id=session_id, device_id=device_id, asset_id=asset.asset_id) }}"
+                  href="{{ url_for('evaluation.edit_asset_page', session_id=session_id, device_id=device_id, asset_id=asset.asset_id) }}"
                   onclick="window.dashboardAction.allowExit()">
                   Modifica
                 </a>

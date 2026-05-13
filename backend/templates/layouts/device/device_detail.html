@@ -59,15 +59,17 @@
           Esporta dispositivo
         </button>
         
-        <button class="btn btn--danger btn--sm inline-form" type="button"
-                onclick="window.openDeleteModal('{{ device.device_id }}', '{{ device.name|e }}')">
-          Elimina
-        </button>
+        <div
+          id="device-delete-widget"
+          data-device-name="{{ device.name }}"
+          data-delete-url="{{ url_for('devices.delete_device', device_id=device_id) }}"
+          data-export-base-url="{{ url_for('devices.export_device', device_id=device_id) }}"
+          data-redirect-url="{{ url_for('devices.get_device_list') }}"
+        ></div>
       </div>
     </div>
   </div>
 
-  <div id="delete-device-app"></div>
   <div id="export-device-app"></div>
   <div id="open-session-app"></div> {% endblock %}
 
