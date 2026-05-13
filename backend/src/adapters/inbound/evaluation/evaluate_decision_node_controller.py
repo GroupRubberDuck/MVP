@@ -19,7 +19,7 @@ class FlaskEvaluateDecisionNodeController(FlaskController):
         def register_routes(self, blueprint: Blueprint) -> None:
 
                 @blueprint.route(
-                                "/api/session/<session_id>/devices/<device_id>/assets/<asset_id>/requirements/<req_id>",
+                                "/api/sessions/<session_id>/devices/<device_id>/assets/<asset_id>/requirements/<req_id>",
                                  methods=["PUT"])
                 def insert_decision_node_evaluation(
                                 session_id:str,

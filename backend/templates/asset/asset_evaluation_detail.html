@@ -4,67 +4,86 @@
 {% block title %}Valutazione - {{ name }} {% endblock %}
 
 {% block head %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 {% endblock %}
 
 {% block content %}
-  <h1>{{asset.name}}</h1>
-  <div>
-    <h2>Summary</h2>
-    <dl>
-      <dt>Stato aggregato della valutazione</dt>
-      <dd>{{asset.evaluation}}</dd>
-      <dt>Tipo di asset</dt>
-      <dd>{{asset.type}}</dd>
-    </dl>
-    <dl>Descrizione</dl>
-    <dt>{{asset.description}}</dt>
+<div class="detail-container">
+
+  <div class="device-header">
+    <h1 class="device-header__title">Asset: {{ asset.name }}</h1>
   </div>
-  <div>
-    <h2>Lista dei requisiti</h2>
-    <ul>
-      {% for req in asset.requirements%}
-      <li>
-        <span>{{req.id}}</span>
-        <span>{{req.evaluation}}</span>
-        <span><a href="{{
-          url_for(
-            'evaluation.get_requirement_evaluation_detail',
-            session_id=session_id,
-            device_id=device_id,
-            asset_id=asset_id,
-            requirement_id=req.id
+
+  <div class="card summary-card">
+    <div class="card__header">
+      <h2 class="card__title">Summary</h2>
+    </div>
+    
+    <div class="device-body">
+      <div>
+        <div class="section-label">Stato aggregato della valutazione</div>
+        <div class="info-row">
+          <span class="badge {{ 'badge--pass' if asset.evaluation == 'Conforme' else 'badge--fail' }}"> {{ asset.evaluation }}
+          </span>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Tipo di asset</div>
+        <div class="info-row"><strong>{{ asset.type }}</strong></div>
+      </div>
+    </div>
+
+    <div class="description-section">
+      <div class="section-label">Descrizione</div>
+      <p class="info-text">{{ asset.description }}</p>
+    </div>
+  </div>
+
+  <div class="requirements-section">
+    <h2 class="requirements-title">Lista dei requisiti</h2>
+    
+    <ul class="asset-list">
+      {% for req in asset.requirements %}
+      <li class="asset-item">
+        <div class="asset-item__info">
+          <span class="asset-item__name">{{ req.id }}</span>
+        </div>
+        
+        <div>
+          <span class="badge {{ 'badge--pass' if req.evaluation == 'Conforme' else 'badge--fail' }}">
+            {{ req.evaluation }}
+          </span>
+        </div>
+        
+        <div class="asset-item__actions">
+          <a class="info-link" href="{{
+            url_for(
+              'evaluation.get_requirement_evaluation_detail',
+              session_id=session_id,
+              device_id=device_id,
+              asset_id=asset_id,
+              requirement_id=req.id
             )
-        }}">Vai al requisito</a></span>
+          }}">Vai al requisito &rarr;</a>
+        </div>
       </li>
       {% endfor %}
     </ul>
   </div>
-  <div>
-                <a class="btn btn--primary btn--sm" 
-                  href="{{ url_for('evaluation.edit_asset_page', session_id=session_id, device_id=device_id, asset_id=asset.asset_id) }}"
-                  onclick="window.dashboardAction.allowExit()">
-                  Modifica
-                </a>
 
+  <div class="page-actions">
+    <a class="btn btn--primary" 
+       href="{{ url_for('evaluation.edit_asset_page', session_id=session_id, device_id=device_id, asset_id=asset.asset_id) }}"
+       onclick="window.dashboardAction.allowExit()">
+       Modifica
+    </a>
+    
+    <div
+      id="asset-delete-widget"
+      data-delete-url="{{ url_for('evaluation.delete_asset', asset_id=asset_id, device_id=device_id, session_id=session_id) }}"
+      data-redirect-url="{{ url_for('evaluation.get_device_evaluation_detail', session_id=session_id, device_id=device_id) }}"
+    ></div>
   </div>
-  <div
-  id="asset-delete-widget"
-  data-delete-url="{{ url_for('evaluation.delete_asset', 
-  asset_id=asset_id,
-  device_id=device_id,
-  session_id=session_id
-  ) }}"
-  data-redirect-url="{{ url_for(
-    'evaluation.get_device_evaluation_detail',
-    session_id=session_id,
-    device_id=device_id
-    ) }}"
-  ></div>
 
-{% endblock %}
-
-{% block scripts %}
-  <script type="module" src="{{ url_for('static', filename='vue/dashboard-logic.js') }}"></script>
-<script type="module" src="{{ url_for('static', filename='vue/asset-delete-widget.js') }}"></script>
+</div> 
 {% endblock %}

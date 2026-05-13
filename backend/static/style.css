@@ -388,6 +388,27 @@
     font-weight: 500;
 }
 
+.detail-container {
+  max-width: 900px; 
+  margin: 0 auto;   
+  padding: 2rem 1rem; 
+}
 
+.requirements-section {
+  margin-top: 2.5rem;
+}
 
+.requirements-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0f54a1;
+  margin: 0 0 1.25rem 0;
+  
+}
 
+.page-actions {
+  gap: 12px;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+}

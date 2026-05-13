@@ -8,7 +8,7 @@ export { default as EvaluationBadge } from './components/EvaluationBadge.vue';
 export { default as JustificationForm } from './components/JustificationForm.vue';
 
 // Store
-export { useDecisionTreeStore } from './stores/decisionTreeStore.js';
+export { useDecisionTreeStore } from './store/decisionTreeStore.js';
 
 // Domain
 export { DecisionNode, LeafNode } from './models/Node.js';

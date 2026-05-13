@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { useDecisionTreeStore } from '../stores/decisionTreeStore.js';
+import { useDecisionTreeStore } from '../store/decisionTreeStore.js';
 
 const store = useDecisionTreeStore();
 
@@ -126,19 +126,13 @@ export default {
 
 <style scoped>
 .tree-sidebar {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 340px;
-  height: 100%;
-  background: var(--dt-sidebar-bg, #ffffff);
-  border-left: 1px solid var(--dt-sidebar-border, #e2e8f0);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
-  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.06);
-  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
-
 .sidebar-header {
   display: flex;
   justify-content: space-between;

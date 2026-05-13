@@ -14,6 +14,7 @@ import { createApp } from 'vue'
 import DeviceCreateWidget from './DeviceCreateWidget.vue'
 import { DEFAULT_STANDARD_ID } from '../../constants.js'
 
+
 const mountPoint = document.getElementById('create-device-app')
 
 if (mountPoint) {
