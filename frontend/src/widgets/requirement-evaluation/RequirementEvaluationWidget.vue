@@ -61,6 +61,7 @@ onMounted(() => {
     requirementsUrl: props.requirementsUrl,
     apiClient,
   })
+  
 })
 </script>
 <template>

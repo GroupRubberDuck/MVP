@@ -40,12 +40,6 @@
         <li class="device-item">
           <span class="device-item__name">{{ device.name }}</span>
           <div class="device-item__actions">
-            
-            <button class="btn btn--danger btn--sm inline-form" type="button" 
-                    onclick="window.openDeleteModal('{{ device.device_id }}', '{{ device.name|e }}')">
-              Elimina
-            </button>
-            
             <a class="btn btn--primary btn--sm"
                href="{{ url_for('devices.get_device_detail', device_id=device.device_id) }}"> 
                Dettagli Dispositivo

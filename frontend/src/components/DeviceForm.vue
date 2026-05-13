@@ -53,6 +53,9 @@ defineProps({
         class="form-input"
         :class="{ 'form-input-error': errors.deviceOs }"
       />
+      <span class="form-hint">
+        Max 64 caratteri ({{ fields.deviceOs.length }}/64)
+      </span>
     </FormField>
 
     <p class="section-label">Descrizione e Funzionalità</p>
