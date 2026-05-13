@@ -76,13 +76,13 @@ from adapters.inbound.device.flask_import_device_controller import (
 from adapters.inbound.device.flask_query_dashboard_controller import (
     FlaskQueryDashboardController,
 )
+from adapters.inbound.evaluation.evaluation_session_controller import EvaluationSessionController
 
 # evaluation session service
 from core.services.evaluation.get_active_session_service import GetActiveSessionService
 from core.services.evaluation.evaluation_session.open_evaluation_session_service import OpenEvaluationSessionService
 from core.services.evaluation.evaluation_session.close_evaluation_session_service import CloseEvaluationSessionService
 from core.services.evaluation.evaluation_session.commit_evaluation_session_service import CommitEvaluationSessionService
-from adapters.inbound.evaluation.evaluation_session_controller import EvaluationSessionController
 
 # interactive evaluation service
 
@@ -186,6 +186,13 @@ def create_app() -> Flask:
         import_device_service=import_device_service
     )
 
+    evaluation_session_controller = EvaluationSessionController(
+        open_session_use_case=open_session_service,
+        close_session_use_case=close_session_service,
+        commit_session_use_case=commit_session_service,
+        get_active_session_use_case=get_active_session_service
+    )
+
     # ── Registrazione Rotte ──
     register_routes(
         app,
@@ -196,6 +203,7 @@ def create_app() -> Flask:
             query_dashboard_controller,
         ],
         report_controllers=[export_report_controller],
+        evaluation_session_controllers=[evaluation_session_controller]
     )
     register_error_handlers(app)
 
