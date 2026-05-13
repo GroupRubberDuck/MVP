@@ -25,7 +25,7 @@
             "node_id": "N2",
             "node_type": "decision_node",
             "question": "Do the physical or logical measures in the targeted operational environment limit the accessibility to authorized entities?",
-            "child_yes": "L1",
+            "child_yes": "L4",
             "child_no": "N3"
           },
           {
@@ -39,24 +39,18 @@
             "node_id": "N4",
             "node_type": "decision_node",
             "question": "Are there access control mechanisms that manage entities' access to the security asset and network asset?",
-            "child_yes": "L1",
+            "child_yes": "L5",
             "child_no": "L3"
           },
-          {
-            "node_id": "L1",
-            "node_type": "leaf_node",
-            "verdict": "pass"
-          },
+          { "node_id": "L1", "node_type": "leaf_node", "verdict": "pass" },
+          { "node_id": "L4", "node_type": "leaf_node", "verdict": "pass" },
+          { "node_id": "L5", "node_type": "leaf_node", "verdict": "pass" },
           {
             "node_id": "L2",
             "node_type": "leaf_node",
             "verdict": "not_applicable"
           },
-          {
-            "node_id": "L3",
-            "node_type": "leaf_node",
-            "verdict": "fail"
-          }
+          { "node_id": "L3", "node_type": "leaf_node", "verdict": "fail" }
         ]
       }
     },
@@ -78,16 +72,8 @@
             "child_yes": "L1",
             "child_no": "L2"
           },
-          {
-            "node_id": "L1",
-            "node_type": "leaf_node",
-            "verdict": "pass"
-          },
-          {
-            "node_id": "L2",
-            "node_type": "leaf_node",
-            "verdict": "fail"
-          }
+          { "node_id": "L1", "node_type": "leaf_node", "verdict": "pass" },
+          { "node_id": "L2", "node_type": "leaf_node", "verdict": "fail" }
         ]
       }
     }

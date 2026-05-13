@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { DecisionNode, LeafNode } from '../src/decision-tree/models/Node.js';
-import { TreeStructure } from '../src/decision-tree/models/TreeStructure.js';
-import { EvaluationEngine } from '../src/decision-tree/models/EvaluationEngine.js';
-import { sampleTree, sampleTreeBackendFormat } from '../src/decision-tree/fixtures.js';
+import { DecisionNode, LeafNode } from '../src/requirement-evaluation/models/Node.js';
+import { TreeStructure } from '../src/requirement-evaluation/models/TreeStructure.js';
+import { EvaluationEngine } from '../src/requirement-evaluation/models/EvaluationEngine.js';
+import { sampleTree, sampleTreeBackendFormat } from '../src/requirement-evaluation/fixtures.js';
 
 // ─── Node ───────────────────────────────────────────────────────
 

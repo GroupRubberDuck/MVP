@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { useDecisionTreeStore } from '../stores/decisionTreeStore.js';
+import { useDecisionTreeStore } from '../store/decisionTreeStore.js';
 
 const store = useDecisionTreeStore();
 

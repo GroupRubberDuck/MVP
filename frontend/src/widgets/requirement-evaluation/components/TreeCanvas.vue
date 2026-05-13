@@ -1,37 +1,19 @@
 <script setup>
-import { computed, ref, onMounted } from 'vue';
-import { useDecisionTreeStore } from '../stores/decisionTreeStore.js';
+import { computed, ref, onMounted , watch} from 'vue';
+import { useDecisionTreeStore } from '../store/decisionTreeStore.js';
 import UiDecisionNode from './UiDecisionNode.vue';
 import UiLeafNode from './UiLeafNode.vue';
 
 const store = useDecisionTreeStore();
-
-// --- Pan & Zoom ---
+const PADDING = 150
+const NODE_HALF_WIDTH = 110
+const NODE_MAX_HALF_HEIGHT = 80
 const svgRef = ref(null);
 const viewBox = ref({ x: 0, y: 0, w: 900, h: 500 });
 const isPanning = ref(false);
 const panStart = ref({ x: 0, y: 0 });
 
-function onWheel(e) {
-  e.preventDefault();
-  const scaleFactor = e.deltaY > 0 ? 1.1 : 0.9;
-  const vb = viewBox.value;
 
-  const svg = svgRef.value;
-  const rect = svg.getBoundingClientRect();
-  const mx = ((e.clientX - rect.left) / rect.width) * vb.w + vb.x;
-  const my = ((e.clientY - rect.top) / rect.height) * vb.h + vb.y;
-
-  const newW = vb.w * scaleFactor;
-  const newH = vb.h * scaleFactor;
-
-  viewBox.value = {
-    x: mx - (mx - vb.x) * scaleFactor,
-    y: my - (my - vb.y) * scaleFactor,
-    w: newW,
-    h: newH,
-  };
-}
 
 function onPointerDown(e) {
   if (e.target.closest('.ui-decision-node, .ui-leaf-node')) return;
@@ -80,34 +62,37 @@ function selectNode(nodeId) {
 }
 
 // Centra la vista sul root all'avvio
-onMounted(() => {
-  if (nodes.value.length > 0) {
-    const root = nodes.value[0];
-    viewBox.value = {
-      x: root.x - 450,
-      y: root.y - 60,
-      w: 900,
-      h: 500,
-    };
-  }
-});
+watch(nodes, (newNodes) => {
+  if (newNodes.length === 0) return
 
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity
+  for (const node of newNodes) {
+    minX = Math.min(minX, node.x - NODE_HALF_WIDTH)
+    maxX = Math.max(maxX, node.x + NODE_HALF_WIDTH)
+    minY = Math.min(minY, node.y - NODE_MAX_HALF_HEIGHT)
+    maxY = Math.max(maxY, node.y + NODE_MAX_HALF_HEIGHT)
+  }
+
+  viewBox.value = {
+    x: minX - PADDING,
+    y: minY - PADDING,
+    w: (maxX - minX) + PADDING * 2,
+    h: (maxY - minY) + PADDING * 2,
+  }
+}, { immediate: true })
 const viewBoxStr = computed(
   () => `${viewBox.value.x} ${viewBox.value.y} ${viewBox.value.w} ${viewBox.value.h}`
 );
 </script>
 
 <template>
-  <svg
-    ref="svgRef"
-    class="tree-canvas"
-    :viewBox="viewBoxStr"
-    @wheel.prevent="onWheel"
-    @pointerdown="onPointerDown"
-    @pointermove="onPointerMove"
-    @pointerup="onPointerUp"
-    @pointerleave="onPointerUp"
-  >
+<svg
+  ref="svgRef"
+  class="tree-canvas"
+  :viewBox="viewBoxStr"
+  :style="{ height: viewBox.h + 'px' }"
+  preserveAspectRatio="xMidYMin meet"
+>
     <defs>
       <marker
         id="arrowhead"
@@ -157,19 +142,19 @@ const viewBoxStr = computed(
 
     <!-- Nodes -->
     <g class="nodes">
-      <component
-        v-for="node in nodes"
-        :key="node.id"
-        :is="resolveComponent(node.type)"
-        v-bind="{
-          id: node.id,
-          text: node.text,
-          resultState: node.resultState,
-          isActive: activePathSet.has(node.id),
-        }"
-        :transform="`translate(${node.x}, ${node.y})`"
-        @click="selectNode(node.id)"
-      />
+<component
+  v-for="node in nodes"
+  :key="node.id"
+  :is="resolveComponent(node.type)"
+  v-bind="{
+    id: node.id,
+    text: node.text,
+    resultState: node.resultState,
+    isActive: activePathSet.has(node.id),
+  }"
+  :transform="`translate(${node.x}, ${node.y})`"
+  @select="selectNode"
+/>
     </g>
   </svg>
 </template>
@@ -177,12 +162,10 @@ const viewBoxStr = computed(
 <style scoped>
 .tree-canvas {
   width: 100%;
-  height: 100%;
-  min-height: 400px;
-  background: var(--dt-canvas-bg, #f8fafc);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
   user-select: none;
-  touch-action: none;
 }
 
 .edge-path {
@@ -198,5 +181,16 @@ const viewBoxStr = computed(
 
 .edge-label-active {
   fill: var(--dt-edge-active, #3b82f6);
+}
+
+.decision-tree-widget {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid var(--dt-widget-border, #e2e8f0);
+  font-family: system-ui, -apple-system, sans-serif;
 }
 </style>

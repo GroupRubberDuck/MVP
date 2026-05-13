@@ -1,4 +1,4 @@
-import { DecisionNode, LeafNode } from './Node.js';
+import { DecisionNode, LeafNode } from '@/widgets/requirement-evaluation/models/Node.js';
 
 /**
  * Rappresentazione piatta dell'albero per lookup rapido.
