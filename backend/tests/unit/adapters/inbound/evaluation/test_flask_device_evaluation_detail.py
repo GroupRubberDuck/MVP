@@ -62,7 +62,7 @@ class TestFlaskDeviceEvaluationDetailController:
 
         mock_use_case.get_device_evaluation_detail.return_value = mock_device_detail
 
-        response = client.get("/sessions/s1/devices/d1")
+        response = client.get("/dashboard/sessions/s1/devices/d1")
 
         assert response.status_code == 200
         
@@ -93,7 +93,7 @@ class TestFlaskDeviceEvaluationDetailController:
         
         mock_command_class.side_effect = create_mock_validation_error()
 
-        response = client.get("/sessions/s1/devices/d1")
+        response = client.get("/dashboard/sessions/s1/devices/d1")
 
         assert response.status_code == 400
         mock_render_template.assert_called_once()
@@ -106,7 +106,7 @@ class TestFlaskDeviceEvaluationDetailController:
         
         mock_use_case.get_device_evaluation_detail.side_effect = GetEvaluationDetailFailure("Dispositivo d1 non trovato")
 
-        response = client.get("/sessions/s1/devices/d1")
+        response = client.get("/dashboard/sessions/s1/devices/d1")
 
         assert response.status_code == 404
         mock_render_template.assert_called_once()

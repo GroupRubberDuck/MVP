@@ -1,6 +1,5 @@
-from flask import Blueprint, request, jsonify, render_template
-from flask.typing import ResponseReturnValue
-from pydantic import ValidationError,BaseModel
+from flask import Blueprint, render_template
+from pydantic import BaseModel
 
 from adapters.inbound.flask_controller_interface import FlaskController
 

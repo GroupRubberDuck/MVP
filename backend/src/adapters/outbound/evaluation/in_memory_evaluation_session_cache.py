@@ -5,7 +5,7 @@ from core.domain.evaluation_standard.compliance_standard import ComplianceStanda
 from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
 from core.ports.outbound.evaluation.evaluation_session.save_evaluation_session_port import SaveEvaluationSessionPort
 from core.ports.outbound.evaluation.evaluation_session.create_evaluation_session_port import CreateEvaluationSessionPort
-from core.ports.outbound.evaluation.evaluation_session_exists_port import EvaluationSessionExistsPort
+from core.ports.outbound.evaluation.evaluation_session_exists_port import EvaluationSessionExistPort
 from core.ports.outbound.evaluation.evaluation_session.close_evaluation_session_port import CloseEvaluationSessionPort
 from core.domain.session.evaluation_session import EvaluationSession
 
@@ -19,7 +19,7 @@ class InMemoryEvaluationSessionCache(
     GetEvaluationSessionPort,
     SaveEvaluationSessionPort,
     CreateEvaluationSessionPort,
-    EvaluationSessionExistsPort,
+    EvaluationSessionExistPort,
     CloseEvaluationSessionPort,
 ):
     def __init__(self) -> None:
