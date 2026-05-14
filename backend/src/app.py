@@ -74,6 +74,7 @@ from core.services.asset.get_requirement_evaluation_detail_service import GetReq
 from core.services.evaluation.evaluation_session.close_evaluation_session_service import CloseEvaluationSessionService
 from core.services.evaluation.evaluation_session.commit_evaluation_session_service import CommitEvaluationSessionService
 from core.services.evaluation.evaluation_session.open_evaluation_session_service import OpenEvaluationSessionService
+from core.services.evaluation.get_active_session_service import GetActiveSessionService
 from core.services.evaluation.evaluation_session.session_coordinator import SessionCoordinator,SessionHandler
 
 
@@ -201,6 +202,9 @@ def create_app() -> Flask:
         get_evaluation_session_port=session_cache,
         evaluation_engine=EvaluationEngine()
     )
+    get_active_session_service=GetActiveSessionService(
+        get_active_session_port=session_cache
+    )
 
     close_evaluation_session_service=CloseEvaluationSessionService(
         delete_session_port=session_cache
@@ -290,7 +294,8 @@ def create_app() -> Flask:
     evaluation_session_controller=EvaluationSessionController(
         open_use_case=open_evaluation_session_service,
         close_use_case=close_evaluation_session_service,
-        commit_use_case=commit_evaluation_session_service
+        commit_use_case=commit_evaluation_session_service,
+        get_active_session_use_case=get_active_session_service
     )
 
     write_asset_controller=FlaskWriteAssetController(

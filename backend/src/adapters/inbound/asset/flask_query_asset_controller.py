@@ -1,6 +1,6 @@
-from flask import Blueprint, request, jsonify, render_template
+from flask import Blueprint , render_template
 from flask.typing import ResponseReturnValue
-from pydantic import ValidationError,BaseModel
+from pydantic import BaseModel
 
 from adapters.inbound.flask_controller_interface import FlaskController
 
@@ -24,7 +24,7 @@ class FlaskQueryAssetController(FlaskController):
     def register_routes(self, blueprint: Blueprint) -> None:
 
         @blueprint.route("/sessions/<session_id>/devices/<device_id>/assets", methods=["GET"])
-        def create_asset_page(session_id: str, device_id: str): 
+        def create_asset_page(session_id: str, device_id: str)-> ResponseReturnValue: 
             return render_template(
                 "asset/create_asset.html",
                 session_id=session_id,

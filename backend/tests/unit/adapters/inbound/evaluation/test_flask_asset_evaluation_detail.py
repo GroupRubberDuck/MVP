@@ -15,7 +15,7 @@ from adapters.inbound.evaluation.evaluation_detail.flask_asset_evaluation_detail
 
 def create_mock_validation_error() -> ValidationError:
     """Crea un finto ValidationError di Pydantic per testare il ramo 400."""
-    return ValidationError.from_exception_data("GetAssetDetailCommand", line_errors=[])
+    return ValidationError.from_exception_data("GetAssetEvaluationDetailCommand", line_errors=[])
 
 @pytest.fixture
 def mock_use_case():
@@ -70,7 +70,7 @@ class TestFlaskAssetEvaluationDetailController:
 
         mock_render_template.assert_called_once()
         args, kwargs = mock_render_template.call_args
-        assert args[0] == "layouts/asset_detail.html"
+        assert args[0] == "asset/asset_evaluation_detail.html"
         
         dto_passato = kwargs["asset"]
         assert dto_passato["name"] == "Server Database"
@@ -79,7 +79,7 @@ class TestFlaskAssetEvaluationDetailController:
         assert dto_passato["requirements"][0]["id"] == "req-123"
 
     @patch("adapters.inbound.evaluation.evaluation_detail.flask_asset_evaluation_detail_controller.render_template")
-    @patch("adapters.inbound.evaluation.evaluation_detail.flask_asset_evaluation_detail_controller.GetAssetDetailCommand")
+    @patch("adapters.inbound.evaluation.evaluation_detail.flask_asset_evaluation_detail_controller.GetAssetEvaluationDetailCommand")
     def test_ritorna_400_su_errore_di_validazione(self, mock_command_class, mock_render_template, app_and_client):
         client, _ = app_and_client
         mock_render_template.return_value = "Mocked 400 HTML"

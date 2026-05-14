@@ -28,7 +28,7 @@ def app_and_client(mock_use_case):
     app = Flask(__name__)
     blueprint = Blueprint("test_bp", __name__)
     
-    controller = FlaskRequirementEvaluationDetail(mock_use_case)
+    controller = FlaskRequirementEvaluationDetailController(mock_use_case)
     controller.register_routes(blueprint)
     
     app.register_blueprint(blueprint)

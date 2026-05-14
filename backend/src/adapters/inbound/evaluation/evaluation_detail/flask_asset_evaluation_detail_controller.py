@@ -2,8 +2,8 @@ from adapters.inbound.flask_controller_interface import FlaskController
 
 
 from core.ports.inbound.asset.get_asset_evaluation_detail_use_case import (
-    GetAssetDetailCommand,
-    GetAssetDetailUseCase,
+    GetAssetEvaluationDetailCommand,
+    GetAssetEvaluationDetailUseCase,
 )
 
 from core.domain.evaluation_engine.evaluation_detail import (
@@ -38,7 +38,7 @@ class AssetEvaluationDTO(BaseModel):
 
 
 class FlaskAssetEvaluationDetailController(FlaskController):
-    def __init__(self, get_asset_ev_detail_use_case: GetAssetDetailUseCase) -> None:
+    def __init__(self, get_asset_ev_detail_use_case: GetAssetEvaluationDetailUseCase) -> None:
         self._get_asset_ev_detail_use_case = get_asset_ev_detail_use_case
 
     def _make_dto(self, detail: AssetEvaluationDetail) -> AssetEvaluationDTO:
@@ -65,7 +65,7 @@ class FlaskAssetEvaluationDetailController(FlaskController):
             session_id: str, device_id: str, asset_id: str
         ) -> ResponseReturnValue:
             try:
-                command = GetAssetDetailCommand(
+                command = GetAssetEvaluationDetailCommand(
                     asset_id=asset_id, device_id=device_id, session_id=session_id
                 )
             except ValidationError as e:
