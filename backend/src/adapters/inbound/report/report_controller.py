@@ -41,5 +41,6 @@ class FlaskExportReportController(FlaskController):
             return send_file(
                 exported.content,
                 mimetype=exported.media_type,
+                as_attachment=True,
                 download_name=exported.filename,
             )

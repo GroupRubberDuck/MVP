@@ -4,8 +4,8 @@ from core.ports.inbound.device.import_device_use_case import (
 )
 from core.ports.inbound.device.exceptions import ImportDeviceFailure, DeviceRegistrationFailure
 from core.ports.outbound.device.exceptions import DuplicateDeviceError, DeviceImportError
-from core.ports.outbound.device.file_device_importer_factory_port import FileDeviceImporterFactoryPort
-from core.ports.outbound.device.register_device_port import RegisterDevicePort
+from core.ports.outbound.device.importer.file_device_importer_factory_port import FileDeviceImporterFactoryPort
+from core.ports.outbound.device.repository.register_device_port import RegisterDevicePort
 
 
 class ImportDeviceService(ImportDeviceUseCase):

@@ -1,6 +1,6 @@
 from core.ports.inbound.device.export_device_use_case import ExportDeviceUseCase
-from core.ports.outbound.device.find_device_port import FindDevicePort
-from core.ports.outbound.device.file_device_exporter_factory_port import FileDeviceExporterFactoryPort
+from core.ports.outbound.device.repository.find_device_port import FindDevicePort
+from core.ports.outbound.device.exporter.file_device_exporter_factory_port import FileDeviceExporterFactoryPort
 from core.ports.inbound.device.export_device_use_case import ExportDeviceCommand, ExportedFile
 from core.ports.outbound.device.exceptions import DeviceNotFoundError , DeviceExportError
 from core.ports.inbound.device.exceptions import DeviceNotFoundFailure , ExportDeviceFailure

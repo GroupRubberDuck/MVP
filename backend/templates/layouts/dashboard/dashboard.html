@@ -1,0 +1,103 @@
+{# layouts/dashboard.html #}
+{% extends "layouts/base.html" %}
+
+{% block title %}Valutazione - {{ device_detail.device_name }}{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-header__text">
+      <h1>Valutazione del dispositivo: {{ device_detail.device_name }}</h1>
+      <p>Sistema Operativo: {{ device_detail.device_os }} | Esito Globale: <strong>{{ device_detail.device_evaluation_result }}</strong></p>
+    </div>
+    
+    <div class="page-header__actions">
+      <button class="btn btn--outline" onclick="window.dashboardAction.save()">
+        Salva Sessione
+      </button>
+      
+      <button class="btn btn--danger inline-form" onclick="window.dashboardAction.close()">
+        Chiudi Sessione
+      </button>
+
+      <button class="btn btn--primary" onclick="window.dashboardAction.generateReport()">
+        Genera Report PDF
+      </button>
+    </div>
+  </div>
+
+  <div class="device-body">
+    <div class="card shadow-sm">
+      <div class="card__header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 class="card__title">Gestione Asset</h2>
+        
+        <a class="btn btn--success" 
+        href="{{ url_for('evaluation.create_asset_page', session_id=session_id, device_id=device_id) }}"
+       onclick="window.dashboardAction.allowExit()">
+      + Aggiungi Asset
+    </a>
+      </div>
+
+      <p class="section-label">Lista Asset Analizzati</p>
+
+      {% if device_detail.asset_list|length > 0 %}
+        <table class="asset-table">
+          <thead>
+            <tr>
+              <th>Nome Asset</th>
+              <th>Tipologia</th>
+              <th>Stato Valutazione</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for asset in device_detail.asset_list %}
+              <tr>
+                <td><strong>{{ asset.asset_name }}</strong></td>
+                <td>{{ asset.asset_type }}</td>
+                <td>
+                  <span class="badge {{ 'badge--pass' if asset.asset_evaluation == 'Conforme' else 'badge--fail' }}">
+                    {{ asset.asset_evaluation }}
+                  </span>
+                </td>
+                <td style="display: flex; gap: 8px;">
+                  <a class="btn btn--outline btn--sm" href="{{
+                    url_for(
+                      'evaluation.get_asset_evaluation_detail',
+                      session_id=session_id,
+                      device_id=device_id,
+                      asset_id=asset.asset_id
+                    )
+                  }}">
+                    Valuta
+                  </a>
+                  
+                  <a class="btn btn--primary btn--sm" 
+                  href="{{ url_for('evaluation.edit_asset_page', session_id=session_id, device_id=device_id, asset_id=asset.asset_id) }}"
+                  onclick="window.dashboardAction.allowExit()">
+                  Modifica
+                </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="empty-state-small" style="margin-top: 20px;">
+          <p class="info-text">Nessun asset presente. Clicca su "+ Aggiungi Asset" per iniziare.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div id="dashboard-logic-app"></div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ url_for('static', filename='vue/dashboard-logic.js') }}"></script>
+{% endblock %}

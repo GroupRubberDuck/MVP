@@ -5,6 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
+coverage.svg
 
 # Distribution / packaging
 .Python
@@ -234,3 +235,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Pytest & Coverage
+htmlcov/
+.coverage*
+test-results.xml
+test-report.json
+test_report.html

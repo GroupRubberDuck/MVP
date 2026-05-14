@@ -13,7 +13,7 @@ from core.domain.evaluation_engine.evaluation_result import (
 from core.domain.evaluation_standard.compliance_standard import ComplianceStandard
 from core.domain.evaluation_standard.requirement import Requirement
 from core.domain.shared.exceptions import DomainError
-from core.domain.ExportedFile import ExportedFile
+from core.domain.shared.ExportedFile import ExportedFile
 
 from core.domain.evaluation_object.device import Device
 from core.domain.utilities.evaluation_detail_builder import EvaluationDetailBuilder

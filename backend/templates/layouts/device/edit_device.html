@@ -1,0 +1,36 @@
+{# layouts/device/create_device.html #} {% extends "layouts/base.html" %} {%
+block title %} {% if device %}Modifica {{ device.name }}{% else %}Nuovo
+Dispositivo{% endif %} {% endblock %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='create-device.css') }}"
+/>
+{% endblock %} {% block content %} 
+<div class="create-device-container">
+  <div class="page-header">
+    <div class="page-header__text">
+      <h1>Modifica Dispositivo</h1>
+      <p>Aggiorna le informazioni del dispositivo nel sistema.</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <h2>Modifica Dispositivo</h2>
+    </div>
+<div
+  id="device-edit-widget"
+  data-submit-url="{{ url_for('devices.update_device', device_id=device.device_id) }}"
+  data-cancel-url="{{ url_for('devices.get_device_detail', device_id=device.device_id) }}"
+  data-default-standard-id="{{ device.standard_id }}"
+  data-initial-name="{{ device.name }}"
+  data-initial-os="{{ device.os }}"
+  data-initial-description="{{ device.description }}"
+></div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script
+  type="module"
+  src="{{ url_for('static', filename='vue/edit-device.js') }}"
+></script>
+{% endblock %}

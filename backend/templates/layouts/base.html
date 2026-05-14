@@ -4,14 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
-    {% block head %}{% endblock %}
+    <title>{% block title %}{{ title }}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block head %}{% endblock %}
 </head>
 
 <body>
     <main>
-        <h1 class="title">{{ page_title }}</h1>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <ol class="breadcrumb__list">
+                {% block breadcrumbs %}{% endblock %}
+            </ol>
+        </nav>
+
+        <h1 class="title">{% block page_title %}{{ page_title }}{% endblock %}</h1>
+        
         {% block content %}{% endblock %}
     </main>
 

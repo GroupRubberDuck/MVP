@@ -4,6 +4,7 @@ from pymongo import MongoClient
 from pymongo.database import Database
 from pymongo.errors import ConnectionFailure, ServerSelectionTimeoutError
 from .exceptions import DatabaseConnectionError
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +33,7 @@ def connect(
     db_name = db_name or os.environ.get("DB_NAME", "mvp_db")
 
     uri = f"mongodb://{user}:{password}@{host}:{port}/"
-    client = MongoClient(
+    client: MongoClient[dict[str, Any]] = MongoClient(
         uri,
         serverSelectionTimeoutMS=timeout_ms,
         connectTimeoutMS=timeout_ms,

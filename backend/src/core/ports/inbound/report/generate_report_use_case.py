@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from enum import StrEnum
 from pydantic import BaseModel
-from core.domain.ExportedFile import ExportedFile
+from core.domain.shared.ExportedFile import ExportedFile
 
 class ReportFormat(StrEnum):
     PDF = "pdf"

@@ -1,0 +1,102 @@
+// Seleziona il database che vuoi usare (verrà creato in automatico)
+db = db.getSiblingDB('mvp_db');
+
+// Inserisci i dati di partenza in una collection (es. 'utenti' o 'configurazioni')
+db.compliance_standards.insertOne(
+        {
+  "_id": "STD-EN303645------------",
+  "name": "ETSI EN 303 645",
+  "version_number": "2.1.1",
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "name": "No universal default passwords",
+      "description": {
+        "norm_description": "Where passwords are used and in any state other than the factory default, all consumer IoT device passwords shall be unique per device or defined by the user.",
+        "target_description": "All device interfaces requiring authentication"
+      },
+      "dependency_ids": [],
+      "decision_tree": {
+        "root_node_id": "N1",
+        "nodes": [
+          {
+            "node_id": "N1",
+            "node_type": "decision_node",
+            "question": "Is the public accessibility of the equipment's intended equipment functionality?",
+            "child_yes": "N2",
+            "child_no": "L1"
+          },
+          {
+            "node_id": "N2",
+            "node_type": "decision_node",
+            "question": "Do the physical or logical measures in the targeted operational environment limit the accessibility to authorized entities?",
+            "child_yes": "L1",
+            "child_no": "N3"
+          },
+          {
+            "node_id": "N3",
+            "node_type": "decision_node",
+            "question": "Do legal implications not allow access control mechanisms?",
+            "child_yes": "L2",
+            "child_no": "N4"
+          },
+          {
+            "node_id": "N4",
+            "node_type": "decision_node",
+            "question": "Are there access control mechanisms that manage entities' access to the security asset and network asset?",
+            "child_yes": "L1",
+            "child_no": "L3"
+          },
+          {
+            "node_id": "L1",
+            "node_type": "leaf_node",
+            "verdict": "pass"
+          },
+          {
+            "node_id": "L2",
+            "node_type": "leaf_node",
+            "verdict": "not_applicable"
+          },
+          {
+            "node_id": "L3",
+            "node_type": "leaf_node",
+            "verdict": "fail"
+          }
+        ]
+      }
+    },
+    {
+      "id": "REQ-002",
+      "name": "Implement a means to manage reports of vulnerabilities",
+      "description": {
+        "norm_description": "For each access control mechanism that is required per REQ-001, the access control mechanism shall ensure that only authorized entities have access to the protected security asset or network asset.",
+        "target_description": "Each access control mechanism identified in REQ-001"
+      },
+      "dependency_ids": ["REQ-001"],
+      "decision_tree": {
+        "root_node_id": "N1",
+        "nodes": [
+          {
+            "node_id": "N1",
+            "node_type": "decision_node",
+            "question": "Do the access control mechanisms ensure that only authorized entities have access to the protected security asset or network asset?",
+            "child_yes": "L1",
+            "child_no": "L2"
+          },
+          {
+            "node_id": "L1",
+            "node_type": "leaf_node",
+            "verdict": "pass"
+          },
+          {
+            "node_id": "L2",
+            "node_type": "leaf_node",
+            "verdict": "fail"
+          }
+        ]
+      }
+    }
+  ]
+}
+
+)

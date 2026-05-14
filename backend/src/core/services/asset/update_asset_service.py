@@ -3,7 +3,7 @@ from core.ports.inbound.asset.update_asset_use_case import (
     UpdateAssetUseCase,
 )
 from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
-from core.ports.outbound.evaluation.save_evaluation_session_port import SaveEvaluationSessionPort
+from core.ports.outbound.evaluation.evaluation_session.save_evaluation_session_port import SaveEvaluationSessionPort
 from core.ports.inbound.asset.exceptions import UpdateAssetFailure
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionSaveError, EvaluationSessionNotFoundError
 from core.domain.evaluation_object.exceptions import AssetNotFoundError
@@ -28,11 +28,13 @@ class UpdateAssetService(UpdateAssetUseCase):
             ) from e
         
         try: 
-            session.device.get_asset(update_command.asset_id).update_anagraphic(
+            asset=session.device.get_asset(update_command.asset_id)
+            asset=asset.update_anagraphic(
                 name=update_command.name,
                 asset_type=update_command.asset_type,
                 description=update_command.description,
             )
+            session.device.update_asset(asset=asset)
         except AssetNotFoundError as e:
             raise UpdateAssetFailure(
                 f"Impossibile aggiornare: Asset '{update_command.asset_id}' non trovato."
@@ -40,6 +42,8 @@ class UpdateAssetService(UpdateAssetUseCase):
         except ValueError as e:
             raise UpdateAssetFailure(f"Dati non validi per l'asset: {str(e)}") from e
         
+
+
         try:
             self._save_evaluation_session_port.save_evaluation_session(session)
         except EvaluationSessionSaveError as e:

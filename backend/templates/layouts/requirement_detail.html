@@ -1,0 +1,72 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='vue/requirement-evaluation-widget.css') }}">
+
+{% endblock %}
+
+{% block page_title %}<span>{{requirement.id }}</span> - <span>{{requirement.name}}</span>{% endblock %}
+
+{% block content %}
+<h1><span>{{requirement.id }}</span> - <span>{{requirement.name}}</span></h1>
+<div>
+        <dl>
+                <dt>Descrizione</dt>
+                <dd>{{requirement.norm_description}}</dd>
+                <dt>Target</dt>
+                <dd>{{requirement.target_description}}</dd>
+                <dt>Lista dipendenze</dt>
+{% for dep in requirement.dependencies %}
+  <dd>
+    <a href="{{ url_for('evaluation.get_requirement_evaluation_detail',
+      requirement_id=dep.id,
+      session_id=session_id,
+      device_id=device_id,
+      asset_id=asset_id) }}">
+      {{ dep.id }} ({{ dep.evaluation }})
+    </a>
+  </dd>
+{% else %}
+  <dd>Nessuna dipendenza</dd>
+{% endfor %}            
+        </dl>
+
+</div>
+
+<div
+  id="requirement-evaluation-widget"
+  data-tree-data='{{ requirement.decision_tree | tojson }}'
+  data-saved-answers='{{ requirement.answer | tojson }}'
+  data-evaluation-state="{{ requirement.evaluation }}"
+  data-justification="{{ requirement.justification or '' }}"
+  data-answer-url="{{ url_for('evaluation.insert_decision_node_evaluation',
+    session_id=session_id, device_id=device_id,
+    asset_id=asset_id, req_id=requirement_id) }}"
+  data-justification-url="{{ url_for('evaluation.insert_justification',
+    session_id=session_id, asset_id=asset_id,
+    requirement_id=requirement_id) }}"
+
+  data-detail-url="{{ url_for('evaluation.get_requirement_evaluation_json',
+    session_id=session_id, device_id=device_id,
+    asset_id=asset_id, requirement_id=requirement_id) }}"
+
+  data-state-url="{{ url_for('evaluation.get_requirement_evaluation_state',
+  session_id=session_id, device_id=device_id,
+  asset_id=asset_id, requirement_id=requirement_id) }}"
+
+  data-requirements-url="{{ url_for('evaluation.get_asset_evaluation_detail',
+  session_id=session_id, device_id=device_id,
+  asset_id=asset_id) }}"
+></div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script
+  type="module"
+  src="{{ url_for('static', filename='vue/requirement-evaluation-widget.js') }}"
+></script>
+{% endblock %}
