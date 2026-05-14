@@ -1,4 +1,3 @@
-import io
 from flask import Blueprint, request, send_file, jsonify
 from flask.typing import ResponseReturnValue
 
