@@ -55,7 +55,7 @@ class PdfReportGenerator(ReportGeneratorPort):
 
     def _print_asset_evaluations(self, pdf: FPDF, detail: DeviceEvaluationDetail) -> None:
         for asset in detail.asset_details:
-            
+            # Controllo salto pagina per gli header degli asset
             if pdf.get_y() > 250:
                 pdf.add_page()
             self._print_asset_section(pdf, asset)
@@ -81,26 +81,35 @@ class PdfReportGenerator(ReportGeneratorPort):
         pdf.ln(6)
 
     def _print_requirement_row(self, pdf: FPDF, req: RequirementEvaluationDetail) -> None:
+        # 1. CONTROLLO ANTI-SBALLAMENTO PAGINA
+        # Se siamo vicini al fondo della pagina (Y > 260), forziamo una nuova pagina
+        # per non "spezzare" la riga tra titolo e badge
+        if pdf.get_y() > 260:
+            pdf.add_page()
+
         r, g, b = _STATE_COLORS.get(req.state, (0, 0, 0))
         
-        # Salviamo la Y iniziale per gestire multi_cell e badge sulla stessa riga
-        current_y = pdf.get_y()
+        # Salviamo la Y di partenza della riga
+        start_y = pdf.get_y()
 
-        # 1. Stampiamo lo STATO (Badge) allineato a destra
-        pdf.set_font("Helvetica", "B", 9)
-        pdf.set_text_color(r, g, b)
-        # Stampiamo il badge a destra 
-        pdf.cell(0, 7, req.state.upper(), align="R", new_x="LMARGIN", new_y="TOP")
-        
-        # 2. Torniamo alla Y iniziale e stampiamo il TESTO a sinistra
-        pdf.set_y(current_y)
+        # 2. Stampiamo PRIMA il testo a sinistra (multi_cell) per capire quanto spazio verticale occupa
         pdf.set_text_color(0, 0, 0)
         pdf.set_font("Helvetica", "B", 10)
-        
-        # Usiamo multi_cell con larghezza 155mm per lasciare il "corridoio" allo stato sulla destra
         pdf.multi_cell(155, 7, f"  {req.requirement_id} - {req.name}", new_x="LMARGIN", new_y="NEXT")
+        
+        # Salviamo la Y finale del testo (utile se va a capo)
+        end_y = pdf.get_y()
 
-        # 3. Giustificazione (se presente)
+        # 3. Torniamo in alto e stampiamo il BADGE a destra
+        pdf.set_y(start_y)
+        pdf.set_font("Helvetica", "B", 9)
+        pdf.set_text_color(r, g, b)
+        pdf.cell(0, 7, req.state.name.upper(), align="R", new_x="LMARGIN", new_y="NEXT")
+        
+        # 4. Riportiamo il cursore alla Y più in basso raggiunta per non sovrascrivere
+        pdf.set_y(max(end_y, pdf.get_y()))
+
+        # 5. Giustificazione (se presente)
         if req.justification and req.justification.strip():
             pdf.set_font("Helvetica", "I", 9)
             pdf.set_text_color(100, 100, 100)
@@ -108,7 +117,9 @@ class PdfReportGenerator(ReportGeneratorPort):
             pdf.set_x(pdf.get_x() + 5)
             pdf.multi_cell(150, 5, f"Nota: {req.justification}", new_x="LMARGIN", new_y="NEXT")
             pdf.set_text_color(0, 0, 0)
-            pdf.ln(1)
+            
+        # Un piccolo spazio prima del prossimo requisito
+        pdf.ln(2)
 
     def _format_footer(self, pdf: FPDF) -> None:
         pdf.set_y(-20)
@@ -124,5 +135,7 @@ class PdfReportGenerator(ReportGeneratorPort):
         
         pdf.set_font("Helvetica", "B", 10)
         pdf.set_text_color(r, g, b)
-        pdf.cell(0, 8, state.upper(), new_x="LMARGIN", new_y="NEXT")
+        # Assicurati di stampare la stringa corrispondente all'enum (usando .name o cast stringa a seconda del tuo Enum)
+        state_text = state.name if hasattr(state, 'name') else str(state)
+        pdf.cell(0, 8, state_text.upper(), new_x="LMARGIN", new_y="NEXT")
         pdf.set_text_color(0, 0, 0)

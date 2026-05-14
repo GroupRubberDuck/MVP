@@ -232,7 +232,7 @@
   letter-spacing: 0.07em;
   color: #696767;
   text-transform: uppercase;
-  margin: 20px 0 8px;
+  margin: 20px  8px;
 }
 
 .section-label:first-child { margin-top: 0; }
