@@ -42,6 +42,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  requirementsUrl: {
+    type: String,
+    default: '',
+  },
 })
 
 const store = useDecisionTreeStore()
@@ -54,8 +58,10 @@ onMounted(() => {
     savedAnswers: props.savedAnswers,
     evaluationState: props.evaluationState,
     justification: props.justification,
+    requirementsUrl: props.requirementsUrl,
     apiClient,
   })
+  
 })
 </script>
 <template>

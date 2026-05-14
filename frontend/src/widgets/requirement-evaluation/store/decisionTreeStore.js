@@ -19,7 +19,7 @@ export const useDecisionTreeStore = defineStore('decisionTree', () => {
   const evaluationState = ref(null)
   const justification = ref('')
   const justificationStatus = ref('idle')
-
+  const requirementsUrl = ref('')
 
   function refreshPath() {
     if (!evaluationEngine) return
@@ -33,7 +33,14 @@ export const useDecisionTreeStore = defineStore('decisionTree', () => {
     layoutResult.value = engine.calculateLayout(tree.getAllNodes(), tree.getRootId())
   }
 
-  function init({ treeData, savedAnswers = {}, evaluationState: initialState = null, justification: initialJustification = '', apiClient: client = null }) {
+  function init({ 
+    treeData, 
+    savedAnswers = {}, 
+    evaluationState: initialState = null, 
+    justification: initialJustification = '',
+    apiClient: client = null,
+    requirementsUrl: url = ''
+    }) {
     const tree = new TreeStructure(treeData)
     evaluationEngine = new EvaluationEngine(tree)
 
@@ -41,7 +48,7 @@ export const useDecisionTreeStore = defineStore('decisionTree', () => {
     evaluationState.value = initialState
     justification.value = initialJustification
     justificationStatus.value = 'idle'
-
+    requirementsUrl.value = url
     apiClient = client
 
     calculateLayout()
@@ -56,30 +63,36 @@ export const useDecisionTreeStore = defineStore('decisionTree', () => {
     }
   }
 
-  async function setAnswer(nodeId, answer) {
-    const newAnswers = new Map(answers.value)
-    newAnswers.set(nodeId, answer)
-    answers.value = newAnswers
-    refreshPath()
+async function setAnswer(nodeId, answer) {
+  // 1. Aggiungi la nuova risposta
+  const newAnswers = new Map(answers.value)
+  newAnswers.set(nodeId, answer)
+  answers.value = newAnswers
 
-    const pathSet = new Set(activePath.value)
-    for (const key of answers.value.keys()) {
-      if (!pathSet.has(key)) {
-        answers.value.delete(key)
-      }
-    }
-    refreshPath()
+  // 2. Ricalcola il path con la nuova risposta
+  refreshPath()
 
-    if (apiClient) {
-      try {
-        await apiClient.saveAnswer({ nodeId, answer })
-        const { evaluation } = await apiClient.fetchState()
-        evaluationState.value = evaluation
-      } catch (err) {
-        console.error('Failed to save answer:', err)
-      }
+
+  // questo è commentato perché il backend non pulisce
+  // 3. Pulisci le risposte fuori dal NUOVO path
+  // const pathSet = new Set(activePath.value)
+  // for (const key of answers.value.keys()) {
+  //   if (!pathSet.has(key)) {
+  //     answers.value.delete(key)
+  //   }
+  // }
+
+  // 4. Persisti e aggiorna lo stato
+  if (apiClient) {
+    try {
+      await apiClient.saveAnswer({ nodeId, answer })
+      const { evaluation } = await apiClient.fetchState()
+      evaluationState.value = evaluation
+    } catch (err) {
+      console.error('Failed to save answer:', err)
     }
   }
+}
 
   function selectNode(nodeId) {
     selectedNodeId.value = nodeId
@@ -124,6 +137,7 @@ export const useDecisionTreeStore = defineStore('decisionTree', () => {
     evaluationState,
     justification,
     justificationStatus,
+    requirementsUrl,
     init,
     setAnswer,
     selectNode,
