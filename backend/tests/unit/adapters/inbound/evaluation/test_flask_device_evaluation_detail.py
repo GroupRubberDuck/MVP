@@ -74,7 +74,7 @@ class TestFlaskDeviceEvaluationDetailController:
         # Verifichiamo il render_template e il mapping del DTO
         mock_render_template.assert_called_once()
         args, kwargs = mock_render_template.call_args
-        assert args[0] == "layouts/device_eval_detail.html"
+        assert args[0] == "layouts/dashboard/dashboard.html"
         
         dto_passato = kwargs["device_detail"]
         

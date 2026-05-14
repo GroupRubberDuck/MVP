@@ -66,7 +66,7 @@ function onSuccess() {
 <template>
 
   <div>
-    <button v-if="!isModalOpen" @click="openModal">
+    <button class="btn-red" v-if="!isModalOpen" @click="openModal">
       Elimina
     </button>
 

@@ -159,13 +159,17 @@ const submitForm = async () => {
 
     alert(isEditing.value ? "Asset aggiornato correttamente!" : "Nuovo asset creato!");
     
-    // Gestione blocco navigazione dashboard
+    
     if (window.dashboardAction && window.dashboardAction.allowExit) {
         window.dashboardAction.allowExit();
     }
     
-    // Reindirizzamento alla dashboard del dispositivo
-    window.location.href = `/dashboard/sessions/${sessionId.value}/devices/${deviceId.value}`;
+    
+   if (isEditing.value) {
+      window.location.href = `/sessions/${sessionId.value}/devices/${deviceId.value}/assets/${assetId.value}`;
+    } else {
+      window.location.href = `/dashboard/sessions/${sessionId.value}/devices/${deviceId.value}`;
+    }
 
   } catch (error) {
     alert("Attenzione: " + error.message);
