@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 from flask import Flask, Blueprint
 
 from adapters.inbound.device.flask_write_device_controller import FlaskWriteDeviceController
@@ -8,7 +8,6 @@ from core.ports.inbound.device.exceptions import (
     UpdateDeviceFailure,
     DeleteDeviceFailure,
 )
-
 
 @pytest.fixture
 def mock_create_use_case():
@@ -37,6 +36,10 @@ def client(mock_create_use_case, mock_update_use_case, mock_delete_use_case):
     )
     bp = Blueprint("devices", __name__)
     controller.register_routes(bp)
+    
+    @bp.route("/devices/<device_id>", endpoint="get_device_detail", methods=["GET"])
+    def dummy_get_device_detail(device_id):
+        return "Dummy route"
     app.register_blueprint(bp)
 
     return app.test_client()
@@ -46,9 +49,10 @@ def client(mock_create_use_case, mock_update_use_case, mock_delete_use_case):
 
 
 class TestCreateDevice:
-
-    def test_returns_201_on_success(self, client, mock_create_use_case):
+    @patch("adapters.inbound.device.flask_write_device_controller.url_for")
+    def test_returns_201_on_success(self,mock_url_for, client, mock_create_use_case):
         mock_create_use_case.create_device.return_value = "D-123"
+        mock_url_for.return_value = "/devices/D-123"
         response = client.post(
             "/devices",
             json={
@@ -109,7 +113,7 @@ class TestCreateDevice:
 
 class TestUpdateDevice:
 
-    def test_returns_204_on_success(self, client, mock_update_use_case):
+    def test_returns_200_on_success(self, client, mock_update_use_case):
         response = client.put(
             "/devices/D-1",
             json={
@@ -118,7 +122,7 @@ class TestUpdateDevice:
                 "device_description": "Updated desc",
             },
         )
-        assert response.status_code == 204
+        assert response.status_code == 200
 
     def test_calls_use_case_with_correct_data(self, client, mock_update_use_case):
         client.put(

@@ -70,7 +70,7 @@ class TestFlaskAssetEvaluationDetailController:
 
         mock_render_template.assert_called_once()
         args, kwargs = mock_render_template.call_args
-        assert args[0] == "layouts/asset_detail.html"
+        assert args[0] == "asset/asset_evaluation_detail.html"
         
         dto_passato = kwargs["asset"]
         assert dto_passato["name"] == "Server Database"
