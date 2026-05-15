@@ -2,10 +2,23 @@ from core.ports.inbound.device.import_device_use_case import (
     ImportDeviceCommand,
     ImportDeviceUseCase,
 )
-from core.ports.inbound.device.exceptions import ImportDeviceFailure, DeviceRegistrationFailure
-from core.ports.outbound.device.exceptions import DuplicateDeviceError, DeviceImportError
-from core.ports.outbound.device.importer.file_device_importer_factory_port import FileDeviceImporterFactoryPort
-from core.ports.outbound.device.repository.register_device_port import RegisterDevicePort
+from core.ports.inbound.device.exceptions import (
+    ImportDeviceFailure,
+    DeviceRegistrationFailure,
+)
+from core.ports.outbound.device.exceptions import (
+    DuplicateDeviceError,
+    DeviceImportError,
+)
+from core.ports.outbound.device.importer.file_device_importer_port import (
+    FileDeviceImporterPort,
+)
+from core.ports.outbound.device.importer.file_device_importer_factory_port import (
+    FileDeviceImporterFactoryPort,
+)
+from core.ports.outbound.device.repository.register_device_port import (
+    RegisterDevicePort,
+)
 
 
 class ImportDeviceService(ImportDeviceUseCase):
@@ -18,14 +31,14 @@ class ImportDeviceService(ImportDeviceUseCase):
         self._register_device_port = register_device_port
 
     def import_device(self, command: ImportDeviceCommand) -> None:
-        importer = self._device_importer_factory.get_file_device_importer(
-            command.extension
+        importer: FileDeviceImporterPort = (
+            self._device_importer_factory.get_file_device_importer(command.extension)
         )
 
         try:
             device = importer.parse_device_file(command.device_file_content)
         except DeviceImportError as e:
-                raise ImportDeviceFailure("Errore durante l'importazione del file.") from e
+            raise ImportDeviceFailure("Errore durante l'importazione del file.") from e
 
         try:
             self._register_device_port.register(device)
