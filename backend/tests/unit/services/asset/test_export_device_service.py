@@ -56,21 +56,41 @@ def valid_command():
 # caso nominale
 
 def test_export_restituisce_file(service, valid_command):
+    """
+    Dato un comando di esportazione valido (Given),
+    quando il servizio esegue l'esportazione (When),
+    allora deve restituire un oggetto ExportedFile che incapsula i dati generati (Then).
+    """
     # Verifica che il service incarti il risultato in un oggetto ExportedFile
     result = service.export_device(valid_command)
     assert isinstance(result, ExportedFile)
 
 def test_export_restituisce_output_dell_exporter(service, valid_command):
+    """
+    Dato un comando di esportazione (Given),
+    quando l'exporter genera i byte del file (When),
+    allora il contenuto dell'oggetto ExportedFile restituito deve coincidere esattamente con l'output dell'exporter (Then).
+    """
     # Il contenuto del file esportato deve coincidere con quello generato dall'exporter
     result = service.export_device(valid_command)
     assert result.content == b"file_bytes"
 
 def test_export_chiama_find_by_id_con_device_id_corretto(service, valid_command, find_device_mock):
+    """
+    Dato un identificativo di dispositivo presente nel comando (Given),
+    quando il servizio avvia l'esportazione (When),
+    allora deve invocare il metodo find_by_id del repository utilizzando l'ID corretto (Then).
+    """
     # find_by_id deve essere chiamato con il device_id del command
     service.export_device(valid_command)
     find_device_mock.find_by_id.assert_called_once_with("device-1")
 
 def test_export_chiama_factory_con_extension_corretta(service, valid_command, exporter_factory_mock):
+    """
+    Dato un formato di estensione richiesto nel comando (Given),
+    quando il servizio richiede un exporter (When),
+    allora la factory deve essere invocata con l'estensione corretta per fornire il modulo di esportazione adeguato (Then).
+    """
     # La factory deve essere chiamata con l'extension del command
     service.export_device(valid_command)
     exporter_factory_mock.get_file_device_exporter.assert_called_once_with(
@@ -78,6 +98,11 @@ def test_export_chiama_factory_con_extension_corretta(service, valid_command, ex
     )
 
 def test_export_chiama_generate_device_file(service, valid_command, exporter_mock, device):
+    """
+    Dato un dispositivo recuperato dal sistema (Given),
+    quando viene eseguita l'esportazione (When),
+    allora l'exporter selezionato deve ricevere l'entità di dominio Device per generare il file finale (Then).
+    """
     # L'exporter deve ricevere l'entità di dominio Device (grazie al nostro refactoring!)
     service.export_device(valid_command)
     exporter_mock.generate_device_file.assert_called_once_with(device)
@@ -86,6 +111,11 @@ def test_export_chiama_generate_device_file(service, valid_command, exporter_moc
 # casi di errore
 
 def test_export_device_non_trovato_lancia_keyerror(exporter_factory_mock):
+    """
+    Dato un comando con un ID dispositivo non esistente nel database (Given),
+    quando il repository fallisce nel recupero (When),
+    allora il servizio deve propagare l'eccezione KeyError (Then).
+    """
     # Se il device non esiste find_by_id deve propagare KeyError
     find_device_mock = MagicMock()
     find_device_mock.find_by_id.side_effect = KeyError("Device non trovato")
@@ -101,6 +131,11 @@ def test_export_device_non_trovato_lancia_keyerror(exporter_factory_mock):
         service.export_device(command)
 
 def test_export_extension_non_supportata_lancia_valueerror(find_device_mock):
+    """
+    Dato un comando che richiede un'estensione non supportata dalla factory (Given),
+    quando viene richiesto l'exporter (When),
+    allora deve essere sollevata un'eccezione ValueError (Then).
+    """
     # Se l'extension non è supportata la factory deve propagare ValueError
     exporter_factory_mock = MagicMock()
     exporter_factory_mock.get_file_device_exporter.side_effect = ValueError("Formato non supportato")

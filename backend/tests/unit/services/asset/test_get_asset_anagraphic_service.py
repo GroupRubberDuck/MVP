@@ -43,6 +43,11 @@ def _make_mock_session(asset_id: str, anagraphic_obj: MagicMock) -> MagicMock:
 class TestGetAssetAnagraphicSuccess:
     
     def test_returns_correct_anagraphic_object(self, service, mock_session_port, command):
+        """
+        Dato un Asset esistente all'interno di una sessione attiva (Given),
+        quando viene richiesto il recupero dei suoi dati anagrafici (When),
+        allora il servizio deve restituire l'oggetto AssetAnagraphic corrispondente recuperato dal dominio (Then).
+        """
         mock_anagraphic = MagicMock(spec=AssetAnagraphic)
         mock_session_port.get_evaluation_session.return_value = _make_mock_session(
             command.asset_id, mock_anagraphic
@@ -52,6 +57,11 @@ class TestGetAssetAnagraphicSuccess:
         assert result == mock_anagraphic
 
     def test_calls_port_with_correct_session_id(self, service, mock_session_port, command):
+        """
+        Dato un comando di recupero anagrafica contenente un ID sessione (Given),
+        quando il servizio viene eseguito (When),
+        allora deve interrogare la porta di uscita della sessione utilizzando l'identificativo corretto (Then).
+        """
         mock_session_port.get_evaluation_session.return_value = _make_mock_session(
             command.asset_id, MagicMock()
         )
@@ -60,6 +70,11 @@ class TestGetAssetAnagraphicSuccess:
         mock_session_port.get_evaluation_session.assert_called_once_with("SESSION-123")
 
     def test_calls_device_with_correct_asset_id(self, service, mock_session_port, command):
+        """
+        Dato un ID asset fornito nel comando (Given),
+        quando la sessione viene recuperata con successo (When),
+        allora il servizio deve richiedere al dispositivo l'asset specifico utilizzando l'ID fornito (Then).
+        """
         mock_session = _make_mock_session(command.asset_id, MagicMock())
         mock_session_port.get_evaluation_session.return_value = mock_session
 
@@ -71,13 +86,22 @@ class TestGetAssetAnagraphicSuccess:
 class TestGetAssetAnagraphicFailures:
 
     def test_raises_failure_when_session_not_found(self, service, mock_session_port, command):
-
+        """
+        Dato un ID sessione non presente nel sistema (Given),
+        quando si tenta di recuperare l'anagrafica di un asset (When),
+        allora il servizio deve intercettare l'errore di sessione mancante e sollevare una GetAssetAnagraphicFailure (Then).
+        """
         mock_session_port.get_evaluation_session.side_effect = EvaluationSessionNotFoundError()
 
         with pytest.raises(GetAssetAnagraphicFailure, match="SESSION-123"):
             service.get_asset_anagraphic(command)
 
     def test_raises_failure_when_asset_not_found_in_device(self, service, mock_session_port, command):
+        """
+        Data una sessione valida ma un dispositivo che non contiene l'ID asset richiesto (Given),
+        quando il dominio solleva un AssetNotFoundError (When),
+        allora il servizio deve propagare il fallimento tramite l'eccezione GetAssetAnagraphicFailure riportando l'ID dell'asset (Then).
+        """
         mock_session = MagicMock()
         mock_session.device.get_asset.side_effect = AssetNotFoundError()
         mock_session_port.get_evaluation_session.return_value = mock_session

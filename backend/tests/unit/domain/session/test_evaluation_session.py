@@ -40,6 +40,11 @@ def make_session(asset: Asset) -> EvaluationSession:
 class TestInsertJustification:
  
     def test_justification_viene_salvata(self):
+        """
+        Dato un asset regolarmente inserito in una sessione di valutazione (Given),
+        quando viene impostata una giustificazione testuale per un requisito specifico (When),
+        allora il testo deve essere correttamente salvato e rintracciabile nell'evidenza dell'asset (Then).
+        """
         asset = make_asset()
         session = make_session(asset)
         testo_giustificazione = "Il dispositivo soddisfa il requisito"
@@ -53,6 +58,11 @@ class TestInsertJustification:
         assert evidence.justification == testo_giustificazione
  
     def test_justification_vuota_viene_salvata(self):
+        """
+        Dato un asset all'interno di una sessione (Given),
+        quando l'utente inserisce una giustificazione vuota (When),
+        allora l'evidenza del requisito deve registrare correttamente la stringa vuota senza sollevare errori (Then).
+        """
         asset = make_asset()
         session = make_session(asset)
  
@@ -64,6 +74,11 @@ class TestInsertJustification:
         assert evidence.justification == ""
  
     def test_justification_sovrascrive_precedente(self):
+        """
+        Data un'evidenza che contiene già una giustificazione salvata (Given),
+        quando viene impostata una nuova giustificazione per lo stesso requisito (When),
+        allora il sistema deve sovrascrivere il valore precedente con la versione aggiornata (Then).
+        """
         asset = make_asset()
         session = make_session(asset)
         
@@ -78,6 +93,11 @@ class TestInsertJustification:
         assert evidence.justification == "versione aggiornata"
  
     def test_asset_non_trovato_solleva_eccezione(self):
+        """
+        Data una sessione con un set definito di asset (Given),
+        quando si tenta di inserire una giustificazione utilizzando un ID asset non esistente (When),
+        allora il dominio deve impedire l'azione sollevando un'eccezione AssetNotFoundError (Then).
+        """
         asset = make_asset()
         session = make_session(asset)
  

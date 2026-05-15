@@ -74,6 +74,11 @@ class TestGetRequirementEvaluationDetailSuccess:
     def test_returns_result_from_builder(
         self, MockBuilder, service, mock_session_port, mock_engine, command
     ):
+        """
+        Dato un percorso di esecuzione senza errori (Given),
+        quando viene richiesto il dettaglio valutativo di un requisito (When),
+        allora il servizio deve restituire l'oggetto RequirementEvaluationDetail generato dal Builder (Then).
+        """
         mock_session, mock_req_result, mock_req = _setup_happy_path(
             mock_session_port, mock_engine, command
         )
@@ -91,6 +96,11 @@ class TestGetRequirementEvaluationDetailSuccess:
     def test_calls_builder_with_result_and_requirement(
         self, MockBuilder, service, mock_session_port, mock_engine, command
     ):
+        """
+        Dati il risultato della valutazione e l'entità del requisito recuperati (Given),
+        quando il servizio prepara il dettaglio (When),
+        allora deve delegare la costruzione al Builder passando correttamente sia il risultato grezzo che l'anagrafica del requisito (Then).
+        """
         mock_session, mock_req_result, mock_req = _setup_happy_path(
             mock_session_port, mock_engine, command
         )
@@ -105,6 +115,11 @@ class TestGetRequirementEvaluationDetailSuccess:
     def test_calls_engine_with_session_device_and_standard(
         self, service, mock_session_port, mock_engine, command
     ):
+        """
+        Data una sessione attiva recuperata (Given),
+        quando viene richiesto il dettaglio del requisito (When),
+        allora il servizio deve invocare il motore di valutazione passando il dispositivo e lo standard associati alla sessione (Then).
+        """
         mock_session, _, _ = _setup_happy_path(
             mock_session_port, mock_engine, command
         )
@@ -118,6 +133,11 @@ class TestGetRequirementEvaluationDetailSuccess:
     def test_gets_requirement_from_standard(
         self, service, mock_session_port, mock_engine, command
     ):
+        """
+        Dato un identificativo di requisito (Given),
+        quando il servizio deve ricostruire l'anagrafica del dettaglio (When),
+        allora deve richiedere la definizione del requisito direttamente allo standard di conformità della sessione (Then).
+        """
         mock_session, _, _ = _setup_happy_path(
             mock_session_port, mock_engine, command
         )
@@ -132,6 +152,11 @@ class TestGetRequirementEvaluationDetailFailures:
     def test_raises_failure_when_session_not_found(
         self, service, mock_session_port, command
     ):
+        """
+        Dato un identificativo di sessione non valido (Given),
+        quando viene richiesto il dettaglio del requisito (When),
+        allora il servizio deve sollevare una GetRequirementEvaluationDetailFailure riportando l'ID sessione (Then).
+        """
         mock_session_port.get_evaluation_session.side_effect = (
             EvaluationSessionNotFoundError()
         )
@@ -142,6 +167,11 @@ class TestGetRequirementEvaluationDetailFailures:
     def test_raises_failure_when_device_id_does_not_match(
         self, service, mock_session_port, mock_engine, command
     ):
+        """
+        Dato un comando per un dispositivo specifico (Given),
+        quando l'identificativo del dispositivo in sessione è diverso da quello nel comando (When),
+        allora deve essere sollevato un errore di fallimento del recupero dettagli (Then).
+        """
         mock_device = MagicMock()
         mock_device.id = "WRONG-DEVICE"
 
@@ -155,6 +185,11 @@ class TestGetRequirementEvaluationDetailFailures:
     def test_raises_failure_when_asset_result_is_none(
         self, service, mock_session_port, mock_engine, command
     ):
+        """
+        Dato un motore di valutazione che non produce risultati per l'asset richiesto (Given),
+        quando il servizio tenta di estrarre il risultato del requisito (When),
+        allora deve sollevare una GetRequirementEvaluationDetailFailure segnalando l'asset mancante (Then).
+        """
         _setup_happy_path(mock_session_port, mock_engine, command)
 
         mock_device_result = MagicMock()
@@ -167,6 +202,11 @@ class TestGetRequirementEvaluationDetailFailures:
     def test_raises_failure_when_requirement_result_is_none(
         self, service, mock_session_port, mock_engine, command
     ):
+        """
+        Dato un asset rintracciato ma privo di risultato specifico per il requisito richiesto (Given),
+        quando il servizio tenta di completare la richiesta (When),
+        allora deve sollevare un'eccezione di fallimento riportando l'ID del requisito (Then).
+        """
         _setup_happy_path(mock_session_port, mock_engine, command)
 
         mock_asset_result = MagicMock()

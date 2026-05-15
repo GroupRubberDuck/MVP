@@ -57,6 +57,11 @@ class TestUpdateAssetSuccess:
     def test_updates_asset_and_saves_session_successfully(
         self, service, mock_get_evaluation_session_port, mock_save_evaluation_session_port, command
     ):
+        """
+        Dato un comando di aggiornamento valido e una sessione attiva (Given),
+        quando il servizio esegue l'aggiornamento dell'asset (When),
+        allora deve invocare la logica di dominio per modificare l'anagrafica e salvare la sessione aggiornata (Then).
+        """
         mock_updated_asset = MagicMock()
         mock_session = _make_mock_session(command, mock_updated_asset)
         mock_get_evaluation_session_port.get_evaluation_session.return_value = mock_session
@@ -80,6 +85,11 @@ class TestUpdateAssetFailures:
     def test_raises_failure_when_session_not_found(
         self, service, mock_get_evaluation_session_port, command
     ):
+        """
+        Dato un identificativo di sessione inesistente (Given),
+        quando si tenta di aggiornare un asset (When),
+        allora il servizio deve sollevare una UpdateAssetFailure riportando l'ID della sessione mancante (Then).
+        """
         mock_get_evaluation_session_port.get_evaluation_session.side_effect = EvaluationSessionNotFoundError()
 
         with pytest.raises(UpdateAssetFailure, match="SESSION-123"):
@@ -88,6 +98,11 @@ class TestUpdateAssetFailures:
     def test_raises_failure_when_asset_not_found(
         self, service, mock_get_evaluation_session_port, command
     ):
+        """
+        Dato un ID asset che non appartiene al dispositivo in sessione (Given),
+        quando il dominio segnala l'assenza della risorsa (When),
+        allora il servizio deve propagare l'errore tramite un'eccezione UpdateAssetFailure (Then).
+        """
         mock_session = MagicMock()
         mock_session.device.get_asset.side_effect = AssetNotFoundError()
         mock_get_evaluation_session_port.get_evaluation_session.return_value = mock_session
@@ -98,6 +113,11 @@ class TestUpdateAssetFailures:
     def test_raises_failure_on_invalid_data_value_error(
         self, service, mock_get_evaluation_session_port, command
     ):
+        """
+        Dati dei parametri di aggiornamento che violano le regole di validazione del dominio (Given),
+        quando il metodo update_anagraphic solleva un ValueError (When),
+        allora il servizio deve catturare l'eccezione e rilanciarla come UpdateAssetFailure includendo il messaggio originale (Then).
+        """
         mock_asset = MagicMock()
         mock_asset.update_anagraphic.side_effect = ValueError("Il nome non può essere vuoto")
         

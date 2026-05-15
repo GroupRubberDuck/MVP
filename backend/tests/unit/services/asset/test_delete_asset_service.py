@@ -46,6 +46,11 @@ class TestDeleteAssetSuccess:
     def test_deletes_asset_and_saves_session_successfully(
         self, service, mock_get_evaluation_session_port, mock_save_evaluation_session_port, command
     ):
+        """
+        Dato un identificativo di sessione e un identificativo asset validi (Given),
+        quando viene richiesto al servizio di eliminare l'asset (When),
+        allora il servizio deve rimuovere l'asset dal dispositivo e salvare lo stato aggiornato della sessione (Then).
+        """
         mock_session = _make_mock_session()
         mock_get_evaluation_session_port.get_evaluation_session.return_value = mock_session
 
@@ -63,6 +68,11 @@ class TestDeleteAssetFailures:
     def test_raises_failure_when_session_not_found(
         self, service, mock_get_evaluation_session_port, command
     ):
+        """
+        Dato un ID sessione inesistente o non caricato (Given),
+        quando viene tentata la cancellazione di un asset (When),
+        allora il servizio deve intercettare l'errore di sessione mancante e sollevare una DeleteAssetFailure specifica (Then).
+        """
         mock_get_evaluation_session_port.get_evaluation_session.side_effect = EvaluationSessionNotFoundError()
 
         with pytest.raises(DeleteAssetFailure, match="SESSION-123"):
@@ -71,6 +81,11 @@ class TestDeleteAssetFailures:
     def test_raises_failure_when_asset_not_found(
         self, service, mock_get_evaluation_session_port, command
     ):
+        """
+        Data una sessione valida ma un ID asset non associato al dispositivo (Given),
+        quando il dominio solleva un errore di asset non trovato (When),
+        allora il servizio deve propagare il fallimento tramite l'eccezione DeleteAssetFailure riportando l'ID dell'asset (Then).
+        """
 
         mock_session = _make_mock_session()
 

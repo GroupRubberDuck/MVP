@@ -29,7 +29,11 @@ def make_service():
 class TestCommitEvaluationSessionService:
 
     def test_commit_effettuato_con_successo(self):
-        
+        """
+        Dato un identificativo di sessione valido presente nel sistema (Given),
+        quando viene richiesto il commit della sessione (When),
+        allora il servizio deve recuperare la sessione ed eseguire il salvataggio persistente del dispositivo associato (Then).
+        """
         service, mock_get_session, mock_save_device, mock_session = make_service()
         command = make_command(session_id="session-1")
         
@@ -42,7 +46,11 @@ class TestCommitEvaluationSessionService:
         mock_save_device.save_device.assert_called_once_with(mock_session.device)
 
     def test_solleva_failure_se_sessione_non_trovata(self):
-        
+        """
+        Dato un ID sessione che non corrisponde ad alcuna sessione attiva (Given),
+        quando si tenta di eseguire il commit (When),
+        allora il servizio deve sollevare una CommitSessionFailure specificando che la sessione non è stata trovata (Then).
+        """
         service, mock_get_session, _, _ = make_service()
         
         mock_get_session.get_evaluation_session.side_effect = EvaluationSessionNotFoundError("Cache vuota")
@@ -54,7 +62,11 @@ class TestCommitEvaluationSessionService:
         assert "Sessione 'session-fake' non trovata" in str(exc_info.value)
 
     def test_solleva_failure_se_salvataggio_device_fallisce(self):
-        
+        """
+        Dato un errore imprevisto a livello di database durante la persistenza del dispositivo (Given),
+        quando il commit viene processato (When),
+        allora il servizio deve catturare l'eccezione tecnica e rilanciare una CommitSessionFailure descrittiva (Then).
+        """
         service, _, mock_save_device, _ = make_service()
         
         mock_save_device.save_device.side_effect = DeviceSaveError("Database offline")

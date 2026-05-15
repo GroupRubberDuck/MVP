@@ -41,6 +41,11 @@ class TestFlaskDeviceEvaluationDetailController:
 
     @patch("adapters.inbound.evaluation.evaluation_detail.flask_device_evaluation_detail_controller.render_template") 
     def test_ritorna_200_e_renderizza_dto_su_successo(self, mock_render_template, app_and_client):
+        """
+        Dati parametri di rotta validi (ID sessione e ID device) che permettono di recuperare la valutazione (Given),
+        quando viene richiesta la dashboard di dettaglio del dispositivo (When),
+        allora il controller deve mappare i risultati nel DTO e renderizzare il template della dashboard restituendo uno status code 200 OK (Then).
+        """
         client, mock_use_case = app_and_client
         mock_render_template.return_value = "Mocked HTML"
 
@@ -88,6 +93,11 @@ class TestFlaskDeviceEvaluationDetailController:
     @patch("adapters.inbound.evaluation.evaluation_detail.flask_device_evaluation_detail_controller.render_template")
     @patch("adapters.inbound.evaluation.evaluation_detail.flask_device_evaluation_detail_controller.GetDeviceEvaluationDetailCommand")
     def test_ritorna_400_su_errore_di_validazione(self, mock_command_class, mock_render_template, app_and_client):
+        """
+        Dati dei parametri mancanti o malformati che generano un errore di validazione durante la creazione del Command (Given),
+        quando il controller riceve la richiesta per la dashboard del dispositivo (When),
+        allora l'eccezione deve essere gestita renderizzando la pagina di errore associata allo status 400 Bad Request (Then).
+        """
         client, _ = app_and_client
         mock_render_template.return_value = "Mocked 400 HTML"
         
@@ -101,6 +111,11 @@ class TestFlaskDeviceEvaluationDetailController:
 
     @patch("adapters.inbound.evaluation.evaluation_detail.flask_device_evaluation_detail_controller.render_template") 
     def test_ritorna_404_su_fallimento_use_case(self, mock_render_template, app_and_client):
+        """
+        Dato uno scenario in cui i dettagli valutativi non sono reperibili e lo use case solleva una GetEvaluationDetailFailure (Given),
+        quando l'utente tenta di visualizzare il dispositivo (When),
+        allora il controller deve catturare l'eccezione e restituire il template di errore con status code 404 Not Found (Then).
+        """
         client, mock_use_case = app_and_client
         mock_render_template.return_value = "Mocked 404 HTML"
         

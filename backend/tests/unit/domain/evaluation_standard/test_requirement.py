@@ -56,6 +56,11 @@ def requirement_with_deps(simple_tree) -> Requirement:
 class TestRequirementValidation:
 
     def test_empty_id_raises(self):
+        """
+        Dati dei parametri di inizializzazione di un requisito (Given),
+        quando l'identificativo 'requirement_id' è una stringa vuota (When),
+        allora il sistema deve sollevare un ValueError (Then).
+        """
         with pytest.raises(ValueError):
             Requirement(
                 requirement_id="", name="Test",
@@ -78,14 +83,29 @@ class TestRequirementValidation:
 class TestRequirementEvaluation:
 
     def test_pass(self, requirement_with_tree):
+        """
+        Dato un requisito con un albero decisionale semplice (Given),
+        quando l'evidenza fornita contiene risposte che portano a un verdetto positivo (When),
+        allora il requisito deve essere valutato come EvaluationState.PASS (Then).
+        """
         answer = AssetEvidence(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": True}))
         assert requirement_with_tree.evaluate(answer) == EvaluationState.PASS
 
     def test_fail(self, requirement_with_tree):
+        """
+        Dato un requisito valutabile (Given),
+        quando le risposte dell'utente terminano su un nodo di fallimento (When),
+        allora lo stato finale del requisito deve essere EvaluationState.FAIL (Then).
+        """
         answer = AssetEvidence(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": False}))
         assert requirement_with_tree.evaluate(answer) == EvaluationState.FAIL
 
     def test_pending_incomplete_answers(self):
+        """
+        Dato un requisito basato su un albero decisionale complesso a più livelli (Given),
+        quando l'evidenza contiene solo risposte parziali che non raggiungono una foglia (When),
+        allora il requisito deve risultare in stato EvaluationState.PENDING (Then).
+        """
         """Albero a due livelli, risposta solo al primo nodo."""
         tree = DecisionTree(root="n1", nodes=[
             DecisionNode("n1", "Q1?", "n2", "leaf_fail"),
@@ -107,6 +127,11 @@ class TestRequirementEvaluation:
 class TestRequirementNAJustification:
 
     def test_na_without_justification_returns_fail(self, na_tree):
+        """
+        Dato un requisito il cui albero decisionale prevede un esito di non applicabilità (Given),
+        quando l'esito dell'albero è NA ma l'utente non ha fornito alcuna giustificazione testuale (When),
+        allora il requisito deve essere forzato allo stato EvaluationState.FAIL per mancanza di evidenza (Then).
+        """
         req = Requirement(
             requirement_id="REQ-001", name="Test",
             description="Test", target_description="Test",
@@ -120,6 +145,11 @@ class TestRequirementNAJustification:
         assert req.evaluate(answer) == EvaluationState.FAIL
 
     def test_na_with_whitespace_justification_returns_fail(self, na_tree):
+        """
+        Dato un esito di non applicabilità (NA) (Given),
+        quando la giustificazione fornita consiste solo di spazi vuoti (When),
+        allora deve essere trattata come mancante e il requisito deve fallire (Then).
+        """
         req = Requirement(
             requirement_id="REQ-001", name="Test",
             description="Test", target_description="Test",
@@ -133,6 +163,11 @@ class TestRequirementNAJustification:
         assert req.evaluate(answer) == EvaluationState.FAIL
 
     def test_na_with_justification_returns_na(self, na_tree):
+        """
+        Dato un esito di non applicabilità (NA) (Given),
+        quando l'utente fornisce una giustificazione testuale valida (When),
+        allora lo stato del requisito deve essere confermato come EvaluationState.NA (Then).
+        """
         req = Requirement(
             requirement_id="REQ-001", name="Test",
             description="Test", target_description="Test",
@@ -146,7 +181,11 @@ class TestRequirementNAJustification:
         assert req.evaluate(answer) == EvaluationState.NA
 
     def test_pass_without_justification_stays_pass(self, na_tree):
-        """La regola giustificazione si applica solo a NA, non a PASS."""
+        """
+        Dato un requisito che termina con successo (Given),
+        quando la giustificazione è assente (When),
+        allora il requisito deve rimanere EvaluationState.PASS (poiché l'obbligo di giustificazione è ristretto al solo caso NA) (Then).
+        """
         req = Requirement(
             requirement_id="REQ-001", name="Test",
             description="Test", target_description="Test",
@@ -175,6 +214,11 @@ class TestRequirementDependencies:
         ((("DEP-1", EvaluationState.PASS), ("DEP-2", EvaluationState.NA)), EvaluationState.NA),
     ])
     def test_dependency_blocking(self, requirement_with_tree, dependency_states, expected):
+        """
+        Dato un requisito legato a dipendenze esterne (Given),
+        quando lo stato delle dipendenze è bloccante (FAIL, PENDING o NA) (When),
+        allora il requisito deve assumere lo stato della dipendenza più critica ignorando la valutazione dell'albero (Then).
+        """
         answer = AssetEvidence(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": True}))
         assert requirement_with_tree.evaluate(answer, dependency_states) == expected
 
@@ -187,16 +231,29 @@ class TestRequirementDependencies:
         ((("D1", EvaluationState.NA), ("D2", EvaluationState.PENDING)), EvaluationState.PENDING),
     ])
     def test_dependency_priority(self, requirement_with_tree, dependency_states, expected):
-        """Priorità: FAIL > PENDING > NA."""
+        """
+        Dato un requisito con molteplici dipendenze in stati diversi (Given),
+        quando si calcola l'impatto sul requisito figlio (When),
+        allora deve essere rispettata la gerarchia di priorità FAIL > PENDING > NA (Then).
+        """
         answer = AssetEvidence(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": True}))
         assert requirement_with_tree.evaluate(answer, dependency_states) == expected
 
     def test_no_dependencies_evaluates_normally(self, requirement_with_tree):
+        """
+        Dato un requisito valutabile (Given),
+        quando non vengono passati stati di dipendenza (When),
+        allora il requisito deve essere valutato esclusivamente in base alle risposte dell'albero decisionale (Then).
+        """
         answer = AssetEvidence(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": True}))
         assert requirement_with_tree.evaluate(answer) == EvaluationState.PASS
 
     def test_dependencies_block_before_tree_evaluation(self, requirement_with_tree):
-        """Se le dipendenze bloccano, l'albero non viene nemmeno consultato."""
+        """
+        Dato un requisito con dipendenze fallite (Given),
+        quando viene richiesta la valutazione (When),
+        allora l'esito deve essere bloccato preventivamente dalle dipendenze, rendendo irrilevante l'esito potenziale dell'albero decisionale (Then).
+        """
         answer = AssetEvidence(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": False}))
         deps = (("DEP-1", EvaluationState.FAIL),)
         # L'answer porterebbe a FAIL dal tree, ma il risultato è FAIL dalle dipendenze
