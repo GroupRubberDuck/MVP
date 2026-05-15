@@ -6,7 +6,7 @@ from core.ports.outbound.evaluation.exceptions import (EvaluationSessionNotFound
 from core.ports.inbound.evaluation.exceptions import InsertJustificationFailure
 from core.domain.evaluation_object.exceptions import AssetNotFoundError
  
-class EvaluationJustificationService(InsertJustificationUseCase):
+class InsertJustificationService(InsertJustificationUseCase):
     def __init__(self, 
                  get_evaluation_session_port: GetEvaluationSessionPort, 
                  save_evaluation_session_port: SaveEvaluationSessionPort

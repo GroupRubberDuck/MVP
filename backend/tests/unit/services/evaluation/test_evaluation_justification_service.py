@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock
  
-from core.services.evaluation.evaluate_justification_service import EvaluationJustificationService
+from core.services.evaluation.insert_justification_service import InsertJustificationService
 from core.ports.inbound.evaluation.insert_justification_use_case import InsertJustificationCommand
  
  
@@ -21,14 +21,14 @@ def make_service():
     
     mock_get.get_evaluation_session.return_value = mock_session
     
-    service = EvaluationJustificationService(
+    service = InsertJustificationService(
         get_evaluation_session_port=mock_get, 
         save_evaluation_session_port=mock_save
     )
     return service, mock_get, mock_save, mock_session
  
  
-class TestEvaluationJustificationService:
+class TestInsertJustificationService:
  
     def test_recupera_la_sessione_corretta(self):
         """

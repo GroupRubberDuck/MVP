@@ -1,10 +1,10 @@
 from core.domain.session.session_handler import SessionHandler
 from core.ports.outbound.evaluation.evaluation_session_exists_port import (
-        EvaluationSessionExistsPort
+        EvaluationSessionExistPort
 )
 
 class SessionCoordinator:
-        def __init__(self, exist_port:EvaluationSessionExistsPort, session_handler: SessionHandler)-> None:
+        def __init__(self, exist_port:EvaluationSessionExistPort, session_handler: SessionHandler)-> None:
                 self._exist_port = exist_port
                 self._session_handler = session_handler
         

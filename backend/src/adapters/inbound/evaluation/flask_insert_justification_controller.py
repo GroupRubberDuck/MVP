@@ -10,7 +10,7 @@ from core.ports.inbound.evaluation.insert_justification_use_case import (
 from core.ports.inbound.evaluation.exceptions import InsertJustificationFailure
 
 
-class EvaluationJustificationController(FlaskController):
+class FlaskInsertJustificationController(FlaskController):
 
     def __init__(self, insert_justification_use_case: InsertJustificationUseCase) -> None:
         self._use_case = insert_justification_use_case
