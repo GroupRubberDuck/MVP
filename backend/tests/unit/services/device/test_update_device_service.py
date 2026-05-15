@@ -37,8 +37,10 @@ class TestUpdateDeviceService:
         mocker
     ):
         """
-        Scenario: Il dispositivo esiste.
-        Risultato Atteso: I campi vengono aggiornati e il dispositivo viene salvato.
+        Dato un identificativo di dispositivo esistente e nuovi dati anagrafici (Given),
+        quando viene richiesto l'aggiornamento del dispositivo (When),
+        allora il servizio deve recuperare l'entità dal repository, invocare i metodi di aggiornamento 
+        del dominio e infine persistere le modifiche tramite la porta di salvataggio (Then).
         """
         
         command = UpdateDeviceCommand(
@@ -70,8 +72,10 @@ class TestUpdateDeviceService:
         mock_save_device_port: Mock
     ):
         """
-        Scenario: Il dispositivo richiesto non esiste nel database.
-        Risultato Atteso: Viene sollevata un'eccezione di dominio UpdateDeviceFailure e non viene salvato nulla.
+        Dato un ID dispositivo non presente nel sistema (Given),
+        quando il repository segnala che il dispositivo non è stato trovato (When),
+        allora il servizio deve sollevare un'eccezione di dominio UpdateDeviceFailure e 
+        garantire che non venga eseguito alcun tentativo di salvataggio (Then).
         """
         command = UpdateDeviceCommand(
             device_id="DEV-INVALID",

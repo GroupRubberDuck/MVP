@@ -74,6 +74,11 @@ def client(
 class TestGetDeviceDetailService:
 
     def test_returns_device_from_port(self, mock_find_device_port):
+        """
+        Dato un identificativo di dispositivo valido esistente nel sistema (Given),
+        quando viene richiesta la visualizzazione dei suoi dettagli tramite il servizio (When),
+        allora il servizio deve interrogare il repository e restituire l'oggetto di dominio Device corrispondente (Then).
+        """
         mock_device = Mock()
         mock_device.id = "D-1"
         mock_find_device_port.find_by_id.return_value = mock_device
@@ -86,6 +91,11 @@ class TestGetDeviceDetailService:
         mock_find_device_port.find_by_id.assert_called_once_with("D-1")
 
     def test_raises_failure_when_device_not_found(self, mock_find_device_port):
+        """
+        Dato un identificativo di dispositivo non presente nel database (Given),
+        quando il repository segnala un errore di risorsa non trovata (DeviceNotFoundError) (When),
+        allora il servizio deve catturare l'eccezione tecnica e sollevare un fallimento di dominio DeviceNotFoundFailure riportando l'ID cercato (Then).
+        """
         mock_find_device_port.find_by_id.side_effect = DeviceNotFoundError("non trovato")
 
         service = GetDeviceDetailService(mock_find_device_port)
@@ -95,6 +105,11 @@ class TestGetDeviceDetailService:
             service.get_device_detail(command)
 
     def test_failure_wraps_original_error(self, mock_find_device_port):
+        """
+        Dato un fallimento durante il recupero dei dati dal repository (Given),
+        quando viene generata l'eccezione di dominio DeviceNotFoundFailure (When),
+        allora il servizio deve preservare l'eccezione originale come causa (dunder cause) per permettere il tracciamento dell'errore tecnico (Then).
+        """
         original = DeviceNotFoundError("non trovato")
         mock_find_device_port.find_by_id.side_effect = original
 

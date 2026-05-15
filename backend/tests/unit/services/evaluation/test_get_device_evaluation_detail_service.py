@@ -28,6 +28,11 @@ def make_service():
 class TestGetDeviceEvaluationDetailService:
 
     def test_solleva_failure_se_sessione_non_trovata(self):
+        """
+        Dato un ID sessione inesistente o non presente in cache (Given),
+        quando viene richiesta la generazione del dettaglio valutativo del dispositivo (When),
+        allora il servizio deve sollevare una GetEvaluationDetailFailure riportando l'ID mancante (Then).
+        """
         service, mock_get_session, _ = make_service()
         mock_get_session.get_evaluation_session.side_effect = EvaluationSessionNotFoundError("Non trovata")
 
@@ -37,6 +42,12 @@ class TestGetDeviceEvaluationDetailService:
         assert "Sessione 'fake-session' non trovata" in str(exc_info.value)
 
     def test_get_detail_mappa_correttamente_i_dati_di_successo(self):
+        """
+        Dato un contesto di valutazione valido con sessione, dispositivo e asset (Given),
+        quando il servizio orchestra il recupero dei dati e l'esecuzione dell'engine (When),
+        allora deve restituire un DTO di dettaglio completo che mappi correttamente le informazioni del dispositivo, 
+        dei relativi asset e dei risultati dei singoli requisiti (Then).
+        """
         service, mock_get_session, mock_engine = make_service()
         command = make_command()
 

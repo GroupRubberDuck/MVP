@@ -42,6 +42,11 @@ class TestFlaskRequirementEvaluationDetail:
 
     @patch("adapters.inbound.evaluation.evaluation_detail.flask_requirement_evaluation_detail_controller.render_template")
     def test_ritorna_200_e_renderizza_dto_su_successo(self, mock_render_template, app_and_client):
+        """
+        Dati i parametri di rotta validi per recuperare i dettagli di valutazione di un requisito (Given),
+        quando l'utente richiede la vista di dettaglio (When),
+        allora il controller deve mappare i dati (incluso l'albero decisionale e i nodi) nel DTO, renderizzare il template corretto e restituire uno status code 200 OK (Then).
+        """
         client, mock_use_case = app_and_client
         mock_render_template.return_value = "Mocked HTML"
 
@@ -102,6 +107,11 @@ class TestFlaskRequirementEvaluationDetail:
     @patch("adapters.inbound.evaluation.evaluation_detail.flask_requirement_evaluation_detail_controller.render_template")
     @patch("adapters.inbound.evaluation.evaluation_detail.flask_requirement_evaluation_detail_controller.GetRequirementEvaluationDetailCommand")
     def test_ritorna_400_su_errore_di_validazione(self, mock_command_class, mock_render_template, app_and_client):
+        """
+        Dati dei parametri di input malformati o mancanti che causano un errore di validazione nella creazione del Command (Given),
+        quando il controller elabora la richiesta (When),
+        allora l'eccezione deve essere gestita restituendo la pagina di errore associata allo status 400 Bad Request (Then).
+        """
         client, _ = app_and_client
         mock_render_template.return_value = "Mocked 400 HTML"
         
@@ -115,6 +125,11 @@ class TestFlaskRequirementEvaluationDetail:
 
     @patch("adapters.inbound.evaluation.evaluation_detail.flask_requirement_evaluation_detail_controller.render_template")
     def test_ritorna_404_su_fallimento_use_case(self, mock_render_template, app_and_client):
+        """
+        Dato uno scenario in cui i dettagli del requisito non sono reperibili e lo use case solleva una GetRequirementEvaluationDetailFailure (Given),
+        quando l'utente tenta di accedere alla risorsa (When),
+        allora il controller deve intercettare l'errore e renderizzare il template di errore 404 Not Found (Then).
+        """
         client, mock_use_case = app_and_client
         mock_render_template.return_value = "Mocked 404 HTML"
         

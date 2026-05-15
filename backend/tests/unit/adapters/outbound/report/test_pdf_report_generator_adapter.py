@@ -81,6 +81,11 @@ class TestPdfReportGeneratorAdapter:
     def test_generate_returns_valid_pdf_bytes_with_data(
         self, adapter, sample_device_detail
     ):
+        """
+        Dato un dettaglio di valutazione del dispositivo completo e regolarmente popolato con asset e requisiti (Given),
+        quando il generatore di report viene invocato (When),
+        allora deve restituire uno stream di byte non vuoto che rappresenta un file PDF valido (iniziando con la firma '%PDF-') (Then).
+        """
         stream = adapter.generate_report(sample_device_detail)
         result = stream.read()
 
@@ -91,6 +96,11 @@ class TestPdfReportGeneratorAdapter:
     def test_generate_handles_empty_assets_gracefully(
         self, adapter, empty_device_detail
     ):
+        """
+        Dato un dispositivo anagraficamente valido ma privo di qualsiasi asset o valutazione associata (Given),
+        quando il sistema tenta di esportare il report (When),
+        allora il generatore deve gestire il caso limite senza errori e restituire un documento PDF strutturalmente valido (Then).
+        """
         stream = adapter.generate_report(empty_device_detail)
         result = stream.read()
 
@@ -98,6 +108,11 @@ class TestPdfReportGeneratorAdapter:
         assert result.startswith(b"%PDF-")
 
     def test_all_evaluation_states_are_supported(self, adapter):
+        """
+        Dato un dispositivo i cui requisiti coprono tutti i possibili stati dell'enum EvaluationState (PASS, FAIL, NA, PENDING, ecc.) (Given),
+        quando viene richiesta la generazione del report PDF (When),
+        allora il generatore deve supportare il rendering visivo di ogni singolo stato senza sollevare eccezioni e restituire un PDF valido (Then).
+        """
         reqs = [
             RequirementEvaluationDetail(
                 requirement_id=f"REQ-{state.name}",

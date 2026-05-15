@@ -42,6 +42,11 @@ class TestFlaskAssetEvaluationDetailController:
 
     @patch("adapters.inbound.evaluation.evaluation_detail.flask_asset_evaluation_detail_controller.render_template") 
     def test_ritorna_200_e_renderizza_dto_su_successo(self, mock_render_template, app_and_client):
+        """
+        Dati dei parametri di rotta validi (sessione, device e asset) che consentono il recupero dei dettagli valutativi (Given),
+        quando l'utente richiede la pagina di dettaglio dell'asset (When),
+        allora il controller deve invocare correttamente lo use case, mappare i dati nel DTO e renderizzare il template restituendo uno status code 200 OK (Then).
+        """
         client, mock_use_case = app_and_client
         mock_render_template.return_value = "Mocked HTML"
 
@@ -81,6 +86,11 @@ class TestFlaskAssetEvaluationDetailController:
     @patch("adapters.inbound.evaluation.evaluation_detail.flask_asset_evaluation_detail_controller.render_template")
     @patch("adapters.inbound.evaluation.evaluation_detail.flask_asset_evaluation_detail_controller.GetAssetEvaluationDetailCommand")
     def test_ritorna_400_su_errore_di_validazione(self, mock_command_class, mock_render_template, app_and_client):
+        """
+        Dati dei parametri di input malformati o mancanti che causano un ValidationError in fase di creazione del Command (Given),
+        quando il controller elabora la richiesta di dettaglio (When),
+        allora deve intercettare l'errore di validazione e restituire la pagina di errore associata allo status 400 Bad Request (Then).
+        """
         client, _ = app_and_client
         mock_render_template.return_value = "Mocked 400 HTML"
         
@@ -94,6 +104,11 @@ class TestFlaskAssetEvaluationDetailController:
 
     @patch("adapters.inbound.evaluation.evaluation_detail.flask_asset_evaluation_detail_controller.render_template") 
     def test_ritorna_404_su_fallimento_use_case(self, mock_render_template, app_and_client):
+        """
+        Dato uno scenario in cui lo use case non riesce a trovare i dati richiesti lanciando un'eccezione GetAssetDetailFailure (Given),
+        quando si tenta l'accesso al dettaglio dell'asset (When),
+        allora il controller deve gestire l'eccezione renderizzando il template di errore e restituendo lo status code 404 Not Found (Then).
+        """
         client, mock_use_case = app_and_client
         mock_render_template.return_value = "Mocked 404 HTML"
         

@@ -75,6 +75,11 @@ class TestFlaskQueryDeviceControllerList:
     def test_get_device_list_renders_template(
         self, mock_render, client, mock_get_device_list_use_case
     ):
+        """
+        Dato un sistema con uno o più dispositivi registrati restituiti dallo use case (Given),
+        quando l'utente richiede la pagina della lista dei dispositivi (When),
+        allora il controller deve renderizzare il template 'device_list.html' passando i dispositivi correttamente mappati e restituire uno status 200 OK (Then).
+        """
         
         device1 = Mock()
         device1.device_id = "D-1"
@@ -105,6 +110,11 @@ class TestFlaskQueryDeviceControllerList:
     def test_get_device_list_empty(
         self, mock_render, client, mock_get_device_list_use_case
     ):
+        """
+        Dato un sistema senza alcun dispositivo registrato in cui lo use case restituisce una lista vuota (Given),
+        quando l'utente richiede la pagina della lista dei dispositivi (When),
+        allora il controller deve renderizzare la vista regolarmente passando una lista vuota e restituire uno status 200 OK (Then).
+        """
         mock_get_device_list_use_case.get_device_list.return_value = []
         mock_render.return_value = "html"
 
@@ -125,6 +135,11 @@ class TestFlaskQueryDeviceControllerDetail:
         mock_get_device_detail_use_case,
         mock_get_compliance_standard_use_case,
     ):
+        """
+        Dato un ID dispositivo valido e uno standard di compliance associato reperibili tramite gli use case (Given),
+        quando l'utente richiede i dettagli di quello specifico dispositivo (When),
+        allora il controller deve unire le informazioni nel DTO, renderizzare il template 'device_detail.html' e restituire uno status 200 OK (Then).
+        """
         mock_device = Mock()
         mock_device.id = "D-1"
         mock_device.name = "Device 1"
@@ -157,6 +172,11 @@ class TestFlaskQueryDeviceControllerDetail:
     def test_device_not_found_returns_404(
         self, mock_render, client, mock_get_device_detail_use_case
     ):
+        """
+        Dato un ID dispositivo inesistente che provoca una DeviceNotFoundFailure dallo use case (Given),
+        quando l'utente tenta di visualizzare i dettagli del dispositivo (When),
+        allora il controller deve gestire l'errore renderizzando il template di errore e restituendo uno status 404 Not Found (Then).
+        """
         mock_get_device_detail_use_case.get_device_detail.side_effect = (
             DeviceNotFoundFailure("non trovato")
         )
@@ -176,6 +196,11 @@ class TestFlaskQueryDeviceControllerDetail:
         mock_get_device_detail_use_case,
         mock_get_compliance_standard_use_case,
     ):
+        """
+        Dato un dispositivo esistente il cui standard di compliance associato non è però rintracciabile sollevando una StandardNotFoundFailure (Given),
+        quando l'utente richiede la pagina di dettaglio (When),
+        allora il controller deve intercettare l'anomalia e restituire la pagina di errore con status 404 Not Found (Then).
+        """
         mock_device = Mock()
         mock_device.id = "D-1"
         mock_device.standard_id = "STD-999"

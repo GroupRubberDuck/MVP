@@ -82,6 +82,11 @@ class TestOpenEvaluationSessionSuccess:
         mock_session_coordinator, mock_find_device_port,
         mock_find_standard_port, mock_create_session_port,
     ):
+        """
+        Dato un dispositivo esistente e l'assenza di sessioni attive (Given),
+        quando viene richiesto l'avvio di una nuova valutazione (When),
+        allora il servizio deve restituire l'ID univoco della sessione appena creata (Then).
+        """
         _, _, mock_session = _setup_happy_path(
             mock_session_coordinator, mock_find_device_port,
             mock_find_standard_port, mock_create_session_port,
@@ -96,6 +101,11 @@ class TestOpenEvaluationSessionSuccess:
         mock_session_coordinator, mock_find_device_port,
         mock_find_standard_port, mock_create_session_port,
     ):
+        """
+        Dato un comando di apertura sessione (Given),
+        quando il servizio viene eseguito (When),
+        allora deve consultare preventivamente il coordinatore per verificare se le politiche di sistema consentono l'apertura (Then).
+        """
         _setup_happy_path(
             mock_session_coordinator, mock_find_device_port,
             mock_find_standard_port, mock_create_session_port,
@@ -110,6 +120,11 @@ class TestOpenEvaluationSessionSuccess:
         mock_session_coordinator, mock_find_device_port,
         mock_find_standard_port, mock_create_session_port,
     ):
+        """
+        Dato un ID dispositivo nel comando (Given),
+        quando la validazione della sessione ha esito positivo (When),
+        allora il servizio deve recuperare l'anagrafica completa del dispositivo dal repository (Then).
+        """
         _setup_happy_path(
             mock_session_coordinator, mock_find_device_port,
             mock_find_standard_port, mock_create_session_port,
@@ -124,6 +139,11 @@ class TestOpenEvaluationSessionSuccess:
         mock_session_coordinator, mock_find_device_port,
         mock_find_standard_port, mock_create_session_port,
     ):
+        """
+        Dato un dispositivo associato a uno standard specifico (Given),
+        quando il dispositivo viene caricato (When),
+        allora il servizio deve recuperare la definizione dello standard corrispondente per la sessione (Then).
+        """
         mock_device, _, _ = _setup_happy_path(
             mock_session_coordinator, mock_find_device_port,
             mock_find_standard_port, mock_create_session_port,
@@ -138,6 +158,11 @@ class TestOpenEvaluationSessionSuccess:
         mock_session_coordinator, mock_find_device_port,
         mock_find_standard_port, mock_create_session_port,
     ):
+        """
+        Dati il dispositivo e lo standard di conformità recuperati correttamente (Given),
+        quando il processo di apertura prosegue (When),
+        allora il servizio deve invocare la creazione della sessione di valutazione aggregando entrambi gli oggetti di dominio (Then).
+        """
         mock_device, mock_standard, _ = _setup_happy_path(
             mock_session_coordinator, mock_find_device_port,
             mock_find_standard_port, mock_create_session_port,
@@ -155,6 +180,11 @@ class TestOpenEvaluationSessionFailures:
     def test_raises_failure_when_session_already_active(
         self, service, command, mock_session_coordinator,
     ):
+        """
+        Dato un sistema in cui è già presente una sessione attiva (Given),
+        quando si tenta di aprirne una nuova (When),
+        allora il servizio deve sollevare un'eccezione OpenEvaluationSessionFailure segnalando il conflitto (Then).
+        """
         mock_session_coordinator.can_open_session.return_value = False
 
         with pytest.raises(OpenEvaluationSessionFailure, match="sessione attiva"):
@@ -164,6 +194,11 @@ class TestOpenEvaluationSessionFailures:
         self, service, command,
         mock_session_coordinator, mock_find_device_port,
     ):
+        """
+        Dato un ID dispositivo non presente a database (Given),
+        quando si tenta di avviare la sessione (When),
+        allora il servizio deve intercettare l'errore di ricerca e sollevare un fallimento specifico per dispositivo non trovato (Then).
+        """
         mock_session_coordinator.can_open_session.return_value = True
         mock_find_device_port.find_by_id.side_effect = DeviceNotFoundError("non trovato")
 
@@ -175,6 +210,11 @@ class TestOpenEvaluationSessionFailures:
         mock_session_coordinator, mock_find_device_port,
         mock_find_standard_port,
     ):
+        """
+        Dato un dispositivo che referenzia uno standard inesistente (Given),
+        quando il servizio tenta il caricamento dello standard (When),
+        allora deve sollevare una OpenEvaluationSessionFailure riportando l'errore di configurazione dello standard (Then).
+        """
         mock_session_coordinator.can_open_session.return_value = True
 
         mock_device = MagicMock()
@@ -191,6 +231,11 @@ class TestOpenEvaluationSessionFailures:
         mock_session_coordinator, mock_find_device_port,
         mock_find_standard_port, mock_create_session_port,
     ):
+        """
+        Dato un errore tecnico imprevisto durante l'inizializzazione della sessione (Given),
+        quando la porta di creazione fallisce (When),
+        allora il servizio deve catturare l'errore tecnico e rilanciare una OpenEvaluationSessionFailure (Then).
+        """
         _setup_happy_path(
             mock_session_coordinator, mock_find_device_port,
             mock_find_standard_port, mock_create_session_port,
@@ -206,6 +251,11 @@ class TestOpenEvaluationSessionFailures:
         self, service, command,
         mock_session_coordinator, mock_find_device_port,
     ):
+        """
+        Dato un sistema già impegnato (Given),
+        quando la pre-validazione fallisce (When),
+        allora il servizio deve interrompersi immediatamente senza tentare inutili ricerche sul database dei dispositivi (Then).
+        """
         mock_session_coordinator.can_open_session.return_value = False
 
         with pytest.raises(OpenEvaluationSessionFailure):
