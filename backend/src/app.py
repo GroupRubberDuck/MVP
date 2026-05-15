@@ -79,7 +79,7 @@ from core.services.evaluation.evaluation_session.session_coordinator import Sess
 
 
 from core.services.evaluation.evaluate_decision_node_service import EvaluateDecisionNodeService
-from core.services.evaluation.evaluate_justification_service import EvaluationJustificationService
+from core.services.evaluation.insert_justification_service import InsertJustificationService
 
 
 # --- Controller (adapter inbound) ---
@@ -232,7 +232,7 @@ def create_app() -> Flask:
         save_evaluation_session_port=session_cache
     )
 
-    evaluation_justification_service=EvaluationJustificationService(
+    evaluation_justification_service=InsertJustificationService(
         get_evaluation_session_port=session_cache,
         save_evaluation_session_port=session_cache        
     )
