@@ -3,8 +3,8 @@ import pytest
 from unittest.mock import MagicMock
 from flask import Flask, blueprints
  
-from adapters.inbound.evaluation.evaluation_justification_controller import (
-    EvaluationJustificationController,
+from adapters.inbound.evaluation.flask_insert_justification_controller import (
+    FlaskInsertJustificationController,
 )
 from core.ports.inbound.evaluation.insert_justification_use_case import InsertJustificationCommand
  
@@ -14,7 +14,7 @@ BASE_URL = "/sessions/session-1/assets/asset-1/requirements/REQ-1/justification"
 @pytest.fixture(scope="module")
 def app_and_mock():
     mock_use_case = MagicMock()
-    controller=EvaluationJustificationController(mock_use_case)
+    controller=FlaskInsertJustificationController(mock_use_case)
     flask_app = Flask(__name__)
     blueprint = blueprints.Blueprint("evaluation", __name__)
     controller.register_routes(blueprint)
@@ -29,7 +29,7 @@ def app(app_and_mock):
     return flask_app, mock_use_case
  
  
-class TestEvaluationJustificationController:
+class TestFlaskInsertJustificationController:
  
     def test_risponde_200_con_payload_corretto(self, app):
         flask_app, _ = app

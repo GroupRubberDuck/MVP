@@ -104,8 +104,8 @@ from adapters.inbound.device.flask_export_device_controller import FlaskExportDe
 from adapters.inbound.evaluation.evaluation_detail.flask_asset_evaluation_detail_controller import FlaskAssetEvaluationDetailController
 from adapters.inbound.evaluation.evaluation_detail.flask_device_evaluation_detail_controller import FlaskDeviceEvaluationDetailController
 from adapters.inbound.evaluation.evaluation_detail.flask_requirement_evaluation_detail_controller import FlaskRequirementEvaluationDetailController
-from adapters.inbound.evaluation.evaluation_justification_controller import EvaluationJustificationController
-from adapters.inbound.evaluation.evaluate_decision_node_controller import FlaskEvaluateDecisionNodeController
+from adapters.inbound.evaluation.flask_insert_justification_controller import FlaskInsertJustificationController
+from adapters.inbound.evaluation.flask_evaluate_decision_node_controller import FlaskEvaluateDecisionNodeController
 from adapters.inbound.evaluation.evaluation_session_controller import EvaluationSessionController
 
 from adapters.inbound.report.report_controller import FlaskExportReportController
@@ -283,7 +283,7 @@ def create_app() -> Flask:
         get_requirement_ev_detail_use_case=get_requirement_evalaution_detail_service
     )
 
-    evaluation_justification_controller=EvaluationJustificationController(
+    evaluation_justification_controller=FlaskInsertJustificationController(
         insert_justification_use_case=evaluation_justification_service
     )
 
