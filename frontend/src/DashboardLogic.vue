@@ -5,13 +5,12 @@
 <script setup>
 import { onMounted, onUnmounted } from 'vue';
 
-// 1. Recupero ID dal percorso URL (es. /sessions/ID_SESS/devices/ID_DEV)
 const pathParts = window.location.pathname.split('/');
 const sessionIndex = pathParts.indexOf('sessions');
 const deviceIndex = pathParts.indexOf('devices');
 
 const sessionId = sessionIndex !== -1 ? pathParts[sessionIndex + 1] : null;
-const deviceId = deviceIndex !== -1 ? pathParts[deviceIndex + 1] : null; // AGGIUNTO: recupero deviceId
+const deviceId = deviceIndex !== -1 ? pathParts[deviceIndex + 1] : null; 
 
 // 2. Gestione Blocco Navigazione
 const handleBeforeUnload = (event) => {
@@ -39,7 +38,6 @@ save: async () => {
       const response = await fetch(`/sessions/${sessionId}/commit`, { method: 'POST' }); 
       
       if (!response.ok) {
-        // Leggiamo l'errore esatto mandato da Flask
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || `Errore HTTP ${response.status}`);
       }
@@ -64,20 +62,43 @@ save: async () => {
     }
   },
 
-  // GENERA REPORT - CORRETTO
+  // SALVA E CHIUDI
+  saveAndClose: async () => {
+    if (!sessionId) return alert("Errore: ID sessione non trovato.");
+    
+    try {
+      // 1. Esegue il salvataggio
+      const responseSave = await fetch(`/sessions/${sessionId}/commit`, { method: 'POST' }); 
+      if (!responseSave.ok) {
+        const errorData = await responseSave.json().catch(() => ({}));
+        throw new Error(errorData.error || `Errore HTTP nel salvataggio ${responseSave.status}`);
+      }
+      
+      // 2. Se il salvataggio va a buon fine, chiude direttamente senza chiedere conferma
+      const responseClose = await fetch(`/sessions/${sessionId}`, { method: 'DELETE' });
+      if (!responseClose.ok) {
+        throw new Error("Dati salvati, ma errore nella chiusura della sessione sul server.");
+      }
+      
+      // 3. Sblocca la navigazione ed esce
+      allowExit(); 
+      window.location.href = "/devices"; 
+    } catch (e) {
+      alert("Errore durante Salva e Chiudi: " + e.message);
+    }
+  },
+
+  // GENERA REPORT 
   generateReport: () => {
     if (!sessionId || !deviceId) return alert("Errore: ID sessione o dispositivo mancanti.");
 
     // Disattiviamo temporaneamente il blocco per permettere al browser di gestire il file
     allowExit();
-
-    // NOTA: Abbiamo rimosso l'alert() perché bloccava l'esecuzione del download
     console.log("Generazione report avviata...");
 
     // Avviamo il download con l'URL completo richiesto dal controller
     window.location.assign(`/sessions/${sessionId}/devices/${deviceId}/report/pdf`);
 
-    // Riattiviamo il blocco dopo 1 secondo per proteggere la pagina
     setTimeout(() => {
       window.addEventListener('beforeunload', handleBeforeUnload);
     }, 1000);

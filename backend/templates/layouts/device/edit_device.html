@@ -1,10 +1,8 @@
 {# layouts/device/create_device.html #} {% extends "layouts/base.html" %} {%
 block title %} {% if device %}Modifica {{ device.name }}{% else %}Nuovo
 Dispositivo{% endif %} {% endblock %} {% block head %}
-<link
-  rel="stylesheet"
-  href="{{ url_for('static', filename='create-device.css') }}"
-/>
+
+
 {% endblock %} {% block content %} 
 <div class="create-device-container">
   <div class="page-header">
