@@ -6,8 +6,8 @@ db = db.getSiblingDB('mvp_db');
 
 // Inserisci i nuovi dati nella collection
 db.compliance_standards.insertOne({
-    "_id": "STD-EN303645------------",
-    "name": "EVS-EN_18031",
+    "_id": "STD-EN18031-1-2024",
+    "name": "EN18031-1-2024",
     "version_number": "1:2024",
     "requirements": [
         {
