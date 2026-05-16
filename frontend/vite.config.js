@@ -33,6 +33,11 @@ export default defineConfig({
         'create-asset': resolve(__dirname, 'src/main-create-asset.js'),
         'asset-delete-widget': resolve(__dirname, 'src/widgets/asset-delete/main.js'),
         'requirement-evaluation-widget':resolve(__dirname, 'src/widgets/requirement-evaluation/main.js'),
+        'device-import-widget':resolve(__dirname, 'src/widgets/device-import/main.js'),
+        'open-session-widget':resolve(__dirname, 'src/widgets/open-session/main.js'),
+        'export-device-widget':resolve(__dirname, 'src/widgets/device-export/main.js'),
+        'edit-asset-widget':resolve(__dirname, 'src/widgets/asset-edit/main.js'),
+        'create-asset-widget':resolve(__dirname, 'src/widgets/asset-create/main.js'),
       },
       output: {
         entryFileNames: `[name].js`,

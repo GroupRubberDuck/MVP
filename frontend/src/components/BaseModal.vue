@@ -16,6 +16,14 @@
 <script setup>
 import { onMounted, onUnmounted } from 'vue'
 
+const props = defineProps({
+  contentClass: {
+    type: String,
+    default: '',
+  },
+})
+
+
 const emit = defineEmits(['close'])
 
 function onKeydown(event) {
@@ -46,8 +54,28 @@ onUnmounted(() => {
     class="base-modal-overlay"
     @click="onOverlayClick"
   >
-    <div class="base-modal-content">
+    <div class="base-modal-content" :class="contentClass">
       <slot></slot>
     </div>
   </div>
 </template>
+<style scoped>
+.base-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.base-modal-content {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 480px;
+  width: 95%;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+</style>

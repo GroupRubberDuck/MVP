@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from infrastructure.database.connection import connect
 from infrastructure.database.exceptions import DatabaseConnectionError
 
+
 # Adapter outbound
 # device Repository
 from adapters.outbound.device.repository.mongo_device_repository import (

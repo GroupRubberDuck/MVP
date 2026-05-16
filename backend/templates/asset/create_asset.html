@@ -6,21 +6,22 @@
 {% endblock %}
 
 {% block head %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='vue/create-asset.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='create-device.css') }}">
 {% endblock %}
 
 {% block content %}
-  
-  <div id="create-asset-app"
-       data-session-id="{{ session_id }}"
-       data-device-id="{{ device_id }}"
-       data-asset-id="{{ asset.asset_id if asset else '' }}"
-       data-asset-name="{{ asset.asset_name if asset else '' }}"
-       data-asset-type="{{ asset.asset_type if asset else '' }}"
-       data-asset-description="{{ asset.asset_description if asset else '' }}">
+  <div id="asset-create-widget"
+  data-submit-url="{{url_for('evaluation.create_asset',session_id=session_id,device_id=device_id)}}"
+  data-cancel-url="{{url_for('evaluation.get_device_evaluation_detail',session_id=session_id,device_id=device_id)}}"
+  data-redirect-url="{{url_for('evaluation.get_asset_evaluation_detail',session_id=session_id,device_id=device_id,asset_id="__ASSET_ID__")}}"
+  >
+
   </div>
+
 {% endblock %}
 
 {% block scripts %}
   <script type="module" src="{{ url_for('static', filename='vue/create-asset.js') }}"></script>
+  <script type="module" src="{{ url_for('static', filename='vue/create-asset-widget.js') }}"></script>
 {% endblock %}

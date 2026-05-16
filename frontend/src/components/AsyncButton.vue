@@ -32,6 +32,10 @@ const props = defineProps({
     type: String,
     default: 'Caricamento...',
   },
+  buttonClass: {
+    type: String,
+    default: '',
+  },
 })
 
 const emit = defineEmits(['success', 'error'])
@@ -62,9 +66,10 @@ async function handleClick() {
     <button
       :disabled="isLoading"
       @click="handleClick"
+      :class="buttonClass"
     >
       {{ isLoading ? loadingLabel : label }}
     </button>
-    <span v-if="error">{{ error }}</span>
+    <span v-if="error" class="error-text">{{ error }}</span>
   </div>
 </template>

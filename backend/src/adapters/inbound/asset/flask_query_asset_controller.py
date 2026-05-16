@@ -53,7 +53,7 @@ class FlaskQueryAssetController(FlaskController):
             )
             
             return render_template(
-                "asset/create_asset.html",
+                "asset/edit_asset.html",
                 session_id=session_id,
                 device_id=device_id,
                 asset=asset_dto

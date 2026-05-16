@@ -1,1 +1,1 @@
-export const DEFAULT_STANDARD_ID = "STD-EN303645------------";
+export const DEFAULT_STANDARD_ID = "EVS-EN_18031-1:2024-----";

@@ -15,6 +15,8 @@
 {% block head %}
   <link rel="stylesheet" href="{{ url_for('static', filename='delete-device.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='vue/export-device.css') }}"> 
+  <link rel="stylesheet" href="{{ url_for('static', filename='vue/export-device-widget.css') }}"> 
+  <link rel="stylesheet" href="{{ url_for('static', filename='vue/open-session-widget.css') }}"> 
   {% endblock %}
 
 {% block page_title %}{% endblock %}
@@ -23,10 +25,12 @@
   <div class="device-header">
     <h1 class="device-header__title">Dispositivo: {{ device.name }}</h1>
     <div class="device-header__actions">
-      <button class="btn btn--outline" type="button"
-              onclick="window.openSessionAction('{{ device.device_id }}')">
-        Avvia Valutazione
-      </button>
+<div
+  id="open-session-widget"
+  data-create-session-url="{{ url_for('evaluation.open_session') }}"
+  data-device-id="{{ device.device_id }}"
+  data-redirect-url-template="{{ url_for('evaluation.get_device_evaluation_detail', session_id='__SESSION_ID__', device_id=device.device_id) }}"
+></div>
     </div>
   </div>
 
@@ -54,10 +58,11 @@
       <p class="info-row"><strong>Versione Standard:</strong> {{ device.compliance_standard_version }}</p>
 
       <div style="margin-top: 20px; display: flex; gap: 8px;">
-        <button class="btn btn--secondary btn--sm" type="button"
-                onclick="window.openExportModal('{{ device.device_id }}', '{{ device.name|e }}')">
-          Esporta dispositivo
-        </button>
+        <div
+  id="device-export-widget"
+  data-device-name="{{ device.name }}"
+  data-export-base-url="{{ url_for('devices.export_device', device_id=device.device_id) }}"
+></div>
         
         <div
           id="device-delete-widget"
@@ -77,4 +82,6 @@
   <script type="module" src="{{ url_for('static', filename='vue/delete-device.js') }}"></script>
   <script type="module" src="{{ url_for('static', filename='vue/export-device.js') }}"></script>
   <script type="module" src="{{ url_for('static', filename='vue/open-session.js') }}"></script>
+  <script type="module" src="{{ url_for('static', filename='vue/open-session-widget.js') }}"></script>
+  <script type="module" src="{{ url_for('static', filename='vue/export-device-widget.js') }}"></script>
 {% endblock %}
