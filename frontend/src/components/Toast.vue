@@ -43,3 +43,17 @@ onMounted(() => {
     {{ message }}
   </div>
 </template>
+<style scoped>
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #065f46;
+  color: white;
+  padding: 14px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 0.9rem;
+  z-index: 3000;
+}
+</style>

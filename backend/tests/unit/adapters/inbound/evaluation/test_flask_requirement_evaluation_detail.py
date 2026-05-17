@@ -11,7 +11,6 @@ from core.domain.evaluation_engine.evaluation_detail import (
     NodeDetail
 )
 from core.ports.inbound.asset.exceptions import GetRequirementEvaluationDetailFailure
-
 from adapters.inbound.evaluation.evaluation_detail.flask_requirement_evaluation_detail_controller import FlaskRequirementEvaluationDetailController
 
 def create_mock_validation_error() -> ValidationError:
@@ -95,7 +94,7 @@ class TestFlaskRequirementEvaluationDetail:
 
         mock_render_template.assert_called_once()
         args, kwargs = mock_render_template.call_args
-        assert args[0] == "layouts/requirement_detail.html"
+        assert args[0] == "asset/asset_evaluation_detail.html"
         
         dto_passato = kwargs["requirement"]
         dto_passato = kwargs["requirement"]

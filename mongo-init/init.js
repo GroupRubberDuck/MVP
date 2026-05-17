@@ -22,28 +22,28 @@ db.compliance_standards.insertOne(
                     {
                         "node_id": "DN-1",
                         "node_type": "decision_node",
-                        "question": "Is the public accessibility of the asset the equipment's intended functionality",
+                        "question": "Is the public accessibility of the asset the equipment's intended functionality?",
                         "child_yes": "leaf_na_1",
                         "child_no": "DN-2"
                     },
                     {
                         "node_id": "DN-2",
                         "node_type": "decision_node",
-                        "question": "Do the physical or logical measures in the targeted operational environment limit the accessibility to authorized entities",
+                        "question": "Do the physical or logical measures in the targeted operational environment limit the accessibility to authorized entities?",
                         "child_yes": "leaf_na_2",
                         "child_no": "DN-3"
                     },
                     {
                         "node_id": "DN-3",
                         "node_type": "decision_node",
-                        "question": "Do legal implications not allow access control mechanisms",
+                        "question": "Do legal implications not allow access control mechanisms?",
                         "child_yes": "leaf_na_3",
                         "child_no": "DN-4"
                     },
                     {
                         "node_id": "DN-4",
                         "node_type": "decision_node",
-                        "question": "Are there access control mechanisms that manage entities' access to the security assets and network assets",
+                        "question": "Are there access control mechanisms that manage entities' access to the security assets and network assets?",
                         "child_yes": "leaf_pass_1",
                         "child_no": "leaf_fail_1"
                     },
@@ -91,7 +91,7 @@ db.compliance_standards.insertOne(
                     {
                         "node_id": "DN-1",
                         "node_type": "decision_node",
-                        "question": "Do the access control mechanisms ensure that only authorized entities have access to the protected security asset or network asset",
+                        "question": "Do the access control mechanisms ensure that only authorized entities have access to the protected security asset or network asset?",
                         "child_yes": "leaf_pass_1",
                         "child_no": "leaf_fail_1"
                     },
@@ -113,7 +113,7 @@ db.compliance_standards.insertOne(
             "name": "Applicability of authentication mechanisms - Network interface",
             "description": {
                 "norm_description": "Determines if authentication is required for network functions performed over network interfaces.",
-                "target_description": "Network interfaces and related network function configurations."
+                "target_description": "For each access control mechanism required per ACM-1 that manages entities' access via a network interface and allows to: read confidential network function configuration or confidential security parameters; or modify sensitive network function configuration or sensitive security parameters; or use network functions or security functions."
             },
             "dependency_ids": [
                 "ACM-1"
@@ -124,36 +124,36 @@ db.compliance_standards.insertOne(
                     {
                         "node_id": "DN-1",
                         "node_type": "decision_node",
-                        "question": "Is the absence of authentication required for the equipment's intended functionality",
-                        "child_yes": "leaf_pass_1",
+                        "question": "Is the managed access for network functions or network functions configuration and is the absence of authentication required for the equipment's intended functionality?",
+                        "child_yes": "leaf_na_1",
                         "child_no": "DN-2"
                     },
                     {
                         "node_id": "DN-2",
                         "node_type": "decision_node",
-                        "question": "Is the access performed over networks where access is limited to authorized entities",
-                        "child_yes": "leaf_pass_2",
+                        "question": "Is the managed access performed over networks where access is limited to authorized entities?",
+                        "child_yes": "leaf_na_2",
                         "child_no": "DN-3"
                     },
                     {
                         "node_id": "DN-3",
                         "node_type": "decision_node",
-                        "question": "Does the managed access use authentication mechanisms",
-                        "child_yes": "leaf_pass_3",
+                        "question": "Does the managed access use authentication mechanisms?",
+                        "child_yes": "leaf_pass_1",
                         "child_no": "leaf_fail_1"
                     },
                     {
+                        "node_id": "leaf_na_1",
+                        "node_type": "leaf_node",
+                        "verdict": "not_applicable"
+                    },
+                    {
+                        "node_id": "leaf_na_2",
+                        "node_type": "leaf_node",
+                        "verdict": "not_applicable"
+                    },
+                    {
                         "node_id": "leaf_pass_1",
-                        "node_type": "leaf_node",
-                        "verdict": "pass"
-                    },
-                    {
-                        "node_id": "leaf_pass_2",
-                        "node_type": "leaf_node",
-                        "verdict": "pass"
-                    },
-                    {
-                        "node_id": "leaf_pass_3",
                         "node_type": "leaf_node",
                         "verdict": "pass"
                     },
@@ -170,7 +170,7 @@ db.compliance_standards.insertOne(
             "name": "Applicability of authentication mechanisms - User interface",
             "description": {
                 "norm_description": "Determines if authentication is required for access via physical or logical user interfaces.",
-                "target_description": "User interfaces (local or remote) and associated network function configurations."
+                "target_description": "For each access control mechanism required per ACM-1 that manages entities' access via a user interface and allows to: - read confidential network function configuration or confidential security parameters; or - modify sensitive network function configuration or sensitive security parameters; or - use network functions or security functions."
             },
             "dependency_ids": [
                 "ACM-1"
@@ -181,40 +181,30 @@ db.compliance_standards.insertOne(
                     {
                         "node_id": "DN-1",
                         "node_type": "decision_node",
-                        "question": "Do physical or logical measures in the targeted environment provide confidence in the correctness of an entity's claim",
-                        "child_yes": "leaf_pass_1",
+                        "question": "Is the managed access performed over a user interface where physical or logical measures in the targeted environment provide confidence in the correctness of an entity's claim?",
+                        "child_yes": "leaf_na_1",
                         "child_no": "DN-2"
                     },
                     {
                         "node_id": "DN-2",
                         "node_type": "decision_node",
-                        "question": "Is access without authentication needed to enable intended equipment functionality",
-                        "child_yes": "leaf_pass_2",
+                        "question": "Is access without authentication needed to enable the intended equipment functionality?",
+                        "child_yes": "leaf_na_2",
                         "child_no": "DN-3"
                     },
                     {
                         "node_id": "DN-3",
                         "node_type": "decision_node",
-                        "question": "Is access without authentication mandated by legal implications",
-                        "child_yes": "leaf_na_1",
+                        "question": "Is access without authentication  needed because legal implications do not allow for authentication mechanisms?",
+                        "child_yes": "leaf_na_3",
                         "child_no": "DN-4"
                     },
                     {
                         "node_id": "DN-4",
                         "node_type": "decision_node",
-                        "question": "Does the managed access use authentication mechanisms",
-                        "child_yes": "leaf_pass_3",
+                        "question": "Does the managed access use authentication mechanisms?",
+                        "child_yes": "leaf_pass_1",
                         "child_no": "leaf_fail_1"
-                    },
-                    {
-                        "node_id": "leaf_pass_1",
-                        "node_type": "leaf_node",
-                        "verdict": "pass"
-                    },
-                    {
-                        "node_id": "leaf_pass_2",
-                        "node_type": "leaf_node",
-                        "verdict": "pass"
                     },
                     {
                         "node_id": "leaf_na_1",
@@ -222,37 +212,14 @@ db.compliance_standards.insertOne(
                         "verdict": "not_applicable"
                     },
                     {
-                        "node_id": "leaf_pass_3",
+                        "node_id": "leaf_na_2",
                         "node_type": "leaf_node",
-                        "verdict": "pass"
+                        "verdict": "not_applicable"
                     },
                     {
-                        "node_id": "leaf_fail_1",
+                        "node_id": "leaf_na_3",
                         "node_type": "leaf_node",
-                        "verdict": "fail"
-                    }
-                ]
-            }
-        },
-        {
-            "id": "AUM-2-NI",
-            "name": "Appropriate authentication mechanisms - Network",
-            "description": {
-                "norm_description": "Ensures the authentication mechanism uses at least one factor for authentication of entities (knowledge, possession, or inherence).",
-                "target_description": "Authentication mechanisms identified for network interfaces in AUM-1-1."
-            },
-            "dependency_ids": [
-                "AUM-1-1"
-            ],
-            "decision_tree": {
-                "root_node_id": "DN-1",
-                "nodes": [
-                    {
-                        "node_id": "DN-1",
-                        "node_type": "decision_node",
-                        "question": "Does the authentication mechanism examine evidence from at least one category (knowledge, possession, inherence)",
-                        "child_yes": "leaf_pass_1",
-                        "child_no": "leaf_fail_1"
+                        "verdict": "not_applicable"
                     },
                     {
                         "node_id": "leaf_pass_1",
@@ -268,13 +235,14 @@ db.compliance_standards.insertOne(
             }
         },
         {
-            "id": "AUM-2-UI",
-            "name": "Appropriate authentication mechanisms - User",
+            "id": "AUM-2",
+            "name": "Appropriate authentication mechanisms",
             "description": {
                 "norm_description": "Ensures the authentication mechanism uses at least one factor for authentication of entities (knowledge, possession, or inherence).",
-                "target_description": "Authentication mechanisms identified for user interfaces in AUM-1-2."
+                "target_description": "For each authentication mechanism that is required per AUM-1-1 (network interface) or AUM-1-2 (user interface)"
             },
             "dependency_ids": [
+                "AUM-1-1",
                 "AUM-1-2"
             ],
             "decision_tree": {
@@ -283,7 +251,7 @@ db.compliance_standards.insertOne(
                     {
                         "node_id": "DN-1",
                         "node_type": "decision_node",
-                        "question": "Does the authentication mechanism examine evidence from at least one category (knowledge, possession, inherence)",
+                        "question": "Does the authentication mechanism examine evidence from at least one element of the categories knowledge, possession and inherence (one factor authentication)?",
                         "child_yes": "leaf_pass_1",
                         "child_no": "leaf_fail_1"
                     },
@@ -301,46 +269,14 @@ db.compliance_standards.insertOne(
             }
         },
         {
-            "id": "AUM-3-NI",
-            "name": "Authenticator validation - Network",
+            "id": "AUM-3",
+            "name": "Authenticator validation",
             "description": {
                 "norm_description": "Ensures the authentication mechanism validates all relevant properties of the authenticator in the operational environments of use.",
-                "target_description": "Authentication mechanisms identified for network interfaces in AUM-1-1."
+                "target_description": "For each authentication mechanism that is required per AUM-1-1 (network interface) or AUM-1-2 (user interface)"
             },
             "dependency_ids": [
-                "AUM-1-1"
-            ],
-            "decision_tree": {
-                "root_node_id": "DN-1",
-                "nodes": [
-                    {
-                        "node_id": "DN-1",
-                        "node_type": "decision_node",
-                        "question": "Does the mechanism validate all relevant properties of the authenticator in its operational environment",
-                        "child_yes": "leaf_pass_1",
-                        "child_no": "leaf_fail_1"
-                    },
-                    {
-                        "node_id": "leaf_pass_1",
-                        "node_type": "leaf_node",
-                        "verdict": "pass"
-                    },
-                    {
-                        "node_id": "leaf_fail_1",
-                        "node_type": "leaf_node",
-                        "verdict": "fail"
-                    }
-                ]
-            }
-        },
-        {
-            "id": "AUM-3-UI",
-            "name": "Authenticator validation - User",
-            "description": {
-                "norm_description": "Ensures the authentication mechanism validates all relevant properties of the authenticator in the operational environments of use.",
-                "target_description": "Authentication mechanisms identified for user interfaces in AUM-1-2."
-            },
-            "dependency_ids": [
+                "AUM-1-1",
                 "AUM-1-2"
             ],
             "decision_tree": {
@@ -349,7 +285,7 @@ db.compliance_standards.insertOne(
                     {
                         "node_id": "DN-1",
                         "node_type": "decision_node",
-                        "question": "Does the mechanism validate all relevant properties of the authenticator in its operational environment",
+                        "question": "Does the authentication mechanism validate all relevant properties considering the available information about the authenticator in the operational environments of use?",
                         "child_yes": "leaf_pass_1",
                         "child_no": "leaf_fail_1"
                     },
@@ -367,14 +303,15 @@ db.compliance_standards.insertOne(
             }
         },
         {
-            "id": "AUM-4-NI",
-            "name": "Changing authenticators - Network",
+            "id": "AUM-4",
+            "name": "Changing authenticators",
             "description": {
                 "norm_description": "Verifies that the authentication mechanism allows the authenticator factor to be changed by an authorized entity, unless it conflicts with security goals.",
-                "target_description": "Authentication mechanisms identified for network interfaces in AUM-1-1."
+                "target_description": "For each authentication mechanism that is required per AUM-1-1 (network interface) or AUM-1-2 (user interface)"
             },
             "dependency_ids": [
-                "AUM-1-1"
+                "AUM-1-1",
+                "AUM-1-2"
             ],
             "decision_tree": {
                 "root_node_id": "DN-1",
@@ -382,14 +319,14 @@ db.compliance_standards.insertOne(
                     {
                         "node_id": "DN-1",
                         "node_type": "decision_node",
-                        "question": "Does changing the authenticator conflict with security goals",
+                        "question": "Does the change of the authenticator conflict security goals?",
                         "child_yes": "leaf_na_1",
                         "child_no": "DN-2"
                     },
                     {
                         "node_id": "DN-2",
                         "node_type": "decision_node",
-                        "question": "Does the authentication mechanism allow the change of the authenticator",
+                        "question": "Does the authentication mechanism allow the change of the authenticator?",
                         "child_yes": "leaf_pass_1",
                         "child_no": "leaf_fail_1"
                     },
@@ -412,59 +349,15 @@ db.compliance_standards.insertOne(
             }
         },
         {
-            "id": "AUM-4-UI",
-            "name": "Changing authenticators - User",
-            "description": {
-                "norm_description": "Verifies that the authentication mechanism allows the authenticator factor to be changed by an authorized entity, unless it conflicts with security goals.",
-                "target_description": "Authentication mechanisms identified for user interfaces in AUM-1-2."
-            },
-            "dependency_ids": [
-                "AUM-1-2"
-            ],
-            "decision_tree": {
-                "root_node_id": "DN-1",
-                "nodes": [
-                    {
-                        "node_id": "DN-1",
-                        "node_type": "decision_node",
-                        "question": "Does changing the authenticator conflict with security goals",
-                        "child_yes": "leaf_na_1",
-                        "child_no": "DN-2"
-                    },
-                    {
-                        "node_id": "DN-2",
-                        "node_type": "decision_node",
-                        "question": "Does the authentication mechanism allow the change of the authenticator",
-                        "child_yes": "leaf_pass_1",
-                        "child_no": "leaf_fail_1"
-                    },
-                    {
-                        "node_id": "leaf_na_1",
-                        "node_type": "leaf_node",
-                        "verdict": "not_applicable"
-                    },
-                    {
-                        "node_id": "leaf_pass_1",
-                        "node_type": "leaf_node",
-                        "verdict": "pass"
-                    },
-                    {
-                        "node_id": "leaf_fail_1",
-                        "node_type": "leaf_node",
-                        "verdict": "fail"
-                    }
-                ]
-            }
-        },
-        {
-            "id": "AUM-5-1-NI",
-            "name": "Password strength - factory default passwords - Network",
+            "id": "AUM-5-1",
+            "name": "Password strength - factory default passwords",
             "description": {
                 "norm_description": "Ensures factory default passwords are changed before or on first use, or that they are unique per device and follow best practices regarding strength.",
-                "target_description": "Factory default passwords used by authentication mechanisms for network interfaces in AUM-1-1."
+                "target_description": "For each authentication mechanism required per AUM-1-1 or AUM-1-2 that uses factory default passwords"
             },
             "dependency_ids": [
-                "AUM-1-1"
+                "AUM-1-1",
+                "AUM-1-2"
             ],
             "decision_tree": {
                 "root_node_id": "DN-1",
@@ -472,21 +365,21 @@ db.compliance_standards.insertOne(
                     {
                         "node_id": "DN-1",
                         "node_type": "decision_node",
-                        "question": "Is the password enforced to be changed by the user before or on first use",
+                        "question": "Is the password enforced to be changed by the user before or on first use?",
                         "child_yes": "leaf_pass_1",
                         "child_no": "DN-2"
                     },
                     {
                         "node_id": "DN-2",
                         "node_type": "decision_node",
-                        "question": "Is the password unique per equipment",
+                        "question": "Is the password unique per equipment?",
                         "child_yes": "DN-3",
                         "child_no": "leaf_fail_1"
                     },
                     {
                         "node_id": "DN-3",
                         "node_type": "decision_node",
-                        "question": "Does the password follow best practice concerning strength",
+                        "question": "Does the password follow best practice concerning strength?",
                         "child_yes": "leaf_pass_2",
                         "child_no": "leaf_fail_2"
                     },
@@ -514,13 +407,14 @@ db.compliance_standards.insertOne(
             }
         },
         {
-            "id": "AUM-5-1-UI",
-            "name": "Password strength - factory default passwords - User",
+            "id": "AUM-5-2",
+            "name": "Password strength - non-factory default passwords",
             "description": {
-                "norm_description": "Ensures factory default passwords are changed before or on first use, or that they are unique per device and follow best practices regarding strength.",
-                "target_description": "Factory default passwords used by authentication mechanisms for user interfaces in AUM-1-2."
+                "norm_description": "Validates that non-factory passwords are set securely before first use/network connection, defined by an authorized entity, or generated securely by the device.",
+                "target_description": "For each authentication mechanism required per AUM-1-1 or AUM-1-2; and For each non factory default password"
             },
             "dependency_ids": [
+                "AUM-1-1",
                 "AUM-1-2"
             ],
             "decision_tree": {
@@ -529,78 +423,21 @@ db.compliance_standards.insertOne(
                     {
                         "node_id": "DN-1",
                         "node_type": "decision_node",
-                        "question": "Is the password enforced to be changed by the user before or on first use",
+                        "question": "Is the password enforced to be set by the user before or on first use and before the equipment is logically connected to a network?",
                         "child_yes": "leaf_pass_1",
                         "child_no": "DN-2"
                     },
                     {
                         "node_id": "DN-2",
                         "node_type": "decision_node",
-                        "question": "Is the password unique per equipment",
-                        "child_yes": "DN-3",
-                        "child_no": "leaf_fail_1"
-                    },
-                    {
-                        "node_id": "DN-3",
-                        "node_type": "decision_node",
-                        "question": "Does the password follow best practice concerning strength",
-                        "child_yes": "leaf_pass_2",
-                        "child_no": "leaf_fail_2"
-                    },
-                    {
-                        "node_id": "leaf_pass_1",
-                        "node_type": "leaf_node",
-                        "verdict": "pass"
-                    },
-                    {
-                        "node_id": "leaf_fail_1",
-                        "node_type": "leaf_node",
-                        "verdict": "fail"
-                    },
-                    {
-                        "node_id": "leaf_pass_2",
-                        "node_type": "leaf_node",
-                        "verdict": "pass"
-                    },
-                    {
-                        "node_id": "leaf_fail_2",
-                        "node_type": "leaf_node",
-                        "verdict": "fail"
-                    }
-                ]
-            }
-        },
-        {
-            "id": "AUM-5-2-NI",
-            "name": "Password strength - non-factory default passwords - Network",
-            "description": {
-                "norm_description": "Validates that non-factory passwords are set securely before first usenetwork connection, defined by an authorized entity, or generated securely by the device.",
-                "target_description": "Non-factory default passwords used by authentication mechanisms for network interfaces in AUM-1-1."
-            },
-            "dependency_ids": [
-                "AUM-1-1"
-            ],
-            "decision_tree": {
-                "root_node_id": "DN-1",
-                "nodes": [
-                    {
-                        "node_id": "DN-1",
-                        "node_type": "decision_node",
-                        "question": "Is the password enforced to be set by the user before first use and before network connection",
-                        "child_yes": "leaf_pass_1",
-                        "child_no": "DN-2"
-                    },
-                    {
-                        "node_id": "DN-2",
-                        "node_type": "decision_node",
-                        "question": "Is the password defined by an authorized entity within a protected network",
+                        "question": "Is the password defined by an authorized entity within a network where access is limited to authorised entities?",
                         "child_yes": "leaf_pass_2",
                         "child_no": "DN-3"
                     },
                     {
                         "node_id": "DN-3",
                         "node_type": "decision_node",
-                        "question": "Is the password generated by the equipment using best practices and communicated securely",
+                        "question": "Is the password generated by the equipment using best practice concerning strength and only communicated to an authorized entity within a network where access is limited to authorised entities?",
                         "child_yes": "leaf_pass_3",
                         "child_no": "leaf_fail_1"
                     },
@@ -628,13 +465,14 @@ db.compliance_standards.insertOne(
             }
         },
         {
-            "id": "AUM-5-2-UI",
-            "name": "Password strength - non-factory default passwords - User",
+            "id": "AUM-6",
+            "name": "Brute force protection",
             "description": {
-                "norm_description": "Validates that non-factory passwords are set securely before first usenetwork connection, defined by an authorized entity, or generated securely by the device.",
-                "target_description": "Non-factory default passwords used by authentication mechanisms for user interfaces in AUM-1-2."
+                "norm_description": "Ensures the authentication mechanism has protection mechanisms against brute force attacks.",
+                "target_description": "For each authentication mechanisms required by AUM-1-1 or AUM-1-2"
             },
             "dependency_ids": [
+                "AUM-1-1",
                 "AUM-1-2"
             ],
             "decision_tree": {
@@ -643,97 +481,7 @@ db.compliance_standards.insertOne(
                     {
                         "node_id": "DN-1",
                         "node_type": "decision_node",
-                        "question": "Is the password enforced to be set by the user before first use and before network connection",
-                        "child_yes": "leaf_pass_1",
-                        "child_no": "DN-2"
-                    },
-                    {
-                        "node_id": "DN-2",
-                        "node_type": "decision_node",
-                        "question": "Is the password defined by an authorized entity within a protected network",
-                        "child_yes": "leaf_pass_2",
-                        "child_no": "DN-3"
-                    },
-                    {
-                        "node_id": "DN-3",
-                        "node_type": "decision_node",
-                        "question": "Is the password generated by the equipment using best practices and communicated securely",
-                        "child_yes": "leaf_pass_3",
-                        "child_no": "leaf_fail_1"
-                    },
-                    {
-                        "node_id": "leaf_pass_1",
-                        "node_type": "leaf_node",
-                        "verdict": "pass"
-                    },
-                    {
-                        "node_id": "leaf_pass_2",
-                        "node_type": "leaf_node",
-                        "verdict": "pass"
-                    },
-                    {
-                        "node_id": "leaf_pass_3",
-                        "node_type": "leaf_node",
-                        "verdict": "pass"
-                    },
-                    {
-                        "node_id": "leaf_fail_1",
-                        "node_type": "leaf_node",
-                        "verdict": "fail"
-                    }
-                ]
-            }
-        },
-        {
-            "id": "AUM-6-NI",
-            "name": "Brute force protection - Network",
-            "description": {
-                "norm_description": "Ensures the authentication mechanism has protection mechanisms against brute force attacks.",
-                "target_description": "Authentication mechanisms identified for network interfaces in AUM-1-1."
-            },
-            "dependency_ids": [
-                "AUM-1-1"
-            ],
-            "decision_tree": {
-                "root_node_id": "DN-1",
-                "nodes": [
-                    {
-                        "node_id": "DN-1",
-                        "node_type": "decision_node",
-                        "question": "Is the authentication mechanism resilient against brute force attacks",
-                        "child_yes": "leaf_pass_1",
-                        "child_no": "leaf_fail_1"
-                    },
-                    {
-                        "node_id": "leaf_pass_1",
-                        "node_type": "leaf_node",
-                        "verdict": "pass"
-                    },
-                    {
-                        "node_id": "leaf_fail_1",
-                        "node_type": "leaf_node",
-                        "verdict": "fail"
-                    }
-                ]
-            }
-        },
-        {
-            "id": "AUM-6-UI",
-            "name": "Brute force protection - User",
-            "description": {
-                "norm_description": "Ensures the authentication mechanism has protection mechanisms against brute force attacks.",
-                "target_description": "Authentication mechanisms identified for user interfaces in AUM-1-2."
-            },
-            "dependency_ids": [
-                "AUM-1-2"
-            ],
-            "decision_tree": {
-                "root_node_id": "DN-1",
-                "nodes": [
-                    {
-                        "node_id": "DN-1",
-                        "node_type": "decision_node",
-                        "question": "Is the authentication mechanism resilient against brute force attacks",
+                        "question": "Has the authentication mechanism the capability to be resilient against brute force attacks?",
                         "child_yes": "leaf_pass_1",
                         "child_no": "leaf_fail_1"
                     },
@@ -751,5 +499,4 @@ db.compliance_standards.insertOne(
             }
         }
     ]
-}
-)
+});

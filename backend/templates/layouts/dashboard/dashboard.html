@@ -4,7 +4,8 @@
 {% block title %}Valutazione - {{ device_detail.device_name }}{% endblock %}
 
 {% block head %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vue/session-commit-widget.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -16,17 +17,34 @@
     </div>
     
     <div class="page-header__actions">
-      <button class="btn btn--outline" onclick="window.dashboardAction.save()">
-        Salva Sessione
-      </button>
       
-      <button class="btn btn--danger inline-form" onclick="window.dashboardAction.close()">
-        Chiudi Sessione
-      </button>
+      <div id="session-commit-widget" 
+      data-commit-url="{{url_for('evaluation.commit_session',session_id=session_id)}}">
+
+      </div>
+      <div
+      id="session-close-widget"
+      data-close-url="{{url_for('evaluation.close_session',session_id=session_id)}}"
+      data-redirect-url="{{url_for('devices.get_device_detail', device_id=device_id)}}"
+      >
+
+      </div>
+      
+      
+
+
+      <div id="session-commit-and-close-widget"
+        data-commit-and-close-url="{{ url_for('evaluation.commit_and_close', session_id=session_id) }}"
+        data-redirect-url="{{ url_for('devices.get_device_detail', device_id=device_id) }}">
+      </div>
+
+
 
       <button class="btn btn--primary" onclick="window.dashboardAction.generateReport()">
         Genera Report PDF
       </button>
+
+
     </div>
   </div>
 
@@ -60,9 +78,9 @@
                 <td><strong>{{ asset.asset_name }}</strong></td>
                 <td>{{ asset.asset_type }}</td>
                 <td>
-                  <span class="badge {{ 'badge--pass' if asset.asset_evaluation == 'Conforme' else 'badge--fail' }}">
-                    {{ asset.asset_evaluation }}
-                  </span>
+                <span class="badge {{ 'badge--pass' if asset.asset_evaluation|trim|upper == 'PASS' else 'badge--fail' }}">
+                  {{ asset.asset_evaluation if asset.asset_evaluation else 'PENDING' }}
+                </span>
                 </td>
                 <td style="display: flex; gap: 8px;">
                   <a class="btn btn--outline btn--sm" href="{{
@@ -72,15 +90,10 @@
                       device_id=device_id,
                       asset_id=asset.asset_id
                     )
-                  }}">
-                    Valuta
-                  </a>
-                  
-                  <a class="btn btn--primary btn--sm" 
-                  href="{{ url_for('evaluation.edit_asset_page', session_id=session_id, device_id=device_id, asset_id=asset.asset_id) }}"
+                  }}"
                   onclick="window.dashboardAction.allowExit()">
-                  Modifica
-                </a>
+                  Valuta
+                  </a>
                 </td>
               </tr>
             {% endfor %}
@@ -100,4 +113,6 @@
 
 {% block scripts %}
   <script type="module" src="{{ url_for('static', filename='vue/dashboard-logic.js') }}"></script>
+  <script type="module" src="{{ url_for('static', filename='vue/session-commit-widget.js') }}"></script>
+  <script type="module" src="{{ url_for('static', filename='vue/session-close-widget.js') }}"></script>
 {% endblock %}

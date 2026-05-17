@@ -63,16 +63,22 @@ async function updateAsset() {
     }
     throw new Error(data.error || 'Errore durante il salvataggio.')
   }
-
-  return await response.json()
 }
 
-function onSuccess(data) {
-  window.location.href = data.redirect_url
+function onSuccess() {
+  window.location.href = props.redirectUrl
 }
 </script>
 
 <template>
+
+
+
+  <div class="card" style="max-width: 600px; margin: 0 auto; margin-top: 20px;">
+    <div class="card__header">
+      <h2 class="card__title">{{ isEditing ? 'Modifica Asset' : 'Aggiungi Nuovo Asset' }}</h2>
+    </div>
+    <div class="card__body">
   <form @submit.prevent>
     <AssetForm :fields="fields" :errors="errors">
       <template #actions>
@@ -87,4 +93,7 @@ function onSuccess(data) {
       </template>
     </AssetForm>
   </form>
+  </div>
+
+  </div>
 </template>

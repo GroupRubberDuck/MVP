@@ -19,16 +19,11 @@ from core.ports.inbound.asset.exceptions import GetRequirementEvaluationDetailFa
 from typing import Annotated, Literal, Union
 from pydantic import BaseModel, Field, ValidationError
 from collections.abc import Mapping
-# DTOs
-
-# --- Nodi ---
 
 class NodeBaseDTO(BaseModel):
     parent_id: str | None
-    # Potresti voler aggiungere configurazioni qui, se necessario
 
 class DecisionNodeDTO(NodeBaseDTO):
-    # Il frontend userà questo campo per fare un if/switch
     node_type: Literal["decision"] = "decision" 
     question: str
     yes_child_id: str | None
@@ -38,11 +33,9 @@ class LeafNodeDTO(NodeBaseDTO):
     node_type: Literal["leaf"] = "leaf"
     verdict: StandardVerdict
 
-# Creiamo un tipo che dice a Pydantic: 
-# "Guarda il campo 'node_type' per capire quale classe usare"
+
 AnyNodeDTO = Annotated[Union[DecisionNodeDTO, LeafNodeDTO], Field(discriminator="node_type")]
 
-# --- Albero e DTO Principale ---
 
 class DecisionTreeDTO(BaseModel):
     root_node_id: str
@@ -63,7 +56,6 @@ class RequirementEvaluationDTO(BaseModel):
     justification:str | None
 
 
-#controller
 
 class FlaskRequirementEvaluationDetailController(FlaskController):
         def __init__(self, get_requirement_ev_detail_use_case:GetRequirementEvaluationDetailUseCase) -> None:

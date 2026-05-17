@@ -38,6 +38,8 @@ export default defineConfig({
         'export-device-widget':resolve(__dirname, 'src/widgets/device-export/main.js'),
         'edit-asset-widget':resolve(__dirname, 'src/widgets/asset-edit/main.js'),
         'create-asset-widget':resolve(__dirname, 'src/widgets/asset-create/main.js'),
+        'session-commit-widget':resolve(__dirname, 'src/widgets/session-commit/main.js'),
+        'session-close-widget':resolve(__dirname, 'src/widgets/session-close/main.js'),
       },
       output: {
         entryFileNames: `[name].js`,

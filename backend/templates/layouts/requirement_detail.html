@@ -1,5 +1,25 @@
 {% extends "layouts/base.html" %}
 
+{% block breadcrumbs %}
+  <li class="breadcrumb__item">
+    <a href="{{ url_for('evaluation.get_device_evaluation_detail', session_id=session_id, device_id=device_id) }}">
+      Dashboard
+    </a>
+  </li>
+  
+  <li class="breadcrumb__item">
+    <span class="separator">/</span>
+    <a href="{{ url_for('evaluation.get_asset_evaluation_detail', session_id=session_id, device_id=device_id, asset_id=asset_id) }}">
+      Dettaglio Asset
+    </a>
+  </li>
+
+  <li class="breadcrumb__item">
+    <span class="separator">/</span>
+    <span aria-current="page">Valutazione: {{requirement_id }}</span>
+  </li>
+{% endblock %}
+
 {% block title %}{% endblock %}
 
 {% block head %}
@@ -7,32 +27,63 @@
 
 {% endblock %}
 
-{% block page_title %}<span>{{requirement.id }}</span> - <span>{{requirement.name}}</span>{% endblock %}
-
 {% block content %}
-<h1><span>{{requirement.id }}</span> - <span>{{requirement.name}}</span></h1>
-<div>
-        <dl>
-                <dt>Descrizione</dt>
-                <dd>{{requirement.norm_description}}</dd>
-                <dt>Target</dt>
-                <dd>{{requirement.target_description}}</dd>
-                <dt>Lista dipendenze</dt>
-{% for dep in requirement.dependencies %}
-  <dd>
-    <a href="{{ url_for('evaluation.get_requirement_evaluation_detail',
-      requirement_id=dep.id,
-      session_id=session_id,
-      device_id=device_id,
-      asset_id=asset_id) }}">
-      {{ dep.id }} ({{ dep.evaluation }})
-    </a>
-  </dd>
-{% else %}
-  <dd>Nessuna dipendenza</dd>
-{% endfor %}            
-        </dl>
+<div class="detail-container detail-container--left">
+  
+  <!-- Intestazione pagina (ID e Nome Requisito) -->
+  <div class="device-header device-header--start">
+    <h1 class="device-header__title">
+      <strong>{{ requirement_id }}</strong> 
+      <span class="device-header__separator">|</span> 
+      {{ requirement.name }}
+    </h1>
+  </div>
 
+  <div class="req-details-section">
+    
+    <!-- Titolo con semplice linea di separazione sottostante -->
+    <h2 class="req-details-title">
+      Dettagli Requisito
+    </h2>
+
+    <!-- La lista formattata -->
+    <!-- La lista formattata -->
+    <dl class="minimal-dl minimal-dl--left">
+      
+      <div class="minimal-dl__group">
+        <dt>Descrizione</dt>
+        <dd>{{ requirement.norm_description }}</dd>
+      </div>
+
+      <div class="minimal-dl__group">
+        <dt>Target</dt>
+        <dd>{{ requirement.target_description }}</dd>
+      </div>
+
+      <div class="minimal-dl__group">
+        <dt>Lista dipendenze</dt>
+        <dd>
+          {% if requirement.dependencies %}
+            <ul class="asset-list asset-list--spaced" style="padding-left: 0; list-style-type: none;">
+              {% for dep in requirement.dependencies %}
+                <li class="asset-item">
+                  <a class="info-link info-link--flex" href="{{ url_for('evaluation.get_requirement_evaluation_detail', requirement_id=dep.id, session_id=session_id, device_id=device_id, asset_id=asset_id) }}">
+                    <strong>{{ dep.id }}</strong> 
+                    <span class="badge {{ 'badge--pass' if dep.evaluation|trim|upper == 'PASS' else 'badge--fail' }}">
+                      {{ dep.evaluation if dep.evaluation else 'PENDING' }}
+                    </span>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <span class="text-empty">Nessuna dipendenza</span>
+          {% endif %}
+        </dd>
+      </div>
+
+    </dl>
+  </div>
 </div>
 
 <div
