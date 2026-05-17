@@ -51,6 +51,11 @@ def make_service():
 class TestEvaluateDecisionNodeService:
 
     def test_evaluate_node_success(self):
+        """
+        Dato un comando di valutazione nodo valido (Given),
+        quando il servizio processa la risposta dell'utente (When),
+        allora deve recuperare la sessione e l'asset corretti, aggiornare la scelta del nodo nel dominio e salvare la sessione (Then).
+        """
         service, mock_get, mock_save, mock_session, mock_asset = make_service()
         command = make_command()
 
@@ -70,6 +75,11 @@ class TestEvaluateDecisionNodeService:
         mock_save.save_evaluation_session.assert_called_once_with(mock_session)
 
     def test_solleva_failure_se_sessione_non_trovata(self):
+        """
+        Dato un ID sessione non presente nella cache (Given),
+        quando viene tentata la valutazione di un nodo (When),
+        allora il servizio deve sollevare una EvaluateNodeFailure indicando che la sessione non è stata trovata (Then).
+        """
         service, mock_get, _, _, _ = make_service()
         mock_get.get_evaluation_session.side_effect = EvaluationSessionNotFoundError("Not found")
 
@@ -79,6 +89,11 @@ class TestEvaluateDecisionNodeService:
         assert "Sessione 'session-1' non trovata" in str(exc_info.value)
 
     def test_solleva_failure_se_asset_non_trovato(self):
+        """
+        Data una sessione valida ma un ID asset non appartenente al dispositivo (Given),
+        quando si tenta di impostare una risposta (When),
+        allora il servizio deve sollevare una EvaluateNodeFailure riportando l'ID dell'asset mancante (Then).
+        """
         service, _, _, mock_session, _ = make_service()
         mock_session.device.get_asset.side_effect = AssetNotFoundError("Not found")
 
@@ -88,6 +103,11 @@ class TestEvaluateDecisionNodeService:
         assert "Asset 'asset-1' non trovato" in str(exc_info.value)
 
     def test_solleva_failure_se_dominio_rifiuta_valore(self):
+        """
+        Dato un nodo o un valore di risposta che viola le regole di validazione del dominio (Given),
+        quando l'entità Asset solleva un ValueError (When),
+        allora il servizio deve catturare l'eccezione e rilanciare una EvaluateNodeFailure descrittiva (Then).
+        """
         service, _, _, _, mock_asset = make_service()
         mock_asset.set_node_choice.side_effect = ValueError("Nodo inesistente")
 
@@ -97,6 +117,11 @@ class TestEvaluateDecisionNodeService:
         assert "Risposta non valida per il nodo" in str(exc_info.value)
 
     def test_solleva_failure_se_salvataggio_fallisce(self):
+        """
+        Dato un errore tecnico durante la persistenza della sessione aggiornata (Given),
+        quando il servizio tenta di salvare lo stato (When),
+        allora deve sollevare una EvaluateNodeFailure per notificare il fallimento dell'operazione (Then).
+        """
         service, _, mock_save, _, _ = make_service()
         mock_save.save_evaluation_session.side_effect = EvaluationSessionSaveError("DB Disconnesso")
 

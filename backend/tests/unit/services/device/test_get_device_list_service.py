@@ -71,6 +71,11 @@ def client(
 class TestGetDeviceListService:
 
     def test_returns_list_from_port(self, mock_find_all_port):
+        """
+        Dati uno o più dispositivi registrati nel sistema (Given),
+        quando viene richiesto il recupero dell'elenco dei dispositivi (When),
+        allora il servizio deve interrogare la porta di output e restituire una lista di oggetti DeviceSummary correttamente popolati (Then).
+        """
         summaries = [
             DeviceSummary(
                 device_id="D-1",
@@ -98,6 +103,11 @@ class TestGetDeviceListService:
         mock_find_all_port.find_all.assert_called_once()
 
     def test_returns_empty_list(self, mock_find_all_port):
+        """
+        Dato un sistema privo di dispositivi registrati (Given),
+        quando viene invocata la richiesta dell'elenco (When),
+        allora il servizio deve restituire una lista vuota senza sollevare eccezioni (Then).
+        """
         mock_find_all_port.find_all.return_value = []
 
         service = GetDeviceListService(mock_find_all_port)

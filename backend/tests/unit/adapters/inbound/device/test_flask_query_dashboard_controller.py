@@ -68,6 +68,11 @@ def app(app_and_mock: tuple[Flask, MagicMock]) -> tuple[Flask, MagicMock]:
 class TestFlaskQueryDashboardController:
 
     def test_risponde_200_caso_felice(self, app: tuple[Flask, MagicMock]) -> None:
+        """
+        Dato un ID di sessione e un ID device validi che restituiscono un dettaglio valutativo (Given),
+        quando l'utente richiede la dashboard del dispositivo (When),
+        allora il controller deve restituire uno status code 200 OK (Then).
+        """
         flask_app, mock_use_case = app
         mock_use_case.get_device_evaluation_detail.return_value = _make_mock_detail()
         with patch(PATCH_RENDER, return_value=""):
@@ -76,6 +81,11 @@ class TestFlaskQueryDashboardController:
         assert response.status_code == 200
 
     def test_chiama_use_case_una_volta(self, app: tuple[Flask, MagicMock]) -> None:
+        """
+        Dati un ID di sessione e un ID device validi (Given),
+        quando viene invocata la rotta della dashboard (When),
+        allora lo use case delegato al recupero dei dettagli deve essere chiamato esattamente una volta (Then).
+        """
         flask_app, mock_use_case = app
         mock_use_case.get_device_evaluation_detail.return_value = _make_mock_detail()
         with patch(PATCH_RENDER, return_value=""):
@@ -84,6 +94,11 @@ class TestFlaskQueryDashboardController:
         mock_use_case.get_device_evaluation_detail.assert_called_once()
 
     def test_command_ha_i_campi_corretti(self, app: tuple[Flask, MagicMock]) -> None:
+        """
+        Dati un session_id e un device_id passati attraverso i parametri dell'URL (Given),
+        quando viene effettuata la richiesta per la dashboard (When),
+        allora i parametri estratti devono essere mappati correttamente all'interno del Command per lo use case (Then).
+        """
         flask_app, mock_use_case = app
         mock_use_case.get_device_evaluation_detail.return_value = _make_mock_detail()
         with patch(PATCH_RENDER, return_value=""):
@@ -96,6 +111,11 @@ class TestFlaskQueryDashboardController:
         assert command.device_id == DEVICE_ID
 
     def test_use_case_failure_risponde_404(self, app: tuple[Flask, MagicMock]) -> None:
+        """
+        Dato uno scenario in cui lo use case lancia un'eccezione GetEvaluationDetailFailure per device inesistente (Given),
+        quando viene richiesta la dashboard del dispositivo (When),
+        allora il controller deve intercettare l'errore e restituire uno status code 404 Not Found (Then).
+        """
         flask_app, mock_use_case = app
         mock_use_case.get_device_evaluation_detail.side_effect = GetEvaluationDetailFailure("not found")
         with patch(PATCH_RENDER, return_value=""):
@@ -104,6 +124,11 @@ class TestFlaskQueryDashboardController:
         assert response.status_code == 404
 
     def test_use_case_failure_usa_template_errore(self, app: tuple[Flask, MagicMock]) -> None:
+        """
+        Dato un fallimento nel recupero dei dettagli valutativi del dispositivo (Given),
+        quando la rotta gestisce l'eccezione (When),
+        allora il controller deve renderizzare il template HTML specifico per gli errori 404 passando il relativo messaggio (Then).
+        """
         flask_app, mock_use_case = app
         mock_use_case.get_device_evaluation_detail.side_effect = GetEvaluationDetailFailure("not found")
         with patch(PATCH_RENDER, return_value="") as mock_render:
@@ -113,6 +138,11 @@ class TestFlaskQueryDashboardController:
         assert "message" in mock_render.call_args.kwargs
 
     def test_usa_template_dashboard(self, app: tuple[Flask, MagicMock]) -> None:
+        """
+        Dati dei risultati validi restituiti dalla business logic (Given),
+        quando la dashboard viene elaborata con successo (When),
+        allora il controller deve utilizzare il template 'layouts/device/dashboard.html' per la renderizzazione (Then).
+        """
         flask_app, mock_use_case = app
         mock_use_case.get_device_evaluation_detail.return_value = _make_mock_detail()
         with patch(PATCH_RENDER, return_value="") as mock_render:
@@ -121,6 +151,11 @@ class TestFlaskQueryDashboardController:
         assert mock_render.call_args[0][0] == "layouts/device/dashboard.html"
 
     def test_mapping_campi_device_nel_dto(self, app: tuple[Flask, MagicMock]) -> None:
+        """
+        Dato un oggetto di dettaglio restituito in uscita dallo use case (Given),
+        quando il controller prepara la vista per il front-end (When),
+        allora i dati anagrafici e di stato del device devono essere mappati correttamente in un DeviceDashboardDTO (Then).
+        """
         flask_app, mock_use_case = app
         mock_detail = _make_mock_detail()
         mock_use_case.get_device_evaluation_detail.return_value = mock_detail
@@ -143,6 +178,11 @@ class TestFlaskQueryDashboardController:
         assert dto.aggregate_status == mock_detail.verdict
 
     def test_mapping_asset_list(self, app: tuple[Flask, MagicMock]) -> None:
+        """
+        Dato un dettaglio valutativo contenente una lista di asset analizzati (Given),
+        quando i dati vengono strutturati per il template della dashboard (When),
+        allora l'elenco degli asset deve essere mappato all'interno del DTO rispettando id, nomi, tipi e verdetti (Then).
+        """
         flask_app, mock_use_case = app
         mock_asset = _make_mock_asset(asset_id="asset-99", verdict=EvaluationState.FAIL)
         mock_use_case.get_device_evaluation_detail.return_value = _make_mock_detail(

@@ -12,6 +12,12 @@ def make_service():
 class TestCloseEvaluationSessionService:
 
     def test_chiama_delete_con_session_id_corretto(self):
+        """
+        Dato un identificativo di sessione attivo (Given),
+        quando viene richiesto al servizio di chiudere la sessione di valutazione (When),
+        allora il servizio deve invocare correttamente la porta di cancellazione (delete) 
+        per rimuovere la sessione specifica dalla persistenza temporanea (Then).
+        """
         service, mock_delete = make_service()
         command = CloseEvaluationSessionCommand(session_id="session-1")
 

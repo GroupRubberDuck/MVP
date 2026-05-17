@@ -101,6 +101,11 @@ class TestExportReportSuccess:
     def test_generates_and_returns_report_successfully(
         self, service, mock_session_port, mock_engine, mock_report_generator, command
     ):
+        """
+        Dato un comando di generazione report valido per una sessione esistente (Given),
+        quando il servizio esegue la procedura di esportazione (When),
+        allora deve restituire il contenuto del file generato (es. PDF) correttamente prodotto dal generatore di report (Then).
+        """
         _setup_happy_path(mock_session_port, mock_engine, mock_report_generator, command)
 
         result = service.export_report(command)
@@ -110,6 +115,12 @@ class TestExportReportSuccess:
     def test_builds_correct_device_evaluation_detail(
         self, service, mock_session_port, mock_engine, mock_report_generator, command
     ):
+        """
+        Dati i risultati della valutazione ottenuti dal motore di dominio (Given),
+        quando il servizio prepara i dati per l'esportazione (When),
+        allora deve costruire un oggetto DeviceEvaluationDetail accurato e passarlo al generatore di report, 
+        includendo le anagrafiche e i verdetti corretti per device, asset e requisiti (Then).
+        """
         
         _setup_happy_path(mock_session_port, mock_engine, mock_report_generator, command)
 
@@ -140,6 +151,11 @@ class TestExportReportFailures:
     def test_raises_failure_when_session_not_found(
         self, service, mock_session_port, command
     ):
+        """
+        Dato un ID sessione non presente nel sistema (Given),
+        quando viene richiesta la generazione del report (When),
+        allora il servizio deve sollevare un'eccezione ExportReportFailure indicando che la sessione non è stata trovata (Then).
+        """
         mock_session_port.get_evaluation_session.side_effect = EvaluationSessionNotFoundError()
 
         with pytest.raises(ExportReportFailure, match="SESSION-1"):
@@ -148,6 +164,11 @@ class TestExportReportFailures:
     def test_raises_failure_on_domain_error_during_evaluation(
         self, service, mock_session_port, mock_engine, mock_report_generator, command
     ):
+        """
+        Dato un errore di business logica durante la fase di valutazione (es. un ciclo infinito nell'albero decisionale) (Given),
+        quando il motore di valutazione solleva un DomainError (When),
+        allora il servizio deve catturare l'eccezione tecnica e rilanciarla come ExportReportFailure per l'utente (Then).
+        """
         _setup_happy_path(mock_session_port, mock_engine, mock_report_generator, command)
         
         mock_engine.evaluate.side_effect = DomainError("Ciclo infinito rilevato nell'albero")

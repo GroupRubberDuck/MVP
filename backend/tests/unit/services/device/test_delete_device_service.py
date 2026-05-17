@@ -26,8 +26,9 @@ class TestDeleteDeviceService:
         mock_delete_device_port: Mock
     ):
         """
-        Scenario: Il dispositivo esiste e viene eliminato senza errori.
-        Risultato Atteso: La porta in uscita viene chiamata con l'ID corretto.
+        Dato un identificativo di dispositivo presente nel sistema (Given),
+        quando viene inviato il comando di eliminazione al servizio (When),
+        allora il servizio deve invocare correttamente la porta di cancellazione sul repository utilizzando l'ID fornito (Then).
         """
         command = DeleteDeviceCommand(device_id="DEV-999")
 
@@ -41,8 +42,9 @@ class TestDeleteDeviceService:
         mock_delete_device_port: Mock
     ):
         """
-        Scenario: L'ID del dispositivo non esiste nel database.
-        Risultato Atteso: Il service intercetta DeviceNotFoundError e lancia DeleteDeviceFailure.
+        Dato un ID dispositivo non censito nel database (Given),
+        quando il repository segnala un errore di risorsa non trovata (DeviceNotFoundError) (When),
+        allora il servizio deve intercettare l'errore tecnico e sollevare un'eccezione di dominio DeleteDeviceFailure riportando l'ID mancante (Then).
         """
         command = DeleteDeviceCommand(device_id="DEV-GHOST")
         

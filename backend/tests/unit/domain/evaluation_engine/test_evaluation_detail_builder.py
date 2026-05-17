@@ -113,8 +113,14 @@ def _make_standard(requirements=None):
 
 
 class TestBuildRequirementDetail:
+    
 
     def test_builds_detail_with_correct_fields(self, builder):
+        """
+        Dato un requisito di dominio completo di albero decisionale e il suo risultato di valutazione (Given),
+        quando il builder viene invocato per generare i dettagli del requisito (When),
+        allora deve creare un oggetto RequirementEvaluationDetail con tutti i campi anagrafici e di stato correttamente mappati (Then).
+        """
         tree = _make_decision_tree()
         req = _make_requirement(tree=tree)
         result = _make_requirement_result()
@@ -131,6 +137,11 @@ class TestBuildRequirementDetail:
         assert detail.root_id == "N1"
 
     def test_nodes_are_flat_node_details(self, builder):
+        """
+        Dato un albero decisionale strutturato a grafi all'interno del requisito (Given),
+        quando il builder genera il dettaglio (When),
+        allora deve appiattire l'albero convertendo tutti i nodi in una mappa strutturata di oggetti NodeDetail (Then).
+        """
         tree = _make_decision_tree()
         req = _make_requirement(tree=tree)
         result = _make_requirement_result()
@@ -142,6 +153,11 @@ class TestBuildRequirementDetail:
             assert isinstance(node, NodeDetail)
 
     def test_decision_node_has_correct_type(self, builder):
+        """
+        Dato un albero decisionale contenente nodi di tipo 'decisione' con relative domande (Given),
+        quando viene generato il dettaglio appiattito (When),
+        allora i NodeDetail corrispondenti devono avere il node_type impostato a 'decision' e mantenere i riferimenti ai figli (Then).
+        """
         tree = _make_decision_tree()
         req = _make_requirement(tree=tree)
         result = _make_requirement_result()
@@ -156,6 +172,11 @@ class TestBuildRequirementDetail:
         assert n1.verdict is None
 
     def test_leaf_node_has_correct_type(self, builder):
+        """
+        Dato un albero decisionale contenente nodi foglia con i verdetti finali (Given),
+        quando viene generato il dettaglio appiattito (When),
+        allora i NodeDetail corrispondenti devono avere node_type 'leaf', il corretto verdetto e campi figli nulli (Then).
+        """
         tree = _make_decision_tree()
         req = _make_requirement(tree=tree)
         result = _make_requirement_result()
@@ -170,6 +191,11 @@ class TestBuildRequirementDetail:
         assert l1.child_on_false_id is None
 
     def test_parent_ids_are_correct(self, builder):
+        """
+        Dato un albero decisionale complesso (Given),
+        quando il builder calcola le relazioni per i NodeDetail (When),
+        allora deve risolvere correttamente i puntatori 'parent_id', lasciando a None quello della radice e associando correttamente gli altri ai padri che li invocano (Then).
+        """
         tree = _make_decision_tree()
         req = _make_requirement(tree=tree)
         result = _make_requirement_result()
@@ -182,6 +208,11 @@ class TestBuildRequirementDetail:
         assert detail.nodes["L2"].parent_id == "N2"
 
     def test_no_decision_tree_returns_empty_nodes(self, builder):
+        """
+        Dato un requisito che, per sua natura, è sprovvisto di un albero decisionale (Given),
+        quando si tenta di generare il dettaglio (When),
+        allora il dizionario dei nodi deve risultare vuoto e il root_id pari a una stringa vuota, senza sollevare errori (Then).
+        """
         req = _make_requirement(tree=None)
         result = _make_requirement_result()
 
@@ -191,6 +222,11 @@ class TestBuildRequirementDetail:
         assert detail.root_id == ""
 
     def test_preserves_dependencies(self, builder):
+        """
+        Dato un risultato di valutazione che presenta dipendenze verso altri requisiti (Given),
+        quando il builder istanzia il dettaglio del requisito (When),
+        allora l'informazione sulle dipendenze deve essere preservata inalterata (Then).
+        """
         tree = _make_decision_tree()
         req = _make_requirement(tree=tree)
         result = RequirementEvaluationResult(
@@ -212,6 +248,11 @@ class TestBuildRequirementDetail:
 class TestBuildAssetDetail:
 
     def test_builds_detail_with_correct_fields(self, builder):
+        """
+        Dato il risultato della valutazione di un asset assieme al device e allo standard associati (Given),
+        quando viene richiesto il dettaglio dell'asset (When),
+        allora il builder deve estrarre l'anagrafica dall'entità di dominio e aggregarla con il verdetto e i dettagli dei requisiti (Then).
+        """
         tree = _make_decision_tree()
         req = _make_requirement(tree=tree)
         asset = _make_asset()
@@ -236,6 +277,11 @@ class TestBuildAssetDetail:
         assert len(detail.requirement_details) == 1
 
     def test_multiple_requirements(self, builder):
+        """
+        Dato un asset valutato su più requisiti differenti (Given),
+        quando il builder assembla il dettaglio complessivo (When),
+        allora tutti i requirement_details devono essere correttamente processati, mappati e inclusi nell'oggetto restituito (Then).
+        """
         tree = _make_decision_tree()
         req1 = _make_requirement(req_id="REQ-001", tree=tree)
         req2 = _make_requirement(req_id="REQ-002", tree=tree)
@@ -264,6 +310,11 @@ class TestBuildAssetDetail:
 class TestBuildDeviceDetail:
 
     def test_builds_detail_with_correct_fields(self, builder):
+        """
+        Dato un risultato di valutazione root (DeviceEvaluationResult) e le relative entità Device e Standard (Given),
+        quando il builder viene invocato per l'aggregazione finale (When),
+        allora deve creare un DeviceEvaluationDetail estraendo correttamente l'anagrafica hardware e aggregando i dettagli di livello inferiore (Then).
+        """
         tree = _make_decision_tree()
         req = _make_requirement(tree=tree)
         asset = _make_asset()
@@ -295,6 +346,11 @@ class TestBuildDeviceDetail:
         assert len(detail.asset_details) == 1
 
     def test_multiple_assets(self, builder):
+        """
+        Dato un dispositivo contenente molteplici asset valutati (Given),
+        quando viene processato dal builder centrale (When),
+        allora tutti i dettagli degli asset devono essere mappati in cascata e inclusi nell'oggetto restituito, preservando il verdetto aggregato globale (Then).
+        """
         tree = _make_decision_tree()
         req = _make_requirement(tree=tree)
 
@@ -329,6 +385,11 @@ class TestBuildDeviceDetail:
         assert detail.verdict == EvaluationState.FAIL
 
     def test_empty_device(self, builder):
+        """
+        Dato un dispositivo anagraficamente valido ma privo di asset e valutazioni (Given),
+        quando si tenta di generare il suo dettaglio di valutazione (When),
+        allora il builder deve restituire un oggetto con la lista degli asset vuota gestendo correttamente l'assenza di dati (Then).
+        """
         device = _make_device()
         standard = _make_standard()
         device_result = DeviceEvaluationResult(

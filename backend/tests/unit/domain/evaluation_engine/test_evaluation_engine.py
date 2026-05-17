@@ -23,14 +23,29 @@ def engine() -> EvaluationEngine:
 class TestAggregateEvaluationStates:
 
     def test_all_pass_returns_pass(self, engine):
+        """
+        Dato un elenco di stati di valutazione in cui tutti sono positivi (PASS) (Given),
+        quando il motore li aggrega (When),
+        allora il verdetto finale restituito deve essere PASS (Then).
+        """
         states = [EvaluationState.PASS, EvaluationState.PASS]
         assert engine._aggregate_evaluation_states(states) == EvaluationState.PASS
 
     def test_any_fail_returns_fail(self, engine):
+        """
+        Dato un elenco di stati di valutazione contenente almeno un fallimento (FAIL) (Given),
+        quando il motore procede all'aggregazione (When),
+        allora il verdetto finale restituito deve essere FAIL, indipendentemente dalla presenza di stati positivi o in sospeso (Then).
+        """
         states = [EvaluationState.PASS, EvaluationState.FAIL, EvaluationState.PENDING]
         assert engine._aggregate_evaluation_states(states) == EvaluationState.FAIL
 
     def test_any_pending_without_fail_returns_pending(self, engine):
+        """
+        Dato un elenco di stati senza fallimenti ma con almeno uno stato in sospeso (PENDING) (Given),
+        quando il motore li aggrega (When),
+        allora il verdetto finale restituito deve essere PENDING (Then).
+        """
         states = [EvaluationState.PASS, EvaluationState.PENDING, EvaluationState.PASS]
         assert engine._aggregate_evaluation_states(states) == EvaluationState.PENDING
 
@@ -40,7 +55,11 @@ class TestAggregateEvaluationStates:
 class TestEvaluationEngineResolve:
 
     def test_resolve_missing_evidence_returns_pending(self, engine):
-        """Se manca l'evidence, il requisito va in PENDING."""
+        """
+        Dato un requisito senza evidenze associate all'interno dell'asset (Given),
+        quando il motore tenta di risolverlo (When),
+        allora lo stato restituito deve essere PENDING e registrato in cache, ignorando la logica di valutazione (Then).
+        """
         mock_req = Mock()
         mock_req.dependency_ids = ()
 
@@ -63,7 +82,11 @@ class TestEvaluationEngineResolve:
         assert "REQ-001" in cache
 
     def test_resolve_uses_cache(self, engine):
-        """Se il requisito è già nella cache, _resolve lo restituisce senza ricalcolarlo."""
+        """
+        Dato un requisito dotato della relativa evidenza e senza dipendenze gerarchiche da risolvere (Given),
+        quando il motore lo processa (When),
+        allora deve delegare la decisione al metodo 'evaluate' del requisito e restituirne correttamente il risultato (Then).
+        """
         cached_result = RequirementEvaluationResult(
             requirement_id="REQ-001",
             state=EvaluationState.PASS,
@@ -81,7 +104,11 @@ class TestEvaluationEngineResolve:
         mock_standard.get_requirement.assert_not_called()
 
     def test_resolve_with_evidence_calls_evaluate(self, engine):
-        """Se l'evidence esiste e non ci sono dipendenze, chiama requirement.evaluate."""
+        """
+        Dato un requisito dotato della relativa evidenza e senza dipendenze gerarchiche da risolvere (Given),
+        quando il motore lo processa (When),
+        allora deve delegare la decisione al metodo 'evaluate' del requisito e restituirne correttamente il risultato (Then).
+        """
         mock_evidence = Mock(
             justification="J1",
             node_choices=MappingProxyType({"n1": True}),
@@ -109,7 +136,11 @@ class TestEvaluationEngineResolve:
         mock_req.evaluate.assert_called_once_with(mock_evidence, ())
 
     def test_resolve_evaluates_dependencies_first(self, engine):
-        """Le dipendenze vengono risolte prima del requisito principale."""
+        """
+        Dato un requisito principale che dipende dall'esito di un requisito secondario (Given),
+        quando il motore avvia la risoluzione (When),
+        allora deve prima risolvere la dipendenza e solo successivamente valutare il requisito principale passandogli l'esito del secondario (Then).
+        """
         req1 = Mock()
         req1.dependency_ids = ("REQ-002",)
         req1.evaluate.return_value = EvaluationState.PASS
@@ -148,8 +179,11 @@ class TestEvaluationEngineResolve:
         )
 
     def test_resolve_missing_evidence_with_dependencies(self, engine):
-        """Se manca l'evidence ma ci sono dipendenze, stato è PENDING
-        e le dipendenze vengono comunque risolte."""
+        """
+        Dato un requisito principale mancante di evidenza ma legato a dipendenze (Given),
+        quando il motore lo valuta (When),
+        allora deve risolvere regolarmente le dipendenze ma forzare comunque lo stato del requisito principale a PENDING, senza invocare 'evaluate' (Then).
+        """
         req1 = Mock()
         req1.dependency_ids = ("REQ-002",)
 
@@ -185,7 +219,11 @@ class TestEvaluationEngineResolve:
 class TestEvaluationEngineEvaluateAsset:
 
     def test_evaluate_asset_aggregates_all_requirements(self, engine):
-        """Verifica che _evaluate_asset iteri sui requisiti e aggreghi i risultati."""
+        """
+        Dato un asset da ispezionare rispetto a uno standard contenente molteplici requisiti (Given),
+        quando il motore ne avvia la valutazione (When),
+        allora deve iterare su tutti i requisiti dello standard, risolverli uno ad uno e aggregare i risultati per calcolare il verdetto complessivo dell'asset (Then).
+        """
         req1, req2 = Mock(), Mock()
         req1.requirement_id = "REQ-001"
         req2.requirement_id = "REQ-002"
@@ -229,7 +267,11 @@ class TestEvaluationEngineEvaluateAsset:
 class TestEvaluationEngineEvaluateDevice:
 
     def test_evaluate_device_aggregates_all_assets(self, engine):
-        """Verifica che evaluate iteri sugli asset e aggreghi il verdetto."""
+        """
+        Dato un dispositivo completo composto da svariati asset e sottoposto a uno standard di conformità (Given),
+        quando il motore valuta l'intero apparato (When),
+        allora deve orchestrare la valutazione dei singoli asset aggregandone i verdetti parziali nel risultato finale del Device (Then).
+        """
         mock_device = Mock()
         mock_device.id = "DEVICE-1"
 

@@ -88,12 +88,22 @@ def _make_requirement_doc(
 class TestFindStandard:
 
     def test_standard_not_found_raises(self, adapter, mock_collection):
+        """
+        Dato un ID di standard che non esiste nella collection MongoDB e per cui find_one restituisce None (Given),
+        quando l'adapter tenta di recuperare lo standard tramite find_standard (When),
+        allora deve sollevare un'eccezione StandardNotFoundError per segnalare l'assenza del documento (Then).
+        """
         mock_collection.find_one.return_value = None
 
         with pytest.raises(StandardNotFoundError):
             adapter.find_standard("STD-999")
 
     def test_find_standard_returns_compliance_standard(self, adapter, mock_collection):
+        """
+        Dato un documento MongoDB valido e completo di uno standard con relativi requirements (Given),
+        quando l'adapter lo recupera e lo deserializza tramite find_standard (When),
+        allora deve restituire un'istanza di ComplianceStandard con ID, nome e numero di versione correttamente popolati (Then).
+        """
         doc = _make_standard_doc(requirements=[_make_requirement_doc()])
         mock_collection.find_one.return_value = doc
 
@@ -107,6 +117,11 @@ class TestFindStandard:
     def test_find_standard_calls_collection_with_correct_filter(
         self, adapter, mock_collection
     ):
+        """
+        Dato un ID standard da ricercare nel database (Given),
+        quando viene invocato il metodo find_standard sull'adapter (When),
+        allora la query MongoDB deve utilizzare esattamente il filtro {'_id': '<standard_id>'} per interrogare la collection (Then).
+        """
         mock_collection.find_one.return_value = _make_standard_doc(
             requirements=[_make_requirement_doc()]
         )
@@ -122,6 +137,11 @@ class TestFindStandard:
 class TestRequirementDeserialization:
 
     def test_single_requirement(self, adapter, mock_collection):
+        """
+        Dato un documento standard contenente esattamente un requirement con tutti i campi valorizzati (Given),
+        quando l'adapter deserializza il documento in un oggetto ComplianceStandard (When),
+        allora la lista dei requirements deve contenere un solo elemento con ID, nome, descrizione normativa e descrizione target mappati correttamente (Then).
+        """
         doc = _make_standard_doc(requirements=[_make_requirement_doc()])
         mock_collection.find_one.return_value = doc
 
@@ -135,6 +155,11 @@ class TestRequirementDeserialization:
         assert req.target_description == "All network interfaces"
 
     def test_multiple_requirements(self, adapter, mock_collection):
+        """
+        Dato un documento standard con due requirements distinti identificati da REQ-001 e REQ-002 (Given),
+        quando l'adapter completa la deserializzazione (When),
+        allora la lista risultante deve contenere entrambi i requirements, ciascuno con il proprio ID univoco preservato (Then).
+        """
         doc = _make_standard_doc(
             requirements=[
                 _make_requirement_doc(req_id="REQ-001"),
@@ -150,6 +175,11 @@ class TestRequirementDeserialization:
         assert ids == {"REQ-001", "REQ-002"}
 
     def test_empty_requirements(self, adapter, mock_collection):
+        """
+        Dato un documento standard la cui lista dei requirements è vuota (Given),
+        quando viene eseguita la deserializzazione tramite l'adapter (When),
+        allora l'oggetto ComplianceStandard risultante deve avere una lista di requirements vuota, senza errori di mapping (Then).
+        """
         doc = _make_standard_doc(requirements=[])
         mock_collection.find_one.return_value = doc
 
@@ -158,6 +188,11 @@ class TestRequirementDeserialization:
         assert len(result.requirements) == 0
 
     def test_dependency_ids_preserved(self, adapter, mock_collection):
+        """
+        Dato un requirement con una lista di dependency_ids contenente riferimenti ad altri requirement (es. ['REQ-001']) (Given),
+        quando l'adapter deserializza il documento MongoDB (When),
+        allora la lista dependency_ids del requirement risultante deve contenere esattamente i valori specificati nel documento originale (Then).
+        """
         doc = _make_standard_doc(
             requirements=[
                 _make_requirement_doc(
@@ -174,6 +209,11 @@ class TestRequirementDeserialization:
         assert "REQ-001" in req.dependency_ids
 
     def test_missing_dependency_ids_defaults_to_empty(self, adapter, mock_collection):
+        """
+        Dato un requirement il cui documento MongoDB non include il campo opzionale dependency_ids (Given),
+        quando l'adapter lo deserializza in un oggetto di dominio (When),
+        allora la proprietà dependency_ids deve essere inizializzata come una lista vuota, senza sollevare eccezioni (Then).
+        """
         doc = _make_standard_doc(
             requirements=[_make_requirement_doc()]
         )
@@ -191,6 +231,11 @@ class TestRequirementDeserialization:
 class TestDecisionTreeDeserialization:
 
     def test_decision_node_deserialized(self, adapter, mock_collection):
+        """
+        Dato un requirement il cui decision tree include un nodo decisionale (decision_node) con risposta affermativa che porta a un leaf_node di fail (Given),
+        quando l'albero viene deserializzato e valutato fornendo lo stato 'True' per il nodo N1 (When),
+        allora il risultato della valutazione deve essere EvaluationState.FAIL, confermando la corretta ricostruzione della logica decisionale (Then).
+        """
         doc = _make_standard_doc(requirements=[_make_requirement_doc()])
         mock_collection.find_one.return_value = doc
 
@@ -208,6 +253,11 @@ class TestDecisionTreeDeserialization:
         assert state == EvaluationState.FAIL
 
     def test_leaf_node_deserialized(self, adapter, mock_collection):
+        """
+        Dato un decision tree in cui la risposta negativa al nodo decisionale N1 conduce al leaf_node con verdetto 'pass' (Given),
+        quando l'albero deserializzato viene valutato con lo stato 'False' per N1 (When),
+        allora il verdetto restituito deve essere EvaluationState.PASS, dimostrando che i leaf_node sono stati correttamente mappati (Then).
+        """
         doc = _make_standard_doc(requirements=[_make_requirement_doc()])
         mock_collection.find_one.return_value = doc
 
@@ -222,6 +272,11 @@ class TestDecisionTreeDeserialization:
         assert state == EvaluationState.PASS
 
     def test_unanswered_node_returns_pending(self, adapter, mock_collection):
+        """
+        Dato un decision tree deserializzato correttamente ma valutato senza fornire alcuna risposta alle domande dei nodi decisionali (Given),
+        quando il metodo evaluate viene chiamato con un dizionario di stati vuoto (When),
+        allora il sistema deve restituire EvaluationState.PENDING, indicando che la valutazione non ha ancora prodotto un verdetto definitivo (Then).
+        """
         doc = _make_standard_doc(requirements=[_make_requirement_doc()])
         mock_collection.find_one.return_value = doc
 
