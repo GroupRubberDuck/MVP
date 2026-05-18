@@ -40,6 +40,7 @@ export default defineConfig({
         'create-asset-widget':resolve(__dirname, 'src/widgets/asset-create/main.js'),
         'session-commit-widget':resolve(__dirname, 'src/widgets/session-commit/main.js'),
         'session-close-widget':resolve(__dirname, 'src/widgets/session-close/main.js'),
+        'session-commit-and-close-widget':resolve(__dirname, 'src/widgets/session-commit-and-close/main.js'),
       },
       output: {
         entryFileNames: `[name].js`,

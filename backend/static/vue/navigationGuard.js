@@ -1,0 +1,1 @@
+function e(e){e.preventDefault(),e.returnValue=``}function t(){window.removeEventListener(`beforeunload`,e)}export{t};

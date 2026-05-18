@@ -94,7 +94,7 @@ class TestFlaskRequirementEvaluationDetail:
 
         mock_render_template.assert_called_once()
         args, kwargs = mock_render_template.call_args
-        assert args[0] == "asset/asset_evaluation_detail.html"
+        assert args[0] == "layouts/requirement_detail.html"
         
         dto_passato = kwargs["requirement"]
         dto_passato = kwargs["requirement"]

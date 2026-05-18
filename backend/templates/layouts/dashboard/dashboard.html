@@ -40,9 +40,11 @@
 
 
 
-      <button class="btn btn--primary" onclick="window.dashboardAction.generateReport()">
-        Genera Report PDF
-      </button>
+      <a class="btn btn--primary"
+   href="{{ url_for('report.export_report', session_id=session_id, device_id=device_id,fmt="pdf") }}"
+   data-allow-download>
+  Genera Report PDF
+</a>
 
 
     </div>
@@ -115,4 +117,5 @@
   <script type="module" src="{{ url_for('static', filename='vue/dashboard-logic.js') }}"></script>
   <script type="module" src="{{ url_for('static', filename='vue/session-commit-widget.js') }}"></script>
   <script type="module" src="{{ url_for('static', filename='vue/session-close-widget.js') }}"></script>
+  <script type="module" src="{{ url_for('static', filename='vue/session-commit-and-close-widget.js') }}"></script>
 {% endblock %}

@@ -115,16 +115,16 @@ function onSuccess() {
         @error="onFileError"
       />
 
-      <div class="form-actions mt-4">
+      <div class=" mt-4">
         <AsyncButton
           :action="uploadFile"
           label="Avvia Importazione"
           loading-label="Caricamento in corso..."
           @success="onSuccess"
           @error="(err) => errorMessage = err.message"
-          button-class="btn btn--primary"
+          button-class="btn btn--outline"
         />
-        <button @click="closeModal" class="btn btn--primary">
+        <button @click="closeModal" class="btn btn--outline">
           Annulla
         </button>
       </div>
