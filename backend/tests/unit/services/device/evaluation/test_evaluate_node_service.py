@@ -1,16 +1,21 @@
 import pytest
 from unittest.mock import MagicMock
 
-from core.services.evaluation.evaluate_decision_node_service import EvaluateDecisionNodeService
-from core.ports.inbound.evaluation.evaluate_decision_node_use_case import EvaluateDecisionNodeCommand
+from core.services.evaluation.evaluate_decision_node_service import (
+    EvaluateDecisionNodeService,
+)
+from core.ports.inbound.evaluation.evaluate_decision_node_use_case import (
+    EvaluateDecisionNodeCommand,
+)
 from core.ports.inbound.evaluation.exceptions import EvaluateNodeFailure
 from core.ports.outbound.evaluation.exceptions import (
     EvaluationSessionNotFoundError,
-    EvaluationSessionSaveError
+    EvaluationSessionSaveError,
 )
 from core.domain.evaluation_object.exceptions import AssetNotFoundError
 
 # --- HELPER FUNCTIONS ---
+
 
 def make_command(
     session_id="session-1",
@@ -18,7 +23,7 @@ def make_command(
     asset_id="asset-1",
     requirement_id="REQ-1",
     node_id="node-1",
-    answer=True
+    answer=True,
 ) -> EvaluateDecisionNodeCommand:
     return EvaluateDecisionNodeCommand(
         session_id=session_id,
@@ -26,8 +31,9 @@ def make_command(
         asset_id=asset_id,
         requirement_id=requirement_id,
         node_id=node_id,
-        answer=answer
+        answer=answer,
     )
+
 
 def make_service():
     mock_get_port = MagicMock()
@@ -40,7 +46,7 @@ def make_service():
 
     service = EvaluateDecisionNodeService(
         get_evaluation_session_port=mock_get_port,
-        save_evaluation_session_port=mock_save_port
+        save_evaluation_session_port=mock_save_port,
     )
 
     return service, mock_get_port, mock_save_port, mock_session, mock_asset
@@ -48,8 +54,8 @@ def make_service():
 
 # --- TEST SUITE ---
 
-class TestEvaluateDecisionNodeService:
 
+class TestEvaluateDecisionNodeService:
     def test_evaluate_node_success(self):
         """
         Dato un comando di valutazione nodo valido (Given),
@@ -67,9 +73,7 @@ class TestEvaluateDecisionNodeService:
         mock_session.device.get_asset.assert_called_once_with("asset-1")
         # Ha chiamato set_node_choice con i parametri esatti?
         mock_asset.set_node_choice.assert_called_once_with(
-            requirement_id="REQ-1",
-            node_id="node-1",
-            value=True
+            requirement_id="REQ-1", node_id="node-1", value=True
         )
         # Ha salvato la sessione modificata?
         mock_save.save_evaluation_session.assert_called_once_with(mock_session)
@@ -81,7 +85,9 @@ class TestEvaluateDecisionNodeService:
         allora il servizio deve sollevare una EvaluateNodeFailure indicando che la sessione non è stata trovata (Then).
         """
         service, mock_get, _, _, _ = make_service()
-        mock_get.get_evaluation_session.side_effect = EvaluationSessionNotFoundError("Not found")
+        mock_get.get_evaluation_session.side_effect = EvaluationSessionNotFoundError(
+            "Not found"
+        )
 
         with pytest.raises(EvaluateNodeFailure) as exc_info:
             service.evaluate_node(make_command())
@@ -123,7 +129,9 @@ class TestEvaluateDecisionNodeService:
         allora deve sollevare una EvaluateNodeFailure per notificare il fallimento dell'operazione (Then).
         """
         service, _, mock_save, _, _ = make_service()
-        mock_save.save_evaluation_session.side_effect = EvaluationSessionSaveError("DB Disconnesso")
+        mock_save.save_evaluation_session.side_effect = EvaluationSessionSaveError(
+            "DB Disconnesso"
+        )
 
         with pytest.raises(EvaluateNodeFailure) as exc_info:
             service.evaluate_node(make_command())

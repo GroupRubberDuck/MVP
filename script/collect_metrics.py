@@ -39,6 +39,7 @@ from pathlib import Path
 # Conteggio righe sorgente
 # ===========================================================================
 
+
 def count_source_lines(source_dir: str) -> dict:
     """Conta le righe di codice Python (escluse righe vuote e commenti)."""
     src = Path(source_dir)
@@ -62,6 +63,7 @@ def count_source_lines(source_dir: str) -> dict:
 # ===========================================================================
 # Coverage (statement + branch)
 # ===========================================================================
+
 
 def parse_coverage_json(coverage_json_path: str) -> dict:
     """Estrae statement e branch coverage dal report JSON di coverage.py."""
@@ -90,7 +92,8 @@ def parse_coverage_json(coverage_json_path: str) -> dict:
         },
         "branch": {
             "total": totals.get("num_branches", 0),
-            "covered": totals.get("num_branches", 0) - totals.get("missing_branches", 0),
+            "covered": totals.get("num_branches", 0)
+            - totals.get("missing_branches", 0),
             "missing": totals.get("missing_branches", 0),
             "percentage": round(float(totals.get("percent_covered_display", "0")), 2),
         },
@@ -101,6 +104,7 @@ def parse_coverage_json(coverage_json_path: str) -> dict:
 # ===========================================================================
 # Risultati test (JUnit XML)
 # ===========================================================================
+
 
 def parse_test_results(test_results_path: str) -> dict:
     """Estrae i risultati dei test dal JUnit XML."""
@@ -125,16 +129,20 @@ def parse_test_results(test_results_path: str) -> dict:
 
             if failure is not None:
                 failed += 1
-                failures_list.append({
-                    "test": f"{testcase.get('classname', '')}.{testcase.get('name', '')}",
-                    "message": failure.get("message", ""),
-                })
+                failures_list.append(
+                    {
+                        "test": f"{testcase.get('classname', '')}.{testcase.get('name', '')}",
+                        "message": failure.get("message", ""),
+                    }
+                )
             elif error is not None:
                 errors += 1
-                failures_list.append({
-                    "test": f"{testcase.get('classname', '')}.{testcase.get('name', '')}",
-                    "message": error.get("message", ""),
-                })
+                failures_list.append(
+                    {
+                        "test": f"{testcase.get('classname', '')}.{testcase.get('name', '')}",
+                        "message": error.get("message", ""),
+                    }
+                )
             elif skip is not None:
                 skipped += 1
             else:
@@ -155,6 +163,7 @@ def parse_test_results(test_results_path: str) -> dict:
 # Failure density
 # ===========================================================================
 
+
 def compute_failure_density(test_results: dict, loc: dict) -> dict:
     """Failure density: test falliti per KLOC."""
     total_loc = loc["total"]
@@ -172,6 +181,7 @@ def compute_failure_density(test_results: dict, loc: dict) -> dict:
 # ===========================================================================
 # Complessità ciclomatica (radon)
 # ===========================================================================
+
 
 def compute_cyclomatic_complexity(source_dir: str) -> dict:
     """Usa radon per calcolare la complessità ciclomatica."""
@@ -257,6 +267,7 @@ def compute_cyclomatic_complexity(source_dir: str) -> dict:
 # Coupling e Instability (analisi AST a livello di classi)
 # ===========================================================================
 
+
 def extract_classes(filepath: Path) -> list[str]:
     """Estrae i nomi delle classi definite in un file."""
     try:
@@ -265,10 +276,7 @@ def extract_classes(filepath: Path) -> list[str]:
     except SyntaxError:
         return []
 
-    return [
-        node.name for node in ast.walk(tree)
-        if isinstance(node, ast.ClassDef)
-    ]
+    return [node.name for node in ast.walk(tree) if isinstance(node, ast.ClassDef)]
 
 
 def extract_imported_names(filepath: Path) -> list[dict]:
@@ -287,7 +295,9 @@ def extract_imported_names(filepath: Path) -> list[dict]:
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for alias in node.names:
-                imported.append({"module": alias.name, "name": alias.name.split(".")[-1]})
+                imported.append(
+                    {"module": alias.name, "name": alias.name.split(".")[-1]}
+                )
         elif isinstance(node, ast.ImportFrom):
             if node.module:
                 for alias in node.names:
@@ -319,18 +329,12 @@ def discover_packages(source_dir: str) -> dict[str, list[Path]]:
     src = Path(source_dir)
     packages: dict[str, list[Path]] = {}
 
-    root_files = [
-        f for f in src.glob("*.py")
-        if f.name != "__init__.py"
-    ]
+    root_files = [f for f in src.glob("*.py") if f.name != "__init__.py"]
     if root_files:
         packages["(root)"] = root_files
 
     def _scan(directory: Path, prefix: str):
-        py_files = [
-            f for f in directory.glob("*.py")
-            if f.name != "__init__.py"
-        ]
+        py_files = [f for f in directory.glob("*.py") if f.name != "__init__.py"]
 
         if py_files:
             packages[prefix] = py_files
@@ -434,8 +438,8 @@ def compute_coupling(source_dir: str) -> dict:
     modules_metrics = {}
     for pkg in sorted(packages.keys()):
         own_classes = package_classes[pkg]
-        ce = len(ce_classes[pkg])                   # classi esterne da cui dipendo
-        ca = len(imported_from[pkg])                # mie classi da cui altri dipendono
+        ce = len(ce_classes[pkg])  # classi esterne da cui dipendo
+        ca = len(imported_from[pkg])  # mie classi da cui altri dipendono
         total = ce + ca
         instability = round(ce / total, 4) if total > 0 else 0.0
 
@@ -467,7 +471,9 @@ def compute_coupling(source_dir: str) -> dict:
     n = len(modules_metrics)
 
     # Conta quanti sono in zona di dolore
-    in_pain_zone = sum(1 for m in modules_metrics.values() if m["zone"] == "zona di dolore")
+    in_pain_zone = sum(
+        1 for m in modules_metrics.values() if m["zone"] == "zona di dolore"
+    )
 
     # Coefficient of coupling = archi unici / numero componenti
     num_edges = len(dependency_edges)
@@ -498,6 +504,7 @@ def compute_coupling(source_dir: str) -> dict:
 # ===========================================================================
 # Code smell density (ruff)
 # ===========================================================================
+
 
 def compute_code_smells(source_dir: str, loc: dict) -> dict:
     """
@@ -571,8 +578,7 @@ def compute_code_smells(source_dir: str, loc: dict) -> dict:
             "density_per_100loc": round(total_violations / hectoloc, 4),
             "rules_violated": len(by_rule),
             "top_rules": [
-                {"rule": code, "count": count}
-                for code, count in top_rules[:10]
+                {"rule": code, "count": count} for code, count in top_rules[:10]
             ],
         },
         "per_file": per_file_summary,
@@ -582,6 +588,7 @@ def compute_code_smells(source_dir: str, loc: dict) -> dict:
 # ===========================================================================
 # Main
 # ===========================================================================
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -634,7 +641,9 @@ def main():
     print(f"    Statement coverage:  {coverage['statement']['percentage']}%")
     print(f"    Branch coverage:     {coverage['branch']['percentage']}%")
     print(f"    Test passati:        {test_results['passed']}/{test_results['total']}")
-    print(f"    Failure density:     {failure_density['failure_density_per_kloc']} / KLOC")
+    print(
+        f"    Failure density:     {failure_density['failure_density_per_kloc']} / KLOC"
+    )
     print()
     print("  MANUTENIBILITÀ")
     print(f"    Complessità media:   {cc.get('average_complexity', 0)}")
@@ -642,7 +651,7 @@ def main():
     print(f"    Funzioni analizzate: {cc.get('total_functions', 0)}")
     print(f"    Moduli analizzati:   {cs.get('total_modules', 0)}")
     print(f"    Instabilità media:   {cs.get('average_instability', 0)}")
-    coc = cs.get('coefficient_of_coupling', 0)
+    coc = cs.get("coefficient_of_coupling", 0)
     coc_status = "ottimo" if coc <= 0.2 else ("accettabile" if coc <= 0.4 else "alto")
     print(f"    Coeff. coupling:     {coc} ({coc_status})")
 
@@ -673,9 +682,13 @@ def main():
                 f"I={data['instability_index']}{zone_label}"
             )
             if data["efferent_classes"]:
-                print(f"      └─ dipende da classi: {', '.join(data['efferent_classes'])}")
+                print(
+                    f"      └─ dipende da classi: {', '.join(data['efferent_classes'])}"
+                )
             if data["afferent_classes"]:
-                print(f"      └─ usato per classi:  {', '.join(data['afferent_classes'])}")
+                print(
+                    f"      └─ usato per classi:  {', '.join(data['afferent_classes'])}"
+                )
 
         pain = coupling["summary"].get("modules_in_pain_zone", 0)
         if pain > 0:

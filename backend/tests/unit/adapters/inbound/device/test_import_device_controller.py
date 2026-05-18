@@ -3,8 +3,13 @@ import pytest
 from unittest.mock import MagicMock
 from flask import Flask, Blueprint
 
-from adapters.inbound.device.flask_import_device_controller import FlaskImportDeviceController
-from core.ports.inbound.device.exceptions import DeviceRegistrationFailure, ImportDeviceFailure
+from adapters.inbound.device.flask_import_device_controller import (
+    FlaskImportDeviceController,
+)
+from core.ports.inbound.device.exceptions import (
+    DeviceRegistrationFailure,
+    ImportDeviceFailure,
+)
 
 
 @pytest.fixture
@@ -34,7 +39,6 @@ def _post_file(client, filename, content=b"{}"):
 
 
 class TestImportDeviceController:
-
     def test_returns_400_when_no_file_in_request(self, client):
         """
         Dato un payload di richiesta privo di qualsiasi file allegato (Given),
@@ -95,7 +99,10 @@ class TestImportDeviceController:
         mock_service.import_device.return_value = None
         _post_file(client, "device.json")
         command = mock_service.import_device.call_args[0][0]
-        from core.services.device.allowed_device_extensions import AllowedDeviceFileExtension
+        from core.services.device.allowed_device_extensions import (
+            AllowedDeviceFileExtension,
+        )
+
         assert command.extension == AllowedDeviceFileExtension.JSON
 
     def test_returns_422_on_import_device_failure(self, client, mock_service):
@@ -115,7 +122,9 @@ class TestImportDeviceController:
         quando si tenta il salvataggio (When),
         allora il controller deve rispondere con uno status 409 Conflict (Then).
         """
-        mock_service.import_device.side_effect = DeviceRegistrationFailure("Dispositivo già esistente.")
+        mock_service.import_device.side_effect = DeviceRegistrationFailure(
+            "Dispositivo già esistente."
+        )
         response = _post_file(client, "device.json")
         assert response.status_code == 409
         assert "già esistente" in response.get_json()["error"]

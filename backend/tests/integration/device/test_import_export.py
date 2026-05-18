@@ -1,12 +1,24 @@
 import pytest
 
-from adapters.outbound.device.exporter.json_file_device_exporter import JSONFileDeviceExporter
-from adapters.outbound.device.importer.json_file_device_importer import JSONFileDeviceImporter
-from adapters.outbound.device.exporter.xml_file_device_exporter import XMLFileDeviceExporter
-from adapters.outbound.device.importer.xml_file_device_importer import XMLFileDeviceImporter
+from adapters.outbound.device.exporter.json_file_device_exporter import (
+    JSONFileDeviceExporter,
+)
+from adapters.outbound.device.importer.json_file_device_importer import (
+    JSONFileDeviceImporter,
+)
+from adapters.outbound.device.exporter.xml_file_device_exporter import (
+    XMLFileDeviceExporter,
+)
+from adapters.outbound.device.importer.xml_file_device_importer import (
+    XMLFileDeviceImporter,
+)
 
-from adapters.outbound.device.exporter.csv_file_device_exporter import CSVFileDeviceExporter
-from adapters.outbound.device.importer.csv_file_device_importer import CSVFileDeviceImporter
+from adapters.outbound.device.exporter.csv_file_device_exporter import (
+    CSVFileDeviceExporter,
+)
+from adapters.outbound.device.importer.csv_file_device_importer import (
+    CSVFileDeviceImporter,
+)
 from core.domain.evaluation_object.device import Device
 from core.domain.evaluation_object.asset.asset import Asset
 from core.domain.evaluation_object.asset.asset_anagraphic import AssetAnagraphic
@@ -98,7 +110,6 @@ class TestDeviceImportExport:
         for node_id, original_value in original_evidence.node_choices.items():
             assert imported_evidence.node_choices[node_id] == original_value
 
-
     def test_xml_round_trip(self, device):
         """
         Verifica che esportando un Device in XML e re-importandolo,
@@ -125,7 +136,9 @@ class TestDeviceImportExport:
 
         assert imported_asset.id == original_asset.id
         assert imported_asset.anagraphic.name == original_asset.anagraphic.name
-        assert imported_asset.anagraphic.asset_type == original_asset.anagraphic.asset_type
+        assert (
+            imported_asset.anagraphic.asset_type == original_asset.anagraphic.asset_type
+        )
 
         assert len(imported_asset.proprieties.evidences) == len(
             original_asset.proprieties.evidences
@@ -139,7 +152,6 @@ class TestDeviceImportExport:
 
         for node_id, original_value in original_evidence.node_choices.items():
             assert imported_evidence.node_choices[node_id] == original_value
-
 
     def test_csv_round_trip(self, device):
         """
@@ -167,7 +179,9 @@ class TestDeviceImportExport:
 
         assert imported_asset.id == original_asset.id
         assert imported_asset.anagraphic.name == original_asset.anagraphic.name
-        assert imported_asset.anagraphic.asset_type == original_asset.anagraphic.asset_type
+        assert (
+            imported_asset.anagraphic.asset_type == original_asset.anagraphic.asset_type
+        )
 
         assert len(imported_asset.proprieties.evidences) == len(
             original_asset.proprieties.evidences

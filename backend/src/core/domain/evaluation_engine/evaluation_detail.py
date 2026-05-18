@@ -6,7 +6,6 @@ from core.domain.evaluation_standard.evaluation_state import EvaluationState
 from core.domain.evaluation_standard.standard_verdict import StandardVerdict
 
 
-
 @dataclass(frozen=True)
 class NodeDetail:
     node_id: str
@@ -17,6 +16,7 @@ class NodeDetail:
     verdict: StandardVerdict | None  # solo per leaf
     parent_id: str | None
 
+
 @dataclass(frozen=True)
 class RequirementEvaluationDetail:
     requirement_id: str
@@ -24,7 +24,7 @@ class RequirementEvaluationDetail:
     description: str
     target: str
     justification: str
-    root_id:str
+    root_id: str
     node_choices: MappingProxyType[str, bool]
     nodes: Mapping[str, NodeDetail]
     state: EvaluationState

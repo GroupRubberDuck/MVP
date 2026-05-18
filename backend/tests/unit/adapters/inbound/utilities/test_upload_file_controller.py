@@ -7,7 +7,6 @@ from core.services.device.allowed_device_extensions import AllowedDeviceFileExte
 
 
 class TestGetHttpFileExtension:
-
     def test_returns_csv_extension(self):
         """
         Dato un nome file con estensione '.csv' (Given),
@@ -73,7 +72,6 @@ class TestGetHttpFileExtension:
 
 
 class TestGetHttpFilePayload:
-
     def test_returns_file_storage_stream(self):
         """
         Dato un oggetto FileStorage (tipico dei file ricevuti tramite Flask) contenente uno stream di byte (Given),

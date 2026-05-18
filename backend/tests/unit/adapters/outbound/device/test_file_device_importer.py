@@ -6,7 +6,7 @@ from core.domain.evaluation_object.asset.asset_type import AssetType
 from core.ports.outbound.device.exceptions import (
     InvalidAssetTypeError,
     MissingDeviceFieldError,
-    FileTooLargeError
+    FileTooLargeError,
 )
 
 
@@ -50,7 +50,6 @@ def _asset_data(**overrides) -> dict:
 
 
 class TestBuildDevice:
-
     def test_builds_device_with_correct_fields(self):
         """
         Dati i campi obbligatori device_id, standard_id, name e os deserializzati correttamente da un file (Given),
@@ -112,7 +111,6 @@ class TestBuildDevice:
 
 
 class TestBuildAsset:
-
     def test_builds_asset_with_correct_type(self):
         """
         Dato un asset il cui asset_type nei dati grezzi è la stringa 'security' (Given),
@@ -161,12 +159,12 @@ class TestBuildAsset:
         with pytest.raises(InvalidAssetTypeError):
             _StubImporter(data).parse_device_file(io.BytesIO())
 
+
 class TestPreValidate:
-
     class _SizeCheckStub(FileDeviceImporter):
-
         def _deserialize(self, content) -> dict:
             return {}
+
         def _parse_data(self, raw) -> dict:
             return raw
 

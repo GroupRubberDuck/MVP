@@ -7,7 +7,6 @@ from core.ports.outbound.device.exceptions import InvalidFileFormatError
 
 
 class CSVFileDeviceImporter(FileDeviceImporter):
-
     def _deserialize(self, device_file_content: IO[bytes]) -> list[dict]:
         try:
             text = io.TextIOWrapper(device_file_content, encoding="utf-8")
@@ -18,8 +17,9 @@ class CSVFileDeviceImporter(FileDeviceImporter):
     def _parse_data(self, raw: list[dict]) -> dict:
         if not raw:
             from core.ports.outbound.device.exceptions import EmptyFileError
+
             raise EmptyFileError("Il file CSV non contiene righe.")
-            
+
         first = raw[0]
         assets_by_id: dict[str, dict] = {}
         evaluations_by_asset_req: dict[tuple[str, str], dict] = {}
@@ -57,7 +57,9 @@ class CSVFileDeviceImporter(FileDeviceImporter):
                 ev = evaluations_by_asset_req[ev_key]
 
             if node_id:
-                ev["evaluation_map"][node_id] = (row.get("node_value", "").lower() == "true")
+                ev["evaluation_map"][node_id] = (
+                    row.get("node_value", "").lower() == "true"
+                )
 
         return {
             "device_id": first.get("device_id", ""),

@@ -7,7 +7,9 @@ from core.ports.inbound.device.exceptions import DeviceNotFoundFailure
 from core.ports.outbound.device.exceptions import DeviceNotFoundError
 
 from core.services.device.get_device_detail_service import GetDeviceDetailService
-from adapters.inbound.device.flask_query_device_controller import FlaskQueryDeviceController
+from adapters.inbound.device.flask_query_device_controller import (
+    FlaskQueryDeviceController,
+)
 
 
 # ── Fixtures ──
@@ -66,13 +68,10 @@ def client(
     return app.test_client()
 
 
-
-
 # ── GetDeviceDetailService ──
 
 
 class TestGetDeviceDetailService:
-
     def test_returns_device_from_port(self, mock_find_device_port):
         """
         Dato un identificativo di dispositivo valido esistente nel sistema (Given),
@@ -96,7 +95,9 @@ class TestGetDeviceDetailService:
         quando il repository segnala un errore di risorsa non trovata (DeviceNotFoundError) (When),
         allora il servizio deve catturare l'eccezione tecnica e sollevare un fallimento di dominio DeviceNotFoundFailure riportando l'ID cercato (Then).
         """
-        mock_find_device_port.find_by_id.side_effect = DeviceNotFoundError("non trovato")
+        mock_find_device_port.find_by_id.side_effect = DeviceNotFoundError(
+            "non trovato"
+        )
 
         service = GetDeviceDetailService(mock_find_device_port)
         command = GetDeviceDetailCommand(device_id="D-999")

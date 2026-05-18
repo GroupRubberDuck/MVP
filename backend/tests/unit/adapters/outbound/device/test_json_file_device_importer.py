@@ -2,7 +2,9 @@ import io
 import json
 import pytest
 
-from adapters.outbound.device.importer.json_file_device_importer import JSONFileDeviceImporter
+from adapters.outbound.device.importer.json_file_device_importer import (
+    JSONFileDeviceImporter,
+)
 from core.ports.outbound.device.exceptions import InvalidFileFormatError
 
 
@@ -29,7 +31,6 @@ def importer() -> JSONFileDeviceImporter:
 
 
 class TestJSONFileDeviceImporter:
-
     def test_parses_valid_json(self, importer):
         """
         Dato un flusso di byte contenente un JSON valido con tutti i campi obbligatori di un dispositivo (Given),
@@ -56,8 +57,13 @@ class TestJSONFileDeviceImporter:
         allora l'asset deve essere accessibile nella collezione del dispositivo tramite la chiave 'A1' (Then).
         """
 
-        asset = {"id": "A1", "name": "WiFi", "asset_type": "network",
-                 "description": "d", "evaluations": []}
+        asset = {
+            "id": "A1",
+            "name": "WiFi",
+            "asset_type": "network",
+            "description": "d",
+            "evaluations": [],
+        }
         device = importer.parse_device_file(_to_stream(_base_data(assets=[asset])))
         assert "A1" in device.assets
 
@@ -67,10 +73,18 @@ class TestJSONFileDeviceImporter:
         quando l'importer JSON deserializza l'intera struttura nidificata (When),
         allora l'evidenza associata al requirement deve essere recuperabile e contenere la scelta del nodo N1 correttamente valorizzata a True (Then).
         """
-        evaluation = {"requirement_id": "REQ-1",
-                      "evaluation_map": {"N1": True}, "justification": "ok"}
-        asset = {"id": "A1", "name": "WiFi", "asset_type": "network",
-                 "description": "d", "evaluations": [evaluation]}
+        evaluation = {
+            "requirement_id": "REQ-1",
+            "evaluation_map": {"N1": True},
+            "justification": "ok",
+        }
+        asset = {
+            "id": "A1",
+            "name": "WiFi",
+            "asset_type": "network",
+            "description": "d",
+            "evaluations": [evaluation],
+        }
         device = importer.parse_device_file(_to_stream(_base_data(assets=[asset])))
         assert device.assets["A1"].get_evidence("REQ-1").node_choices["N1"] is True
 

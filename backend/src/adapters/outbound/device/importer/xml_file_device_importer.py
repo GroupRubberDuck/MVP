@@ -6,7 +6,6 @@ from core.ports.outbound.device.exceptions import InvalidFileFormatError
 
 
 class XMLFileDeviceImporter(FileDeviceImporter):
-
     def _deserialize(self, device_file_content: IO[bytes]) -> ET.Element:
         try:
             return ET.parse(device_file_content).getroot()
@@ -22,18 +21,22 @@ class XMLFileDeviceImporter(FileDeviceImporter):
                     entry.get("node_id"): entry.get("value", "") == "true"
                     for entry in ev_el.findall("evaluation_map/choice")
                 }
-                evaluations.append({
-                    "requirement_id": ev_el.get("requirement_id", ""),
-                    "evaluation_map": evaluation_map,
-                    "justification": ev_el.findtext("justification", ""),
-                })
-            assets.append({
-                "id": asset_el.get("id", ""),
-                "name": asset_el.findtext("name", ""),
-                "asset_type": asset_el.findtext("asset_type", ""),
-                "description": asset_el.findtext("description", ""),
-                "evaluations": evaluations,
-            })
+                evaluations.append(
+                    {
+                        "requirement_id": ev_el.get("requirement_id", ""),
+                        "evaluation_map": evaluation_map,
+                        "justification": ev_el.findtext("justification", ""),
+                    }
+                )
+            assets.append(
+                {
+                    "id": asset_el.get("id", ""),
+                    "name": asset_el.findtext("name", ""),
+                    "asset_type": asset_el.findtext("asset_type", ""),
+                    "description": asset_el.findtext("description", ""),
+                    "evaluations": evaluations,
+                }
+            )
         return {
             "device_id": raw.get("device_id", ""),
             "standard_id": raw.findtext("standard_id", ""),

@@ -11,7 +11,10 @@ from core.domain.evaluation_object.device import Device
 
 from core.domain.evaluation_object.device_summary import DeviceSummary
 
-from adapters.outbound.device.repository.mongo_device_repository import MongoDeviceAdapter, DeviceNotFoundError
+from adapters.outbound.device.repository.mongo_device_repository import (
+    MongoDeviceAdapter,
+    DeviceNotFoundError,
+)
 
 
 def _make_asset(asset_id: str = "A1", evidences: dict | None = None) -> Asset:
@@ -37,9 +40,11 @@ def _make_device(assets: list[Asset] | None = None) -> Device:
     )
 
 
-def _make_evidence(req_id: str = "REQ-1",
-                   choices: dict | None = None,
-                   justification: str = "Giustificazione") -> AssetEvidence:
+def _make_evidence(
+    req_id: str = "REQ-1",
+    choices: dict | None = None,
+    justification: str = "Giustificazione",
+) -> AssetEvidence:
     return AssetEvidence(
         requirement_id=req_id,
         node_choices=MappingProxyType(choices or {"N1": True}),
@@ -68,9 +73,11 @@ def _asset_doc(asset_id: str = "A1", evaluations: list | None = None) -> dict:
     }
 
 
-def _eval_doc(req_id: str = "REQ-1",
-              choices: dict | None = None,
-              justification: str = "Giustificazione") -> dict:
+def _eval_doc(
+    req_id: str = "REQ-1",
+    choices: dict | None = None,
+    justification: str = "Giustificazione",
+) -> dict:
     return {
         "id": req_id,
         "evaluation_map": choices or {"N1": True},
@@ -101,7 +108,6 @@ def device_con_asset():
 
 
 class TestRegister:
-
     def test_calls_insert_one(self, adapter, collection, device_senza_asset):
         """
         Dato un'entità Device valida fornita dal dominio (Given),
@@ -121,7 +127,9 @@ class TestRegister:
         doc = collection.insert_one.call_args[0][0]
         assert doc["_id"] == "DEV-1"
 
-    def test_document_has_anagraphic_fields(self, adapter, collection, device_senza_asset):
+    def test_document_has_anagraphic_fields(
+        self, adapter, collection, device_senza_asset
+    ):
         """
         Dato un device con i dati anagrafici popolati (Given),
         quando viene inserito nel database (When),
@@ -134,7 +142,9 @@ class TestRegister:
         assert doc["description"] == "Router di test"
         assert doc["compliance_standard_id"] == "EN-18031"
 
-    def test_document_assets_are_serialized(self, adapter, collection, device_con_asset):
+    def test_document_assets_are_serialized(
+        self, adapter, collection, device_con_asset
+    ):
         """
         Dato un device che possiede una o più entità Asset figlie (Given),
         quando viene serializzato per il salvataggio (When),
@@ -162,7 +172,6 @@ class TestRegister:
 
 
 class TestSave:
-
     def test_calls_replace_one(self, adapter, collection, device_senza_asset):
         """
         Dato un device esistente con dati aggiornati (Given),
@@ -182,7 +191,9 @@ class TestSave:
         filtro = collection.replace_one.call_args[0][0]
         assert filtro == {"_id": "DEV-1"}
 
-    def test_document_has_no_redundant_id(self, adapter, collection, device_senza_asset):
+    def test_document_has_no_redundant_id(
+        self, adapter, collection, device_senza_asset
+    ):
         """
         Dato il dizionario serializzato pronto per sostituire il documento preesistente (Given),
         quando viene passato a 'replace_one' (When),
@@ -193,9 +204,7 @@ class TestSave:
         assert "_id" not in doc
 
 
-
 class TestDelete:
-
     def test_calls_delete_one(self, adapter, collection):
         """
         Dato l'ID univoco di un dispositivo (Given),
@@ -206,9 +215,7 @@ class TestDelete:
         collection.delete_one.assert_called_once_with({"_id": "DEV-1"})
 
 
-
 class TestFindById:
-
     def test_returns_device(self, adapter, collection):
         """
         Dato l'ID di un dispositivo regolarmente registrato (Given),
@@ -230,9 +237,6 @@ class TestFindById:
         collection.find_one.return_value = None
         with pytest.raises(DeviceNotFoundError):
             adapter.find_by_id("INESISTENTE")
-
-
-
 
     def test_asset_is_reconstructed(self, adapter, collection):
         """
@@ -283,7 +287,6 @@ class TestFindById:
 
 
 class TestFindAll:
-
     def test_returns_summary_list(self, adapter, collection):
         """
         Dati dei documenti dispositivo presenti nel database (Given),

@@ -11,8 +11,9 @@ from core.ports.inbound.evaluation.exceptions import InsertJustificationFailure
 
 
 class FlaskInsertJustificationController(FlaskController):
-
-    def __init__(self, insert_justification_use_case: InsertJustificationUseCase) -> None:
+    def __init__(
+        self, insert_justification_use_case: InsertJustificationUseCase
+    ) -> None:
         self._use_case = insert_justification_use_case
 
     def register_routes(self, blueprint: Blueprint) -> None:

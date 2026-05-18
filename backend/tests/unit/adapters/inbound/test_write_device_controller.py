@@ -2,12 +2,15 @@ import pytest
 from unittest.mock import Mock, patch
 from flask import Flask, Blueprint
 
-from adapters.inbound.device.flask_write_device_controller import FlaskWriteDeviceController
+from adapters.inbound.device.flask_write_device_controller import (
+    FlaskWriteDeviceController,
+)
 from core.ports.inbound.device.exceptions import (
     CreateDeviceFailure,
     UpdateDeviceFailure,
     DeleteDeviceFailure,
 )
+
 
 @pytest.fixture
 def mock_create_use_case():
@@ -36,10 +39,11 @@ def client(mock_create_use_case, mock_update_use_case, mock_delete_use_case):
     )
     bp = Blueprint("devices", __name__)
     controller.register_routes(bp)
-    
+
     @bp.route("/devices/<device_id>", endpoint="get_device_detail", methods=["GET"])
     def dummy_get_device_detail(device_id):
         return "Dummy route"
+
     app.register_blueprint(bp)
 
     return app.test_client()
@@ -50,7 +54,7 @@ def client(mock_create_use_case, mock_update_use_case, mock_delete_use_case):
 
 class TestCreateDevice:
     @patch("adapters.inbound.device.flask_write_device_controller.url_for")
-    def test_returns_201_on_success(self,mock_url_for, client, mock_create_use_case):
+    def test_returns_201_on_success(self, mock_url_for, client, mock_create_use_case):
         """
         Dati dei parametri validi per la registrazione di un nuovo dispositivo (Given),
         quando viene inviata una richiesta POST all'endpoint di creazione (When),
@@ -119,7 +123,9 @@ class TestCreateDevice:
         quando lo use case tenta di salvare il record (When),
         allora il controller deve catturare l'eccezione e restituire uno status code 409 Conflict con il messaggio d'errore (Then).
         """
-        mock_create_use_case.create_device.side_effect = CreateDeviceFailure("duplicato")
+        mock_create_use_case.create_device.side_effect = CreateDeviceFailure(
+            "duplicato"
+        )
         response = client.post(
             "/devices",
             json={
@@ -137,7 +143,6 @@ class TestCreateDevice:
 
 
 class TestUpdateDevice:
-
     def test_returns_200_on_success(self, client, mock_update_use_case):
         """
         Dato un ID dispositivo valido e un payload JSON contenente i dati aggiornati (Given),
@@ -201,7 +206,9 @@ class TestUpdateDevice:
         quando lo use case tenta di applicare la modifica (When),
         allora il controller deve gestire l'eccezione restituendo uno status code 404 Not Found con il dettaglio dell'errore (Then).
         """
-        mock_update_use_case.update_device.side_effect = UpdateDeviceFailure("non trovato")
+        mock_update_use_case.update_device.side_effect = UpdateDeviceFailure(
+            "non trovato"
+        )
         response = client.put(
             "/devices/D-1",
             json={
@@ -218,7 +225,6 @@ class TestUpdateDevice:
 
 
 class TestDeleteDevice:
-
     def test_returns_204_on_success(self, client, mock_delete_use_case):
         """
         Dato un ID di un dispositivo regolarmente registrato a sistema (Given),
@@ -244,7 +250,9 @@ class TestDeleteDevice:
         quando lo use case notifica il fallimento (When),
         allora il controller deve rispondere adeguatamente con uno status code 404 Not Found (Then).
         """
-        mock_delete_use_case.delete_device.side_effect = DeleteDeviceFailure("non trovato")
+        mock_delete_use_case.delete_device.side_effect = DeleteDeviceFailure(
+            "non trovato"
+        )
         response = client.delete("/devices/D-1")
         assert response.status_code == 404
         assert "non trovato" in response.get_json()["error"]

@@ -10,17 +10,27 @@ from core.domain.evaluation_object.asset.asset_type import AssetType
 from core.domain.evaluation_object.device import Device
 
 from core.ports.outbound.device.repository.delete_device_port import DeleteDevicePort
-from core.ports.outbound.device.repository.find_all_devices_port import FindAllDevicePort 
+from core.ports.outbound.device.repository.find_all_devices_port import (
+    FindAllDevicePort,
+)
 from core.domain.evaluation_object.device_summary import DeviceSummary
 from core.ports.outbound.device.repository.find_device_port import FindDevicePort
-from core.ports.outbound.device.repository.register_device_port import RegisterDevicePort
+from core.ports.outbound.device.repository.register_device_port import (
+    RegisterDevicePort,
+)
 from core.ports.outbound.device.repository.save_device_port import SaveDevicePort
-from core.ports.outbound.device.exceptions import DeviceNotFoundError, DuplicateDeviceError
+from core.ports.outbound.device.exceptions import (
+    DeviceNotFoundError,
+    DuplicateDeviceError,
+)
 
 
 class MongoDeviceAdapter(
-    SaveDevicePort, RegisterDevicePort, DeleteDevicePort,
-    FindDevicePort, FindAllDevicePort,
+    SaveDevicePort,
+    RegisterDevicePort,
+    DeleteDevicePort,
+    FindDevicePort,
+    FindAllDevicePort,
 ):
     def __init__(self, collection: Collection) -> None:
         self._collection = collection
@@ -32,25 +42,32 @@ class MongoDeviceAdapter(
             self._collection.insert_one(doc)
         except DuplicateKeyError as e:
             if "duplicate key error" in str(e):
-                raise DuplicateDeviceError(f"Device '{device.id}' è già presente nello storage.")
+                raise DuplicateDeviceError(
+                    f"Device '{device.id}' è già presente nello storage."
+                )
             raise
 
     def save_device(self, device: Device) -> None:
         doc = self._to_document(device)
-        result =self._collection.replace_one({"_id": device.id}, doc)
+        result = self._collection.replace_one({"_id": device.id}, doc)
         if result.matched_count == 0:
-            raise DeviceNotFoundError(f"Device '{device.id}' non trovato nello storage, aggiornamento fallito.")
-
+            raise DeviceNotFoundError(
+                f"Device '{device.id}' non trovato nello storage, aggiornamento fallito."
+            )
 
     def delete(self, device_id: str) -> None:
-        result=self._collection.delete_one({"_id": device_id})
+        result = self._collection.delete_one({"_id": device_id})
         if result.deleted_count == 0:
-            raise DeviceNotFoundError(f"Device '{device_id}' non trovato nello storage.")
+            raise DeviceNotFoundError(
+                f"Device '{device_id}' non trovato nello storage."
+            )
 
     def find_by_id(self, device_id: str) -> Device:
         doc = self._collection.find_one({"_id": device_id})
         if doc is None:
-            raise DeviceNotFoundError(f"Device '{device_id}' non trovato nello storage.")
+            raise DeviceNotFoundError(
+                f"Device '{device_id}' non trovato nello storage."
+            )
         return self._from_document(doc)
 
     def find_all(self) -> list[DeviceSummary]:
@@ -101,15 +118,17 @@ class MongoDeviceAdapter(
                 )
                 for ev in asset_doc.get("evaluations", [])
             }
-            assets.append(Asset(
-                id=asset_doc["id"],
-                anagraphic=AssetAnagraphic(
-                    name=asset_doc["name"],
-                    asset_type=AssetType(asset_doc["type"]),
-                    description=asset_doc["description"],
-                ),
-                proprieties=AssetProprieties(evidences=evidences),
-            ))
+            assets.append(
+                Asset(
+                    id=asset_doc["id"],
+                    anagraphic=AssetAnagraphic(
+                        name=asset_doc["name"],
+                        asset_type=AssetType(asset_doc["type"]),
+                        description=asset_doc["description"],
+                    ),
+                    proprieties=AssetProprieties(evidences=evidences),
+                )
+            )
         return Device.create(
             device_id=str(doc["_id"]),
             standard_id=doc["compliance_standard_id"],

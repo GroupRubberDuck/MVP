@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from pydantic import BaseModel
 
+
 class CreateDeviceCommand(BaseModel):
     device_name: str
     device_os: str
@@ -10,4 +11,4 @@ class CreateDeviceCommand(BaseModel):
 
 class CreateDeviceUseCase(ABC):
     @abstractmethod
-    def create_device(self, command: CreateDeviceCommand) -> str: ...  
+    def create_device(self, command: CreateDeviceCommand) -> str: ...

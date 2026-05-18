@@ -18,5 +18,6 @@ class EvaluationState(StrEnum):
         result = mapping.get(verdict)
         if result is None:
             raise ValueError(
-                f"StandardVerdict '{verdict}' non ha un EvaluationState corrispondente.")
+                f"StandardVerdict '{verdict}' non ha un EvaluationState corrispondente."
+            )
         return result

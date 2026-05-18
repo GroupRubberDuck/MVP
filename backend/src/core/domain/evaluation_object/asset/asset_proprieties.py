@@ -21,15 +21,13 @@ class AssetProprieties:
     def get_evidence(self, requirement_id: str) -> AssetEvidence | None:
         return self._evidences.get(requirement_id)
 
-    def set_node_choice(self, requirement_id: str,
-                        node_id: str, value: bool) -> None:
+    def set_node_choice(self, requirement_id: str, node_id: str, value: bool) -> None:
         evidence = self._evidences.get(requirement_id)
         if evidence is None:
             evidence = AssetEvidence(requirement_id=requirement_id)
         self._evidences[requirement_id] = evidence.with_node_choice(node_id, value)
 
-    def set_justification(self, requirement_id: str,
-                          justification: str) -> None:
+    def set_justification(self, requirement_id: str, justification: str) -> None:
         evidence = self._evidences.get(requirement_id)
         if evidence is None:
             evidence = AssetEvidence(requirement_id=requirement_id)

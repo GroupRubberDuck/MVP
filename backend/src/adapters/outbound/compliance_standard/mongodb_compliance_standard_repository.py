@@ -10,7 +10,7 @@ from core.domain.evaluation_standard.decision_tree import (
     DecisionNode,
     DecisionTree,
     LeafNode,
-    Node
+    Node,
 )
 
 
@@ -45,9 +45,7 @@ class MongoComplianceStandardAdapter(FindStandardPort):
                     nodes.append(
                         LeafNode(
                             node_id=node_doc["node_id"],
-                            verdict_value=StandardVerdict(
-                                node_doc["verdict"]
-                            ),
+                            verdict_value=StandardVerdict(node_doc["verdict"]),
                         )
                     )
             requirements.append(
@@ -57,7 +55,7 @@ class MongoComplianceStandardAdapter(FindStandardPort):
                     description=req_doc["description"]["norm_description"],
                     target_description=req_doc["description"]["target_description"],
                     decision_tree=DecisionTree(root=root, nodes=nodes),
-                    dependency_ids=tuple(req_doc.get("dependency_ids", ()))
+                    dependency_ids=tuple(req_doc.get("dependency_ids", ())),
                 )
             )
         return ComplianceStandard(

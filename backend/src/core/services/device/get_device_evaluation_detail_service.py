@@ -18,14 +18,16 @@ from core.ports.inbound.device.get_device_evaluation_detail_use_case import (
 
 from core.ports.inbound.evaluation.exceptions import GetEvaluationDetailFailure
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
-from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
+from core.ports.outbound.evaluation.get_evaluation_session_port import (
+    GetEvaluationSessionPort,
+)
 
 
 class GetDeviceEvaluationDetailService(GetDeviceEvaluationDetailUseCase):
     def __init__(
-        self, 
-        get_evaluation_session_port: GetEvaluationSessionPort, 
-        evaluation_engine: EvaluationEngine
+        self,
+        get_evaluation_session_port: GetEvaluationSessionPort,
+        evaluation_engine: EvaluationEngine,
     ) -> None:
         self._get_evaluation_session_port = get_evaluation_session_port
         self._evaluation_engine = evaluation_engine
@@ -34,12 +36,14 @@ class GetDeviceEvaluationDetailService(GetDeviceEvaluationDetailUseCase):
         self, command: GetDeviceEvaluationDetailCommand
     ) -> DeviceEvaluationDetail:
         try:
-            session = self._get_evaluation_session_port.get_evaluation_session(command.session_id)
+            session = self._get_evaluation_session_port.get_evaluation_session(
+                command.session_id
+            )
         except EvaluationSessionNotFoundError:
             raise GetEvaluationDetailFailure(
                 f"Sessione '{command.session_id}' non trovata."
             )
-        
+
         device_result = self._evaluation_engine.evaluate(
             session.device, session.standard
         )
@@ -63,7 +67,7 @@ class GetDeviceEvaluationDetailService(GetDeviceEvaluationDetailUseCase):
         self, asset_result: AssetEvaluationResult, session: EvaluationSession
     ) -> AssetEvaluationDetail:
         asset = session.device.get_asset(asset_result.asset_id)
-        
+
         requirement_details = tuple(
             self._make_requirement_detail(
                 r, session.standard.get_requirement(r.requirement_id)
@@ -83,7 +87,4 @@ class GetDeviceEvaluationDetailService(GetDeviceEvaluationDetailUseCase):
     def _make_requirement_detail(
         self, r: RequirementEvaluationResult, req: Requirement
     ) -> RequirementEvaluationDetail:
-        return EvaluationDetailBuilder().build_requirement_detail(
-            req=req,
-            result=r
-        )
+        return EvaluationDetailBuilder().build_requirement_detail(req=req, result=r)

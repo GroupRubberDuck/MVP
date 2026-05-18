@@ -5,9 +5,15 @@ from core.services.device.allowed_device_extensions import AllowedDeviceFileExte
 
 from core.ports.inbound.device.import_device_use_case import ImportDeviceCommand
 
-from core.ports.outbound.device.importer.file_device_importer_factory_port import FileDeviceImporterFactoryPort
-from core.ports.outbound.device.importer.file_device_importer_port import FileDeviceImporterPort
-from core.ports.outbound.device.repository.register_device_port import RegisterDevicePort
+from core.ports.outbound.device.importer.file_device_importer_factory_port import (
+    FileDeviceImporterFactoryPort,
+)
+from core.ports.outbound.device.importer.file_device_importer_port import (
+    FileDeviceImporterPort,
+)
+from core.ports.outbound.device.repository.register_device_port import (
+    RegisterDevicePort,
+)
 from core.services.device.import_device_service import ImportDeviceService
 
 
@@ -43,8 +49,9 @@ def comando_csv() -> ImportDeviceCommand:
 
 
 class TestImportDevice:
-
-    def test_calls_factory_with_correct_extension(self, service, factory, importer, comando_csv):
+    def test_calls_factory_with_correct_extension(
+        self, service, factory, importer, comando_csv
+    ):
         """
         Dato un comando di importazione per un file CSV (Given),
         quando il servizio processa la richiesta (When),
@@ -53,9 +60,13 @@ class TestImportDevice:
         factory.get_file_device_importer.return_value = importer
         importer.parse_device_file.return_value = MagicMock()
         service.import_device(comando_csv)
-        factory.get_file_device_importer.assert_called_once_with(AllowedDeviceFileExtension.CSV)
+        factory.get_file_device_importer.assert_called_once_with(
+            AllowedDeviceFileExtension.CSV
+        )
 
-    def test_calls_importer_with_file_content(self, service, factory, importer, comando_csv):
+    def test_calls_importer_with_file_content(
+        self, service, factory, importer, comando_csv
+    ):
         """
         Dato un contenuto di file binario fornito nel comando (Given),
         quando l'importer viene recuperato dalla factory (When),
@@ -64,9 +75,13 @@ class TestImportDevice:
         factory.get_file_device_importer.return_value = importer
         importer.parse_device_file.return_value = MagicMock()
         service.import_device(comando_csv)
-        importer.parse_device_file.assert_called_once_with(comando_csv.device_file_content)
+        importer.parse_device_file.assert_called_once_with(
+            comando_csv.device_file_content
+        )
 
-    def test_registers_device_returned_by_parser(self, service, factory, importer, register_port, comando_csv):
+    def test_registers_device_returned_by_parser(
+        self, service, factory, importer, register_port, comando_csv
+    ):
         """
         Dato un dispositivo correttamente deserializzato dal parser (Given),
         quando il processo di importazione prosegue (When),
@@ -92,5 +107,7 @@ class TestImportDevice:
         factory.get_file_device_importer.return_value = importer
         importer.parse_device_file.return_value = device
         service.import_device(comando)
-        factory.get_file_device_importer.assert_called_once_with(AllowedDeviceFileExtension.JSON)
+        factory.get_file_device_importer.assert_called_once_with(
+            AllowedDeviceFileExtension.JSON
+        )
         register_port.register.assert_called_once_with(device)

@@ -11,6 +11,7 @@ from core.domain.evaluation_object.asset import (
 
 # ── Fixtures ──
 
+
 @pytest.fixture
 def anagraphic():
     return AssetAnagraphic(
@@ -34,8 +35,8 @@ def asset_con_evidence(anagraphic):
 
 # ── AssetEvidence ──
 
-class TestAssetEvidence:
 
+class TestAssetEvidence:
     def test_default_empty(self):
         """
         Data l'inizializzazione di una nuova evidenza per un requisito (Given),
@@ -96,8 +97,8 @@ class TestAssetEvidence:
 
 # ── AssetProprieties ──
 
-class TestAssetProprieties:
 
+class TestAssetProprieties:
     def test_empty_by_default(self):
         """
         Data l'inizializzazione del gestore delle proprietà di un asset (Given),
@@ -195,8 +196,8 @@ class TestAssetProprieties:
 
 # ── Asset ──
 
-class TestAssetCreation:
 
+class TestAssetCreation:
     def test_create_empty(self, asset_vuoto):
         """
         Dati dei parametri anagrafici validi (Given),
@@ -227,7 +228,6 @@ class TestAssetCreation:
 
 
 class TestAssetDelegation:
-
     def test_set_node_choice(self, asset_vuoto):
         """
         Dato un Asset (Given),
@@ -262,7 +262,6 @@ class TestAssetDelegation:
 
 
 class TestAssetUpdateAnagraphic:
-
     def test_update_name(self, asset_vuoto):
         """
         Dato un Asset esistente (Given),

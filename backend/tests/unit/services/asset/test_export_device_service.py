@@ -2,11 +2,14 @@ import pytest
 from unittest.mock import MagicMock
 from core.services.device.export_device_service import ExportDeviceService, ExportedFile
 from core.ports.inbound.device.export_device_use_case import ExportDeviceCommand
-from core.domain.evaluation_object.allowed_device_file_extension import AllowedDeviceFileExtension
+from core.domain.evaluation_object.allowed_device_file_extension import (
+    AllowedDeviceFileExtension,
+)
 from core.domain.evaluation_object.device import Device
 
 
-# fixtures 
+# fixtures
+
 
 @pytest.fixture
 def device():
@@ -18,11 +21,13 @@ def device():
         description="Device di test",
     )
 
+
 @pytest.fixture
 def find_device_mock(device):
     mock = MagicMock()
     mock.find_by_id.return_value = device
     return mock
+
 
 @pytest.fixture
 def exporter_mock():
@@ -31,6 +36,7 @@ def exporter_mock():
     mock.generate_device_file.return_value = b"file_bytes"
     return mock
 
+
 @pytest.fixture
 def exporter_factory_mock(exporter_mock):
     # Mock della factory — restituisce sempre l'exporter mock
@@ -38,12 +44,14 @@ def exporter_factory_mock(exporter_mock):
     mock.get_file_device_exporter.return_value = exporter_mock
     return mock
 
+
 @pytest.fixture
 def service(find_device_mock, exporter_factory_mock):
     return ExportDeviceService(
         find_device=find_device_mock,
         exporter_factory=exporter_factory_mock,
     )
+
 
 @pytest.fixture
 def valid_command():
@@ -55,6 +63,7 @@ def valid_command():
 
 # caso nominale
 
+
 def test_export_restituisce_file(service, valid_command):
     """
     Dato un comando di esportazione valido (Given),
@@ -64,6 +73,7 @@ def test_export_restituisce_file(service, valid_command):
     # Verifica che il service incarti il risultato in un oggetto ExportedFile
     result = service.export_device(valid_command)
     assert isinstance(result, ExportedFile)
+
 
 def test_export_restituisce_output_dell_exporter(service, valid_command):
     """
@@ -75,7 +85,10 @@ def test_export_restituisce_output_dell_exporter(service, valid_command):
     result = service.export_device(valid_command)
     assert result.content == b"file_bytes"
 
-def test_export_chiama_find_by_id_con_device_id_corretto(service, valid_command, find_device_mock):
+
+def test_export_chiama_find_by_id_con_device_id_corretto(
+    service, valid_command, find_device_mock
+):
     """
     Dato un identificativo di dispositivo presente nel comando (Given),
     quando il servizio avvia l'esportazione (When),
@@ -85,7 +98,10 @@ def test_export_chiama_find_by_id_con_device_id_corretto(service, valid_command,
     service.export_device(valid_command)
     find_device_mock.find_by_id.assert_called_once_with("device-1")
 
-def test_export_chiama_factory_con_extension_corretta(service, valid_command, exporter_factory_mock):
+
+def test_export_chiama_factory_con_extension_corretta(
+    service, valid_command, exporter_factory_mock
+):
     """
     Dato un formato di estensione richiesto nel comando (Given),
     quando il servizio richiede un exporter (When),
@@ -97,7 +113,10 @@ def test_export_chiama_factory_con_extension_corretta(service, valid_command, ex
         AllowedDeviceFileExtension.JSON
     )
 
-def test_export_chiama_generate_device_file(service, valid_command, exporter_mock, device):
+
+def test_export_chiama_generate_device_file(
+    service, valid_command, exporter_mock, device
+):
     """
     Dato un dispositivo recuperato dal sistema (Given),
     quando viene eseguita l'esportazione (When),
@@ -109,6 +128,7 @@ def test_export_chiama_generate_device_file(service, valid_command, exporter_moc
 
 
 # casi di errore
+
 
 def test_export_device_non_trovato_lancia_keyerror(exporter_factory_mock):
     """
@@ -130,6 +150,7 @@ def test_export_device_non_trovato_lancia_keyerror(exporter_factory_mock):
     with pytest.raises(KeyError):
         service.export_device(command)
 
+
 def test_export_extension_non_supportata_lancia_valueerror(find_device_mock):
     """
     Dato un comando che richiede un'estensione non supportata dalla factory (Given),
@@ -138,7 +159,9 @@ def test_export_extension_non_supportata_lancia_valueerror(find_device_mock):
     """
     # Se l'extension non è supportata la factory deve propagare ValueError
     exporter_factory_mock = MagicMock()
-    exporter_factory_mock.get_file_device_exporter.side_effect = ValueError("Formato non supportato")
+    exporter_factory_mock.get_file_device_exporter.side_effect = ValueError(
+        "Formato non supportato"
+    )
     service = ExportDeviceService(
         find_device=find_device_mock,
         exporter_factory=exporter_factory_mock,

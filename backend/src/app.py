@@ -20,8 +20,12 @@ from adapters.outbound.compliance_standard.mongodb_compliance_standard_repositor
 )
 
 # device importer factory
-from adapters.outbound.device.importer.concrete_file_device_importer_factory import ConcreteFileDeviceImporterFactory
-from adapters.outbound.device.exporter.concrete_file_device_exporter_factory import ConcreteFileDeviceExporterFactory
+from adapters.outbound.device.importer.concrete_file_device_importer_factory import (
+    ConcreteFileDeviceImporterFactory,
+)
+from adapters.outbound.device.exporter.concrete_file_device_exporter_factory import (
+    ConcreteFileDeviceExporterFactory,
+)
 
 # report generator
 from adapters.outbound.report.pdf_report_generator import PdfReportGenerator
@@ -66,20 +70,37 @@ from core.services.asset.create_asset_service import CreateAssetService
 from core.services.asset.update_asset_service import UpdateAssetService
 from core.services.asset.delete_asset_service import DeleteAssetService
 
-from core.services.asset.get_asset_evaluation_detail_service import GetAssetEvaluationDetailService
+from core.services.asset.get_asset_evaluation_detail_service import (
+    GetAssetEvaluationDetailService,
+)
 
 from core.services.asset.get_asset_anagraphic_service import GetAssetAnagraphicService
-from core.services.asset.get_requirement_evaluation_detail_service import GetRequirementEvaluationDetailService
+from core.services.asset.get_requirement_evaluation_detail_service import (
+    GetRequirementEvaluationDetailService,
+)
 
-from core.services.evaluation.evaluation_session.close_evaluation_session_service import CloseEvaluationSessionService
-from core.services.evaluation.evaluation_session.commit_evaluation_session_service import CommitEvaluationSessionService
-from core.services.evaluation.evaluation_session.open_evaluation_session_service import OpenEvaluationSessionService
+from core.services.evaluation.evaluation_session.close_evaluation_session_service import (
+    CloseEvaluationSessionService,
+)
+from core.services.evaluation.evaluation_session.commit_evaluation_session_service import (
+    CommitEvaluationSessionService,
+)
+from core.services.evaluation.evaluation_session.open_evaluation_session_service import (
+    OpenEvaluationSessionService,
+)
 from core.services.evaluation.get_active_session_service import GetActiveSessionService
-from core.services.evaluation.evaluation_session.session_coordinator import SessionCoordinator,SessionHandler
+from core.services.evaluation.evaluation_session.session_coordinator import (
+    SessionCoordinator,
+    SessionHandler,
+)
 
 
-from core.services.evaluation.evaluate_decision_node_service import EvaluateDecisionNodeService
-from core.services.evaluation.insert_justification_service import InsertJustificationService
+from core.services.evaluation.evaluate_decision_node_service import (
+    EvaluateDecisionNodeService,
+)
+from core.services.evaluation.insert_justification_service import (
+    InsertJustificationService,
+)
 
 
 # --- Controller (adapter inbound) ---
@@ -99,19 +120,37 @@ from adapters.inbound.device.flask_query_dashboard_controller import (
 # from core.services
 
 # interactive evaluation service
-from adapters.inbound.device.flask_export_device_controller import FlaskExportDeviceController
+from adapters.inbound.device.flask_export_device_controller import (
+    FlaskExportDeviceController,
+)
 
-from adapters.inbound.evaluation.evaluation_detail.flask_asset_evaluation_detail_controller import FlaskAssetEvaluationDetailController
-from adapters.inbound.evaluation.evaluation_detail.flask_device_evaluation_detail_controller import FlaskDeviceEvaluationDetailController
-from adapters.inbound.evaluation.evaluation_detail.flask_requirement_evaluation_detail_controller import FlaskRequirementEvaluationDetailController
-from adapters.inbound.evaluation.flask_insert_justification_controller import FlaskInsertJustificationController
-from adapters.inbound.evaluation.flask_evaluate_decision_node_controller import FlaskEvaluateDecisionNodeController
-from adapters.inbound.evaluation.evaluation_session_controller import EvaluationSessionController
+from adapters.inbound.evaluation.evaluation_detail.flask_asset_evaluation_detail_controller import (
+    FlaskAssetEvaluationDetailController,
+)
+from adapters.inbound.evaluation.evaluation_detail.flask_device_evaluation_detail_controller import (
+    FlaskDeviceEvaluationDetailController,
+)
+from adapters.inbound.evaluation.evaluation_detail.flask_requirement_evaluation_detail_controller import (
+    FlaskRequirementEvaluationDetailController,
+)
+from adapters.inbound.evaluation.flask_insert_justification_controller import (
+    FlaskInsertJustificationController,
+)
+from adapters.inbound.evaluation.flask_evaluate_decision_node_controller import (
+    FlaskEvaluateDecisionNodeController,
+)
+from adapters.inbound.evaluation.evaluation_session_controller import (
+    EvaluationSessionController,
+)
 
 from adapters.inbound.report.report_controller import FlaskExportReportController
 
-from adapters.inbound.asset.flask_write_asset_controller import FlaskWriteAssetController
-from adapters.inbound.asset.flask_query_asset_controller import FlaskQueryAssetController
+from adapters.inbound.asset.flask_write_asset_controller import (
+    FlaskWriteAssetController,
+)
+from adapters.inbound.asset.flask_query_asset_controller import (
+    FlaskQueryAssetController,
+)
 
 
 # Controller (adapter inbound)
@@ -166,78 +205,71 @@ def create_app() -> Flask:
         device_importer_factory=ConcreteFileDeviceImporterFactory(),
     )
 
-    get_device_evaluation_detail_service=GetDeviceEvaluationDetailService(
-        get_evaluation_session_port=session_cache,
-        evaluation_engine=EvaluationEngine()
+    get_device_evaluation_detail_service = GetDeviceEvaluationDetailService(
+        get_evaluation_session_port=session_cache, evaluation_engine=EvaluationEngine()
     )
 
-    export_device_service=ExportDeviceService(
-        find_device=device_adapter,
-        exporter_factory=ConcreteFileDeviceExporterFactory()
+    export_device_service = ExportDeviceService(
+        find_device=device_adapter, exporter_factory=ConcreteFileDeviceExporterFactory()
     )
 
-    create_asset_service=CreateAssetService(
-        save_evaluation_session=session_cache,
-        get_evaluation_session=session_cache
+    create_asset_service = CreateAssetService(
+        save_evaluation_session=session_cache, get_evaluation_session=session_cache
     )
 
-    update_asset_service=UpdateAssetService(
+    update_asset_service = UpdateAssetService(
         save_evaluation_session_port=session_cache,
-        get_evaluation_session_port=session_cache
+        get_evaluation_session_port=session_cache,
     )
 
-    delete_asset_service=DeleteAssetService(
+    delete_asset_service = DeleteAssetService(
         save_evaluation_session_port=session_cache,
-        get_evaluation_session_port=session_cache
-    )
-    get_asset_detail_service=GetAssetEvaluationDetailService(
         get_evaluation_session_port=session_cache,
-        evaluation_engine=EvaluationEngine()
     )
-    get_asset_anagraphic_service=GetAssetAnagraphicService(
+    get_asset_detail_service = GetAssetEvaluationDetailService(
+        get_evaluation_session_port=session_cache, evaluation_engine=EvaluationEngine()
+    )
+    get_asset_anagraphic_service = GetAssetAnagraphicService(
         get_evaluation_session_port=session_cache
     )
 
-    get_requirement_evalaution_detail_service=GetRequirementEvaluationDetailService(
-        get_evaluation_session_port=session_cache,
-        evaluation_engine=EvaluationEngine()
+    get_requirement_evalaution_detail_service = GetRequirementEvaluationDetailService(
+        get_evaluation_session_port=session_cache, evaluation_engine=EvaluationEngine()
     )
-    get_active_session_service=GetActiveSessionService(
+    get_active_session_service = GetActiveSessionService(
         get_active_session_port=session_cache
     )
 
-    close_evaluation_session_service=CloseEvaluationSessionService(
+    close_evaluation_session_service = CloseEvaluationSessionService(
         delete_session_port=session_cache
     )
 
-    commit_evaluation_session_service=CommitEvaluationSessionService(
-        get_evaluation_session_port=session_cache,
-        save_device_port=device_adapter
+    commit_evaluation_session_service = CommitEvaluationSessionService(
+        get_evaluation_session_port=session_cache, save_device_port=device_adapter
     )
 
-    session_coordinator=SessionCoordinator(
-        exist_port=session_cache,
-        session_handler=SessionHandler()
+    session_coordinator = SessionCoordinator(
+        exist_port=session_cache, session_handler=SessionHandler()
     )
-    
-    open_evaluation_session_service=OpenEvaluationSessionService(
+
+    open_evaluation_session_service = OpenEvaluationSessionService(
         session_coordinator=session_coordinator,
         create_session_port=session_cache,
         find_device_port=device_adapter,
-        find_standard_port=standard_adapter
+        find_standard_port=standard_adapter,
     )
 
-    evaluate_decision_node_service=EvaluateDecisionNodeService(
+    evaluate_decision_node_service = EvaluateDecisionNodeService(
         get_evaluation_session_port=session_cache,
-        save_evaluation_session_port=session_cache
+        save_evaluation_session_port=session_cache,
     )
 
-    evaluation_justification_service=InsertJustificationService(
+    evaluation_justification_service = InsertJustificationService(
         get_evaluation_session_port=session_cache,
-        save_evaluation_session_port=session_cache        
+        save_evaluation_session_port=session_cache,
     )
 
-#  service report
+    #  service report
     generate_report_service = GenerateReportService(
         get_evaluation_session_port=session_cache,
         report_generator_port=report_generator_adapter,
@@ -269,55 +301,61 @@ def create_app() -> Flask:
         import_device_service=import_device_service
     )
 
-    export_device_controller=FlaskExportDeviceController(export_device_service)
+    export_device_controller = FlaskExportDeviceController(export_device_service)
 
-    asset_evaluation_detail_controller=FlaskAssetEvaluationDetailController(
+    asset_evaluation_detail_controller = FlaskAssetEvaluationDetailController(
         get_asset_ev_detail_use_case=get_asset_detail_service
     )
 
-    device_evaluation_detail_controller=FlaskDeviceEvaluationDetailController(
+    device_evaluation_detail_controller = FlaskDeviceEvaluationDetailController(
         get_device_ev_detail_use_case=get_device_evaluation_detail_service
     )
 
-    requirement_evaluation_detail_controller=FlaskRequirementEvaluationDetailController(
-        get_requirement_ev_detail_use_case=get_requirement_evalaution_detail_service
+    requirement_evaluation_detail_controller = (
+        FlaskRequirementEvaluationDetailController(
+            get_requirement_ev_detail_use_case=get_requirement_evalaution_detail_service
+        )
     )
 
-    evaluation_justification_controller=FlaskInsertJustificationController(
+    evaluation_justification_controller = FlaskInsertJustificationController(
         insert_justification_use_case=evaluation_justification_service
     )
 
-    evaluate_decision_node_controller=FlaskEvaluateDecisionNodeController(
+    evaluate_decision_node_controller = FlaskEvaluateDecisionNodeController(
         evaluate_decision_node_use_case=evaluate_decision_node_service
     )
 
-    evaluation_session_controller=EvaluationSessionController(
+    evaluation_session_controller = EvaluationSessionController(
         open_use_case=open_evaluation_session_service,
         close_use_case=close_evaluation_session_service,
         commit_use_case=commit_evaluation_session_service,
-        get_active_session_use_case=get_active_session_service
+        get_active_session_use_case=get_active_session_service,
     )
 
-    write_asset_controller=FlaskWriteAssetController(
+    write_asset_controller = FlaskWriteAssetController(
         create_asset_use_case=create_asset_service,
         update_asset_use_case=update_asset_service,
-        delete_asset_use_case=delete_asset_service
+        delete_asset_use_case=delete_asset_service,
     )
 
-    query_asset_controller=FlaskQueryAssetController(
+    query_asset_controller = FlaskQueryAssetController(
         get_asset_anagraphic_use_case=get_asset_anagraphic_service
     )
-    @app.route("/sessions",methods=["GET"])
+
+    @app.route("/sessions", methods=["GET"])
     def active_session():
         if session_cache._session is not None:
-            return jsonify(session_cache._session.session_id,session_cache._session.device.id)
+            return jsonify(
+                session_cache._session.session_id, session_cache._session.device.id
+            )
         return jsonify("No active session")
+
     # ── Registrazione Rotte ──
     register_routes(
         app,
         device_controllers=[
-            query_device_controller, 
-            write_device_controller, 
+            query_device_controller,
+            write_device_controller,
             import_device_controller,
             export_device_controller,
             query_dashboard_controller,
@@ -330,8 +368,8 @@ def create_app() -> Flask:
             evaluate_decision_node_controller,
             evaluation_session_controller,
             write_asset_controller,
-            query_asset_controller
-            ],
+            query_asset_controller,
+        ],
         report_controllers=[export_report_controller],
     )
     register_error_handlers(app)

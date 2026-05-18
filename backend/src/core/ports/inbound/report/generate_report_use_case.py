@@ -3,14 +3,17 @@ from enum import StrEnum
 from pydantic import BaseModel
 from core.domain.shared.ExportedFile import ExportedFile
 
+
 class ReportFormat(StrEnum):
     PDF = "pdf"
+
     @property
     def media_type(self) -> str:
         mapping = {
             "pdf": "application/pdf",
         }
         return mapping[self.value]
+
 
 class GenerateReportCommand(BaseModel):
     session_id: str

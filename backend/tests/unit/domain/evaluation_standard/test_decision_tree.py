@@ -1,7 +1,9 @@
 import pytest
 from types import MappingProxyType
 from core.domain.evaluation_standard.decision_tree import (
-    DecisionTree, DecisionNode, LeafNode,
+    DecisionTree,
+    DecisionNode,
+    LeafNode,
 )
 from core.domain.evaluation_standard.standard_verdict import StandardVerdict
 from core.domain.evaluation_standard.evaluation_state import EvaluationState
@@ -10,42 +12,52 @@ from core.domain.evaluation_standard.exceptions import CycleDetectedError
 
 # ── Fixtures ──
 
+
 @pytest.fixture
 def simple_tree() -> DecisionTree:
     """n1 --True--> PASS, --False--> FAIL"""
-    return DecisionTree(root="n1", nodes=[
-        DecisionNode("n1", "Domanda 1?", "leaf_pass", "leaf_fail"),
-        LeafNode("leaf_pass", StandardVerdict.PASS),
-        LeafNode("leaf_fail", StandardVerdict.FAIL),
-    ])
+    return DecisionTree(
+        root="n1",
+        nodes=[
+            DecisionNode("n1", "Domanda 1?", "leaf_pass", "leaf_fail"),
+            LeafNode("leaf_pass", StandardVerdict.PASS),
+            LeafNode("leaf_fail", StandardVerdict.FAIL),
+        ],
+    )
 
 
 @pytest.fixture
 def two_step_tree() -> DecisionTree:
     """n1 --True--> n2 --True--> PASS / --False--> FAIL
-       n1 --False--> FAIL"""
-    return DecisionTree(root="n1", nodes=[
-        DecisionNode("n1", "Domanda 1?", "n2", "leaf_fail"),
-        DecisionNode("n2", "Domanda 2?", "leaf_pass", "leaf_fail"),
-        LeafNode("leaf_pass", StandardVerdict.PASS),
-        LeafNode("leaf_fail", StandardVerdict.FAIL),
-    ])
+    n1 --False--> FAIL"""
+    return DecisionTree(
+        root="n1",
+        nodes=[
+            DecisionNode("n1", "Domanda 1?", "n2", "leaf_fail"),
+            DecisionNode("n2", "Domanda 2?", "leaf_pass", "leaf_fail"),
+            LeafNode("leaf_pass", StandardVerdict.PASS),
+            LeafNode("leaf_fail", StandardVerdict.FAIL),
+        ],
+    )
 
 
 @pytest.fixture
 def na_tree() -> DecisionTree:
     """n1 --True--> PASS, --False--> NA"""
-    return DecisionTree(root="n1", nodes=[
-        DecisionNode("n1", "Applicabile?", "leaf_pass", "leaf_na"),
-        LeafNode("leaf_pass", StandardVerdict.PASS),
-        LeafNode("leaf_na", StandardVerdict.NA),
-    ])
+    return DecisionTree(
+        root="n1",
+        nodes=[
+            DecisionNode("n1", "Applicabile?", "leaf_pass", "leaf_na"),
+            LeafNode("leaf_pass", StandardVerdict.PASS),
+            LeafNode("leaf_na", StandardVerdict.NA),
+        ],
+    )
 
 
 # ── Costruzione ──
 
-class TestDecisionTreeConstruction:
 
+class TestDecisionTreeConstruction:
     def test_duplicate_node_raises(self):
         """
         Dato un elenco di nodi per la costruzione dell'albero (Given),
@@ -53,10 +65,13 @@ class TestDecisionTreeConstruction:
         allora il sistema deve sollevare un ValueError impedendo la creazione di una struttura ambigua (Then).
         """
         with pytest.raises(ValueError, match="ID duplicato"):
-            DecisionTree(root="n1", nodes=[
-                LeafNode("n1", StandardVerdict.PASS),
-                LeafNode("n1", StandardVerdict.FAIL),
-            ])
+            DecisionTree(
+                root="n1",
+                nodes=[
+                    LeafNode("n1", StandardVerdict.PASS),
+                    LeafNode("n1", StandardVerdict.FAIL),
+                ],
+            )
 
     def test_missing_root_raises(self):
         """
@@ -65,9 +80,12 @@ class TestDecisionTreeConstruction:
         allora deve essere sollevato un ValueError segnalando l'assenza del punto di ingresso (Then).
         """
         with pytest.raises(ValueError, match="nodo radice"):
-            DecisionTree(root="missing", nodes=[
-                LeafNode("n1", StandardVerdict.PASS),
-            ])
+            DecisionTree(
+                root="missing",
+                nodes=[
+                    LeafNode("n1", StandardVerdict.PASS),
+                ],
+            )
 
     def test_single_leaf_as_root(self):
         """
@@ -75,17 +93,20 @@ class TestDecisionTreeConstruction:
         quando viene eseguita la valutazione (When),
         allora il sistema deve restituire immediatamente il verdetto della foglia senza richiedere input (Then).
         """
-        tree = DecisionTree(root="leaf", nodes=[
-            LeafNode("leaf", StandardVerdict.PASS),
-        ])
+        tree = DecisionTree(
+            root="leaf",
+            nodes=[
+                LeafNode("leaf", StandardVerdict.PASS),
+            ],
+        )
         result = tree.evaluate(MappingProxyType({}))
         assert result == EvaluationState.PASS
 
 
 # ── Valutazione ──
 
-class TestDecisionTreeEvaluation:
 
+class TestDecisionTreeEvaluation:
     def test_pass_path(self, simple_tree):
         """
         Dato un albero decisionale semplice (Given),
@@ -161,17 +182,20 @@ class TestDecisionTreeEvaluation:
 
 # ── Cicli ──
 
-class TestDecisionTreeCycleDetection:
 
+class TestDecisionTreeCycleDetection:
     def test_self_referencing_node(self):
         """
         Dato un nodo decisionale mal configurato che punta a se stesso come figlio (Given),
         quando viene avviata la valutazione (When),
         allora il sistema deve rilevare la ricorsione infinita e sollevare un CycleDetectedError (Then).
         """
-        tree = DecisionTree(root="n1", nodes=[
-            DecisionNode("n1", "Loop?", "n1", "n1"),
-        ])
+        tree = DecisionTree(
+            root="n1",
+            nodes=[
+                DecisionNode("n1", "Loop?", "n1", "n1"),
+            ],
+        )
         with pytest.raises(CycleDetectedError):
             tree.evaluate(MappingProxyType({"n1": True}))
 
@@ -181,9 +205,12 @@ class TestDecisionTreeCycleDetection:
         quando l'algoritmo di visita attraversa nuovamente un nodo già presente nel percorso corrente (When),
         allora deve essere sollevato un CycleDetectedError per prevenire il blocco del sistema (Then).
         """
-        tree = DecisionTree(root="n1", nodes=[
-            DecisionNode("n1", "Q1?", "n2", "n2"),
-            DecisionNode("n2", "Q2?", "n1", "n1"),
-        ])
+        tree = DecisionTree(
+            root="n1",
+            nodes=[
+                DecisionNode("n1", "Q1?", "n2", "n2"),
+                DecisionNode("n2", "Q2?", "n1", "n1"),
+            ],
+        )
         with pytest.raises(CycleDetectedError):
             tree.evaluate(MappingProxyType({"n1": True, "n2": True}))

@@ -10,21 +10,43 @@ from core.domain.evaluation_object.asset.asset_evidence import AssetEvidence
 from core.domain.evaluation_object.asset.asset_type import AssetType
 from core.domain.evaluation_standard.compliance_standard import ComplianceStandard
 from core.domain.evaluation_standard.requirement import Requirement
-from core.domain.evaluation_standard.decision_tree import DecisionTree, DecisionNode, LeafNode
+from core.domain.evaluation_standard.decision_tree import (
+    DecisionTree,
+    DecisionNode,
+    LeafNode,
+)
 from core.domain.evaluation_standard.standard_verdict import StandardVerdict
-from adapters.outbound.device.repository.mongo_device_repository import MongoDeviceAdapter
-from adapters.outbound.evaluation.in_memory_evaluation_session_cache import InMemoryEvaluationSessionCache
+from adapters.outbound.device.repository.mongo_device_repository import (
+    MongoDeviceAdapter,
+)
+from adapters.outbound.evaluation.in_memory_evaluation_session_cache import (
+    InMemoryEvaluationSessionCache,
+)
 from adapters.outbound.report.pdf_report_generator import PdfReportGenerator
-from core.services.evaluation.evaluation_session.open_evaluation_session_service import OpenEvaluationSessionService
-from core.services.evaluation.evaluation_session.close_evaluation_session_service import CloseEvaluationSessionService
-from core.services.evaluation.evaluation_session.commit_evaluation_session_service import CommitEvaluationSessionService
-from core.services.evaluation.evaluation_session.session_coordinator import SessionCoordinator, SessionHandler
-from core.services.evaluation.evaluate_decision_node_service import EvaluateDecisionNodeService
-from core.services.evaluation.insert_justification_service import InsertJustificationService
+from core.services.evaluation.evaluation_session.open_evaluation_session_service import (
+    OpenEvaluationSessionService,
+)
+from core.services.evaluation.evaluation_session.close_evaluation_session_service import (
+    CloseEvaluationSessionService,
+)
+from core.services.evaluation.evaluation_session.commit_evaluation_session_service import (
+    CommitEvaluationSessionService,
+)
+from core.services.evaluation.evaluation_session.session_coordinator import (
+    SessionCoordinator,
+    SessionHandler,
+)
+from core.services.evaluation.evaluate_decision_node_service import (
+    EvaluateDecisionNodeService,
+)
+from core.services.evaluation.insert_justification_service import (
+    InsertJustificationService,
+)
 from core.services.report.generate_report_service import GenerateReportService
 
 
 # Database
+
 
 @pytest.fixture
 def mongo_db():
@@ -33,9 +55,11 @@ def mongo_db():
     yield db
     client.close()
 
+
 @pytest.fixture
 def device_adapter(mongo_db):
     return MongoDeviceAdapter(mongo_db["devices"])
+
 
 @pytest.fixture
 def session_cache():
@@ -43,6 +67,7 @@ def session_cache():
 
 
 # Dominio
+
 
 @pytest.fixture
 def simple_standard():
@@ -55,6 +80,7 @@ def simple_standard():
                 LeafNode("L_FAIL", StandardVerdict.FAIL),
             ],
         )
+
     return ComplianceStandard(
         standard_id="STD-001",
         name="Test Standard",
@@ -78,6 +104,7 @@ def simple_standard():
             ),
         ],
     )
+
 
 @pytest.fixture
 def device_with_asset():
@@ -107,6 +134,7 @@ def device_with_asset():
 
 # Servizi
 
+
 @pytest.fixture
 def evaluation_services(session_cache, device_adapter, simple_standard):
     class FakeStandardRepo:
@@ -116,7 +144,10 @@ def evaluation_services(session_cache, device_adapter, simple_standard):
         def find_standard(self, standard_id: str) -> ComplianceStandard:
             if standard_id == self._standard.id:
                 return self._standard
-            from core.ports.outbound.compliance_standard.exceptions import StandardNotFoundError
+            from core.ports.outbound.compliance_standard.exceptions import (
+                StandardNotFoundError,
+            )
+
             raise StandardNotFoundError(f"Standard '{standard_id}' non trovato.")
 
     coordinator = SessionCoordinator(

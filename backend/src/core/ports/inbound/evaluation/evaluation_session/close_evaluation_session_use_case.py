@@ -7,8 +7,8 @@ class CloseEvaluationSessionCommand:
     session_id: str
 
 
-
 class CloseEvaluationSessionUseCase(ABC):
-
     @abstractmethod
-    def close_evaluation_session(self, command: CloseEvaluationSessionCommand) -> None: ...
+    def close_evaluation_session(
+        self, command: CloseEvaluationSessionCommand
+    ) -> None: ...

@@ -38,7 +38,9 @@ class AssetEvaluationDTO(BaseModel):
 
 
 class FlaskAssetEvaluationDetailController(FlaskController):
-    def __init__(self, get_asset_ev_detail_use_case: GetAssetEvaluationDetailUseCase) -> None:
+    def __init__(
+        self, get_asset_ev_detail_use_case: GetAssetEvaluationDetailUseCase
+    ) -> None:
         self._get_asset_ev_detail_use_case = get_asset_ev_detail_use_case
 
     def _make_dto(self, detail: AssetEvaluationDetail) -> AssetEvaluationDTO:
@@ -84,9 +86,10 @@ class FlaskAssetEvaluationDetailController(FlaskController):
 
             asset_dto = self._make_dto(asset)
 
-            return render_template("asset/asset_evaluation_detail.html", 
-                                   asset=asset_dto.model_dump(),
-                                   session_id=session_id,
-                                   device_id=device_id,
-                                   asset_id=asset_id
-                                   ), 200
+            return render_template(
+                "asset/asset_evaluation_detail.html",
+                asset=asset_dto.model_dump(),
+                session_id=session_id,
+                device_id=device_id,
+                asset_id=asset_id,
+            ), 200

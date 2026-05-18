@@ -10,16 +10,13 @@ class RequirementEvaluationResult:
     justification: str
     node_choices: MappingProxyType[str, bool]
     state: EvaluationState
-    dependencies: tuple[tuple[str, EvaluationState], ...] = field(
-        default_factory=tuple
-    )
+    dependencies: tuple[tuple[str, EvaluationState], ...] = field(default_factory=tuple)
 
     def was_blocked_by_dependencies(self) -> bool:
         return any(
-            dep_state != EvaluationState.PASS
-            for _, dep_state in self.dependencies
+            dep_state != EvaluationState.PASS for _, dep_state in self.dependencies
         )
-    
+
 
 @dataclass(frozen=True)
 class AssetEvaluationResult:
@@ -27,17 +24,23 @@ class AssetEvaluationResult:
     requirement_results: tuple[RequirementEvaluationResult, ...]
     verdict: EvaluationState
 
-    def get_requirement_result(self, requirement_id: str) -> RequirementEvaluationResult | None:
-        return next((r for r in self.requirement_results
-                     if r.requirement_id == requirement_id), None)
+    def get_requirement_result(
+        self, requirement_id: str
+    ) -> RequirementEvaluationResult | None:
+        return next(
+            (r for r in self.requirement_results if r.requirement_id == requirement_id),
+            None,
+        )
 
     def failed(self) -> tuple[RequirementEvaluationResult, ...]:
-        return tuple(r for r in self.requirement_results
-                     if r.state == EvaluationState.FAIL)
+        return tuple(
+            r for r in self.requirement_results if r.state == EvaluationState.FAIL
+        )
 
     def pending(self) -> tuple[RequirementEvaluationResult, ...]:
-        return tuple(r for r in self.requirement_results
-                     if r.state == EvaluationState.PENDING)
+        return tuple(
+            r for r in self.requirement_results if r.state == EvaluationState.PENDING
+        )
 
 
 @dataclass(frozen=True)
@@ -48,16 +51,15 @@ class DeviceEvaluationResult:
     verdict: EvaluationState
 
     def get_asset_result(self, asset_id: str) -> AssetEvaluationResult | None:
-        return next((a for a in self.asset_results
-                     if a.asset_id == asset_id), None)
+        return next((a for a in self.asset_results if a.asset_id == asset_id), None)
 
     def failed_assets(self) -> tuple[AssetEvaluationResult, ...]:
-        return tuple(a for a in self.asset_results
-                     if a.verdict == EvaluationState.FAIL)
+        return tuple(a for a in self.asset_results if a.verdict == EvaluationState.FAIL)
 
     def pending_assets(self) -> tuple[AssetEvaluationResult, ...]:
-        return tuple(a for a in self.asset_results
-                     if a.verdict == EvaluationState.PENDING)
+        return tuple(
+            a for a in self.asset_results if a.verdict == EvaluationState.PENDING
+        )
 
     def is_complete(self) -> bool:
         return self.verdict != EvaluationState.PENDING

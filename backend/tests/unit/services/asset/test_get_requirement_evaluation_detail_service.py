@@ -67,7 +67,6 @@ def _setup_happy_path(mock_session_port, mock_engine, command):
 
 
 class TestGetRequirementEvaluationDetailSuccess:
-
     @patch(
         "core.services.asset.get_requirement_evaluation_detail_service.EvaluationDetailBuilder"
     )
@@ -120,9 +119,7 @@ class TestGetRequirementEvaluationDetailSuccess:
         quando viene richiesto il dettaglio del requisito (When),
         allora il servizio deve invocare il motore di valutazione passando il dispositivo e lo standard associati alla sessione (Then).
         """
-        mock_session, _, _ = _setup_happy_path(
-            mock_session_port, mock_engine, command
-        )
+        mock_session, _, _ = _setup_happy_path(mock_session_port, mock_engine, command)
 
         service.get_evaluation_detail(command)
 
@@ -138,9 +135,7 @@ class TestGetRequirementEvaluationDetailSuccess:
         quando il servizio deve ricostruire l'anagrafica del dettaglio (When),
         allora deve richiedere la definizione del requisito direttamente allo standard di conformità della sessione (Then).
         """
-        mock_session, _, _ = _setup_happy_path(
-            mock_session_port, mock_engine, command
-        )
+        mock_session, _, _ = _setup_happy_path(mock_session_port, mock_engine, command)
 
         service.get_evaluation_detail(command)
 
@@ -148,7 +143,6 @@ class TestGetRequirementEvaluationDetailSuccess:
 
 
 class TestGetRequirementEvaluationDetailFailures:
-
     def test_raises_failure_when_session_not_found(
         self, service, mock_session_port, command
     ):

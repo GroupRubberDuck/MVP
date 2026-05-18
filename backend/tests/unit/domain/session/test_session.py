@@ -13,9 +13,7 @@ def test_can_open_session_when_no_active_session_exists(handler: SessionHandler)
     quando viene verificata la possibilità di iniziare una nuova sessione (When),
     allora il gestore deve confermare che l'operazione è consentita restituendo True (Then).
     """
-    result = handler.can_open_session(
-        active_session_exists=False
-    )
+    result = handler.can_open_session(active_session_exists=False)
     assert result is True
 
 

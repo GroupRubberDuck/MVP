@@ -2,7 +2,9 @@ import pytest
 from core.domain.evaluation_standard.compliance_standard import ComplianceStandard
 from core.domain.evaluation_standard.requirement import Requirement
 from core.domain.evaluation_standard.decision_tree import (
-    DecisionTree, DecisionNode, LeafNode,
+    DecisionTree,
+    DecisionNode,
+    LeafNode,
 )
 from core.domain.evaluation_standard.standard_verdict import StandardVerdict
 from core.domain.evaluation_standard.exceptions import RequirementNotFoundError
@@ -10,31 +12,41 @@ from core.domain.evaluation_standard.exceptions import RequirementNotFoundError
 
 # ── Fixtures ──
 
+
 @pytest.fixture
 def simple_tree() -> DecisionTree:
-    return DecisionTree(root="n1", nodes=[
-        DecisionNode("n1", "Domanda?", "leaf_pass", "leaf_fail"),
-        LeafNode("leaf_pass", StandardVerdict.PASS),
-        LeafNode("leaf_fail", StandardVerdict.FAIL),
-    ])
+    return DecisionTree(
+        root="n1",
+        nodes=[
+            DecisionNode("n1", "Domanda?", "leaf_pass", "leaf_fail"),
+            LeafNode("leaf_pass", StandardVerdict.PASS),
+            LeafNode("leaf_fail", StandardVerdict.FAIL),
+        ],
+    )
 
 
 @pytest.fixture
 def make_requirement(simple_tree):
     """Factory per creare requirement con ID diversi."""
+
     def _make(req_id: str = "REQ-001", dep_ids: tuple[str, ...] = ()) -> Requirement:
         return Requirement(
-            requirement_id=req_id, name=f"Req {req_id}",
-            description="desc", target_description="target",
-            dependency_ids=dep_ids, decision_tree=simple_tree,
+            requirement_id=req_id,
+            name=f"Req {req_id}",
+            description="desc",
+            target_description="target",
+            dependency_ids=dep_ids,
+            decision_tree=simple_tree,
         )
+
     return _make
 
 
 @pytest.fixture
 def sample_standard(make_requirement) -> ComplianceStandard:
     return ComplianceStandard(
-        standard_id="STD-1", name="EN 18031",
+        standard_id="STD-1",
+        name="EN 18031",
         version_number="1.0",
         requirements=[make_requirement("REQ-001"), make_requirement("REQ-002")],
     )
@@ -42,8 +54,8 @@ def sample_standard(make_requirement) -> ComplianceStandard:
 
 # ── Validazione costruzione ──
 
-class TestComplianceStandardValidation:
 
+class TestComplianceStandardValidation:
     def test_empty_id_raises(self):
         """
         Dati dei parametri di inizializzazione per uno standard (Given),
@@ -75,8 +87,8 @@ class TestComplianceStandardValidation:
 
 # ── Proprietà ──
 
-class TestComplianceStandardProperties:
 
+class TestComplianceStandardProperties:
     def test_id(self, sample_standard):
         """
         Dato uno standard regolarmente istanziato (Given),
@@ -125,8 +137,8 @@ class TestComplianceStandardProperties:
 
 # ── get_requirement ──
 
-class TestComplianceStandardGetRequirement:
 
+class TestComplianceStandardGetRequirement:
     def test_get_existing(self, sample_standard, make_requirement):
         """
         Dato uno standard popolato con requisiti validi (Given),
@@ -148,8 +160,8 @@ class TestComplianceStandardGetRequirement:
 
 # ── Immutabilità per costruzione ──
 
-class TestComplianceStandardImmutability:
 
+class TestComplianceStandardImmutability:
     def test_no_setter_for_id(self, sample_standard):
         """
         Dato uno standard creato (Given),

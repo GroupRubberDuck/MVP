@@ -28,7 +28,9 @@ def client(mock_use_case):
     return app.test_client()
 
 
-def _make_exported_file(content=b"%PDF-fake", filename="device_report.pdf", media_type="application/pdf"):
+def _make_exported_file(
+    content=b"%PDF-fake", filename="device_report.pdf", media_type="application/pdf"
+):
     return SimpleNamespace(
         content=io.BytesIO(content),
         filename=filename,
@@ -37,7 +39,6 @@ def _make_exported_file(content=b"%PDF-fake", filename="device_report.pdf", medi
 
 
 class TestExportReportSuccess:
-
     def test_returns_200_on_success(self, client, mock_use_case):
         """
         Dati dei parametri validi per l'esportazione di un report (Given),
@@ -101,7 +102,6 @@ class TestExportReportSuccess:
 
 
 class TestExportReportFailures:
-
     def test_returns_422_on_export_failure(self, client, mock_use_case):
         """
         Dato uno scenario in cui mancano dati fondamentali (es. sessione non trovata) che causa una ExportReportFailure (Given),

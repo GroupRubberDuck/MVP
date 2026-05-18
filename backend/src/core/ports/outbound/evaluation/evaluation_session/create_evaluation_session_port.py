@@ -5,7 +5,6 @@ from core.domain.evaluation_standard.compliance_standard import ComplianceStanda
 
 
 class CreateEvaluationSessionPort(ABC):
-
     @abstractmethod
     def create_evaluation_session(
         self,

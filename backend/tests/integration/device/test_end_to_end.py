@@ -1,19 +1,38 @@
-#Flusso completo con formato JSON:
-#1. Salva device in DB
-#2. Sessione di valutazione (open → evaluate → justify → commit → close)
-#3. Esporta il device aggiornato in JSON
-#4. Re-importa da JSON
-#5. Verifica che node_choices e justification siano intatti
+# Flusso completo con formato JSON:
+# 1. Salva device in DB
+# 2. Sessione di valutazione (open → evaluate → justify → commit → close)
+# 3. Esporta il device aggiornato in JSON
+# 4. Re-importa da JSON
+# 5. Verifica che node_choices e justification siano intatti
 
-from core.ports.inbound.evaluation.evaluation_session.open_evaluation_session_use_case import OpenEvaluationSessionCommand
-from core.ports.inbound.evaluation.evaluation_session.close_evaluation_session_use_case import CloseEvaluationSessionCommand
-from core.ports.inbound.evaluation.evaluation_session.commit_evaluation_session_use_case import CommitEvaluationSessionCommand
-from core.ports.inbound.evaluation.evaluate_decision_node_use_case import EvaluateDecisionNodeCommand
-from core.ports.inbound.evaluation.insert_justification_use_case import InsertJustificationCommand
-from adapters.outbound.device.exporter.json_file_device_exporter import JSONFileDeviceExporter
-from adapters.outbound.device.importer.json_file_device_importer import JSONFileDeviceImporter
-from adapters.outbound.device.exporter.xml_file_device_exporter import XMLFileDeviceExporter
-from adapters.outbound.device.importer.xml_file_device_importer import XMLFileDeviceImporter
+from core.ports.inbound.evaluation.evaluation_session.open_evaluation_session_use_case import (
+    OpenEvaluationSessionCommand,
+)
+from core.ports.inbound.evaluation.evaluation_session.close_evaluation_session_use_case import (
+    CloseEvaluationSessionCommand,
+)
+from core.ports.inbound.evaluation.evaluation_session.commit_evaluation_session_use_case import (
+    CommitEvaluationSessionCommand,
+)
+from core.ports.inbound.evaluation.evaluate_decision_node_use_case import (
+    EvaluateDecisionNodeCommand,
+)
+from core.ports.inbound.evaluation.insert_justification_use_case import (
+    InsertJustificationCommand,
+)
+from adapters.outbound.device.exporter.json_file_device_exporter import (
+    JSONFileDeviceExporter,
+)
+from adapters.outbound.device.importer.json_file_device_importer import (
+    JSONFileDeviceImporter,
+)
+from adapters.outbound.device.exporter.xml_file_device_exporter import (
+    XMLFileDeviceExporter,
+)
+from adapters.outbound.device.importer.xml_file_device_importer import (
+    XMLFileDeviceImporter,
+)
+
 
 class TestRoundTripEndToEnd:
     def _esegui_sessione_completa(self, evaluation_services, device_id, asset_id):
@@ -84,9 +103,9 @@ class TestRoundTripEndToEnd:
     def test_xml_export_reimport_preserva_evidenze(
         self, evaluation_services, device_adapter, device_with_asset
     ):
-        
-#Flusso completo con formato XML:
-        
+
+        # Flusso completo con formato XML:
+
         device_adapter.register(device_with_asset)
         session_id = evaluation_services["open"].open_evaluation_session(
             OpenEvaluationSessionCommand(device_id=device_with_asset.id)
@@ -130,4 +149,5 @@ class TestRoundTripEndToEnd:
         )
         assert not evaluation_services["cache"].has_active_session()
 
-# forse serve un flusso completo anche in CVS? 
+
+# forse serve un flusso completo anche in CVS?

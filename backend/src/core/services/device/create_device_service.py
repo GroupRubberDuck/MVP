@@ -1,7 +1,12 @@
 from core.ports.inbound.device.exceptions import CreateDeviceFailure
-from core.ports.inbound.device.create_device_use_case import CreateDeviceCommand, CreateDeviceUseCase
+from core.ports.inbound.device.create_device_use_case import (
+    CreateDeviceCommand,
+    CreateDeviceUseCase,
+)
 from core.ports.outbound.device.exceptions import DuplicateDeviceError
-from core.ports.outbound.device.repository.register_device_port import RegisterDevicePort  
+from core.ports.outbound.device.repository.register_device_port import (
+    RegisterDevicePort,
+)
 from core.domain.evaluation_object.device import Device
 import uuid
 

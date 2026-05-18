@@ -8,25 +8,34 @@ from core.domain.evaluation_engine.evaluation_result import RequirementEvaluatio
 from core.domain.evaluation_object.exceptions import AssetNotFoundError
 from core.domain.evaluation_standard.requirement import Requirement
 from core.ports.inbound.asset.exceptions import GetAssetDetailFailure
-from core.ports.inbound.asset.get_asset_evaluation_detail_use_case import GetAssetEvaluationDetailCommand, GetAssetEvaluationDetailUseCase
+from core.ports.inbound.asset.get_asset_evaluation_detail_use_case import (
+    GetAssetEvaluationDetailCommand,
+    GetAssetEvaluationDetailUseCase,
+)
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
-from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
+from core.ports.outbound.evaluation.get_evaluation_session_port import (
+    GetEvaluationSessionPort,
+)
 
 
 class GetAssetEvaluationDetailService(GetAssetEvaluationDetailUseCase):
     def __init__(
-        self, get_evaluation_session_port: GetEvaluationSessionPort, evaluation_engine: EvaluationEngine
+        self,
+        get_evaluation_session_port: GetEvaluationSessionPort,
+        evaluation_engine: EvaluationEngine,
     ) -> None:
         self._get_evaluation_session_port = get_evaluation_session_port
         self._evaluation_engine = evaluation_engine
 
-    def get_asset(self, command: GetAssetEvaluationDetailCommand) -> AssetEvaluationDetail:
+    def get_asset(
+        self, command: GetAssetEvaluationDetailCommand
+    ) -> AssetEvaluationDetail:
         try:
-            session = self._get_evaluation_session_port.get_evaluation_session(command.session_id)
-        except EvaluationSessionNotFoundError:
-            raise GetAssetDetailFailure(
-                f"Sessione '{command.session_id}' non trovata."
+            session = self._get_evaluation_session_port.get_evaluation_session(
+                command.session_id
             )
+        except EvaluationSessionNotFoundError:
+            raise GetAssetDetailFailure(f"Sessione '{command.session_id}' non trovata.")
 
         device_result = self._evaluation_engine.evaluate(
             session.device, session.standard
@@ -64,7 +73,4 @@ class GetAssetEvaluationDetailService(GetAssetEvaluationDetailUseCase):
     def _make_requirement_detail(
         self, r: RequirementEvaluationResult, req: Requirement
     ) -> RequirementEvaluationDetail:
-        return EvaluationDetailBuilder().build_requirement_detail(
-            req=req,
-            result=r
-        )
+        return EvaluationDetailBuilder().build_requirement_detail(req=req, result=r)

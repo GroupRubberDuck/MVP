@@ -1,6 +1,8 @@
 import pytest
 from unittest.mock import Mock
-from adapters.outbound.compliance_standard.mongodb_compliance_standard_repository import MongoComplianceStandardAdapter
+from adapters.outbound.compliance_standard.mongodb_compliance_standard_repository import (
+    MongoComplianceStandardAdapter,
+)
 from core.ports.outbound.compliance_standard.exceptions import StandardNotFoundError
 from core.domain.evaluation_standard.compliance_standard import ComplianceStandard
 
@@ -86,7 +88,6 @@ def _make_requirement_doc(
 
 
 class TestFindStandard:
-
     def test_standard_not_found_raises(self, adapter, mock_collection):
         """
         Dato un ID di standard che non esiste nella collection MongoDB e per cui find_one restituisce None (Given),
@@ -135,7 +136,6 @@ class TestFindStandard:
 
 
 class TestRequirementDeserialization:
-
     def test_single_requirement(self, adapter, mock_collection):
         """
         Dato un documento standard contenente esattamente un requirement con tutti i campi valorizzati (Given),
@@ -214,9 +214,7 @@ class TestRequirementDeserialization:
         quando l'adapter lo deserializza in un oggetto di dominio (When),
         allora la proprietà dependency_ids deve essere inizializzata come una lista vuota, senza sollevare eccezioni (Then).
         """
-        doc = _make_standard_doc(
-            requirements=[_make_requirement_doc()]
-        )
+        doc = _make_standard_doc(requirements=[_make_requirement_doc()])
         mock_collection.find_one.return_value = doc
 
         result = adapter.find_standard("STD-001")
@@ -229,7 +227,6 @@ class TestRequirementDeserialization:
 
 
 class TestDecisionTreeDeserialization:
-
     def test_decision_node_deserialized(self, adapter, mock_collection):
         """
         Dato un requirement il cui decision tree include un nodo decisionale (decision_node) con risposta affermativa che porta a un leaf_node di fail (Given),
@@ -288,5 +285,3 @@ class TestDecisionTreeDeserialization:
 
         state = tree.evaluate(MappingProxyType({}))
         assert state == EvaluationState.PENDING
-
- 

@@ -5,7 +5,9 @@ from core.domain.evaluation_object.asset import AssetEvidence
 
 scenari_iniziali = [
     AssetEvidence(requirement_id="REQ-001"),
-    AssetEvidence(requirement_id="REQ-001", node_choices=MappingProxyType({"n-base": True})),
+    AssetEvidence(
+        requirement_id="REQ-001", node_choices=MappingProxyType({"n-base": True})
+    ),
     AssetEvidence(requirement_id="REQ-001", justification="Già giustificata"),
 ]
 
@@ -16,7 +18,6 @@ def evidence_dinamica(request):
 
 
 class TestAssetEvidenceImmutability:
-
     @pytest.mark.requirement("REQ-ENG-01")
     @pytest.mark.priority("high")
     @pytest.mark.type("unità")
@@ -52,13 +53,14 @@ class TestAssetEvidenceImmutability:
         quando si tenta di mutare il dizionario interno aggiungendo una nuova chiave (When),
         allora deve essere sollevato un TypeError poiché la mappa è protetta da un MappingProxyType (Then).
         """
-        evidence = AssetEvidence(requirement_id="REQ-001", node_choices=MappingProxyType({"n1": True}))
+        evidence = AssetEvidence(
+            requirement_id="REQ-001", node_choices=MappingProxyType({"n1": True})
+        )
         with pytest.raises(TypeError):
             evidence.node_choices["n2"] = False
 
 
 class TestAssetEvidenceWithMethods:
-
     @pytest.mark.requirement("REQ-ENG-01")
     @pytest.mark.priority("high")
     @pytest.mark.type("unità")

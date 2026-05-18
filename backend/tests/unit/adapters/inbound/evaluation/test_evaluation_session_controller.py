@@ -2,9 +2,8 @@ import pytest
 from unittest.mock import MagicMock
 from flask import Flask, Blueprint
 from adapters.inbound.evaluation.evaluation_session_controller import (
-    EvaluationSessionController
-    ) 
-
+    EvaluationSessionController,
+)
 
 
 @pytest.fixture
@@ -14,9 +13,11 @@ def app():
     mock_save = MagicMock()
     mock_commit = MagicMock()
     mock_get_active = MagicMock()
-    mock_controller=EvaluationSessionController(mock_open, mock_close, mock_commit, mock_get_active)
+    mock_controller = EvaluationSessionController(
+        mock_open, mock_close, mock_commit, mock_get_active
+    )
     flask_app = Flask(__name__)
-    bp=Blueprint("evaluation_session",__name__)
+    bp = Blueprint("evaluation_session", __name__)
     mock_controller.register_routes(bp)
     flask_app.register_blueprint(bp)
     flask_app.config["TESTING"] = True
@@ -24,7 +25,6 @@ def app():
 
 
 class TestCloseSession:
-
     def test_risponde_200(self, app):
         """
         Dato un ID di sessione valido (Given),
@@ -52,7 +52,6 @@ class TestCloseSession:
 
 
 class TestCommitAndClose:
-
     def test_risponde_200(self, app):
         """
         Dato un ID di sessione associato a un'operazione di salvataggio e chiusura definitiva (Given),
@@ -74,7 +73,9 @@ class TestCommitAndClose:
         flask_app, _, mock_close, _, mock_commit, _ = app
         call_order = []
         mock_commit.commit.side_effect = lambda _: call_order.append("commit")
-        mock_close.close_evaluation_session.side_effect = lambda _: call_order.append("close")
+        mock_close.close_evaluation_session.side_effect = lambda _: call_order.append(
+            "close"
+        )
 
         with flask_app.test_client() as client:
             client.post("/sessions/session-1/commit-and-close")

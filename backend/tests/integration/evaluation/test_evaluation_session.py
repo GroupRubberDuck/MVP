@@ -1,14 +1,26 @@
 import pytest
-from core.ports.inbound.evaluation.evaluation_session.open_evaluation_session_use_case import OpenEvaluationSessionCommand
-from core.ports.inbound.evaluation.evaluation_session.close_evaluation_session_use_case import CloseEvaluationSessionCommand
-from core.ports.inbound.evaluation.evaluation_session.commit_evaluation_session_use_case import CommitEvaluationSessionCommand
-from core.ports.inbound.evaluation.evaluate_decision_node_use_case import EvaluateDecisionNodeCommand
-from core.ports.inbound.evaluation.insert_justification_use_case import InsertJustificationCommand
-from core.ports.inbound.evaluation.exceptions import OpenEvaluationSessionFailure, CommitSessionFailure
+from core.ports.inbound.evaluation.evaluation_session.open_evaluation_session_use_case import (
+    OpenEvaluationSessionCommand,
+)
+from core.ports.inbound.evaluation.evaluation_session.close_evaluation_session_use_case import (
+    CloseEvaluationSessionCommand,
+)
+from core.ports.inbound.evaluation.evaluation_session.commit_evaluation_session_use_case import (
+    CommitEvaluationSessionCommand,
+)
+from core.ports.inbound.evaluation.evaluate_decision_node_use_case import (
+    EvaluateDecisionNodeCommand,
+)
+from core.ports.inbound.evaluation.insert_justification_use_case import (
+    InsertJustificationCommand,
+)
+from core.ports.inbound.evaluation.exceptions import (
+    OpenEvaluationSessionFailure,
+    CommitSessionFailure,
+)
 
 
 class TestCicloValutazione:
-
     def test_open_session_restituisce_session_id(
         self, evaluation_services, device_adapter, device_with_asset
     ):

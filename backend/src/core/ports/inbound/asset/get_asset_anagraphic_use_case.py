@@ -13,4 +13,6 @@ class GetAssetAnagraphicCommand:
 
 class GetAssetAnagraphicUseCase(ABC):
     @abstractmethod
-    def get_asset_anagraphic(self, command: GetAssetAnagraphicCommand) -> AssetAnagraphic: ...
+    def get_asset_anagraphic(
+        self, command: GetAssetAnagraphicCommand
+    ) -> AssetAnagraphic: ...

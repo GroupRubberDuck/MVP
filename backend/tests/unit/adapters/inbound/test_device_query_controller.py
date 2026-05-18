@@ -5,7 +5,9 @@ from flask import Flask
 from core.ports.inbound.device.exceptions import DeviceNotFoundFailure
 from core.ports.inbound.compliance_standard.exceptions import StandardNotFoundFailure
 
-from adapters.inbound.device.flask_query_device_controller import FlaskQueryDeviceController
+from adapters.inbound.device.flask_query_device_controller import (
+    FlaskQueryDeviceController,
+)
 
 
 # ── Fixtures ──
@@ -64,13 +66,10 @@ def client(
     return app.test_client()
 
 
-
-
 # ── FlaskQueryDeviceController ──
 
 
 class TestFlaskQueryDeviceControllerList:
-
     @patch("adapters.inbound.device.flask_query_device_controller.render_template")
     def test_get_device_list_renders_template(
         self, mock_render, client, mock_get_device_list_use_case
@@ -80,7 +79,7 @@ class TestFlaskQueryDeviceControllerList:
         quando l'utente richiede la pagina della lista dei dispositivi (When),
         allora il controller deve renderizzare il template 'device_list.html' passando i dispositivi correttamente mappati e restituire uno status 200 OK (Then).
         """
-        
+
         device1 = Mock()
         device1.device_id = "D-1"
         device1.name = "Device 1"
@@ -126,7 +125,6 @@ class TestFlaskQueryDeviceControllerList:
 
 
 class TestFlaskQueryDeviceControllerDetail:
-
     @patch("adapters.inbound.device.flask_query_device_controller.render_template")
     def test_get_device_detail_renders_template(
         self,

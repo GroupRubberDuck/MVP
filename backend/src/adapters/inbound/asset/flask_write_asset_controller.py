@@ -4,7 +4,7 @@ from pydantic import ValidationError
 
 from adapters.inbound.flask_controller_interface import FlaskController
 
-from core.domain.evaluation_object.asset import AssetType 
+from core.domain.evaluation_object.asset import AssetType
 
 from core.ports.inbound.asset.create_asset_use_case import (
     CreateAssetUseCase,
@@ -24,8 +24,8 @@ from core.ports.inbound.asset.exceptions import (
     DeleteAssetFailure,
 )
 
-class FlaskWriteAssetController(FlaskController):
 
+class FlaskWriteAssetController(FlaskController):
     def __init__(
         self,
         create_asset_use_case: CreateAssetUseCase,
@@ -48,7 +48,6 @@ class FlaskWriteAssetController(FlaskController):
                 return jsonify({"error": "Body JSON mancante o non valido."}), 400
 
             try:
-               
                 raw_type = body.get("asset_type")
                 typed_asset_type = AssetType(raw_type) if raw_type else None
 
@@ -56,7 +55,7 @@ class FlaskWriteAssetController(FlaskController):
                     session_id=session_id,
                     device_id=device_id,
                     name=body.get("name", ""),
-                    asset_type=typed_asset_type, 
+                    asset_type=typed_asset_type,
                     description=body.get("description", ""),
                 )
             except (ValidationError, ValueError) as e:
@@ -73,13 +72,14 @@ class FlaskWriteAssetController(FlaskController):
             "/api/sessions/<session_id>/devices/<device_id>/assets/<asset_id>",
             methods=["PUT"],
         )
-        def update_asset(session_id: str, device_id: str, asset_id: str) -> ResponseReturnValue:
+        def update_asset(
+            session_id: str, device_id: str, asset_id: str
+        ) -> ResponseReturnValue:
             body = request.get_json(silent=True)
             if body is None:
                 return jsonify({"error": "Body JSON mancante o non valido."}), 400
 
             try:
-                
                 raw_type = body.get("asset_type")
                 typed_asset_type = AssetType(raw_type) if raw_type else None
 
@@ -88,7 +88,7 @@ class FlaskWriteAssetController(FlaskController):
                     device_id=device_id,
                     asset_id=asset_id,
                     name=body.get("name", ""),
-                    asset_type=typed_asset_type, 
+                    asset_type=typed_asset_type,
                     description=body.get("description", ""),
                 )
             except (ValidationError, ValueError) as e:
@@ -105,7 +105,9 @@ class FlaskWriteAssetController(FlaskController):
             "/api/sessions/<session_id>/devices/<device_id>/assets/<asset_id>",
             methods=["DELETE"],
         )
-        def delete_asset(session_id: str, device_id: str, asset_id: str) -> ResponseReturnValue:
+        def delete_asset(
+            session_id: str, device_id: str, asset_id: str
+        ) -> ResponseReturnValue:
             try:
                 command = DeleteAssetCommand(
                     session_id=session_id,

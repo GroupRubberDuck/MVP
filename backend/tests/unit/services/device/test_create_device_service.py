@@ -27,7 +27,6 @@ def command():
 
 
 class TestCreateDeviceService:
-
     def test_returns_device_id(self, service, command):
         """
         Dato un comando di creazione dispositivo valido (Given),

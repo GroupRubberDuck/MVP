@@ -1,9 +1,17 @@
 import pytest
 
-from adapters.outbound.device.importer.concrete_file_device_importer_factory import ConcreteFileDeviceImporterFactory
-from adapters.outbound.device.importer.json_file_device_importer import JSONFileDeviceImporter
-from adapters.outbound.device.importer.csv_file_device_importer import CSVFileDeviceImporter
-from adapters.outbound.device.importer.xml_file_device_importer import XMLFileDeviceImporter
+from adapters.outbound.device.importer.concrete_file_device_importer_factory import (
+    ConcreteFileDeviceImporterFactory,
+)
+from adapters.outbound.device.importer.json_file_device_importer import (
+    JSONFileDeviceImporter,
+)
+from adapters.outbound.device.importer.csv_file_device_importer import (
+    CSVFileDeviceImporter,
+)
+from adapters.outbound.device.importer.xml_file_device_importer import (
+    XMLFileDeviceImporter,
+)
 from core.services.device.allowed_device_extensions import AllowedDeviceFileExtension
 
 
@@ -13,7 +21,6 @@ def factory() -> ConcreteFileDeviceImporterFactory:
 
 
 class TestConcreteFileDeviceImporterFactory:
-
     def test_returns_json_importer(self, factory):
         """
         Data una richiesta di un importer per file con estensione JSON tramite l'enum AllowedDeviceFileExtension (Given),

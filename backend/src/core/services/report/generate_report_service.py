@@ -1,14 +1,23 @@
-from core.ports.inbound.report.generate_report_use_case import GenerateReportUseCase, GenerateReportCommand
+from core.ports.inbound.report.generate_report_use_case import (
+    GenerateReportUseCase,
+    GenerateReportCommand,
+)
 from core.ports.inbound.report.exceptions import ExportReportFailure
-from core.ports.outbound.evaluation.get_evaluation_session_port import GetEvaluationSessionPort
+from core.ports.outbound.evaluation.get_evaluation_session_port import (
+    GetEvaluationSessionPort,
+)
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
 from core.ports.outbound.report.report_generator_port import ReportGeneratorPort
 from core.domain.evaluation_engine.evaluation_engine import EvaluationEngine
 from core.domain.evaluation_engine.evaluation_detail import (
-    DeviceEvaluationDetail, AssetEvaluationDetail, RequirementEvaluationDetail,
+    DeviceEvaluationDetail,
+    AssetEvaluationDetail,
+    RequirementEvaluationDetail,
 )
 from core.domain.evaluation_engine.evaluation_result import (
-    DeviceEvaluationResult, AssetEvaluationResult, RequirementEvaluationResult,
+    DeviceEvaluationResult,
+    AssetEvaluationResult,
+    RequirementEvaluationResult,
 )
 from core.domain.evaluation_standard.compliance_standard import ComplianceStandard
 from core.domain.evaluation_standard.requirement import Requirement
@@ -17,6 +26,7 @@ from core.domain.shared.ExportedFile import ExportedFile
 
 from core.domain.evaluation_object.device import Device
 from core.domain.utilities.evaluation_detail_builder import EvaluationDetailBuilder
+
 
 class GenerateReportService(GenerateReportUseCase):
     def __init__(
@@ -33,7 +43,9 @@ class GenerateReportService(GenerateReportUseCase):
 
     def export_report(self, command: GenerateReportCommand) -> ExportedFile:
         try:
-            session = self._get_evaluation_session_port.get_evaluation_session(command.session_id)
+            session = self._get_evaluation_session_port.get_evaluation_session(
+                command.session_id
+            )
         except EvaluationSessionNotFoundError as e:
             raise ExportReportFailure(
                 f"Sessione '{command.session_id}' non trovata."
@@ -45,18 +57,23 @@ class GenerateReportService(GenerateReportUseCase):
         except DomainError as e:
             raise ExportReportFailure(str(e)) from e
 
-        detail = self._build_device_detail(device_result, session.device, session.standard) 
+        detail = self._build_device_detail(
+            device_result, session.device, session.standard
+        )
         return ExportedFile(
             self._report_generator.generate_report(detail),
             media_type=command.report_format.media_type,
-            filename=f"{session.device.name}_report.{command.report_format.value}"
-            )
+            filename=f"{session.device.name}_report.{command.report_format.value}",
+        )
 
     def _build_device_detail(
-        self, result: DeviceEvaluationResult, device:Device, standard: ComplianceStandard
+        self,
+        result: DeviceEvaluationResult,
+        device: Device,
+        standard: ComplianceStandard,
     ) -> DeviceEvaluationDetail:
         asset_details = tuple(
-            self._build_asset_detail(ar, device, standard )
+            self._build_asset_detail(ar, device, standard)
             for ar in result.asset_results
         )
         return DeviceEvaluationDetail(
@@ -70,11 +87,16 @@ class GenerateReportService(GenerateReportUseCase):
         )
 
     def _build_asset_detail(
-        self, result: AssetEvaluationResult, device:Device, standard: ComplianceStandard
+        self,
+        result: AssetEvaluationResult,
+        device: Device,
+        standard: ComplianceStandard,
     ) -> AssetEvaluationDetail:
         asset = device.get_asset(result.asset_id)
         requirement_details = tuple(
-            self._build_requirement_detail(rr, standard.get_requirement(rr.requirement_id))
+            self._build_requirement_detail(
+                rr, standard.get_requirement(rr.requirement_id)
+            )
             for rr in result.requirement_results
         )
         return AssetEvaluationDetail(
@@ -90,6 +112,5 @@ class GenerateReportService(GenerateReportUseCase):
         self, result: RequirementEvaluationResult, req: Requirement
     ) -> RequirementEvaluationDetail:
         return EvaluationDetailBuilder().build_requirement_detail(
-            req=req,
-            result=result
+            req=req, result=result
         )

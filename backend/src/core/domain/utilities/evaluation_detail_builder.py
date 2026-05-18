@@ -1,27 +1,26 @@
 from core.domain.evaluation_engine.evaluation_detail import (
-        NodeDetail,
-        RequirementEvaluationDetail,
-        AssetEvaluationDetail,
-        DeviceEvaluationDetail
-        
+    NodeDetail,
+    RequirementEvaluationDetail,
+    AssetEvaluationDetail,
+    DeviceEvaluationDetail,
 )
- 
+
 from core.domain.evaluation_engine.evaluation_result import (
-        DeviceEvaluationResult,
-        AssetEvaluationResult,
-        RequirementEvaluationResult
+    DeviceEvaluationResult,
+    AssetEvaluationResult,
+    RequirementEvaluationResult,
 )
 
 from core.domain.evaluation_object.device import Device
 from core.domain.evaluation_standard.compliance_standard import ComplianceStandard
 from core.domain.evaluation_standard.requirement import Requirement
-from core.domain.evaluation_standard.decision_tree import Node, DecisionNode , LeafNode
+from core.domain.evaluation_standard.decision_tree import Node, DecisionNode, LeafNode
 
 from types import MappingProxyType
 from collections.abc import Mapping
 
+
 class EvaluationDetailBuilder:
- 
     def build_device_detail(
         self,
         result: DeviceEvaluationResult,
@@ -29,8 +28,7 @@ class EvaluationDetailBuilder:
         standard: ComplianceStandard,
     ) -> DeviceEvaluationDetail:
         asset_details = tuple(
-            self.build_asset_detail(ar, device, standard)
-            for ar in result.asset_results
+            self.build_asset_detail(ar, device, standard) for ar in result.asset_results
         )
         return DeviceEvaluationDetail(
             device_id=device.id,
@@ -41,7 +39,7 @@ class EvaluationDetailBuilder:
             asset_details=asset_details,
             verdict=result.verdict,
         )
- 
+
     def build_asset_detail(
         self,
         result: AssetEvaluationResult,
@@ -63,7 +61,7 @@ class EvaluationDetailBuilder:
             requirement_details=requirement_details,
             verdict=result.verdict,
         )
- 
+
     def build_requirement_detail(
         self,
         result: RequirementEvaluationResult,
@@ -82,9 +80,9 @@ class EvaluationDetailBuilder:
                 state=result.state,
                 dependencies=result.dependencies,
             )
- 
+
         node_details = self._make_nodes_detail(req.decision_tree.nodes)
- 
+
         return RequirementEvaluationDetail(
             requirement_id=result.requirement_id,
             name=req.name,
@@ -97,10 +95,8 @@ class EvaluationDetailBuilder:
             state=result.state,
             dependencies=result.dependencies,
         )
- 
-    def _make_nodes_detail(
-        self, nodes: Mapping[str, Node]
-    ) -> dict[str, NodeDetail]:
+
+    def _make_nodes_detail(self, nodes: Mapping[str, Node]) -> dict[str, NodeDetail]:
         parent_map: dict[str, str] = {}
         for node_id, node in nodes.items():
             if isinstance(node, DecisionNode):
@@ -110,11 +106,11 @@ class EvaluationDetailBuilder:
                     parent_map[child_true] = node_id
                 if child_false is not None:
                     parent_map[child_false] = node_id
- 
+
         result: dict[str, NodeDetail] = {}
         for node_id, node in nodes.items():
             parent_id = parent_map.get(node_id)
- 
+
             if isinstance(node, DecisionNode):
                 result[node_id] = NodeDetail(
                     node_id=node_id,
@@ -135,6 +131,5 @@ class EvaluationDetailBuilder:
                     verdict=node.verdict,
                     parent_id=parent_id,
                 )
- 
+
         return result
- 

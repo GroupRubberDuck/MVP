@@ -1,32 +1,38 @@
 import pytest
 from unittest.mock import MagicMock
 
-from core.services.device.get_device_evaluation_detail_service import GetDeviceEvaluationDetailService
-from core.ports.inbound.device.get_device_evaluation_detail_use_case import GetDeviceEvaluationDetailCommand
+from core.services.device.get_device_evaluation_detail_service import (
+    GetDeviceEvaluationDetailService,
+)
+from core.ports.inbound.device.get_device_evaluation_detail_use_case import (
+    GetDeviceEvaluationDetailCommand,
+)
 from core.ports.inbound.evaluation.exceptions import GetEvaluationDetailFailure
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
 from core.domain.evaluation_object.asset.asset_type import AssetType
 
 
 def make_command(session_id="session-123") -> GetDeviceEvaluationDetailCommand:
-    return GetDeviceEvaluationDetailCommand(session_id=session_id,device_id="device-123")
+    return GetDeviceEvaluationDetailCommand(
+        session_id=session_id, device_id="device-123"
+    )
+
 
 def make_service():
     mock_get_session_port = MagicMock()
     mock_engine = MagicMock()
-    
+
     service = GetDeviceEvaluationDetailService(
-        get_evaluation_session_port=mock_get_session_port,
-        evaluation_engine=mock_engine
+        get_evaluation_session_port=mock_get_session_port, evaluation_engine=mock_engine
     )
-    
+
     return service, mock_get_session_port, mock_engine
 
 
 # --- TEST SUITE ---
 
-class TestGetDeviceEvaluationDetailService:
 
+class TestGetDeviceEvaluationDetailService:
     def test_solleva_failure_se_sessione_non_trovata(self):
         """
         Dato un ID sessione inesistente o non presente in cache (Given),
@@ -34,10 +40,14 @@ class TestGetDeviceEvaluationDetailService:
         allora il servizio deve sollevare una GetEvaluationDetailFailure riportando l'ID mancante (Then).
         """
         service, mock_get_session, _ = make_service()
-        mock_get_session.get_evaluation_session.side_effect = EvaluationSessionNotFoundError("Non trovata")
+        mock_get_session.get_evaluation_session.side_effect = (
+            EvaluationSessionNotFoundError("Non trovata")
+        )
 
         with pytest.raises(GetEvaluationDetailFailure) as exc_info:
-            service.get_device_evaluation_detail(make_command(session_id="fake-session"))
+            service.get_device_evaluation_detail(
+                make_command(session_id="fake-session")
+            )
 
         assert "Sessione 'fake-session' non trovata" in str(exc_info.value)
 
@@ -45,7 +55,7 @@ class TestGetDeviceEvaluationDetailService:
         """
         Dato un contesto di valutazione valido con sessione, dispositivo e asset (Given),
         quando il servizio orchestra il recupero dei dati e l'esecuzione dell'engine (When),
-        allora deve restituire un DTO di dettaglio completo che mappi correttamente le informazioni del dispositivo, 
+        allora deve restituire un DTO di dettaglio completo che mappi correttamente le informazioni del dispositivo,
         dei relativi asset e dei risultati dei singoli requisiti (Then).
         """
         service, mock_get_session, mock_engine = make_service()
@@ -55,7 +65,7 @@ class TestGetDeviceEvaluationDetailService:
         mock_session = MagicMock()
         mock_device = MagicMock()
         mock_standard = MagicMock()
-        
+
         mock_session.device = mock_device
         mock_session.standard = mock_standard
         mock_get_session.get_evaluation_session.return_value = mock_session
@@ -80,7 +90,7 @@ class TestGetDeviceEvaluationDetailService:
         mock_req.name = "Req Name"
         mock_req.description = "Req Desc"
         mock_req.target_description = "Target Desc"
-        mock_req.decision_tree.nodes = {"node-1": MagicMock()} 
+        mock_req.decision_tree.nodes = {"node-1": MagicMock()}
         mock_standard.get_requirement.return_value = mock_req
 
         # Prepariamo il mock del Risultato dell'Engine

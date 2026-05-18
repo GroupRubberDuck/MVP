@@ -1,6 +1,7 @@
 from core.domain.evaluation_object.device import Device
 from core.domain.evaluation_object.asset import Asset
 from core.domain.evaluation_standard.compliance_standard import ComplianceStandard
+
 # from core.domain.evaluation_standard.requirement import Requirement
 from core.domain.evaluation_standard.evaluation_state import EvaluationState
 from core.domain.evaluation_engine.evaluation_result import (
@@ -11,13 +12,13 @@ from core.domain.evaluation_engine.evaluation_result import (
 from collections.abc import Sequence
 from types import MappingProxyType
 
-class EvaluationEngine:
 
-    def evaluate(self, device: Device,
-                 standard: ComplianceStandard) -> DeviceEvaluationResult:
+class EvaluationEngine:
+    def evaluate(
+        self, device: Device, standard: ComplianceStandard
+    ) -> DeviceEvaluationResult:
         asset_results = tuple(
-            self._evaluate_asset(asset, standard)
-            for asset in device.assets.values()
+            self._evaluate_asset(asset, standard) for asset in device.assets.values()
         )
         verdict = self._aggregate_evaluation_states(
             tuple(a.verdict for a in asset_results)
@@ -29,9 +30,9 @@ class EvaluationEngine:
             verdict=verdict,
         )
 
-
-    def _evaluate_asset(self, asset: Asset,
-                        standard: ComplianceStandard) -> AssetEvaluationResult:
+    def _evaluate_asset(
+        self, asset: Asset, standard: ComplianceStandard
+    ) -> AssetEvaluationResult:
         """Cache subisce side effect, viene usata da _resolve per realizzare la memoizzazione"""
         cache: dict[str, RequirementEvaluationResult] = {}
 
@@ -48,10 +49,13 @@ class EvaluationEngine:
             verdict=verdict,
         )
 
-    def _resolve(self, requirement_id: str,
-                 standard: ComplianceStandard,
-                 asset: Asset,
-                 cache: dict[str, RequirementEvaluationResult]) -> RequirementEvaluationResult:
+    def _resolve(
+        self,
+        requirement_id: str,
+        standard: ComplianceStandard,
+        asset: Asset,
+        cache: dict[str, RequirementEvaluationResult],
+    ) -> RequirementEvaluationResult:
         """Cache subisce side effect, viene usata da _resolve per realizzare la memoizzazione"""
         if requirement_id in cache:
             return cache[requirement_id]
@@ -79,8 +83,9 @@ class EvaluationEngine:
         cache[requirement_id] = result
         return result
 
-    def _aggregate_evaluation_states(self,
-                                     states: Sequence[EvaluationState]) -> EvaluationState:
+    def _aggregate_evaluation_states(
+        self, states: Sequence[EvaluationState]
+    ) -> EvaluationState:
         if any(state == EvaluationState.FAIL for state in states):
             return EvaluationState.FAIL
         if any(state == EvaluationState.PENDING for state in states):

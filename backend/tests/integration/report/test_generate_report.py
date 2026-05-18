@@ -1,17 +1,22 @@
 import pytest
-from core.ports.inbound.evaluation.evaluation_session.open_evaluation_session_use_case import OpenEvaluationSessionCommand
-from core.ports.inbound.evaluation.evaluate_decision_node_use_case import EvaluateDecisionNodeCommand
-from core.ports.inbound.report.generate_report_use_case import GenerateReportCommand, ReportFormat
+from core.ports.inbound.evaluation.evaluation_session.open_evaluation_session_use_case import (
+    OpenEvaluationSessionCommand,
+)
+from core.ports.inbound.evaluation.evaluate_decision_node_use_case import (
+    EvaluateDecisionNodeCommand,
+)
+from core.ports.inbound.report.generate_report_use_case import (
+    GenerateReportCommand,
+    ReportFormat,
+)
 from core.ports.inbound.report.exceptions import ExportReportFailure
 
-class TestGenerazioneReportPdf:
 
-    def test_report(
-        self, evaluation_services, device_adapter, device_with_asset
-    ):
+class TestGenerazioneReportPdf:
+    def test_report(self, evaluation_services, device_adapter, device_with_asset):
         device_adapter.register(device_with_asset)
         session_id = evaluation_services["open"].open_evaluation_session(
-           OpenEvaluationSessionCommand(device_id=device_with_asset.id)
+            OpenEvaluationSessionCommand(device_id=device_with_asset.id)
         )
         exported = evaluation_services["report"].export_report(
             GenerateReportCommand(

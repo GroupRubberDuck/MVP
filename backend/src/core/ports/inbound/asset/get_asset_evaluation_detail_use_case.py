@@ -13,4 +13,6 @@ class GetAssetEvaluationDetailCommand:
 
 class GetAssetEvaluationDetailUseCase(ABC):
     @abstractmethod
-    def get_asset(self, command: GetAssetEvaluationDetailCommand) -> AssetEvaluationDetail: ...
+    def get_asset(
+        self, command: GetAssetEvaluationDetailCommand
+    ) -> AssetEvaluationDetail: ...

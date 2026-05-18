@@ -10,11 +10,12 @@ from core.ports.inbound.device.exceptions import (
     DeviceNotFoundFailure,
     ExportDeviceFailure,
 )
-from core.domain.evaluation_object.allowed_device_file_extension import AllowedDeviceFileExtension
+from core.domain.evaluation_object.allowed_device_file_extension import (
+    AllowedDeviceFileExtension,
+)
 
 
 class FlaskExportDeviceController(FlaskController):
-
     def __init__(self, export_device_use_case: ExportDeviceUseCase) -> None:
         self._use_case = export_device_use_case
 
@@ -28,7 +29,9 @@ class FlaskExportDeviceController(FlaskController):
             try:
                 extension = AllowedDeviceFileExtension(extension_param)
             except ValueError:
-                return jsonify({"error": f"Formato non supportato: '{extension_raw}'."}), 400
+                return jsonify(
+                    {"error": f"Formato non supportato: '{extension_raw}'."}
+                ), 400
             command = ExportDeviceCommand(
                 device_id=device_id,
                 extension=extension,
@@ -40,7 +43,7 @@ class FlaskExportDeviceController(FlaskController):
                     exported.content,
                     mimetype=exported.media_type,
                     as_attachment=True,
-                    download_name=exported.filename
+                    download_name=exported.filename,
                 )
 
             except DeviceNotFoundFailure as e:
@@ -49,5 +52,6 @@ class FlaskExportDeviceController(FlaskController):
                 return jsonify({"error": str(e)}), 422
             except Exception as e:
                 import traceback
+
                 traceback.print_exc()
                 return jsonify({"error": f"Errore interno del server: {str(e)}"}), 500

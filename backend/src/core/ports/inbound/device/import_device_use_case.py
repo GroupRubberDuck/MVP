@@ -4,8 +4,6 @@ from core.services.device.allowed_device_extensions import AllowedDeviceFileExte
 from typing import IO
 
 
-
-
 @dataclass(frozen=True)
 class ImportDeviceCommand:
     device_file_content: IO[bytes]

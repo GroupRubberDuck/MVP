@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
 from pydantic import BaseModel
 
+
 class InsertJustificationCommand(BaseModel):
     session_id: str
     asset_id: str
     requirement_id: str
     justification: str
-
 
 
 class InsertJustificationUseCase(ABC):

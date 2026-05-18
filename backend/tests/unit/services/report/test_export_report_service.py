@@ -10,17 +10,21 @@ from core.services.report.generate_report_service import GenerateReportService
 from core.domain.evaluation_engine.evaluation_detail import DeviceEvaluationDetail
 from core.ports.inbound.report.generate_report_use_case import ReportFormat
 
+
 @pytest.fixture
 def mock_session_port():
     return MagicMock()
+
 
 @pytest.fixture
 def mock_report_generator():
     return MagicMock()
 
+
 @pytest.fixture
 def mock_engine():
     return MagicMock()
+
 
 @pytest.fixture
 def service(mock_session_port, mock_report_generator, mock_engine):
@@ -30,16 +34,19 @@ def service(mock_session_port, mock_report_generator, mock_engine):
         evaluation_engine=mock_engine,
     )
 
+
 @pytest.fixture
 def command():
-    return GenerateReportCommand(session_id="SESSION-1", device_id="DEV-1", report_format=ReportFormat.PDF)
+    return GenerateReportCommand(
+        session_id="SESSION-1", device_id="DEV-1", report_format=ReportFormat.PDF
+    )
 
 
 def _setup_happy_path(mock_session_port, mock_engine, mock_report_generator, command):
-    
+
     mock_tree = MagicMock()
-    mock_tree.nodes = {"n1":{"node_id": "n1", "question": "test?"}}
-    
+    mock_tree.nodes = {"n1": {"node_id": "n1", "question": "test?"}}
+
     mock_req = MagicMock()
     mock_req.requirement_id = "REQ-1"
     mock_req.name = "Req Test"
@@ -97,7 +104,6 @@ def _setup_happy_path(mock_session_port, mock_engine, mock_report_generator, com
 
 
 class TestExportReportSuccess:
-
     def test_generates_and_returns_report_successfully(
         self, service, mock_session_port, mock_engine, mock_report_generator, command
     ):
@@ -106,7 +112,9 @@ class TestExportReportSuccess:
         quando il servizio esegue la procedura di esportazione (When),
         allora deve restituire il contenuto del file generato (es. PDF) correttamente prodotto dal generatore di report (Then).
         """
-        _setup_happy_path(mock_session_port, mock_engine, mock_report_generator, command)
+        _setup_happy_path(
+            mock_session_port, mock_engine, mock_report_generator, command
+        )
 
         result = service.export_report(command)
 
@@ -118,11 +126,13 @@ class TestExportReportSuccess:
         """
         Dati i risultati della valutazione ottenuti dal motore di dominio (Given),
         quando il servizio prepara i dati per l'esportazione (When),
-        allora deve costruire un oggetto DeviceEvaluationDetail accurato e passarlo al generatore di report, 
+        allora deve costruire un oggetto DeviceEvaluationDetail accurato e passarlo al generatore di report,
         includendo le anagrafiche e i verdetti corretti per device, asset e requisiti (Then).
         """
-        
-        _setup_happy_path(mock_session_port, mock_engine, mock_report_generator, command)
+
+        _setup_happy_path(
+            mock_session_port, mock_engine, mock_report_generator, command
+        )
 
         service.export_report(command)
 
@@ -147,7 +157,6 @@ class TestExportReportSuccess:
 
 
 class TestExportReportFailures:
-
     def test_raises_failure_when_session_not_found(
         self, service, mock_session_port, command
     ):
@@ -156,7 +165,9 @@ class TestExportReportFailures:
         quando viene richiesta la generazione del report (When),
         allora il servizio deve sollevare un'eccezione ExportReportFailure indicando che la sessione non è stata trovata (Then).
         """
-        mock_session_port.get_evaluation_session.side_effect = EvaluationSessionNotFoundError()
+        mock_session_port.get_evaluation_session.side_effect = (
+            EvaluationSessionNotFoundError()
+        )
 
         with pytest.raises(ExportReportFailure, match="SESSION-1"):
             service.export_report(command)
@@ -169,21 +180,26 @@ class TestExportReportFailures:
         quando il motore di valutazione solleva un DomainError (When),
         allora il servizio deve catturare l'eccezione tecnica e rilanciarla come ExportReportFailure per l'utente (Then).
         """
-        _setup_happy_path(mock_session_port, mock_engine, mock_report_generator, command)
-        
-        mock_engine.evaluate.side_effect = DomainError("Ciclo infinito rilevato nell'albero")
+        _setup_happy_path(
+            mock_session_port, mock_engine, mock_report_generator, command
+        )
+
+        mock_engine.evaluate.side_effect = DomainError(
+            "Ciclo infinito rilevato nell'albero"
+        )
 
         with pytest.raises(ExportReportFailure, match="Ciclo infinito"):
             service.export_report(command)
 
-
-    # il decision tree non è vuoto teoricamente parlando 
+    # il decision tree non è vuoto teoricamente parlando
     # def test_raises_failure_when_requirement_has_no_decision_tree(
-        # self, service, mock_session_port, mock_engine, mock_report_generator, command
+    # self, service, mock_session_port, mock_engine, mock_report_generator, command
     # ):
-        # mock_req = _setup_happy_path(mock_session_port, mock_engine, mock_report_generator, command)
-        # 
-        # mock_req.decision_tree = None
-# 
-        # with pytest.raises(ExportReportFailure, match="non ha un albero decisionale"):
-            # service.export_report(command)
+    # mock_req = _setup_happy_path(mock_session_port, mock_engine, mock_report_generator, command)
+    #
+    # mock_req.decision_tree = None
+
+
+#
+# with pytest.raises(ExportReportFailure, match="non ha un albero decisionale"):
+# service.export_report(command)

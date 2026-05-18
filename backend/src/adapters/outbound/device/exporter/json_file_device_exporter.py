@@ -2,8 +2,8 @@ import json
 from .file_device_exporter import FileDeviceExporter
 from core.domain.evaluation_object.device import Device
 
-class JSONFileDeviceExporter(FileDeviceExporter):
 
+class JSONFileDeviceExporter(FileDeviceExporter):
     def __init__(self) -> None:
         self._data: dict = {}
 
@@ -23,7 +23,6 @@ class JSONFileDeviceExporter(FileDeviceExporter):
                 "name": asset.anagraphic.name,
                 "asset_type": asset.anagraphic.asset_type.value,
                 "description": asset.anagraphic.description,
-                
                 "evaluations": [
                     {
                         "requirement_id": evidence.requirement_id,

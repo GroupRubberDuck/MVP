@@ -1,43 +1,58 @@
 import pytest
-from core.domain.evaluation_object.asset import Asset,AssetAnagraphic
+from core.domain.evaluation_object.asset import Asset, AssetAnagraphic
 from core.domain.evaluation_object.asset.asset_type import AssetType
 from core.domain.evaluation_object.device import Device
-from core.domain.evaluation_object.exceptions import DuplicateAssetError, AssetNotFoundError
+from core.domain.evaluation_object.exceptions import (
+    DuplicateAssetError,
+    AssetNotFoundError,
+)
 
 
 # ── Fixtures ──
 
+
 @pytest.fixture
 def device_vuoto():
     return Device.create(
-        device_id="DEV-1", standard_id="EN-18031",
-        name="Smart Router", os="Linux", description="Router di test",
+        device_id="DEV-1",
+        standard_id="EN-18031",
+        name="Smart Router",
+        os="Linux",
+        description="Router di test",
     )
 
 
 @pytest.fixture
 def device_con_asset():
     asset = Asset(
-        id="A1", 
-        anagraphic=AssetAnagraphic (name="Test Asset", asset_type=AssetType.NETWORK, description="Test"),
+        id="A1",
+        anagraphic=AssetAnagraphic(
+            name="Test Asset", asset_type=AssetType.NETWORK, description="Test"
+        ),
     )
     return Device.create(
-        device_id="DEV-1", standard_id="EN-18031",
-        name="Smart Router", os="Linux", description="Router di test",
+        device_id="DEV-1",
+        standard_id="EN-18031",
+        name="Smart Router",
+        os="Linux",
+        description="Router di test",
         assets=[asset],
     )
 
 
 def _make_asset(asset_id="ASSET-1"):
     return Asset(
-        id=asset_id, anagraphic=AssetAnagraphic(name="Test Asset", asset_type=AssetType.NETWORK, description="Test")
+        id=asset_id,
+        anagraphic=AssetAnagraphic(
+            name="Test Asset", asset_type=AssetType.NETWORK, description="Test"
+        ),
     )
 
 
 # ── Creazione ──
 
-class TestDeviceCreation:
 
+class TestDeviceCreation:
     def test_create_empty(self, device_vuoto):
         """
         Dati i parametri identificativi e anagrafici corretti (Given),
@@ -55,8 +70,11 @@ class TestDeviceCreation:
         allora l'entità deve contenere tutti gli asset forniti all'interno del suo dizionario interno (Then).
         """
         device = Device.create(
-            device_id="DEV-1", standard_id="EN-18031",
-            name="Router", os="Linux", description="Test",
+            device_id="DEV-1",
+            standard_id="EN-18031",
+            name="Router",
+            os="Linux",
+            description="Test",
             assets=[_make_asset("A1"), _make_asset("A2")],
         )
         assert len(device.assets) == 2
@@ -66,8 +84,8 @@ class TestDeviceCreation:
 
 # ── Gestione Asset ──
 
-class TestDeviceAssetManagement:
 
+class TestDeviceAssetManagement:
     def test_add_asset(self, device_vuoto):
         """
         Dato un Device vuoto e un nuovo Asset (Given),
@@ -143,8 +161,8 @@ class TestDeviceAssetManagement:
 
 # ── update_info ──
 
-class TestDeviceUpdateInfo:
 
+class TestDeviceUpdateInfo:
     def test_update_name(self, device_vuoto):
         """
         Dato un Device esistente (Given),
@@ -181,5 +199,3 @@ class TestDeviceUpdateInfo:
         """
         device_vuoto.update_info()
         assert device_vuoto.name == "Smart Router"
-
-

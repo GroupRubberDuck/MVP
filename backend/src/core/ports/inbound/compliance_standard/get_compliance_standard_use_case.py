@@ -6,6 +6,9 @@ from core.domain.evaluation_standard.compliance_standard import ComplianceStanda
 class GetComplianceStandardCommand(BaseModel):
     standard_id: str
 
+
 class GetComplianceStandardUseCase(ABC):
     @abstractmethod
-    def get_compliance_standard(self, command: GetComplianceStandardCommand) -> ComplianceStandard: ...
+    def get_compliance_standard(
+        self, command: GetComplianceStandardCommand
+    ) -> ComplianceStandard: ...

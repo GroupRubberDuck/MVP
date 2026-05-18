@@ -45,13 +45,21 @@ class FlaskQueryDashboardController(FlaskController):
             session_id: str, device_id: str
         ) -> ResponseReturnValue:
             try:
-                command = GetDeviceEvaluationDetailCommand(session_id=session_id, device_id=device_id)
+                command = GetDeviceEvaluationDetailCommand(
+                    session_id=session_id, device_id=device_id
+                )
             except ValidationError as e:
-                return render_template("errors/400.html", message=f"Parametri non validi: {e}"), 400
+                return render_template(
+                    "errors/400.html", message=f"Parametri non validi: {e}"
+                ), 400
             try:
-                device_dashboard = self._get_device_evaluation_detail_use_case.get_device_evaluation_detail(command)
+                device_dashboard = self._get_device_evaluation_detail_use_case.get_device_evaluation_detail(
+                    command
+                )
             except GetEvaluationDetailFailure as e:
-                return render_template("errors/404.html", message=f"Si è verificato un errore: {e}"), 404
+                return render_template(
+                    "errors/404.html", message=f"Si è verificato un errore: {e}"
+                ), 404
             device_dashboard_dto = DeviceDashboardDTO(
                 device_id=device_dashboard.device_id,
                 device_name=device_dashboard.name,
@@ -68,4 +76,6 @@ class FlaskQueryDashboardController(FlaskController):
                     for a in device_dashboard.asset_details
                 ],
             )
-            return render_template("layouts/device/dashboard.html", dashboard=device_dashboard_dto), 200
+            return render_template(
+                "layouts/device/dashboard.html", dashboard=device_dashboard_dto
+            ), 200

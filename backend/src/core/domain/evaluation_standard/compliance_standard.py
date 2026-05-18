@@ -11,8 +11,13 @@ class ComplianceStandard:
     Rimane immutabile per costruzione: nessun setter esposto.
     """
 
-    def __init__(self, standard_id: str, name: str, version_number: str,
-                 requirements: list[Requirement] | tuple[Requirement, ...]):
+    def __init__(
+        self,
+        standard_id: str,
+        name: str,
+        version_number: str,
+        requirements: list[Requirement] | tuple[Requirement, ...],
+    ):
         if not standard_id:
             raise ValueError("standard_id non può essere vuoto.")
         if not name:
@@ -22,7 +27,8 @@ class ComplianceStandard:
         for req in requirements:
             if req.requirement_id in requirements_dict:
                 raise ValueError(
-                    f"Requisito duplicato: '{req.requirement_id}' già presente nello standard.")
+                    f"Requisito duplicato: '{req.requirement_id}' già presente nello standard."
+                )
             requirements_dict[req.requirement_id] = req
 
         self._id = standard_id
@@ -49,9 +55,11 @@ class ComplianceStandard:
     def get_requirement(self, requirement_id: str) -> Requirement:
         if requirement_id not in self._requirements:
             raise RequirementNotFoundError(
-                f"Requirement '{requirement_id}' non trovato nello standard '{self._name}'.")
+                f"Requirement '{requirement_id}' non trovato nello standard '{self._name}'."
+            )
         return self._requirements[requirement_id]
 
-    def evaluate_requirement(self, requirement_id: str,
-                             answers: AssetEvidence) -> EvaluationState:
+    def evaluate_requirement(
+        self, requirement_id: str, answers: AssetEvidence
+    ) -> EvaluationState:
         return self.get_requirement(requirement_id).evaluate(answers)

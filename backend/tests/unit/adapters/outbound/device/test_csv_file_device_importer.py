@@ -1,7 +1,9 @@
 import io
 import pytest
 
-from adapters.outbound.device.importer.csv_file_device_importer import CSVFileDeviceImporter
+from adapters.outbound.device.importer.csv_file_device_importer import (
+    CSVFileDeviceImporter,
+)
 from core.ports.outbound.device.exceptions import EmptyFileError, InvalidFileFormatError
 
 
@@ -13,9 +15,17 @@ def _to_stream(*rows: str) -> io.BytesIO:
     return io.BytesIO(content.encode())
 
 
-def _row(device_id="DEV-001", standard_id="STD-001", name="Router",
-         os="Linux", description="Test", asset_id="A1",
-         asset_name="WiFi", asset_type="network", asset_description="desc") -> str:
+def _row(
+    device_id="DEV-001",
+    standard_id="STD-001",
+    name="Router",
+    os="Linux",
+    description="Test",
+    asset_id="A1",
+    asset_name="WiFi",
+    asset_type="network",
+    asset_description="desc",
+) -> str:
     return f"{device_id},{standard_id},{name},{os},{description},{asset_id},{asset_name},{asset_type},{asset_description}\n"
 
 
@@ -25,7 +35,6 @@ def importer() -> CSVFileDeviceImporter:
 
 
 class TestCSVFileDeviceImporter:
-
     def test_parses_single_row(self, importer):
         """
         Dato un file CSV contenente l'header e una singola riga di dati dispositivo valida (Given),

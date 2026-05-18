@@ -17,7 +17,9 @@ from core.domain.evaluation_object.asset.asset_type import AssetType
 SESSION_ID = "session-1"
 DEVICE_ID = "device-1"
 BASE_URL = f"/sessions/{SESSION_ID}/devices/{DEVICE_ID}/dashboard"
-PATCH_RENDER = "adapters.inbound.device.flask_query_dashboard_controller.render_template"
+PATCH_RENDER = (
+    "adapters.inbound.device.flask_query_dashboard_controller.render_template"
+)
 
 
 def _make_mock_asset(
@@ -66,7 +68,6 @@ def app(app_and_mock: tuple[Flask, MagicMock]) -> tuple[Flask, MagicMock]:
 
 
 class TestFlaskQueryDashboardController:
-
     def test_risponde_200_caso_felice(self, app: tuple[Flask, MagicMock]) -> None:
         """
         Dato un ID di sessione e un ID device validi che restituiscono un dettaglio valutativo (Given),
@@ -117,20 +118,26 @@ class TestFlaskQueryDashboardController:
         allora il controller deve intercettare l'errore e restituire uno status code 404 Not Found (Then).
         """
         flask_app, mock_use_case = app
-        mock_use_case.get_device_evaluation_detail.side_effect = GetEvaluationDetailFailure("not found")
+        mock_use_case.get_device_evaluation_detail.side_effect = (
+            GetEvaluationDetailFailure("not found")
+        )
         with patch(PATCH_RENDER, return_value=""):
             with flask_app.test_client() as client:
                 response = client.get(BASE_URL)
         assert response.status_code == 404
 
-    def test_use_case_failure_usa_template_errore(self, app: tuple[Flask, MagicMock]) -> None:
+    def test_use_case_failure_usa_template_errore(
+        self, app: tuple[Flask, MagicMock]
+    ) -> None:
         """
         Dato un fallimento nel recupero dei dettagli valutativi del dispositivo (Given),
         quando la rotta gestisce l'eccezione (When),
         allora il controller deve renderizzare il template HTML specifico per gli errori 404 passando il relativo messaggio (Then).
         """
         flask_app, mock_use_case = app
-        mock_use_case.get_device_evaluation_detail.side_effect = GetEvaluationDetailFailure("not found")
+        mock_use_case.get_device_evaluation_detail.side_effect = (
+            GetEvaluationDetailFailure("not found")
+        )
         with patch(PATCH_RENDER, return_value="") as mock_render:
             with flask_app.test_client() as client:
                 client.get(BASE_URL)
@@ -205,4 +212,4 @@ class TestFlaskQueryDashboardController:
         assert asset_dto.asset_id == "asset-99"
         assert asset_dto.name == mock_asset.name
         assert asset_dto.type == AssetType.SECURITY
-        assert asset_dto.aggregate_status == EvaluationState.FAIL 
+        assert asset_dto.aggregate_status == EvaluationState.FAIL

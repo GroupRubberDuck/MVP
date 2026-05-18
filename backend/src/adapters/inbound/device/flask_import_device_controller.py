@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request,render_template
+from flask import Blueprint, jsonify, request, render_template
 
 from flask.typing import ResponseReturnValue
 
@@ -16,7 +16,6 @@ from core.ports.inbound.device.import_device_use_case import (
 
 
 class FlaskImportDeviceController(FlaskController):
-
     def __init__(self, import_device_service: ImportDeviceUseCase) -> None:
         self._service = import_device_service
 
@@ -25,7 +24,9 @@ class FlaskImportDeviceController(FlaskController):
         @blueprint.route("/api/devices/import", methods=["POST"])
         def import_device() -> ResponseReturnValue:
             if "file" not in request.files:
-                return jsonify({"error": "Nessun file presente nella richiesta HTTP."}), 400
+                return jsonify(
+                    {"error": "Nessun file presente nella richiesta HTTP."}
+                ), 400
 
             file_storage = request.files["file"]
             if not file_storage.filename:
@@ -51,7 +52,7 @@ class FlaskImportDeviceController(FlaskController):
                 return jsonify({"error": str(e)}), 409
 
             return jsonify({"message": "Dispositivo importato con successo."}), 201
-        
+
         @blueprint.route("/devices/import", methods=["GET"])
         def import_device_page() -> ResponseReturnValue:
             return render_template("layouts/device/import_device.html")

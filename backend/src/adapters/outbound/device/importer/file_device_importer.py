@@ -9,7 +9,9 @@ from core.domain.evaluation_object.asset.asset_proprieties import AssetProprieti
 from core.domain.evaluation_object.asset.asset_type import AssetType
 from core.domain.evaluation_object.device import Device
 
-from core.ports.outbound.device.importer.file_device_importer_port import FileDeviceImporterPort
+from core.ports.outbound.device.importer.file_device_importer_port import (
+    FileDeviceImporterPort,
+)
 
 from core.ports.outbound.device.exceptions import (
     FileTooLargeError,

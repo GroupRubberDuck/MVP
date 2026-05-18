@@ -20,7 +20,7 @@ from core.domain.evaluation_standard.decision_tree import (
     DecisionTree,
 )
 from core.domain.evaluation_standard.standard_verdict import StandardVerdict
-from core.domain.utilities.evaluation_detail_builder import EvaluationDetailBuilder 
+from core.domain.utilities.evaluation_detail_builder import EvaluationDetailBuilder
 
 
 @pytest.fixture
@@ -113,8 +113,6 @@ def _make_standard(requirements=None):
 
 
 class TestBuildRequirementDetail:
-    
-
     def test_builds_detail_with_correct_fields(self, builder):
         """
         Dato un requisito di dominio completo di albero decisionale e il suo risultato di valutazione (Given),
@@ -246,7 +244,6 @@ class TestBuildRequirementDetail:
 
 
 class TestBuildAssetDetail:
-
     def test_builds_detail_with_correct_fields(self, builder):
         """
         Dato il risultato della valutazione di un asset assieme al device e allo standard associati (Given),
@@ -308,7 +305,6 @@ class TestBuildAssetDetail:
 
 
 class TestBuildDeviceDetail:
-
     def test_builds_detail_with_correct_fields(self, builder):
         """
         Dato un risultato di valutazione root (DeviceEvaluationResult) e le relative entità Device e Standard (Given),

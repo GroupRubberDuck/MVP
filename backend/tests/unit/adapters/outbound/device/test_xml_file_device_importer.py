@@ -1,7 +1,9 @@
 import io
 import pytest
 
-from adapters.outbound.device.importer.xml_file_device_importer import XMLFileDeviceImporter
+from adapters.outbound.device.importer.xml_file_device_importer import (
+    XMLFileDeviceImporter,
+)
 from core.ports.outbound.device.exceptions import InvalidFileFormatError
 
 
@@ -46,7 +48,6 @@ def importer() -> XMLFileDeviceImporter:
 
 
 class TestXMLFileDeviceImporter:
-
     def test_parses_valid_xml(self, importer):
         """
         Dato un flusso di byte contenente una struttura XML valida che descrive un dispositivo base (Given),

@@ -5,7 +5,9 @@ from flask import Flask
 from core.domain.evaluation_object.device_summary import DeviceSummary
 
 from core.services.device.get_device_list_service import GetDeviceListService
-from adapters.inbound.device.flask_query_device_controller import FlaskQueryDeviceController
+from adapters.inbound.device.flask_query_device_controller import (
+    FlaskQueryDeviceController,
+)
 
 
 # ── Fixtures ──
@@ -64,12 +66,10 @@ def client(
     return app.test_client()
 
 
-
 # ── GetDeviceListService ──
 
 
 class TestGetDeviceListService:
-
     def test_returns_list_from_port(self, mock_find_all_port):
         """
         Dati uno o più dispositivi registrati nel sistema (Given),

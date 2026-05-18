@@ -19,11 +19,8 @@ def service(mock_delete_device_port) -> DeleteDeviceService:
 
 
 class TestDeleteDeviceService:
-
     def test_delete_device_success(
-        self,
-        service: DeleteDeviceService,
-        mock_delete_device_port: Mock
+        self, service: DeleteDeviceService, mock_delete_device_port: Mock
     ):
         """
         Dato un identificativo di dispositivo presente nel sistema (Given),
@@ -37,9 +34,7 @@ class TestDeleteDeviceService:
         mock_delete_device_port.delete.assert_called_once_with("DEV-999")
 
     def test_delete_device_raises_failure_when_not_found(
-        self,
-        service: DeleteDeviceService,
-        mock_delete_device_port: Mock
+        self, service: DeleteDeviceService, mock_delete_device_port: Mock
     ):
         """
         Dato un ID dispositivo non censito nel database (Given),
@@ -47,13 +42,15 @@ class TestDeleteDeviceService:
         allora il servizio deve intercettare l'errore tecnico e sollevare un'eccezione di dominio DeleteDeviceFailure riportando l'ID mancante (Then).
         """
         command = DeleteDeviceCommand(device_id="DEV-GHOST")
-        
-        mock_delete_device_port.delete.side_effect = DeviceNotFoundError("Documento non trovato")
+
+        mock_delete_device_port.delete.side_effect = DeviceNotFoundError(
+            "Documento non trovato"
+        )
 
         with pytest.raises(DeleteDeviceFailure) as exc_info:
             service.delete_device(command)
 
         assert "DEV-GHOST" in str(exc_info.value)
         assert "Impossibile eliminare" in str(exc_info.value)
-        
+
         mock_delete_device_port.delete.assert_called_once_with("DEV-GHOST")

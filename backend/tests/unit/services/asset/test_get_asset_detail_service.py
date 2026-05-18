@@ -4,9 +4,13 @@ from unittest.mock import MagicMock
 from core.domain.evaluation_standard.evaluation_state import EvaluationState
 from core.domain.evaluation_object.exceptions import AssetNotFoundError
 from core.ports.inbound.asset.exceptions import GetAssetDetailFailure
-from core.ports.inbound.asset.get_asset_evaluation_detail_use_case import GetAssetEvaluationDetailCommand
+from core.ports.inbound.asset.get_asset_evaluation_detail_use_case import (
+    GetAssetEvaluationDetailCommand,
+)
 from core.ports.outbound.evaluation.exceptions import EvaluationSessionNotFoundError
-from core.services.asset.get_asset_evaluation_detail_service import GetAssetEvaluationDetailService
+from core.services.asset.get_asset_evaluation_detail_service import (
+    GetAssetEvaluationDetailService,
+)
 
 
 @pytest.fixture
@@ -29,7 +33,9 @@ def service(mock_session_port, mock_engine):
 
 @pytest.fixture
 def command():
-    return GetAssetEvaluationDetailCommand(device_id="DEVICE-1", asset_id="ASSET-1", session_id="SESSION-1")
+    return GetAssetEvaluationDetailCommand(
+        device_id="DEVICE-1", asset_id="ASSET-1", session_id="SESSION-1"
+    )
 
 
 def _make_mock_session(asset_id: str = "ASSET-1") -> MagicMock:
@@ -59,7 +65,6 @@ def _make_mock_device_result(
 
 
 class TestGetAssetDetail:
-
     def test_returns_asset_detail_with_correct_id(
         self, service, mock_session_port, mock_engine, command
     ):
@@ -99,7 +104,9 @@ class TestGetAssetDetail:
         allora il verdetto nel dettaglio finale deve essere EvaluationState.PASS (Then).
         """
         mock_session_port.get_evaluation_session.return_value = _make_mock_session()
-        mock_engine.evaluate.return_value = _make_mock_device_result(verdict=EvaluationState.PASS)
+        mock_engine.evaluate.return_value = _make_mock_device_result(
+            verdict=EvaluationState.PASS
+        )
 
         result = service.get_asset(command)
 
@@ -114,7 +121,9 @@ class TestGetAssetDetail:
         allora lo stato finale dell'asset deve riflettere EvaluationState.FAIL (Then).
         """
         mock_session_port.get_evaluation_session.return_value = _make_mock_session()
-        mock_engine.evaluate.return_value = _make_mock_device_result(verdict=EvaluationState.FAIL)
+        mock_engine.evaluate.return_value = _make_mock_device_result(
+            verdict=EvaluationState.FAIL
+        )
 
         result = service.get_asset(command)
 
@@ -129,7 +138,9 @@ class TestGetAssetDetail:
         allora la lista dei requirement_details deve risultare vuota (Then).
         """
         mock_session_port.get_evaluation_session.return_value = _make_mock_session()
-        mock_engine.evaluate.return_value = _make_mock_device_result(requirement_results=())
+        mock_engine.evaluate.return_value = _make_mock_device_result(
+            requirement_results=()
+        )
 
         result = service.get_asset(command)
 
@@ -186,7 +197,6 @@ class TestGetAssetDetail:
 
 
 class TestGetAssetDetailFailures:
-
     def test_raises_failure_when_session_not_found(
         self, service, mock_session_port, command
     ):
@@ -195,7 +205,9 @@ class TestGetAssetDetailFailures:
         quando viene richiesto il dettaglio dell'asset (When),
         allora deve essere sollevata un'eccezione GetAssetDetailFailure riportando l'ID della sessione (Then).
         """
-        mock_session_port.get_evaluation_session.side_effect = EvaluationSessionNotFoundError()
+        mock_session_port.get_evaluation_session.side_effect = (
+            EvaluationSessionNotFoundError()
+        )
 
         with pytest.raises(GetAssetDetailFailure, match="SESSION-1"):
             service.get_asset(command)

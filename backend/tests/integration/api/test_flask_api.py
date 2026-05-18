@@ -3,6 +3,7 @@ import pytest
 import mongomock
 from unittest.mock import patch
 
+
 @pytest.fixture
 def flask_app(mongo_db):
     standard_doc = {
@@ -28,8 +29,16 @@ def flask_app(mongo_db):
                             "child_yes": "L_PASS",
                             "child_no": "L_FAIL",
                         },
-                        {"node_id": "L_PASS", "node_type": "leaf_node", "verdict": "pass"},
-                        {"node_id": "L_FAIL", "node_type": "leaf_node", "verdict": "fail"},
+                        {
+                            "node_id": "L_PASS",
+                            "node_type": "leaf_node",
+                            "verdict": "pass",
+                        },
+                        {
+                            "node_id": "L_FAIL",
+                            "node_type": "leaf_node",
+                            "verdict": "fail",
+                        },
                     ],
                 },
             },
@@ -51,8 +60,16 @@ def flask_app(mongo_db):
                             "child_yes": "L_PASS",
                             "child_no": "L_FAIL",
                         },
-                        {"node_id": "L_PASS", "node_type": "leaf_node", "verdict": "pass"},
-                        {"node_id": "L_FAIL", "node_type": "leaf_node", "verdict": "fail"},
+                        {
+                            "node_id": "L_PASS",
+                            "node_type": "leaf_node",
+                            "verdict": "pass",
+                        },
+                        {
+                            "node_id": "L_FAIL",
+                            "node_type": "leaf_node",
+                            "verdict": "fail",
+                        },
                     ],
                 },
             },
@@ -64,30 +81,36 @@ def flask_app(mongo_db):
         return_value=(mongomock.MongoClient(), mongo_db),
     ):
         from app import create_app
+
         app = create_app()
         app.config["TESTING"] = True
         app.config["PROPAGATE_EXCEPTIONS"] = False
         yield app
 
+
 @pytest.fixture
 def client(flask_app):
     return flask_app.test_client()
 
+
 # test api-device
 def _create_device(client, name="Test Router", standard_id="STD-001"):
-    return client.post("/devices", json={
-        "device_name": name,
-        "device_os": "OpenWRT",
-        "device_description": "Device di test",
-        "standard_id": standard_id,
-    })
+    return client.post(
+        "/devices",
+        json={
+            "device_name": name,
+            "device_os": "OpenWRT",
+            "device_description": "Device di test",
+            "standard_id": standard_id,
+        },
+    )
 
 
 def _open_session(client, device_id):
     return client.post("/sessions", json={"device_id": device_id})
 
-class TestApiDevice:
 
+class TestApiDevice:
     def test_create_device(self, client):
         resp = _create_device(client)
         assert resp.status_code == 201
@@ -99,19 +122,25 @@ class TestApiDevice:
 
     def test_update_device(self, client):
         device_id = _create_device(client).get_json()["device_id"]
-        resp = client.put(f"/devices/{device_id}", json={
-            "device_name": "Router Aggiornato",
-            "device_os": "OpenWRT",
-            "device_description": "Descrizione aggiornata",
-        })
+        resp = client.put(
+            f"/devices/{device_id}",
+            json={
+                "device_name": "Router Aggiornato",
+                "device_os": "OpenWRT",
+                "device_description": "Descrizione aggiornata",
+            },
+        )
         assert resp.status_code == 200
 
     def test_update_device_inesistente(self, client):
-        resp = client.put("/devices/id-inesistente", json={
-            "device_name": "X",
-            "device_os": "Linux",
-            "device_description": "Desc",
-        })
+        resp = client.put(
+            "/devices/id-inesistente",
+            json={
+                "device_name": "X",
+                "device_os": "Linux",
+                "device_description": "Desc",
+            },
+        )
         assert resp.status_code == 404
 
     def test_delete_device(self, client):
@@ -123,9 +152,9 @@ class TestApiDevice:
         resp = client.delete("/devices/id-inesistente")
         assert resp.status_code == 404
 
+
 # test api-valutazione
 class TestApiSessioneValutazione:
-
     def test_open_session(self, client):
         device_id = _create_device(client).get_json()["device_id"]
         resp = _open_session(client, device_id)

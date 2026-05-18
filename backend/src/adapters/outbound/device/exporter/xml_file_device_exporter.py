@@ -26,7 +26,9 @@ class XMLFileDeviceExporter(FileDeviceExporter):
             asset_el = ET.SubElement(assets_el, "asset", id=asset.id)
 
             ET.SubElement(asset_el, "name").text = asset.anagraphic.name
-            ET.SubElement(asset_el, "asset_type").text = asset.anagraphic.asset_type.value
+            ET.SubElement(
+                asset_el, "asset_type"
+            ).text = asset.anagraphic.asset_type.value
             ET.SubElement(asset_el, "description").text = asset.anagraphic.description
             evaluations_el = ET.SubElement(asset_el, "evaluations")
             for evidence in asset.proprieties.evidences.values():
@@ -35,7 +37,7 @@ class XMLFileDeviceExporter(FileDeviceExporter):
                     "evaluation",
                     requirement_id=evidence.requirement_id,
                 )
-            
+
                 evaluation_map_el = ET.SubElement(evaluation_el, "evaluation_map")
                 for node_id, value in evidence.node_choices.items():
                     ET.SubElement(
@@ -44,13 +46,15 @@ class XMLFileDeviceExporter(FileDeviceExporter):
                         node_id=node_id,
                         value=str(value).lower(),
                     )
-                
+
                 # Justification
-                ET.SubElement(evaluation_el, "justification").text = evidence.justification
+                ET.SubElement(
+                    evaluation_el, "justification"
+                ).text = evidence.justification
 
     def _finalize_output(self) -> bytes:
         if self._root is None:
             raise RuntimeError("Struttura XML non inizializzata.")
-            
+
         ET.indent(self._root)
         return ET.tostring(self._root, encoding="utf-8", xml_declaration=True)

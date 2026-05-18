@@ -13,6 +13,7 @@ from core.domain.evaluation_engine.evaluation_result import (
 
 # ── Fixtures ──
 
+
 @pytest.fixture
 def engine() -> EvaluationEngine:
     return EvaluationEngine()
@@ -20,8 +21,8 @@ def engine() -> EvaluationEngine:
 
 # ── 1. Test Aggregazione Stati ──
 
-class TestAggregateEvaluationStates:
 
+class TestAggregateEvaluationStates:
     def test_all_pass_returns_pass(self, engine):
         """
         Dato un elenco di stati di valutazione in cui tutti sono positivi (PASS) (Given),
@@ -52,8 +53,8 @@ class TestAggregateEvaluationStates:
 
 # ── 2. Test Risoluzione Requisiti e Dipendenze (_resolve) ──
 
-class TestEvaluationEngineResolve:
 
+class TestEvaluationEngineResolve:
     def test_resolve_missing_evidence_returns_pending(self, engine):
         """
         Dato un requisito senza evidenze associate all'interno dell'asset (Given),
@@ -150,16 +151,16 @@ class TestEvaluationEngineResolve:
         req2.evaluate.return_value = EvaluationState.FAIL
 
         mock_standard = Mock()
-        mock_standard.get_requirement.side_effect = (
-            lambda r_id: req1 if r_id == "REQ-001" else req2
+        mock_standard.get_requirement.side_effect = lambda r_id: (
+            req1 if r_id == "REQ-001" else req2
         )
 
         mock_evidence1 = Mock(justification="J1", node_choices=MappingProxyType({}))
         mock_evidence2 = Mock(justification="J2", node_choices=MappingProxyType({}))
 
         mock_proprieties = Mock()
-        mock_proprieties.get_evidence.side_effect = (
-            lambda r_id: mock_evidence1 if r_id == "REQ-001" else mock_evidence2
+        mock_proprieties.get_evidence.side_effect = lambda r_id: (
+            mock_evidence1 if r_id == "REQ-001" else mock_evidence2
         )
 
         mock_asset = Mock()
@@ -192,15 +193,15 @@ class TestEvaluationEngineResolve:
         req2.evaluate.return_value = EvaluationState.PASS
 
         mock_standard = Mock()
-        mock_standard.get_requirement.side_effect = (
-            lambda r_id: req1 if r_id == "REQ-001" else req2
+        mock_standard.get_requirement.side_effect = lambda r_id: (
+            req1 if r_id == "REQ-001" else req2
         )
 
         mock_evidence2 = Mock(justification="", node_choices=MappingProxyType({}))
 
         mock_proprieties = Mock()
-        mock_proprieties.get_evidence.side_effect = (
-            lambda r_id: None if r_id == "REQ-001" else mock_evidence2
+        mock_proprieties.get_evidence.side_effect = lambda r_id: (
+            None if r_id == "REQ-001" else mock_evidence2
         )
 
         mock_asset = Mock()
@@ -216,8 +217,8 @@ class TestEvaluationEngineResolve:
 
 # ── 3. Test Valutazione Asset (_evaluate_asset) ──
 
-class TestEvaluationEngineEvaluateAsset:
 
+class TestEvaluationEngineEvaluateAsset:
     def test_evaluate_asset_aggregates_all_requirements(self, engine):
         """
         Dato un asset da ispezionare rispetto a uno standard contenente molteplici requisiti (Given),
@@ -264,8 +265,8 @@ class TestEvaluationEngineEvaluateAsset:
 
 # ── 4. Test Valutazione Device (evaluate) ──
 
-class TestEvaluationEngineEvaluateDevice:
 
+class TestEvaluationEngineEvaluateDevice:
     def test_evaluate_device_aggregates_all_assets(self, engine):
         """
         Dato un dispositivo completo composto da svariati asset e sottoposto a uno standard di conformità (Given),

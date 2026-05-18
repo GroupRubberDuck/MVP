@@ -6,7 +6,6 @@ from core.ports.outbound.device.exceptions import InvalidFileFormatError
 
 
 class JSONFileDeviceImporter(FileDeviceImporter):
-    
     def _deserialize(self, device_file_content: IO[bytes]) -> dict:
         try:
             return json.load(device_file_content)
