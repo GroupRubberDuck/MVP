@@ -12,5 +12,9 @@ class InsertJustificationCommand(BaseModel):
 class InsertJustificationUseCase(ABC):
     @abstractmethod
     def insert_justification(self, command: InsertJustificationCommand) -> None:
-        """Inserisce la giustificazione per un asset specifico e uno specifico requisito nella sessione di valutazione."""
+        """Inserisce la giustificazione per un requisito di un asset nella sessione di valutazione.
+
+        Raises:
+            InsertJustificationFailure: se la giustificazione non può essere impostata (la sessione o l'asset non esistono, o il salvataggio fallisce).
+        """
         ...

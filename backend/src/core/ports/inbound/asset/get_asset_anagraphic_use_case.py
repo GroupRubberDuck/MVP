@@ -15,4 +15,10 @@ class GetAssetAnagraphicUseCase(ABC):
     @abstractmethod
     def get_asset_anagraphic(
         self, command: GetAssetAnagraphicCommand
-    ) -> AssetAnagraphic: ...
+    ) -> AssetAnagraphic: 
+        """Restituisce l'anagrafica dell'asset specificato.
+
+        Raises:
+            GetAssetAnagraphicFailure: se la sessione o l'asset non esistono.
+        """
+        ...

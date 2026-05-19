@@ -14,3 +14,8 @@ class GetDeviceEvaluationDetailUseCase(ABC):
         self, command: GetDeviceEvaluationDetailCommand
     ) -> DeviceEvaluationDetail:
         pass
+        """Restituisce il dettaglio di valutazione del dispositivo specificato.
+
+        Raises:
+            GetEvaluationDetailFailure: se la sessione non esiste.
+        """

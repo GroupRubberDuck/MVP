@@ -11,4 +11,10 @@ class GetComplianceStandardUseCase(ABC):
     @abstractmethod
     def get_compliance_standard(
         self, command: GetComplianceStandardCommand
-    ) -> ComplianceStandard: ...
+    ) -> ComplianceStandard: 
+        """Restituisce il compliance standard corrispondente all'ID fornito.
+
+        Raises:
+            StandardNotFoundFailure: se lo standard non esiste.
+        """
+        ...

@@ -16,4 +16,11 @@ class GetRequirementEvaluationDetailUseCase(ABC):
     @abstractmethod
     def get_evaluation_detail(
         self, command: GetRequirementEvaluationDetailCommand
-    ) -> RequirementEvaluationDetail: ...
+    ) -> RequirementEvaluationDetail: 
+        """Restituisce il dettaglio di valutazione di un requisito specifico.
+
+        Raises:
+            GetRequirementEvaluationDetailFailure: se la sessione non esiste, il dispositivo
+                non è associato alla sessione, o l'asset o il requisito non sono trovati.
+        """
+        ...

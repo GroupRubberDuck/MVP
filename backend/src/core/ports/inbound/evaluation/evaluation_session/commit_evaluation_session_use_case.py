@@ -9,4 +9,10 @@ class CommitEvaluationSessionCommand(BaseModel):
 class CommitEvaluationSessionUseCase(ABC):
     @abstractmethod
     def commit(self, command: CommitEvaluationSessionCommand) -> None:
-        pass
+        """Persiste il dispositivo aggiornato al termine della sessione di valutazione.
+
+        Raises:
+            CommitSessionFailure: se il commit della sessione fallisce per logica di business o problemi infrastrutturali (la sessione non esiste o il salvataggio del dispositivo fallisce).
+        """
+        ...
+

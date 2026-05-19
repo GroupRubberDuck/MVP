@@ -14,5 +14,9 @@ class CreateAssetCommand(BaseModel):
 class CreateAssetUseCase(ABC):
     @abstractmethod
     def create_asset(self, command: CreateAssetCommand) -> str:
-        """ritorna l'id dell'asset creato"""
+        """Crea un nuovo asset e restituisce il suo ID.
+
+        Raises:
+            AssetCreationFailure: se la sessione non esiste, la creazione dell'asset fallisce, o il salvataggio non va a buon fine.
+        """
         ...

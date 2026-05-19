@@ -12,4 +12,11 @@ class ImportDeviceCommand:
 
 class ImportDeviceUseCase(ABC):
     @abstractmethod
-    def import_device(self, command: ImportDeviceCommand) -> None: ...
+    def import_device(self, command: ImportDeviceCommand) -> None:
+        """Importa un dispositivo da file.
+
+        Raises:
+            ImportDeviceFailure: se il file non può essere interpretato.
+            DeviceRegistrationFailure: se si verifica un errore durante la registrazione di un device.
+        """
+        ...

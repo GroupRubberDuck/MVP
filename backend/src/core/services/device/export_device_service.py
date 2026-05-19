@@ -36,7 +36,7 @@ class ExportDeviceService(ExportDeviceUseCase):
         try:
             content = exporter.generate_device_file(device)
         except DeviceExportError:
-            raise ExportDeviceFailure("Unsupported export format")
+            raise ExportDeviceFailure("Failed to generate export file")
 
         return ExportedFile(
             content=content,
