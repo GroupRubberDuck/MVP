@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@vue/server-renderer": "^3.5.34"
+  }
+}

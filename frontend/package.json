@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "watch": "vite build --watch"
+    "watch": "vite build --watch",
+    "test": "vitest run",
+    "test:json": "vitest run --reporter=json --outputFile=vitest-report.json",
+    "test:coverage": "vitest run --coverage --coverage.reporter=text --coverage.reporter=html"
   },
   "dependencies": {
     "d3": "^7.9.0",
@@ -16,6 +19,11 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.6",
-    "vite": "^8.0.9"
+    "@vitest/coverage-v8": "^4.1.6",
+    "@vue/server-renderer": "^3.5.34",
+    "@vue/test-utils": "^2.4.10",
+    "jsdom": "^29.1.1",
+    "vite": "^8.0.9",
+    "vitest": "^4.1.6"
   }
 }

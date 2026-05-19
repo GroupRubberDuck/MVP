@@ -76,7 +76,7 @@ function onSuccess() {
 
   <div class="card" style="max-width: 600px; margin: 0 auto; margin-top: 20px;">
     <div class="card__header">
-      <h2 class="card__title">{{ isEditing ? 'Modifica Asset' : 'Aggiungi Nuovo Asset' }}</h2>
+      <h2 class="card__title">Modifica Asset</h2>
     </div>
     <div class="card__body">
   <form @submit.prevent>
