@@ -16,7 +16,7 @@ class GetRequirementEvaluationDetailUseCase(ABC):
     @abstractmethod
     def get_evaluation_detail(
         self, command: GetRequirementEvaluationDetailCommand
-    ) -> RequirementEvaluationDetail: 
+    ) -> RequirementEvaluationDetail:
         """Restituisce il dettaglio di valutazione di un requisito specifico.
 
         Raises:

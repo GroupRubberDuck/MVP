@@ -11,7 +11,7 @@ class CreateDeviceCommand(BaseModel):
 
 class CreateDeviceUseCase(ABC):
     @abstractmethod
-    def create_device(self, command: CreateDeviceCommand) -> str: 
+    def create_device(self, command: CreateDeviceCommand) -> str:
         """Crea un nuovo dispositivo e restituisce il suo ID.
 
         Raises:

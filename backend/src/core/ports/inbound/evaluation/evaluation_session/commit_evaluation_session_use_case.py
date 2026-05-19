@@ -15,4 +15,3 @@ class CommitEvaluationSessionUseCase(ABC):
             CommitSessionFailure: se il commit della sessione fallisce per logica di business o problemi infrastrutturali (la sessione non esiste o il salvataggio del dispositivo fallisce).
         """
         ...
-

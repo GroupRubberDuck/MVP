@@ -21,7 +21,7 @@ class ExportedFile:
 
 class ExportDeviceUseCase(ABC):
     @abstractmethod
-    def export_device(self, export_command: ExportDeviceCommand) -> ExportedFile: 
+    def export_device(self, export_command: ExportDeviceCommand) -> ExportedFile:
         """Esporta il dispositivo nel formato specificato.
 
         Raises:

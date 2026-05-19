@@ -10,7 +10,7 @@ class GetDeviceDetailCommand(BaseModel):
 
 class GetDeviceDetailUseCase(ABC):
     @abstractmethod
-    def get_device_detail(self, command: GetDeviceDetailCommand) -> Device: 
+    def get_device_detail(self, command: GetDeviceDetailCommand) -> Device:
         """Restituisce il dettaglio del dispositivo specificato.
 
         Raises:

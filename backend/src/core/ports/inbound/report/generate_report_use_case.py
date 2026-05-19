@@ -23,7 +23,7 @@ class GenerateReportCommand(BaseModel):
 
 class GenerateReportUseCase(ABC):
     @abstractmethod
-    def export_report(self, command: GenerateReportCommand) -> ExportedFile: ...
+    def export_report(self, command: GenerateReportCommand) -> ExportedFile:
         """Genera il report di valutazione del dispositivo nel formato specificato.
 
         Raises:

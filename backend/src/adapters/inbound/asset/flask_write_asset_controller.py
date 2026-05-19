@@ -49,7 +49,9 @@ class FlaskWriteAssetController(FlaskController):
 
             try:
                 raw_type = body.get("asset_type")
-                typed_asset_type = AssetType(raw_type) if raw_type else None
+                if raw_type is None:
+                    return jsonify({"error": "Il campo 'asset_type' è obbligatorio."}), 400
+                typed_asset_type = AssetType(raw_type)
 
                 command = CreateAssetCommand(
                     session_id=session_id,
@@ -81,7 +83,9 @@ class FlaskWriteAssetController(FlaskController):
 
             try:
                 raw_type = body.get("asset_type")
-                typed_asset_type = AssetType(raw_type) if raw_type else None
+                if raw_type is None:
+                    return jsonify({"error": "Il campo 'asset_type' è obbligatorio."}), 400
+                typed_asset_type = AssetType(raw_type)
 
                 command = UpdateAssetCommand(
                     session_id=session_id,

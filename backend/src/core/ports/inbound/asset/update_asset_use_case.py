@@ -16,11 +16,11 @@ class UpdateAssetCommand:
 
 class UpdateAssetUseCase(ABC):
     @abstractmethod
-    def update_asset(self, update_command: UpdateAssetCommand) -> None: 
+    def update_asset(self, update_command: UpdateAssetCommand) -> None:
         """Aggiorna l'anagrafica di un asset esistente.
 
         Raises:
             UpdateAssetFailure: se la sessione o l'asset non esistono, i dati
                 non sono validi, o il salvataggio fallisce.
         """
-        ... 
+        ...
