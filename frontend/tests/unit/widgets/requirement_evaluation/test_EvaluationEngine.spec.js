@@ -9,35 +9,35 @@ describe('EvaluationEngine', () => {
   const tree = new TreeStructure(sampleTree);
   const engine = new EvaluationEngine(tree);
 
-  it('GetNodeRenderData Restituisce Il DTO Per Un Id Valido', () => {
+  it('etNodeRenderData restituisce Il DTO Per Un Id Valido', () => {
     const dto = engine.getNodeRenderData('N1');
     expect(dto).not.toBeNull();
     expect(dto.id).toBe('N1');
   });
 
-  it('GetNodeRenderData Restituisce Null Per Un Id Non Valido', () => {
+  it('GetNodeRenderData restituisce Null per un Id non valido', () => {
     expect(engine.getNodeRenderData('INVALID')).toBeNull();
   });
 
   describe('getEvaluationPath', () => {
-    it('Restituisce Solo La Radice Quando Non Ci Sono Risposte', () => {
+    it('restituisce solo la radice quando non ci sono risposte', () => {
       const path = engine.getEvaluationPath(new Map());
       expect(path).toEqual(['N1']);
     });
 
-    it('Segue Il Percorso YES Da N1 A N2', () => {
+    it('segue il percorso YES da N1 A N2', () => {
       const answers = new Map([['N1', true]]);
       const path = engine.getEvaluationPath(answers);
       expect(path).toEqual(['N1', 'N2']);
     });
 
-    it('Segue Il Percorso NO Da N1 A L1 Pass', () => {
+    it('segue il percorso NO da N1 A L1 Pass', () => {
       const answers = new Map([['N1', false]]);
       const path = engine.getEvaluationPath(answers);
       expect(path).toEqual(['N1', 'L1']);
     });
 
-    it('Segue Il Percorso Completo Verso Fail Tramite N4 E L3', () => {
+    it('segue il percorso completo verso Fail tramite N4 E L3', () => {
       const answers = new Map([
         ['N1', true],
         ['N2', false],
@@ -48,7 +48,7 @@ describe('EvaluationEngine', () => {
       expect(path).toEqual(['N1', 'N2', 'N3', 'N4', 'L3']);
     });
 
-    it('Segue Il Percorso Completo Verso Not Applicable', () => {
+    it('segue il percorso completo verso Not Applicable', () => {
       const answers = new Map([
         ['N1', true],
         ['N2', false],
@@ -58,7 +58,7 @@ describe('EvaluationEngine', () => {
       expect(path).toEqual(['N1', 'N2', 'N3', 'L2']);
     });
 
-    it('Segue Il Percorso Completo Verso Pass Tramite N4 E L1', () => {
+    it('segue il percorso completo verso Pass tramite N4 E L1', () => {
       const answers = new Map([
         ['N1', true],
         ['N2', false],
@@ -79,7 +79,7 @@ describe('EvaluationEngine (backend map format)', () => {
     expect(engine.getEvaluationPath(new Map())).toEqual(['N1']);
   });
 
-  it('Il Percorso Completo Verso Fail Corrisponde Al Comportamento Del Formato Array', () => {
+  it('il Percorso completo verso Fail corrisponde al comportamento del formato Array', () => {
     const answers = new Map([
       ['N1', true],
       ['N2', false],
@@ -89,7 +89,7 @@ describe('EvaluationEngine (backend map format)', () => {
     expect(engine.getEvaluationPath(answers)).toEqual(['N1', 'N2', 'N3', 'N4', 'L3']);
   });
 
-  it('Segue Il Percorso Completo Verso Not Applicable', () => {
+  it('segue il percorso completo verso Not Applicable', () => {
     const answers = new Map([
       ['N1', true],
       ['N2', false],

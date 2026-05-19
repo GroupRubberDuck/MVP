@@ -26,7 +26,7 @@ describe('DeviceImportWidget', () => {
     vi.restoreAllMocks();
   });
 
-  it('Mostra il pulsante iniziale e mantiene nascosto il modale', () => {
+  it('mostra il pulsante iniziale e mantiene nascosto il modale', () => {
     const wrapper = mount(DeviceImportWidget, { props: defaultProps });
     
     // Il pulsante principale di apertura deve esserci e contenere il testo giusto
@@ -37,7 +37,7 @@ describe('DeviceImportWidget', () => {
     expect(wrapper.text()).not.toContain('Seleziona un file di configurazione');
   });
 
-  it('Apre il modale al click e pulisce lo stato precedente', async () => {
+  it('apre il modale al click e pulisce lo stato precedente', async () => {
     const wrapper = mount(DeviceImportWidget, { props: defaultProps });
     
     // Clicchiamo il pulsante di apertura
@@ -46,7 +46,7 @@ describe('DeviceImportWidget', () => {
     expect(wrapper.text()).toContain('Seleziona un file di configurazione');
   });
 
-  it('Gestisce correttamente gli eventi custom di FileDropZone', async () => {
+  it('gestisce correttamente gli eventi custom di FileDropZone', async () => {
     const wrapper = mount(DeviceImportWidget, { props: defaultProps });
     await wrapper.find('button').trigger('click');
     
@@ -69,7 +69,7 @@ describe('DeviceImportWidget', () => {
     expect(wrapper.find('.alert-error').exists()).toBe(false);
   });
 
-  it('Invia correttamente il FormData ed esegue il redirect in caso di successo', async () => {
+  it('invia correttamente il FormData ed esegue il redirect in caso di successo', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({ success: true })
@@ -105,7 +105,7 @@ describe('DeviceImportWidget', () => {
     expect(window.location.href).toBe(defaultProps.redirectUrl);
   });
 
-  it('Blocca l’invio se nessun file è selezionato e gestisce gli errori del server', async () => {
+  it('blocca l’invio se nessun file è selezionato e gestisce gli errori del server', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: false,
       json: () => Promise.resolve({ error: 'File XML corrotto o malformato' })

@@ -8,11 +8,11 @@ describe('Configurazione assetFormFields', () => {
   describe('Campo name', () => {
     const field = assetFormFields.name;
 
-    it('Dovrebbe avere un valore iniziale vuoto', () => {
+    it('dovrebbe avere un valore iniziale vuoto', () => {
       expect(field.initialValue).toBe('');
     });
 
-    it('Dovrebbe forzare la regola obbligatoria (non può essere vuoto o contenere solo spazi)', () => {
+    it('dovrebbe forzare la regola obbligatoria (non può essere vuoto o contenere solo spazi)', () => {
       const requiredRule = field.rules[0];
       
       expect(requiredRule('')).toBe("Il nome dell'asset è obbligatorio.");
@@ -24,11 +24,11 @@ describe('Configurazione assetFormFields', () => {
   describe('Campo assetType', () => {
     const field = assetFormFields.assetType;
 
-    it('Dovrebbe avere un valore iniziale vuoto', () => {
+    it('dovrebbe avere un valore iniziale vuoto', () => {
       expect(field.initialValue).toBe('');
     });
 
-    it('Dovrebbe forzare la regola obbligatoria (è necessario selezionare una tipologia)', () => {
+    it('dovrebbe forzare la regola obbligatoria (è necessario selezionare una tipologia)', () => {
       const requiredRule = field.rules[0];
       
       expect(requiredRule('')).toBe('Seleziona una tipologia.');
@@ -41,11 +41,11 @@ describe('Configurazione assetFormFields', () => {
   describe('Campo description', () => {
     const field = assetFormFields.description;
 
-    it('Dovrebbe avere un valore iniziale vuoto', () => {
+    it('dovrebbe avere un valore iniziale vuoto', () => {
       expect(field.initialValue).toBe('');
     });
 
-    it('Dovrebbe avere un array di regole vuoto (nessuna validazione richiesta)', () => {
+    it('dovrebbe avere un array di regole vuoto (nessuna validazione richiesta)', () => {
       // Verifichiamo esplicitamente che l'array delle regole sia vuoto
       expect(field.rules).toEqual([]);
       expect(field.rules.length).toBe(0);

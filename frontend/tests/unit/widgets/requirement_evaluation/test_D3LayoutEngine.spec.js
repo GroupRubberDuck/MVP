@@ -49,7 +49,7 @@ describe('D3LayoutEngine', () => {
     return treeMap;
   };
 
-  it('Inizializza correttamente la configurazione predefinita con il costruttore vuoto', () => {
+  it('inizializza correttamente la configurazione predefinita con il costruttore vuoto', () => {
     const engine = new D3LayoutEngine();
     const treeMap = createSampleTreeMap();
     
@@ -61,7 +61,7 @@ describe('D3LayoutEngine', () => {
     expect(layout.edges.length).toBe(3);
   });
 
-  it('Mappa correttamente le coordinate assolute e i risultati del layout', () => {
+  it('mappa correttamente le coordinate assolute e i risultati del layout', () => {
     const customConfig = { nodeWidth: 100, nodeHeight: 100 };
     const engine = new D3LayoutEngine(customConfig);
     const treeMap = createSampleTreeMap();
@@ -83,7 +83,7 @@ describe('D3LayoutEngine', () => {
     expect(level2Node.y).toBeGreaterThan(level1Node.y);
   });
 
-  it('Rispetta i vincoli di design con i figli YES a sinistra e NO a destra', () => {
+  it('rispetta i vincoli di design con i figli YES a sinistra e NO a destra', () => {
     const engine = new D3LayoutEngine();
     const treeMap = createSampleTreeMap();
 
@@ -97,7 +97,7 @@ describe('D3LayoutEngine', () => {
     expect(yesChild.x).toBeLessThan(noChild.x);
   });
 
-  it('Estrae le connessioni con tracciamento semantico e identificatori accurati', () => {
+  it('estrae le connessioni con tracciamento semantico e identificatori accurati', () => {
     const engine = new D3LayoutEngine();
     const treeMap = createSampleTreeMap();
 
@@ -122,7 +122,7 @@ describe('D3LayoutEngine', () => {
     expect(noEdge.startY).toBe(yesEdge.startY); // Entrambi partono dalla stessa Y della radice N1
   });
 
-  it('Gestisce correttamente i casi con rami mancanti senza generare archi fantasma', () => {
+  it('gestisce correttamente i casi con rami mancanti senza generare archi fantasma', () => {
     const engine = new D3LayoutEngine();
     const treeMap = createSampleTreeMap();
 

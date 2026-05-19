@@ -27,7 +27,7 @@ describe('SessionStartWidget', () => {
     vi.restoreAllMocks();
   });
 
-  it('Dovrebbe renderizzare il pulsante di avvio correttamente', () => {
+  it('dovrebbe renderizzare il pulsante di avvio correttamente', () => {
     const wrapper = mount(SessionStartWidget, { props: defaultProps });
     
     const button = wrapper.find('button');
@@ -35,7 +35,7 @@ describe('SessionStartWidget', () => {
     expect(button.text()).toBe('Avvia Valutazione');
   });
 
-  it('Dovrebbe inviare il payload corretto tramite POST e sostituire __SESSION_ID__ al momento del reindirizzamento', async () => {
+  it('dovrebbe inviare il payload corretto tramite POST e sostituire __SESSION_ID__ al momento del reindirizzamento', async () => {
     // Simuliamo il server che risponde con successo inviando l'ID della nuova sessione
     const mockSessionId = 'SESS-12345-ABC';
     global.fetch.mockResolvedValueOnce({
@@ -62,7 +62,7 @@ describe('SessionStartWidget', () => {
     expect(window.location.href).toBe(expectedUrl);
   });
 
-  it('Dovrebbe gestire i guasti del server in modo sicuro senza reindirizzare', async () => {
+  it('dovrebbe gestire i guasti del server in modo sicuro senza reindirizzare', async () => {
     // Simuliamo un dispositivo non valido o offline
     global.fetch.mockResolvedValueOnce({
       ok: false,
@@ -79,7 +79,7 @@ describe('SessionStartWidget', () => {
     expect(window.location.href).not.toContain('/evaluations/');
   });
 
-  it('Dovrebbe gestire gli errori di rete generici o i JSON non analizzabili senza causare crash', async () => {
+  it('dovrebbe gestire gli errori di rete generici o i JSON non analizzabili senza causare crash', async () => {
     // Simuliamo un crash del server senza risposta JSON
     global.fetch.mockResolvedValueOnce({
       ok: false,

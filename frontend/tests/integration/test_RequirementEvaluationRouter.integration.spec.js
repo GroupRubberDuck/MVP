@@ -38,7 +38,7 @@ describe('Ecosistema RequirementEvaluation (Integrazione Navigazione)', () => {
 
   // ─── FLUSSO 1: INTEGRAZIONE E TRASMISSIONE DELL'URL ALLA SIDEBAR ───
 
-  it('Dovrebbe trasmettere la prop requirementsUrl fino al tag anchor reale all\'interno della sidebar', async () => {
+  it('dovrebbe trasmettere la prop requirementsUrl fino al tag anchor reale all\'interno della sidebar', async () => {
     const wrapper = mount(RequirementEvaluationWidget, { props: defaultProps });
     await wrapper.vm.$nextTick(); // Attendiamo l'onMounted del widget
 
@@ -61,7 +61,7 @@ describe('Ecosistema RequirementEvaluation (Integrazione Navigazione)', () => {
 
   // ─── FLUSSO 2: INTERCETTAZIONE DEL CLICK DI NAVIGAZIONE ───
 
-  it('Dovrebbe consentire il comportamento di navigazione predefinito quando il link di ritorno viene attivato dall\'utente', async () => {
+  it('dovrebbe consentire il comportamento di navigazione predefinito quando il link di ritorno viene attivato dall\'utente', async () => {
     const wrapper = mount(RequirementEvaluationWidget, { props: defaultProps });
     await wrapper.vm.$nextTick();
 

@@ -52,7 +52,7 @@ describe('RequirementEvaluationWidget', () => {
     mockStore.init.mockReset();
   });
 
-  it('Istanzia EvaluationApiClient E Inizializza Lo Store Al Mounted', () => {
+  it('istanzia evaluationApiClient e inizializza lo store al mounted', () => {
     mount(RequirementEvaluationWidget, {
       props: defaultProps,
       global: {
@@ -77,7 +77,7 @@ describe('RequirementEvaluationWidget', () => {
     });
   });
 
-  it('Renderizza Correttamente I Moduli Principali Del Layout', () => {
+  it('renderizza correttamente i moduli principali del layout', () => {
     const wrapper = mount(RequirementEvaluationWidget, {
       props: defaultProps,
       global: {
@@ -103,7 +103,7 @@ describe('RequirementEvaluationWidget', () => {
     ).toBe(true);
   });
 
-  it('Mostra O Nasconde La Sidebar In Base Allo Stato Dello Store', async () => {
+  it('mostra o nasconde la sidebar in base allo stato dello store', async () => {
     const wrapper = mount(RequirementEvaluationWidget, {
       props: defaultProps,
       global: {

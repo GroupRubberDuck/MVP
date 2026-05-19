@@ -36,7 +36,7 @@ describe('SessionCommitAndCloseWidget', () => {
     vi.restoreAllMocks();
   });
 
-  it('Dovrebbe renderizzare il pulsante con le etichette iniziali corrette', () => {
+  it('dovrebbe renderizzare il pulsante con le etichette iniziali corrette', () => {
     const wrapper = mount(SessionCommitAndCloseWidget, { props: defaultProps });
     
     const button = wrapper.find('button');
@@ -45,7 +45,7 @@ describe('SessionCommitAndCloseWidget', () => {
     expect(button.classes()).toContain('btn--primary');
   });
 
-  it('Dovrebbe inviare una richiesta POST, disabilitare la guardia di navigazione e reindirizzare in caso di successo', async () => {
+  it('dovrebbe inviare una richiesta POST, disabilitare la guardia di navigazione e reindirizzare in caso di successo', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({ success: true })
@@ -70,7 +70,7 @@ describe('SessionCommitAndCloseWidget', () => {
     expect(window.location.href).toBe(defaultProps.redirectUrl);
   });
 
-  it('Dovrebbe gestire gli errori del server in modo sicuro senza reindirizzare o disabilitare la guardia', async () => {
+  it('dovrebbe gestire gli errori del server in modo sicuro senza reindirizzare o disabilitare la guardia', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: false,
       json: () => Promise.resolve({ error: 'Errore critico durante il consolidamento dati' })

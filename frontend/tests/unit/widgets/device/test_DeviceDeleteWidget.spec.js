@@ -29,7 +29,7 @@ describe('DeviceDeleteWidget', () => {
     vi.restoreAllMocks();
   });
 
-  it('Mostra il pulsante iniziale di eliminazione e apre il modale al click', async () => {
+  it('mostra il pulsante iniziale di eliminazione e apre il modale al click', async () => {
     const wrapper = mount(DeviceDeleteWidget, { props: defaultProps });
     
     // Inizialmente il modale non c'è, c'è solo il bottone principale
@@ -45,7 +45,7 @@ describe('DeviceDeleteWidget', () => {
     expect(wrapper.text()).toContain(defaultProps.deviceName);
   });
 
-  it('Chiude il modale quando viene cliccato Annulla', async () => {
+  it('chiude il modale quando viene cliccato Annulla', async () => {
     const wrapper = mount(DeviceDeleteWidget, { props: defaultProps });
     
     // Apriamo il modale
@@ -61,7 +61,7 @@ describe('DeviceDeleteWidget', () => {
     expect(wrapper.text()).not.toContain('Questa operazione è irreversibile.');
   });
 
- it('Genera il link di download corretto ed esegue il click per l’esportazione', async () => {
+ it('genera il link di download corretto ed esegue il click per l’esportazione', async () => {
     const wrapper = mount(DeviceDeleteWidget, { props: defaultProps });
     
     // Spiamo appendChild e removeChild ma li lasciamo funzionare normalmente
@@ -91,7 +91,7 @@ describe('DeviceDeleteWidget', () => {
     expect(removeChildSpy).toHaveBeenCalledWith(appendedLink);
   });
   
-  it('Invia la richiesta DELETE ed esegue il redirect in caso di successo', async () => {
+  it('invia la richiesta DELETE ed esegue il redirect in caso di successo', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({ success: true })
@@ -116,7 +116,7 @@ describe('DeviceDeleteWidget', () => {
     expect(window.location.href).toBe(defaultProps.redirectUrl);
   });
 
-  it('Gestisce in sicurezza il fallimento del server durante l’eliminazione senza effettuare il redirect', async () => {
+  it('gestisce in sicurezza il fallimento del server durante l’eliminazione senza effettuare il redirect', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: false,
       json: () => Promise.resolve({ error: 'Dispositivo protetto, impossibile eliminare' })

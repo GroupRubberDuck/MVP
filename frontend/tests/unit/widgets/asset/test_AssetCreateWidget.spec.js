@@ -28,7 +28,7 @@ describe('AssetCreateWidget', () => {
     vi.restoreAllMocks();
   });
 
-  it('Dovrebbe renderizzare correttamente la struttura del form, il titolo e i link di azione', () => {
+  it('dovrebbe renderizzare correttamente la struttura del form, il titolo e i link di azione', () => {
     const wrapper = mount(AssetCreateWidget, { props: defaultProps });
     
     // Verifica struttura e testi base
@@ -41,7 +41,7 @@ describe('AssetCreateWidget', () => {
     expect(cancelLink.text()).toBe('Annulla');
   });
 
-  it('Dovrebbe impedire l\'invio quando la validazione lato client fallisce (form vuoto)', async () => {
+  it('dovrebbe impedire l\'invio quando la validazione lato client fallisce (form vuoto)', async () => {
     const wrapper = mount(AssetCreateWidget, { props: defaultProps });
     
     // Proviamo a inviare il form vuoto
@@ -52,7 +52,7 @@ describe('AssetCreateWidget', () => {
     expect(global.fetch).not.toHaveBeenCalled();
   });
 
-  it('Dovrebbe inviare i dati senza spazi tramite POST e sostituire __ASSET_ID__ in caso di reindirizzamento riuscito', async () => {
+  it('dovrebbe inviare i dati senza spazi tramite POST e sostituire __ASSET_ID__ in caso di reindirizzamento riuscito', async () => {
     const mockAssetId = 'ASSET-777';
     global.fetch.mockResolvedValueOnce({
       ok: true,
@@ -102,7 +102,7 @@ describe('AssetCreateWidget', () => {
     expect(window.location.href).toBe(`/assets/${mockAssetId}/details`);
   });
 
-  it('Dovrebbe gestire gli errori di validazione del server senza reindirizzare', async () => {
+  it('dovrebbe gestire gli errori di validazione del server senza reindirizzare', async () => {
     const serverErrors = { name: 'Nome asset già esistente' };
     global.fetch.mockResolvedValueOnce({
       ok: false,
@@ -135,7 +135,7 @@ describe('AssetCreateWidget', () => {
     expect(window.location.href).not.toContain('/details');
   });
 
-  it('Dovrebbe gestire i guasti generici del server in modo sicuro', async () => {
+  it('dovrebbe gestire i guasti generici del server in modo sicuro', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: false,
       json: () => Promise.reject() // Simula risposta server malformata

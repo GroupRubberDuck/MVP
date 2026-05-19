@@ -20,7 +20,7 @@ describe('DeviceExportWidget', () => {
     vi.restoreAllMocks();
   });
 
-  it('Mostra inizialmente il pulsante di esportazione e mantiene nascosto il modale', () => {
+  it('mostra inizialmente il pulsante di esportazione e mantiene nascosto il modale', () => {
     const wrapper = mount(DeviceExportWidget, { props: defaultProps });
     
     const openBtn = wrapper.find('button.btn--secondary');
@@ -31,7 +31,7 @@ describe('DeviceExportWidget', () => {
     expect(wrapper.text()).not.toContain('Seleziona il formato per esportare');
   });
 
-  it('Apre il modale al click, mostra il nome del dispositivo e reimposta il formato su json', async () => {
+  it('apre il modale al click, mostra il nome del dispositivo e reimposta il formato su json', async () => {
     const wrapper = mount(DeviceExportWidget, { props: defaultProps });
     
     await wrapper.find('button.btn--secondary').trigger('click');
@@ -44,7 +44,7 @@ describe('DeviceExportWidget', () => {
     expect(select.element.value).toBe('json');
   });
 
-  it('Chiude il modale quando viene cliccato il pulsante Annulla', async () => {
+  it('chiude il modale quando viene cliccato il pulsante Annulla', async () => {
     const wrapper = mount(DeviceExportWidget, { props: defaultProps });
     
     // Apriamo il modale
@@ -60,7 +60,7 @@ describe('DeviceExportWidget', () => {
     expect(wrapper.text()).not.toContain('Seleziona il formato per esportare');
   });
 
-  it('Genera il link di download corretto, esegue il click e chiude automaticamente il modale', async () => {
+  it('genera il link di download corretto, esegue il click e chiude automaticamente il modale', async () => {
     const wrapper = mount(DeviceExportWidget, { props: defaultProps });
     
     const appendChildSpy = vi.spyOn(document.body, 'appendChild');

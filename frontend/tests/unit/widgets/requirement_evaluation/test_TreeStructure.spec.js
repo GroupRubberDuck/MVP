@@ -8,23 +8,23 @@ import { sampleTree, sampleTreeBackendFormat } from '../../../../src/widgets/req
 describe('TreeStructure', () => {
   const tree = new TreeStructure(sampleTree);
 
-  it('Dovrebbe restituire la radice tramite getRootId', () => {
+  it('dovrebbe restituire la radice tramite getRootId', () => {
     expect(tree.getRootId()).toBe('N1');
   });
 
-  it('Dovrebbe restituire un DecisionNode per i nodi decisionali tramite getNode', () => {
+  it('dovrebbe restituire un DecisionNode per i nodi decisionali tramite getNode', () => {
     const n1 = tree.getNode('N1');
     expect(n1).toBeInstanceOf(DecisionNode);
     expect(n1.getRenderData().text).toContain('public accessibility');
   });
 
-  it('Dovrebbe restituire un LeafNode per i nodi foglia tramite getNode', () => {
+  it('dovrebbe restituire un LeafNode per i nodi foglia tramite getNode', () => {
     const l1 = tree.getNode('L1');
     expect(l1).toBeInstanceOf(LeafNode);
     expect(l1.getRenderData().resultState).toBe('pass');
   });
 
-  it('Dovrebbe calcolare correttamente il parentId', () => {
+  it('dovrebbe calcolare correttamente il parentId', () => {
     // N2 è figlio yes di N1
     const n2 = tree.getNode('N2');
     expect(n2.getPrevious()).toBe('N1');
@@ -35,11 +35,11 @@ describe('TreeStructure', () => {
     expect(l1.getPrevious()).not.toBeNull();
   });
 
-  it('Dovrebbe restituire null per un nodo sconosciuto', () => {
+  it('dovrebbe restituire null per un nodo sconosciuto', () => {
     expect(tree.getNode('NOPE')).toBeNull();
   });
 
-  it('Dovrebbe restituire tutti i nodi tramite getAllNodes', () => {
+  it('dovrebbe restituire tutti i nodi tramite getAllNodes', () => {
     expect(tree.getAllNodes().size).toBe(7);
   });
 });
@@ -49,11 +49,11 @@ describe('TreeStructure', () => {
 describe('TreeStructure (formato mappa backend)', () => {
   const tree = new TreeStructure(sampleTreeBackendFormat);
 
-  it('Dovrebbe restituire la radice tramite getRootId', () => {
+  it('dovrebbe restituire la radice tramite getRootId', () => {
     expect(tree.getRootId()).toBe('N1');
   });
 
-  it('Dovrebbe analizzare correttamente i nodi decisionali', () => {
+  it('dovrebbe analizzare correttamente i nodi decisionali', () => {
     const n1 = tree.getNode('N1');
     expect(n1).toBeInstanceOf(DecisionNode);
     const dto = n1.getRenderData();
@@ -62,13 +62,13 @@ describe('TreeStructure (formato mappa backend)', () => {
     expect(dto.noChildId).toBe('L1');
   });
 
-  it('Dovrebbe analizzare correttamente i nodi foglia', () => {
+  it('dovrebbe analizzare correttamente i nodi foglia', () => {
     const l3 = tree.getNode('L3');
     expect(l3).toBeInstanceOf(LeafNode);
     expect(l3.getRenderData().resultState).toBe('fail');
   });
 
-  it('Dovrebbe preservare il parent_id proveniente dal backend', () => {
+  it('dovrebbe preservare il parent_id proveniente dal backend', () => {
     const n2 = tree.getNode('N2');
     expect(n2.getPrevious()).toBe('N1');
 
@@ -76,7 +76,7 @@ describe('TreeStructure (formato mappa backend)', () => {
     expect(l2.getPrevious()).toBe('N3');
   });
 
-  it('Dovrebbe restituire tutti e 7 i nodi tramite getAllNodes', () => {
+  it('dovrebbe restituire tutti e 7 i nodi tramite getAllNodes', () => {
     expect(tree.getAllNodes().size).toBe(7);
   });
 });

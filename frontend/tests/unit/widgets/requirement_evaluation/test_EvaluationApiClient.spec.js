@@ -29,7 +29,7 @@ describe('EvaluationApiClient', () => {
 
   // ─── saveAnswer ───
 
-  it('SaveAnswer Chiama Fetch Con Put Body Corretto E Restituisce Il Json Parsato', async () => {
+  it('SaveAnswer chiama fetch con put body corretto e restituisce il json parsato', async () => {
     const mockResponse = { success: true, updated: true };
     global.fetch.mockResolvedValueOnce({
       ok: true,
@@ -50,7 +50,7 @@ describe('EvaluationApiClient', () => {
     expect(result).toEqual(mockResponse);
   });
 
-  it('SaveAnswer Lancia Un Errore Se La Risposta Non È Ok', async () => {
+  it('SaveAnswer lancia un errore se la risposta non è ok', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: false,
       status: 400,
@@ -62,7 +62,7 @@ describe('EvaluationApiClient', () => {
 
   // ─── fetchState ───
 
-  it('FetchState Chiama Fetch Con Get E Restituisce Il Json Parsato', async () => {
+  it('FetchState chiama fetch con get e restituisce il json parsato', async () => {
     const mockState = { status: 'in_progress', completed_nodes: [] };
     global.fetch.mockResolvedValueOnce({
       ok: true,
@@ -72,13 +72,12 @@ describe('EvaluationApiClient', () => {
     const result = await apiClient.fetchState();
 
     expect(global.fetch).toHaveBeenCalledTimes(1);
-    // Fetch default method is GET, so no second argument is strictly required in the assertion
     expect(global.fetch).toHaveBeenCalledWith(mockUrls.state);
     
     expect(result).toEqual(mockState);
   });
 
-  it('FetchState Lancia Un Errore Se La Risposta Non È Ok', async () => {
+  it('FetchState lancia un errore se la risposta non è ok', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: false,
       status: 404,
@@ -89,7 +88,7 @@ describe('EvaluationApiClient', () => {
 
   // ─── saveJustification ───
 
-  it('SaveJustification Chiama Fetch Con Put Body Corretto E Restituisce Il Json Parsato', async () => {
+  it('SaveJustification chiama fetch con put body corretto e restituisce il json parsato', async () => {
     const mockResponse = { saved: true };
     global.fetch.mockResolvedValueOnce({
       ok: true,
@@ -108,7 +107,7 @@ describe('EvaluationApiClient', () => {
     expect(result).toEqual(mockResponse);
   });
 
-  it('SaveJustification Lancia Un Errore Se La Risposta Non È Ok', async () => {
+  it('SaveJustification lancia un errore se la risposta non è ok', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: false,
       status: 500,
@@ -120,7 +119,7 @@ describe('EvaluationApiClient', () => {
 
   // ─── fetchDetail ───
 
-  it('FetchDetail Chiama Fetch Con Get E Restituisce Il Json Parsato', async () => {
+  it('FetchDetail chiama fetch con get e restituisce il json parsato', async () => {
     const mockDetail = { id: 123, nodes: [] };
     global.fetch.mockResolvedValueOnce({
       ok: true,
@@ -135,7 +134,7 @@ describe('EvaluationApiClient', () => {
     expect(result).toEqual(mockDetail);
   });
 
-  it('FetchDetail Lancia Un Errore Se La Risposta Non È Ok', async () => {
+  it('FetchDetail lancia un errore se la risposta non è ok', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: false,
       status: 403,

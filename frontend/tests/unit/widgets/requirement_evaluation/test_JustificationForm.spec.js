@@ -30,7 +30,7 @@ describe('JustificationForm', () => {
     mockStore.saveJustification.mockReset().mockResolvedValue(true);
   });
 
-  it('Dovrebbe renderizzare la giustificazione iniziale dello store e disabilitare i pulsanti di azione', () => {
+  it('dovrebbe renderizzare la giustificazione iniziale dello store e disabilitare i pulsanti di azione', () => {
     const wrapper = mount(JustificationForm);
 
     const textarea = wrapper.find('textarea');
@@ -45,7 +45,7 @@ describe('JustificationForm', () => {
     expect(wrapper.find('.status-text').exists()).toBe(false);
   });
 
-  it('Dovrebbe abilitare i pulsanti quando l\'utente digita delle modifiche (isDirty passa a true)', async () => {
+  it('dovrebbe abilitare i pulsanti quando l\'utente digita delle modifiche (isDirty passa a true)', async () => {
     const wrapper = mount(JustificationForm);
     const textarea = wrapper.find('textarea');
 
@@ -60,7 +60,7 @@ describe('JustificationForm', () => {
     expect(saveBtn.attributes('disabled')).toBeUndefined();
   });
 
-  it('Dovrebbe sincronizzare il testo locale quando la giustificazione dello store cambia esternamente', async () => {
+  it('dovrebbe sincronizzare il testo locale quando la giustificazione dello store cambia esternamente', async () => {
     const wrapper = mount(JustificationForm);
     
     // Simuliamo che lo store venga aggiornato da un'azione esterna (es. cambio nodo dell'albero)
@@ -73,7 +73,7 @@ describe('JustificationForm', () => {
     expect(textarea.element.value).toBe('Aggiornato da fuori');
   });
 
-  it('Dovrebbe chiamare store.saveJustification e aggiornare lo stato dirty al momento dell\'invio', async () => {
+  it('dovrebbe chiamare store.saveJustification e aggiornare lo stato dirty al momento dell\'invio', async () => {
     const wrapper = mount(JustificationForm);
     const textarea = wrapper.find('textarea');
 
@@ -90,7 +90,7 @@ describe('JustificationForm', () => {
     expect(wrapper.find('.btn-primary').attributes('disabled')).toBeDefined();
   });
 
-  it('Dovrebbe ripristinare il testo locale al valore dello store quando viene cliccato il pulsante di annullamento', async () => {
+  it('dovrebbe ripristinare il testo locale al valore dello store quando viene cliccato il pulsante di annullamento', async () => {
     const wrapper = mount(JustificationForm);
     const textarea = wrapper.find('textarea');
 
@@ -106,7 +106,7 @@ describe('JustificationForm', () => {
     expect(wrapper.find('.btn-secondary').attributes('disabled')).toBeDefined();
   });
 
-  it('Dovrebbe renderizzare i messaggi di stato corretti in base alla configurazione dello stato dello store', async () => {
+  it('dovrebbe renderizzare i messaggi di stato corretti in base alla configurazione dello stato dello store', async () => {
     const wrapper = mount(JustificationForm);
 
     // 1. Stato SAVING

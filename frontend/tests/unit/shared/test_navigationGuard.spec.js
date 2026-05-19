@@ -20,7 +20,7 @@ describe('Utility condivisa navigationGuard', () => {
     vi.useRealTimers(); 
   });
 
-  it('Dovrebbe abilitare la guardia aggiungendo l\'event listener beforeunload', () => {
+  it('dovrebbe abilitare la guardia aggiungendo l\'event listener beforeunload', () => {
     // "Spiamo" il metodo addEventListener di window senza sovrascriverlo del tutto
     const addListenerSpy = vi.spyOn(window, 'addEventListener');
 
@@ -47,7 +47,7 @@ describe('Utility condivisa navigationGuard', () => {
     expect(mockEvent.returnValue).toBe('');
   });
 
-  it('Dovrebbe disabilitare la guardia rimuovendo l\'event listener beforeunload', () => {
+  it('dovrebbe disabilitare la guardia rimuovendo l\'event listener beforeunload', () => {
     // "Spiamo" il metodo removeEventListener
     const removeListenerSpy = vi.spyOn(window, 'removeEventListener');
 
@@ -57,7 +57,7 @@ describe('Utility condivisa navigationGuard', () => {
     expect(removeListenerSpy).toHaveBeenCalledWith('beforeunload', expect.any(Function));
   });
 
-  it('Dovrebbe disabilitare temporaneamente la guardia e riabilitarla al termine del timeout', () => {
+  it('dovrebbe disabilitare temporaneamente la guardia e riabilitarla al termine del timeout', () => {
     // Attiviamo l'orologio fittizio di Vitest
     vi.useFakeTimers();
     

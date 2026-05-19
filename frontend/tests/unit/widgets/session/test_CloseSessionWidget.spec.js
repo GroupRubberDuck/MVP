@@ -36,7 +36,7 @@ describe('CloseSessionWidget', () => {
     vi.restoreAllMocks();
   });
 
-  it('Dovrebbe renderizzare il pulsante iniziale e mantenere il modale nascosto', () => {
+  it('dovrebbe renderizzare il pulsante iniziale e mantenere il modale nascosto', () => {
     const wrapper = mount(CloseSessionWidget, { props: defaultProps });
     
     const openBtn = wrapper.find('button.btn--danger');
@@ -47,7 +47,7 @@ describe('CloseSessionWidget', () => {
     expect(wrapper.text()).not.toContain('Sei sicuro di voler chiudere la sessione?');
   });
 
-  it('Dovrebbe aprire il modale al clic', async () => {
+  it('dovrebbe aprire il modale al clic', async () => {
     const wrapper = mount(CloseSessionWidget, { props: defaultProps });
     
     await wrapper.find('button.btn--danger').trigger('click');
@@ -56,7 +56,7 @@ describe('CloseSessionWidget', () => {
     expect(wrapper.text()).toContain('I dati non salvati andranno persi.');
   });
 
-  it('Dovrebbe chiudere il modale quando viene cliccato il pulsante annulla', async () => {
+  it('dovrebbe chiudere il modale quando viene cliccato il pulsante annulla', async () => {
     const wrapper = mount(CloseSessionWidget, { props: defaultProps });
     
     await wrapper.find('button.btn--danger').trigger('click');
@@ -69,7 +69,7 @@ describe('CloseSessionWidget', () => {
     expect(wrapper.text()).not.toContain('Sei sicuro di voler chiudere la sessione?');
   });
 
-  it('Dovrebbe inviare una richiesta DELETE, disabilitare la guardia di navigazione e reindirizzare in caso di successo', async () => {
+  it('dovrebbe inviare una richiesta DELETE, disabilitare la guardia di navigazione e reindirizzare in caso di successo', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({ success: true })
@@ -97,7 +97,7 @@ describe('CloseSessionWidget', () => {
     expect(window.location.href).toBe(defaultProps.redirectUrl);
   });
 
-  it('Dovrebbe gestire i guasti del server in modo sicuro senza reindirizzare o disabilitare la guardia', async () => {
+  it('dovrebbe gestire i guasti del server in modo sicuro senza reindirizzare o disabilitare la guardia', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: false,
       json: () => Promise.resolve({ error: 'Sessione già chiusa o non valida.' })

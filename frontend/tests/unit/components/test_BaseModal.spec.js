@@ -11,7 +11,7 @@ describe('BaseModal', () => {
     vi.restoreAllMocks();
   });
 
-  it('Dovrebbe renderizzare il contenuto dello slot predefinito correttamente', () => {
+  it('dovrebbe renderizzare il contenuto dello slot predefinito correttamente', () => {
     const wrapper = mount(BaseModal, {
       slots: {
         default: '<div class="test-content">Contenuto Dinamico Modal</div>'
@@ -23,7 +23,7 @@ describe('BaseModal', () => {
     expect(content.text()).toBe('Contenuto Dinamico Modal');
   });
 
-  it('Dovrebbe applicare la prop personalizzata contentClass al div del contenuto interno', () => {
+  it('dovrebbe applicare la prop personalizzata contentClass al div del contenuto interno', () => {
     const wrapper = mount(BaseModal, {
       props: {
         contentClass: 'custom-modal-size'
@@ -34,7 +34,7 @@ describe('BaseModal', () => {
     expect(contentDiv.classes()).toContain('custom-modal-size');
   });
 
-  it('Dovrebbe emettere "close" quando l\'overlay viene cliccato direttamente', async () => {
+  it('dovrebbe emettere "close" quando l\'overlay viene cliccato direttamente', async () => {
     const wrapper = mount(BaseModal);
     
     const overlay = wrapper.find('.base-modal-overlay');
@@ -45,7 +45,7 @@ describe('BaseModal', () => {
     expect(wrapper.emitted('close').length).toBe(1);
   });
 
-  it('Non dovrebbe emettere "close" quando viene cliccato il contenuto interno (previene il collasso da bubbling)', async () => {
+  it('non dovrebbe emettere "close" quando viene cliccato il contenuto interno (previene il collasso da bubbling)', async () => {
     const wrapper = mount(BaseModal, {
       slots: { default: '<button id="inner-btn">Cliccami</button>' }
     });
@@ -58,7 +58,7 @@ describe('BaseModal', () => {
     expect(wrapper.emitted('close')).toBeFalsy();
   });
 
-  it('Dovrebbe emettere "close" quando viene premuto il tasto Escape ovunque nel documento', () => {
+  it('dovrebbe emettere "close" quando viene premuto il tasto Escape ovunque nel documento', () => {
     const wrapper = mount(BaseModal);
 
     // Creiamo un finto evento da tastiera
@@ -68,7 +68,7 @@ describe('BaseModal', () => {
     expect(wrapper.emitted('close')).toBeTruthy();
   });
 
-  it('Non dovrebbe emettere "close" quando vengono premuti altri tasti', () => {
+  it('non dovrebbe emettere "close" quando vengono premuti altri tasti', () => {
     const wrapper = mount(BaseModal);
 
     const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
@@ -77,7 +77,7 @@ describe('BaseModal', () => {
     expect(wrapper.emitted('close')).toBeFalsy();
   });
 
-  it('Dovrebbe ripulire l\'event listener keydown quando il componente viene smontato', () => {
+  it('dovrebbe ripulire l\'event listener keydown quando il componente viene smontato', () => {
     const removeEventListenerSpy = vi.spyOn(document, 'removeEventListener');
     
     const wrapper = mount(BaseModal);

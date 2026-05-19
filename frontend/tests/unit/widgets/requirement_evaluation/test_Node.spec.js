@@ -12,7 +12,7 @@ describe('DecisionNode', () => {
     noChildId: 'L1',
   });
 
-  it('Restituisce Il DTO Corretto Tramite getRenderData', () => {
+  it('restituisce il dto corretto tramite getRenderData', () => {
     const dto = node.getRenderData();
 
     expect(dto.id).toBe('N1');
@@ -23,15 +23,15 @@ describe('DecisionNode', () => {
     expect(dto.noChildId).toBe('L1');
   });
 
-  it('Restituisce yesChildId Quando getNext Riceve true', () => {
+  it('restituisce yesChildId quando getNext riceve true', () => {
     expect(node.getNext(true)).toBe('N2');
   });
 
-  it('Restituisce noChildId Quando getNext Riceve false', () => {
+  it('restituisce noChildId quando getNext riceve false', () => {
     expect(node.getNext(false)).toBe('L1');
   });
 
-  it('Restituisce parentId Tramite getPrevious', () => {
+  it('restituisce parentId tramite getPrevious', () => {
     expect(node.getPrevious()).toBeNull();
   });
 });
@@ -43,7 +43,7 @@ describe('LeafNode', () => {
     parentId: 'N1'
   });
 
-  it('Restituisce Il DTO Corretto Tramite getRenderData', () => {
+  it('restituisce il dto corretto tramite getRenderData', () => {
     const dto = leaf.getRenderData();
 
     expect(dto.id).toBe('L1');
@@ -51,12 +51,12 @@ describe('LeafNode', () => {
     expect(dto.resultState).toBe('pass');
   });
 
-  it('Restituisce Sempre null Tramite getNext', () => {
+  it('restituisce sempre null tramite getNext', () => {
     expect(leaf.getNext(true)).toBeNull();
     expect(leaf.getNext(false)).toBeNull();
   });
 
-  it('Restituisce parentId Tramite getPrevious', () => {
+  it('restituisce parentId tramite getPrevious', () => {
     expect(leaf.getPrevious()).toBe('N1');
   });
 });

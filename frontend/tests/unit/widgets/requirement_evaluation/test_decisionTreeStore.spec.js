@@ -62,8 +62,8 @@ describe('decisionTreeStore', () => {
     };
   });
 
-  describe('Inizializzazione tramite init', () => {
-    it('Configura lo stato iniziale, aggiorna il layout e attiva il calcolo del percorso', () => {
+  describe('inizializzazione tramite init', () => {
+    it('configura lo stato iniziale, aggiorna il layout e attiva il calcolo del percorso', () => {
       const store = useDecisionTreeStore();
       
       store.init({
@@ -88,7 +88,7 @@ describe('decisionTreeStore', () => {
       expect(store.activePath).toEqual(['N1', 'N2']);
     });
 
-    it('Apre automaticamente la sidebar e seleziona l’ultimo nodo decisionale del percorso attivo', () => {
+    it('apre automaticamente la sidebar e seleziona l’ultimo nodo decisionale del percorso attivo', () => {
       const store = useDecisionTreeStore();
 
       store.init({ treeData: {} });
@@ -101,8 +101,8 @@ describe('decisionTreeStore', () => {
     });
   });
 
-  describe('Gestione delle risposte tramite setAnswer', () => {
-    it('Aggiorna la mappa locale delle risposte e ricalcola il percorso attivo', async () => {
+  describe('gestione delle risposte tramite setAnswer', () => {
+    it('aggiorna la mappa locale delle risposte e ricalcola il percorso attivo', async () => {
       const store = useDecisionTreeStore();
       store.init({ treeData: {} });
 
@@ -112,7 +112,7 @@ describe('decisionTreeStore', () => {
       expect(store.answers.get('N2')).toBe(false);
     });
 
-    it('Salva le modifiche sul backend e aggiorna lo stato globale quando apiClient è attivo', async () => {
+    it('salva le modifiche sul backend e aggiorna lo stato globale quando apiClient è attivo', async () => {
       const store = useDecisionTreeStore();
       store.init({ treeData: {}, apiClient: mockApiClient });
 
@@ -128,7 +128,7 @@ describe('decisionTreeStore', () => {
       expect(store.evaluationState).toBe('pass');
     });
 
-    it('Intercetta e registra correttamente gli errori se il salvataggio backend fallisce', async () => {
+    it('intercetta e registra correttamente gli errori se il salvataggio backend fallisce', async () => {
       // FIX 2: Creiamo lo spy ma assicuriamoci di pulirlo alla fine del blocco
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       mockApiClient.saveAnswer.mockRejectedValueOnce(new Error('Network Crash'));
@@ -147,8 +147,8 @@ describe('decisionTreeStore', () => {
     });
   });
 
-  describe('Interazioni UI', () => {
-    it('Gestisce correttamente lo stato della sidebar durante le operazioni di selezione', () => {
+  describe('interazioni UI', () => {
+    it('gestisce correttamente lo stato della sidebar durante le operazioni di selezione', () => {
       const store = useDecisionTreeStore();
 
       // Verifica apertura e selezione manuale
@@ -162,7 +162,7 @@ describe('decisionTreeStore', () => {
       expect(store.selectedNodeId).toBeNull();
     });
 
-    it('Aggiorna immediatamente evaluationState tramite l’azione setEvaluationState', () => {
+    it('aggiorna immediatamente evaluationState tramite l’azione setEvaluationState', () => {
       const store = useDecisionTreeStore();
       
       // FIX 3: Rimosso il controllo restrittivo sul valore pre-inizializzato
@@ -171,8 +171,8 @@ describe('decisionTreeStore', () => {
     });
   });
 
-  describe('Gestione delle giustificazioni tramite saveJustification', () => {
-    it('Gestisce correttamente gli stati e passa a "saved" dopo il successo API', async () => {
+  describe('gestione delle giustificazioni tramite saveJustification', () => {
+    it('gestisce correttamente gli stati e passa a "saved" dopo il successo API', async () => {
       const store = useDecisionTreeStore();
       store.init({ treeData: {} , apiClient: mockApiClient });
 
@@ -189,7 +189,7 @@ describe('decisionTreeStore', () => {
       expect(store.justificationStatus).toBe('saved');
     });
 
-    it('Passa allo stato "error" quando il client API restituisce un errore', async () => {
+    it('passa allo stato "error" quando il client API restituisce un errore', async () => {
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       mockApiClient.saveJustification.mockRejectedValueOnce(new Error('500 Internal Error'));
 
@@ -204,7 +204,7 @@ describe('decisionTreeStore', () => {
   });
 
   describe('Getter computed selectedNodeData', () => {
-    it('Restituisce la struttura dati del nodo selezionato quando il motore e la selezione coincidono', () => {
+    it('restituisce la struttura dati del nodo selezionato quando il motore e la selezione coincidono', () => {
       const store = useDecisionTreeStore();
       store.init({ treeData: {} });
 
@@ -218,7 +218,7 @@ describe('decisionTreeStore', () => {
       });
     });
 
-    it('Restituisce null quando nessun nodo è selezionato nella UI', () => {
+    it('restituisce null quando nessun nodo è selezionato nella UI', () => {
       const store = useDecisionTreeStore();
       store.init({ treeData: {} });
 

@@ -31,7 +31,7 @@ describe('AssetEditWidget', () => {
     vi.restoreAllMocks();
   });
 
-  it('Mostra il form, precompila i dati iniziali e visualizza correttamente i link di azione', () => {
+  it('mostra il form, precompila i dati iniziali e visualizza correttamente i link di azione', () => {
     const wrapper = mount(AssetEditWidget, { props: defaultProps });
     
     // Verifica struttura e testi base
@@ -54,7 +54,7 @@ describe('AssetEditWidget', () => {
     }
   });
 
-  it('Blocca l’invio quando la validazione client-side fallisce', async () => {
+  it('blocca l’invio quando la validazione client-side fallisce', async () => {
     const wrapper = mount(AssetEditWidget, { props: defaultProps });
     
     // Svuotiamo il campo del nome per far fallire la validazione
@@ -70,7 +70,7 @@ describe('AssetEditWidget', () => {
     expect(global.fetch).not.toHaveBeenCalled();
   });
 
-  it('Invia i dati aggiornati e ripuliti tramite PUT ed esegue il redirect in caso di successo', async () => {
+  it('invia i dati aggiornati e ripuliti tramite PUT ed esegue il redirect in caso di successo', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({ success: true })
@@ -118,7 +118,7 @@ describe('AssetEditWidget', () => {
     expect(window.location.href).toBe(defaultProps.redirectUrl);
   });
 
-  it('Gestisce gli errori di validazione del server senza effettuare il redirect', async () => {
+  it('gestisce gli errori di validazione del server senza effettuare il redirect', async () => {
     const serverErrors = { name: 'Nome asset già in uso' };
     global.fetch.mockResolvedValueOnce({
       ok: false,
@@ -144,7 +144,7 @@ describe('AssetEditWidget', () => {
     expect(window.location.href).not.toBe(defaultProps.redirectUrl);
   });
 
-  it('Gestisce in sicurezza un errore generico del server', async () => {
+  it('gestisce in sicurezza un errore generico del server', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: false,
       json: () => Promise.reject()

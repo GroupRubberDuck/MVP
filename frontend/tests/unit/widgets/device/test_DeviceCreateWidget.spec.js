@@ -23,14 +23,14 @@ describe('DeviceCreateWidget', () => {
     }
   });
 
-  it('Mostra correttamente la struttura del form e i link di azione', () => {
+  it('mostra correttamente la struttura del form e i link di azione', () => {
     const wrapper = mount(DeviceCreateWidget, { props: defaultProps });
     
     expect(wrapper.find('form').exists()).toBe(true);
     expect(wrapper.find(`a[href="${defaultProps.cancelUrl}"]`).exists()).toBe(true);
   });
 
-  it('Blocca l’invio quando la validazione client-side fallisce', async () => {
+  it('blocca l’invio quando la validazione client-side fallisce', async () => {
     const wrapper = mount(DeviceCreateWidget, { props: defaultProps });
     
     // Clicca direttamente senza compilare i campi obbligatori
@@ -41,7 +41,7 @@ describe('DeviceCreateWidget', () => {
     expect(global.fetch).not.toHaveBeenCalled();
   });
 
-  it('Invia i dati ripuliti e lo standardId ed esegue il redirect in caso di successo', async () => {
+  it('invia i dati ripuliti e lo standardId ed esegue il redirect in caso di successo', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({ redirect_url: '/devices/dashboard' })
@@ -78,7 +78,7 @@ describe('DeviceCreateWidget', () => {
     expect(window.location.href).toBe('/devices/dashboard');
   });
 
-  it('Gestisce gli errori di validazione del server e popola gli errori del form', async () => {
+  it('gestisce gli errori di validazione del server e popola gli errori del form', async () => {
     const serverErrors = { device_name: 'Questo nome è già in uso' };
     global.fetch.mockResolvedValueOnce({
       ok: false,
@@ -99,7 +99,7 @@ describe('DeviceCreateWidget', () => {
     expect(window.location.href).not.toBe('/devices/dashboard');
   });
 
-  it('Utilizza un messaggio di errore predefinito quando il server non restituisce errori specifici', async () => {
+  it('utilizza un messaggio di errore predefinito quando il server non restituisce errori specifici', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: false,
       json: () => Promise.reject() // Simula risposta malformata o crash del server

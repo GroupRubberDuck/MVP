@@ -39,7 +39,7 @@ describe('EvaluationSideBar', () => {
     mockStore.closeSideBar.mockReset();
   });
 
-  it('Non Renderizza La Sidebar Se IsSideBarOpen È False O CurrentNode È Assente', () => {
+  it('non renderizza la sidebar se isSideBarOpen è false o currentNode è assente', () => {
     mockStore.isSideBarOpen = false;
     mockStore.selectedNodeData = { id: 'N1', type: 'decision' };
     
@@ -53,7 +53,7 @@ describe('EvaluationSideBar', () => {
     expect(wrapper.find('.tree-sidebar').exists()).toBe(false);
   });
 
-  it('Renderizza Correttamente Un Nodo Decision Con Domanda E Stati Di Selezione', async () => {
+  it('renderizza correttamente un nodo decision con domanda e stati di selezione', async () => {
     mockStore.isSideBarOpen = true;
     mockStore.selectedNodeId = 'N1';
     mockStore.selectedNodeData = {
@@ -80,7 +80,7 @@ describe('EvaluationSideBar', () => {
     expect(wrapper.find('.btn-no').classes()).not.toContain('selected');
   });
 
-  it('Richiama StoreSetAnswer Quando Si Cliccano I Pulsanti Di Risposta', async () => {
+  it('richiama storeSetAnswer quando si cliccano i pulsanti di risposta', async () => {
     mockStore.isSideBarOpen = true;
     mockStore.selectedNodeId = 'N1';
     mockStore.selectedNodeData = { id: 'N1', type: 'decision', text: 'Test?' };
@@ -96,7 +96,7 @@ describe('EvaluationSideBar', () => {
     expect(mockStore.setAnswer).toHaveBeenCalledWith('N1', true);
   });
 
-  it('Renderizza Correttamente Un Nodo Leaf Con Risultati Formattati E Link Di Reindirizzamento', () => {
+  it('renderizza correttamente un nodo leaf con risultati formattati e link di reindirizzamento', () => {
     mockStore.isSideBarOpen = true;
     mockStore.selectedNodeId = 'L1';
     mockStore.selectedNodeData = {
@@ -121,14 +121,14 @@ describe('EvaluationSideBar', () => {
   });
 
   describe('Navigation Logic', () => {
-    it('Abilita O Disabilita Il Pulsante Previous In Base Alla Presenza Del ParentId', async () => {
+    it('abilita o disabilita il pulsante previous in base alla presenza del parentId', async () => {
       mockStore.isSideBarOpen = true;
       mockStore.selectedNodeId = 'N1';
       mockStore.selectedNodeData = { id: 'N1', type: 'decision', parentId: null };
 
       const wrapper = mount(EvaluationSideBar);
       
-      // Senza parentId, il bottone Previous deve essere bloccato
+      // Senza parentId, il bottone previous deve essere bloccato
       expect(wrapper.find('.btn-nav:first-child').attributes('disabled')).toBeDefined();
 
       // Forziamo la presenza di un nodo genitore
@@ -144,7 +144,7 @@ describe('EvaluationSideBar', () => {
       expect(mockStore.selectNode).toHaveBeenCalledWith('N0');
     });
 
-    it('Gestisce La Validazione Del Pulsante Next E La Navigazione Basata Su YES E NO', async () => {
+    it('gestisce la validazione del pulsante next e la navigazione basata su yes e no', async () => {
       mockStore.isSideBarOpen = true;
       mockStore.selectedNodeId = 'N1';
       mockStore.selectedNodeData = {
@@ -157,7 +157,7 @@ describe('EvaluationSideBar', () => {
       const wrapper = mount(EvaluationSideBar);
       const nextBtn = wrapper.find('.btn-nav-primary');
 
-      // 1. Senza una risposta fornita, il bottone Next deve essere disabilitato
+      // 1. Senza una risposta fornita, il bottone next deve essere disabilitato
       expect(nextBtn.attributes('disabled')).toBeDefined();
 
       // 2. Simuliamo risposta FALSE (No) -> Deve sbloccare il bottone e puntare a noChildId
@@ -177,7 +177,7 @@ describe('EvaluationSideBar', () => {
     });
   });
 
-  it('Richiama StoreCloseSideBar Quando Si Clicca Il Pulsante Di Chiusura', async () => {
+  it('richiama storeCloseSideBar quando si clicca il pulsante di chiusura', async () => {
     mockStore.isSideBarOpen = true;
     mockStore.selectedNodeData = { id: 'N1', type: 'decision' };
 

@@ -7,7 +7,7 @@ import AsyncButton from '../../../src/components/AsyncButton.vue';
 // --- AsyncButton Component ---------------------------------------------------
 
 describe('AsyncButton', () => {
-  it('Dovrebbe renderizzare con le props predefinite', () => {
+  it('dovrebbe renderizzare con le props predefinite', () => {
     const wrapper = mount(AsyncButton, {
       props: {
         action: vi.fn().mockResolvedValue(true)
@@ -21,7 +21,7 @@ describe('AsyncButton', () => {
     expect(wrapper.find('.error-text').exists()).toBe(false); // Nessun errore
   });
 
-  it('Dovrebbe renderizzare con etichette e classi personalizzate', () => {
+  it('dovrebbe renderizzare con etichette e classi personalizzate', () => {
     const wrapper = mount(AsyncButton, {
       props: {
         action: vi.fn().mockResolvedValue(true),
@@ -36,7 +36,7 @@ describe('AsyncButton', () => {
     expect(button.classes()).toContain('custom-class');
   });
 
-  it('Dovrebbe disabilitare il pulsante e mostrare l\'etichetta di caricamento mentre l\'azione è in esecuzione', async () => {
+  it('dovrebbe disabilitare il pulsante e mostrare l\'etichetta di caricamento mentre l\'azione è in esecuzione', async () => {
     // Creiamo una Promise che non si risolve subito per poter ispezionare lo stato "Durante"
     let resolveAction;
     const pendingAction = vi.fn(() => new Promise(resolve => { resolveAction = resolve; }));
@@ -68,7 +68,7 @@ describe('AsyncButton', () => {
     expect(button.text()).toBe('Invia'); // Testo originale ripristinato
   });
 
-  it('Dovrebbe impedire clic multipli durante il caricamento (protezione della concorrenza)', async () => {
+  it('dovrebbe impedire clic multipli durante il caricamento (protezione della concorrenza)', async () => {
     const slowAction = vi.fn(() => new Promise(resolve => setTimeout(resolve, 100)));
 
     const wrapper = mount(AsyncButton, {
@@ -86,7 +86,7 @@ describe('AsyncButton', () => {
     expect(slowAction).toHaveBeenCalledTimes(1);
   });
 
-  it('Dovrebbe emettere "success" con il risultato quando l\'azione si risolve con successo', async () => {
+  it('dovrebbe emettere "success" con il risultato quando l\'azione si risolve con successo', async () => {
     const mockResult = { id: 42, status: 'ok' };
     const successAction = vi.fn().mockResolvedValue(mockResult);
 
@@ -105,7 +105,7 @@ describe('AsyncButton', () => {
     expect(wrapper.find('.error-text').exists()).toBe(false);
   });
 
-  it('Dovrebbe emettere "error" e mostrare il messaggio di errore quando l\'azione fallisce', async () => {
+  it('dovrebbe emettere "error" e mostrare il messaggio di errore quando l\'azione fallisce', async () => {
     const errorMessage = 'Connessione al server persa';
     const failingAction = vi.fn().mockRejectedValue(new Error(errorMessage));
 
@@ -127,7 +127,7 @@ describe('AsyncButton', () => {
     expect(errorSpan.text()).toBe(errorMessage);
   });
 
-  it('Dovrebbe cancellare gli errori precedenti quando viene avviata una nuova azione', async () => {
+  it('dovrebbe cancellare gli errori precedenti quando viene avviata una nuova azione', async () => {
     // Prima fallisce, poi ha successo
     let shouldFail = true;
     const toggleAction = vi.fn(async () => {

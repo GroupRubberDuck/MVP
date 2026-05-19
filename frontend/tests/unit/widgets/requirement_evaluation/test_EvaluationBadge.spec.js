@@ -23,7 +23,7 @@ describe('EvaluationBadge', () => {
     vi.clearAllMocks();
   });
 
-  it('Renderizza Correttamente Lo Stato Pass', () => {
+  it('renderizza Correttamente Lo Stato Pass', () => {
     mockStoreState('pass');
     const wrapper = mount(EvaluationBadge);
 
@@ -33,7 +33,7 @@ describe('EvaluationBadge', () => {
     expect(wrapper.attributes('title')).toBe('Evaluation: Pass');
   });
 
-  it('Renderizza Correttamente Lo Stato Fail', () => {
+  it('renderizza Correttamente Lo Stato Fail', () => {
     mockStoreState('fail');
     const wrapper = mount(EvaluationBadge);
 
@@ -42,7 +42,7 @@ describe('EvaluationBadge', () => {
     expect(wrapper.find('.badge-label').text()).toBe('Fail');
   });
 
-  it('Renderizza Correttamente Lo Stato Not Applicable', () => {
+  it('renderizza Correttamente Lo Stato Not Applicable', () => {
     mockStoreState('not_applicable');
     const wrapper = mount(EvaluationBadge);
 
@@ -51,7 +51,7 @@ describe('EvaluationBadge', () => {
     expect(wrapper.find('.badge-label').text()).toBe('N/A');
   });
 
-  it('Renderizza Correttamente Lo Stato Pending', () => {
+  it('renderizza Correttamente Lo Stato Pending', () => {
     mockStoreState('pending');
     const wrapper = mount(EvaluationBadge);
 
@@ -60,7 +60,7 @@ describe('EvaluationBadge', () => {
     expect(wrapper.find('.badge-label').text()).toBe('Pending');
   });
 
-  it('Renderizza Correttamente Lo Stato Not Evaluated', () => {
+  it('renderizza Correttamente Lo Stato Not Evaluated', () => {
     mockStoreState('not_evaluated');
     const wrapper = mount(EvaluationBadge);
 
@@ -69,7 +69,7 @@ describe('EvaluationBadge', () => {
     expect(wrapper.find('.badge-label').text()).toBe('Not Evaluated');
   });
 
-  it('Mostra Il Fallback Unknown Quando Lo Stato È Mancante O Non Valido', () => {
+  it('mostra Il Fallback Unknown Quando Lo Stato È Mancante O Non Valido', () => {
     // Simuliamo che il backend invii uno stato non mappato nel tuo dizionario
     mockStoreState('stato_strano_e_non_previsto');
     const wrapper = mount(EvaluationBadge);
@@ -80,7 +80,7 @@ describe('EvaluationBadge', () => {
     expect(wrapper.find('.badge-label').text()).toBe('stato_strano_e_non_previsto');
   });
 
-  it('Mostra Il Fallback Unknown Quando Lo Stato È Esplicitamente Null', () => {
+  it('mostra Il Fallback Unknown Quando Lo Stato È Esplicitamente Null', () => {
     mockStoreState(null);
     const wrapper = mount(EvaluationBadge);
 

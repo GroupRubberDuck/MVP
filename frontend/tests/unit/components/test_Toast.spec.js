@@ -17,7 +17,7 @@ describe('Toast', () => {
     vi.useRealTimers();
   });
 
-  it('Dovrebbe renderizzare il messaggio di testo fornito tramite la prop "message"', () => {
+  it('dovrebbe renderizzare il messaggio di testo fornito tramite la prop "message"', () => {
     const wrapper = mount(Toast, {
       props: {
         message: 'Salvataggio completato con successo!'
@@ -30,7 +30,7 @@ describe('Toast', () => {
     expect(wrapper.classes()).toContain('toast');
   });
 
-  it('Dovrebbe emettere l\'evento "close" automaticamente dopo la durata predefinita (3000ms)', () => {
+  it('dovrebbe emettere l\'evento "close" automaticamente dopo la durata predefinita (3000ms)', () => {
     const wrapper = mount(Toast, {
       props: {
         message: 'Timeout standard'
@@ -52,7 +52,7 @@ describe('Toast', () => {
     expect(wrapper.emitted('close').length).toBe(1);
   });
 
-  it('Dovrebbe emettere l\'evento "close" correttamente quando viene fornita una durata personalizzata', () => {
+  it('dovrebbe emettere l\'evento "close" correttamente quando viene fornita una durata personalizzata', () => {
     const customTime = 1500;
     const wrapper = mount(Toast, {
       props: {

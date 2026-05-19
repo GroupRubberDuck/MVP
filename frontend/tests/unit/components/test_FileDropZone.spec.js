@@ -14,7 +14,7 @@ describe('FileDropZone', () => {
     return file;
   };
 
-  it('renders default placeholder and hidden file input', () => {
+  it('dovrebbe renderizzare il placeholder predefinito e l\'input del file nascosto', () => {
     const wrapper = mount(FileDropZone);
     
     // Verifica il testo di default
@@ -26,7 +26,7 @@ describe('FileDropZone', () => {
     expect(fileInput.attributes('accept')).toBe('');
   });
 
-  it('applies dragging classes during dragover and dragleave events', async () => {
+  it('Dovrebbe applicare le classi di trascinamento durante gli eventi dragover e dragleave', async () => {
     const wrapper = mount(FileDropZone);
     const dropZone = wrapper.find('.file-drop-zone');
 
@@ -42,7 +42,7 @@ describe('FileDropZone', () => {
     expect(dropZone.classes()).not.toContain('file-drop-zone--dragging');
   });
 
-  it('handles standard file selection via click and emits "select"', async () => {
+  it('dovrebbe gestire la selezione standard del file tramite clic ed emettere "select"', async () => {
     const wrapper = mount(FileDropZone);
     const fileInput = wrapper.find('input[type="file"]');
     
@@ -65,7 +65,7 @@ describe('FileDropZone', () => {
     expect(wrapper.text()).toContain('(1 KB)');
   });
 
-  it('handles drag and drop of an accepted file and emits "select"', async () => {
+  it('dovrebbe gestire il drag and drop di un file accettato ed emettere "select"', async () => {
     const wrapper = mount(FileDropZone, {
       props: { accept: '.json, .xml' }
     });
@@ -85,7 +85,7 @@ describe('FileDropZone', () => {
     expect(wrapper.text()).toContain('(1 MB)'); // Verifica anche la conversione di formatSize
   });
 
-  it('rejects a dropped file if the extension is not in the accept list and emits "error"', async () => {
+  it('dovrebbe rifiutare un file rilasciato se l\'estensione non è nella lista di quelle accettate ed emettere "error"', async () => {
     const wrapper = mount(FileDropZone, {
       props: { accept: '.csv, .xml' }
     });
@@ -108,7 +108,7 @@ describe('FileDropZone', () => {
     expect(wrapper.text()).not.toContain('virus.exe');
   });
 
-  it('ignores drop events when the component is disabled', async () => {
+  it('dovrebbe ignorare gli eventi di drop quando il componente è disabilitato', async () => {
     const wrapper = mount(FileDropZone, {
       props: { disabled: true }
     });
@@ -125,7 +125,7 @@ describe('FileDropZone', () => {
     expect(wrapper.emitted('error')).toBeFalsy();
   });
 
-  it('resets the selection when the exposed reset() method is called', async () => {
+  it('dovrebbe ripristinare la selezione quando viene chiamato il metodo esposto reset()', async () => {
     const wrapper = mount(FileDropZone);
     const mockFile = createMockFile('temp.txt');
 

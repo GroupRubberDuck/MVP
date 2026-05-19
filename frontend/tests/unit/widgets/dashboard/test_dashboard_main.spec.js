@@ -26,7 +26,7 @@ describe('Dashboard Main Entry (main.js)', () => {
     vi.resetModules();
   });
 
-  it('Abilita il blocco di navigazione al caricamento e collega correttamente i listener dei click', async () => {
+  it('abilita il blocco di navigazione al caricamento e collega correttamente i listener dei click', async () => {
     // creiamo finti bottoni/link con gli attributi dati
     const exitLink = document.createElement('a');
     exitLink.href = '#';

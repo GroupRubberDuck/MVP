@@ -45,7 +45,7 @@ describe('TreeCanvas', () => {
     mockStore.selectNode.mockReset();
   });
 
-  it('Calcola correttamente il viewBox iniziale centrando tutti i nodi', () => {
+  it('calcola correttamente il viewBox iniziale centrando tutti i nodi', () => {
     const wrapper = mount(TreeCanvas);
     const svg = wrapper.find('svg');
 
@@ -53,7 +53,7 @@ describe('TreeCanvas', () => {
     expect(svg.element.style.height).toBe('660px');
   });
 
-  it('Renderizza gli archi con path Bezier e label corrette', () => {
+  it('renderizza gli archi con path Bezier e label corrette', () => {
     const wrapper = mount(TreeCanvas);
 
     const path = wrapper.find('.edge-path');
@@ -65,7 +65,7 @@ describe('TreeCanvas', () => {
     expect(textLabel.text()).toBe('Yes');
   });
 
-  it('Evidenzia gli archi solo quando entrambi i nodi sono attivi nel path', async () => {
+  it('evidenzia gli archi solo quando entrambi i nodi sono attivi nel path', async () => {
     const wrapper = mount(TreeCanvas);
 
     let path = wrapper.find('.edge-path');
@@ -81,7 +81,7 @@ describe('TreeCanvas', () => {
     expect(label.classes()).toContain('edge-label-active');
   });
 
-  it('Renderizza correttamente i componenti dinamici dei nodi con posizione SVG', () => {
+  it('renderizza correttamente i componenti dinamici dei nodi con posizione SVG', () => {
     const wrapper = mount(TreeCanvas, {
       global: {
         stubs: {
@@ -101,7 +101,7 @@ describe('TreeCanvas', () => {
     expect(leafComponent.attributes('transform')).toBe('translate(400, 300)');
   });
 
-  it('Chiama lo store.selectNode quando un nodo emette select', async () => {
+  it('chiama lo store.selectNode quando un nodo emette select', async () => {
     const wrapper = mount(TreeCanvas, {
       global: {
         stubs: { UiDecisionNode: true, UiLeafNode: true }
@@ -115,7 +115,7 @@ describe('TreeCanvas', () => {
     expect(mockStore.selectNode).toHaveBeenCalledWith('N1');
   });
 
-  it('Gestisce correttamente i calcoli matematici della funzione generateBezierPath', () => {
+  it('gestisce correttamente i calcoli matematici della funzione generateBezierPath', () => {
     const wrapper = mount(TreeCanvas);
 
     const edgeCase = { startX: 0, startY: 0, endX: 100, endY: 100 };

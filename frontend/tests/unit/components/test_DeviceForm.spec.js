@@ -21,7 +21,7 @@ describe('DeviceForm', () => {
     }
   });
 
-  it('Dovrebbe renderizzare gli input e le textarea con i dati iniziali e i contatori di caratteri', () => {
+  it('dovrebbe renderizzare gli input e le textarea con i dati iniziali e i contatori di caratteri', () => {
     const props = createProps();
     const wrapper = mount(DeviceForm, { props });
 
@@ -40,7 +40,7 @@ describe('DeviceForm', () => {
     expect(hints[2].text()).toContain('17/512'); 
   });
 
-  it('Dovrebbe aggiornare i campi in modo reattivo e aggiornare i contatori quando l\'utente digita', async () => {
+  it('dovrebbe aggiornare i campi in modo reattivo e aggiornare i contatori quando l\'utente digita', async () => {
     const props = createProps();
     const wrapper = mount(DeviceForm, { props });
 
@@ -57,7 +57,7 @@ describe('DeviceForm', () => {
     expect(hints[0].text()).toContain('15/64');
   });
 
-  it('Dovrebbe applicare la classe form-input-error solo quando è presente un errore', async () => {
+  it('dovrebbe applicare la classe form-input-error solo quando è presente un errore', async () => {
     const props = createProps();
     // Simuliamo che il validatore abbia trovato un errore nel nome, ma non nel sistema operativo
     props.errors.deviceName = 'Il nome è obbligatorio.';
@@ -75,7 +75,7 @@ describe('DeviceForm', () => {
     expect(osInput.classes()).not.toContain('form-input-error');
   });
 
-  it('Dovrebbe renderizzare lo slot delle azioni correttamente', () => {
+  it('dovrebbe renderizzare lo slot delle azioni correttamente', () => {
     const props = createProps();
     const wrapper = mount(DeviceForm, {
       props,

@@ -6,11 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "watch": "vite build --watch",
     "test": "vitest run",
-    "test:json": "vitest run --reporter=json --outputFile=vitest-report.json",
-    "test:coverage": "vitest run --coverage --coverage.reporter=text --coverage.reporter=html"
+    "test:report:unit": "vitest run tests/unit --reporter=json --outputFile=risultati_test_frontend_unit.json",
+    "test:report:integration": "vitest run tests/integration --reporter=json --outputFile=risultati_test_frontend_integration.json"
   },
   "dependencies": {
     "d3": "^7.9.0",

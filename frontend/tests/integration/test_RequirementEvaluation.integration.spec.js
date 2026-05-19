@@ -72,7 +72,7 @@ describe('RequirementEvaluationWidget (Integrazione)', () => {
 
   // ─── FLUSSO 2: INTERAZIONE E NAVIGAZIONE REALE ───
 
-  it('Dovrebbe guidare l\'utente attraverso un percorso di valutazione completo cambiando lo stato tra i componenti', async () => {
+  it('dovrebbe guidare l\'utente attraverso un percorso di valutazione completo cambiando lo stato tra i componenti', async () => {
     const wrapper = mount(RequirementEvaluationWidget, { props: defaultProps });
     await wrapper.vm.$nextTick();
 
@@ -100,7 +100,7 @@ describe('RequirementEvaluationWidget (Integrazione)', () => {
 
   // ─── FLUSSO 3: GESTIONE COMPLETA DELLE GIUSTIFICAZIONI ───
 
-  it('Dovrebbe gestire l\'inserimento delle giustificazioni, bloccare i pulsanti e mostrare gli stati di salvataggio sequenziali', async () => {
+  it('dovrebbe gestire l\'inserimento delle giustificazioni, bloccare i pulsanti e mostrare gli stati di salvataggio sequenziali', async () => {
     const wrapper = mount(RequirementEvaluationWidget, { props: defaultProps });
     await wrapper.vm.$nextTick();
     
@@ -132,7 +132,7 @@ describe('RequirementEvaluationWidget (Integrazione)', () => {
 
   // ─── FLUSSO 4: IDRATAZIONE STATO PRE-SALVATO E CHIUSURA SIDEBAR ───
 
-  it('Dovrebbe inserire le risposte pre-salvate, illuminare il percorso completato nell\'SVG, mostrare il badge finale corretto e gestire la chiusura della sidebar', async () => {
+  it('dovrebbe inserire le risposte pre-salvate, illuminare il percorso completato nell\'SVG, mostrare il badge finale corretto e gestire la chiusura della sidebar', async () => {
     const savedProps = {
       ...defaultProps,
       savedAnswers: { [idN1]: true },
@@ -165,7 +165,7 @@ describe('RequirementEvaluationWidget (Integrazione)', () => {
 
   // ─── FLUSSO 5: SELEZIONE NODO DAL CANVAS SVG (CROSS-COMPONENT INTEGRATION) ───
 
-  it('Dovrebbe aggiornare dinamicamente il contesto della sidebar quando un nodo attivo viene cliccato direttamente sul canvas SVG', async () => {
+  it('dovrebbe aggiornare dinamicamente il contesto della sidebar quando un nodo attivo viene cliccato direttamente sul canvas SVG', async () => {
     const customProps = {
       ...defaultProps,
       savedAnswers: { [idN1]: true }
@@ -195,7 +195,7 @@ describe('RequirementEvaluationWidget (Integrazione)', () => {
 
   // ─── FLUSSO 6: FLUSSO SEPARATO (MODIFICA -> SALVA -> CHIUDI) ───
 
-  it('Dovrebbe eseguire il flusso di lavoro separato passo dopo passo: modificare il testo, fare clic su salva e quindi chiudere la sidebar manualmente', async () => {
+  it('dovrebbe eseguire il flusso di lavoro separato passo dopo passo: modificare il testo, fare clic su salva e quindi chiudere la sidebar manualmente', async () => {
     const wrapper = mount(RequirementEvaluationWidget, { props: defaultProps });
     await wrapper.vm.$nextTick();
 
@@ -227,7 +227,7 @@ describe('RequirementEvaluationWidget (Integrazione)', () => {
 
   // ─── FLUSSO 8: ESPORTAZIONE E GENERAZIONE REPORT (INTEGRAZIONE DATI) ───
 
-  it('Dovrebbe consentire sempre la generazione del report anche senza valutazione, integrando i dati della sessione corrente in modo sicuro', async () => {
+  it('dovrebbe consentire sempre la generazione del report anche senza valutazione, integrando i dati della sessione corrente in modo sicuro', async () => {
     const wrapper = mount(RequirementEvaluationWidget, { props: defaultProps });
     await wrapper.vm.$nextTick(); 
 

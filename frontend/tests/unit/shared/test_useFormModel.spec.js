@@ -25,7 +25,7 @@ describe('useFormModel composable', () => {
     }
   };
 
-  it('Inizializza correttamente campi ed errori in base alle definizioni', () => {
+  it('inizializza correttamente campi ed errori in base alle definizioni', () => {
     const { fields, errors, isValid } = useFormModel(dummyDefinitions);
 
     // I campi devono avere i valori iniziali
@@ -40,7 +40,7 @@ describe('useFormModel composable', () => {
     expect(isValid.value).toBe(true); 
   });
 
-  it('Valida un singolo campo rispettando rigorosamente l’ordine delle regole', () => {
+  it('valida un singolo campo rispettando rigorosamente l’ordine delle regole', () => {
     const { fields, errors, validateField } = useFormModel(dummyDefinitions);
 
     // 1. Il nome è vuoto, deve fallire la prima regola
@@ -61,7 +61,7 @@ describe('useFormModel composable', () => {
     expect(errors.username).toBeNull();
   });
 
-  it('Valida tutti i campi contemporaneamente con validate()', () => {
+  it('valida tutti i campi contemporaneamente con validate()', () => {
     const { fields, errors, validate, isValid } = useFormModel(dummyDefinitions);
 
     // Allo stato iniziale, 'username' è vuoto, quindi fallisce
@@ -80,7 +80,7 @@ describe('useFormModel composable', () => {
     expect(isValid.value).toBe(true);
   });
 
-  it('Imposta correttamente gli errori del server e ignora i campi sconosciuti', () => {
+  it('imposta correttamente gli errori del server e ignora i campi sconosciuti', () => {
     const { errors, setServerErrors, isValid } = useFormModel(dummyDefinitions);
 
     // Simuliamo degli errori tornati dal backend
@@ -102,7 +102,7 @@ describe('useFormModel composable', () => {
     expect(isValid.value).toBe(false);
   });
 
-  it('Reimposta completamente campi ed errori allo stato iniziale', () => {
+  it('reimposta completamente campi ed errori allo stato iniziale', () => {
     const { fields, errors, reset, validate, setServerErrors } = useFormModel(dummyDefinitions);
 
     // 1. "Sporchiamo" lo stato modificando valori e creando errori

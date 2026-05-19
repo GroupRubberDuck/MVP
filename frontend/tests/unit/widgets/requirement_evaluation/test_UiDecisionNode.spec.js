@@ -8,7 +8,7 @@ import UiDecisionNode from '@/widgets/requirement-evaluation/components/UiDecisi
 
 describe('UiDecisionNode', () => {
 
-  it('Dovrebbe renderizzare correttamente con le props predefinite', () => {
+  it('dovrebbe renderizzare correttamente con le props predefinite', () => {
     const wrapper = mount(UiDecisionNode, {
       props: {
         id: 'N1',
@@ -24,7 +24,7 @@ describe('UiDecisionNode', () => {
     expect(wrapper.classes()).not.toContain('is-active');
   });
 
-  it('Dovrebbe calcolare le altezze e le coordinate in modo dinamico per un testo breve su una riga singola', () => {
+  it('dovrebbe calcolare le altezze e le coordinate in modo dinamico per un testo breve su una riga singola', () => {
     const wrapper = mount(UiDecisionNode, {
       props: {
         id: 'N1',
@@ -45,7 +45,7 @@ describe('UiDecisionNode', () => {
     expect(rect.attributes('y')).toBe('-28.4');
   });
 
-  it('Dovrebbe incrementare l\'altezza del nodo correttamente quando il testo si estende su più righe', () => {
+  it('dovrebbe incrementare l\'altezza del nodo correttamente quando il testo si estende su più righe', () => {
     const wrapper = mount(UiDecisionNode, {
       props: {
         id: 'N1',
@@ -62,7 +62,7 @@ describe('UiDecisionNode', () => {
     expect(height).toBeGreaterThan(56.8);
   });
 
-  it('Dovrebbe applicare le classi attive quando la prop isActive è true', () => {
+  it('dovrebbe applicare le classi attive quando la prop isActive è true', () => {
     const wrapper = mount(UiDecisionNode, {
       props: {
         id: 'N1',
@@ -75,7 +75,7 @@ describe('UiDecisionNode', () => {
     expect(wrapper.classes()).toContain('is-active');
   });
 
-  it('Dovrebbe emettere "select" con l\'ID del nodo quando viene cliccato mentre è attivo', async () => {
+  it('dovrebbe emettere "select" con l\'ID del nodo quando viene cliccato mentre è attivo', async () => {
     const wrapper = mount(UiDecisionNode, {
       props: {
         id: 'N1',
@@ -92,7 +92,7 @@ describe('UiDecisionNode', () => {
     expect(wrapper.emitted('select')[0][0]).toBe('N1');
   });
 
-  it('Non dovrebbe emettere "select" quando viene cliccato se isActive è false', async () => {
+  it('non dovrebbe emettere "select" quando viene cliccato se isActive è false', async () => {
     const wrapper = mount(UiDecisionNode, {
       props: {
         id: 'N1',

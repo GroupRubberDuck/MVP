@@ -22,7 +22,7 @@ describe('AssetForm', () => {
     }
   });
 
-  it('Dovrebbe renderizzare tutti gli input e popolarli con i dati iniziali dei campi', () => {
+  it('dovrebbe renderizzare tutti gli input e popolarli con i dati iniziali dei campi', () => {
     const props = createProps();
     const wrapper = mount(AssetForm, { props });
 
@@ -43,7 +43,7 @@ describe('AssetForm', () => {
     expect(textarea.element.value).toBe('Gestisce il traffico in entrata');
   });
 
-  it("Dovrebbe aggiornare l'oggetto fields in modo reattivo quando l'utente digita o seleziona le opzioni", async () => {
+  it("dovrebbe aggiornare l'oggetto fields in modo reattivo quando l'utente digita o seleziona le opzioni", async () => {
     const props = createProps();
     const wrapper = mount(AssetForm, { props });
 
@@ -63,7 +63,7 @@ describe('AssetForm', () => {
     expect(props.fields.description).toBe('Nuova descrizione del router');
   });
 
-  it('Dovrebbe renderizzare il contenuto passato nello slot "actions"', () => {
+  it('dovrebbe renderizzare il contenuto passato nello slot "actions"', () => {
     const props = createProps();
     const wrapper = mount(AssetForm, {
       props,

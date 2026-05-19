@@ -8,7 +8,7 @@ import UiLeafNode from '@/widgets/requirement-evaluation/components/UiLeafNode.v
 
 describe('UiLeafNode', () => {
 
-  it('Dovrebbe renderizzare la forma e l\'etichetta con le dimensioni geometriche del layout fisse', () => {
+  it('dovrebbe renderizzare la forma e l\'etichetta con le dimensioni geometriche del layout fisse', () => {
     const wrapper = mount(UiLeafNode, {
       props: {
         id: 'L1',
@@ -29,7 +29,7 @@ describe('UiLeafNode', () => {
     expect(rect.attributes('rx')).toBe('25');
   });
 
-  it('Dovrebbe applicare la classe di stato corretta in modo dinamico in base a resultState', () => {
+  it('dovrebbe applicare la classe di stato corretta in modo dinamico in base a resultState', () => {
     const wrapper = mount(UiLeafNode, {
       props: {
         id: 'L1',
@@ -44,7 +44,7 @@ describe('UiLeafNode', () => {
     expect(wrapper.attributes('aria-label')).toBe('Result: fail');
   });
 
-  it('Dovrebbe formattare correttamente le etichette chiamando il metodo interno formatLabel', () => {
+  it('dovrebbe formattare correttamente le etichette chiamando il metodo interno formatLabel', () => {
     // 1. Test per lo stato PASS
     let wrapper = mount(UiLeafNode, { 
       props: { id: 'L1', resultState: 'pass', text: 'Test Leaf Node Text' } 
@@ -64,7 +64,7 @@ describe('UiLeafNode', () => {
     expect(wrapper.find('.node-label').text()).toBe('— N/A');
   });
 
-  it('Dovrebbe ripiegare sulla stringa di stato grezza se resultState non è mappato', () => {
+  it('dovrebbe ripiegare sulla stringa di stato grezza se resultState non è mappato', () => {
     const wrapper = mount(UiLeafNode, {
       props: {
         id: 'L1',
@@ -77,7 +77,7 @@ describe('UiLeafNode', () => {
     expect(wrapper.find('.node-label').text()).toBe('custom_status_approved');
   });
 
-  it('Dovrebbe applicare la classe is-active in modo condizionale quando la prop isActive è true', () => {
+  it('dovrebbe applicare la classe is-active in modo condizionale quando la prop isActive è true', () => {
     const wrapper = mount(UiLeafNode, {
       props: {
         id: 'L1',
@@ -91,7 +91,7 @@ describe('UiLeafNode', () => {
     expect(wrapper.classes()).toContain('is-active');
   });
 
-  it('Dovrebbe garantire che i pointer-events siano disabilitati nativamente sul nodo foglia tramite la configurazione del layout', () => {
+  it('dovrebbe garantire che i pointer-events siano disabilitati nativamente sul nodo foglia tramite la configurazione del layout', () => {
     // Le foglie non sono cliccabili dall'utente, verifichiamo che l'accessibilità rispetti lo stile
     const wrapper = mount(UiLeafNode, {
       props: { id: 'L1', resultState: 'pass', text: 'Test Leaf Node Text' } 

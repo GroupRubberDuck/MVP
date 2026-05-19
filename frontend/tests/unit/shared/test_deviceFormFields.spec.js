@@ -60,18 +60,18 @@ describe('Configurazione deviceFormFields', () => {
   describe('Campo deviceDescription', () => {
     const field = deviceFormFields.deviceDescription;
 
-    it('Dovrebbe avere un valore iniziale vuoto', () => {
+    it('dovrebbe avere un valore iniziale vuoto', () => {
       expect(field.initialValue).toBe('');
     });
 
-    it('Dovrebbe consentire stringhe vuote poiché non è strettamente obbligatorio', () => {
+    it('dovrebbe consentire stringhe vuote poiché non è strettamente obbligatorio', () => {
       const maxLengthRule = field.rules[0];
       
       // Essendo opzionale, la stringa vuota deve passare il test della lunghezza
       expect(maxLengthRule('')).toBeNull();
     });
 
-    it('Dovrebbe forzare la regola della lunghezza massima (512 caratteri)', () => {
+    it('dovrebbe forzare la regola della lunghezza massima (512 caratteri)', () => {
       const maxLengthRule = field.rules[0];
       
       const exactValidString = 'c'.repeat(512);

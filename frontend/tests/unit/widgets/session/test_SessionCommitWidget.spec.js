@@ -22,7 +22,7 @@ describe('SessionCommitWidget', () => {
     vi.restoreAllMocks();
   });
 
-  it('Dovrebbe renderizzare il pulsante di salvataggio e mantenere il toast inizialmente nascosto', () => {
+  it('dovrebbe renderizzare il pulsante di salvataggio e mantenere il toast inizialmente nascosto', () => {
     const wrapper = mount(SessionCommitWidget, { props: defaultProps });
     
     // Il bottone asincrono deve esserci
@@ -35,7 +35,7 @@ describe('SessionCommitWidget', () => {
     expect(toast.exists()).toBe(false);
   });
 
-  it('Dovrebbe inviare una richiesta POST e mostrare il toast di successo quando il server risponde correttamente', async () => {
+  it('dovrebbe inviare una richiesta POST e mostrare il toast di successo quando il server risponde correttamente', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({ success: true })
@@ -59,7 +59,7 @@ describe('SessionCommitWidget', () => {
     expect(toast.props('message')).toBe('Sessione salvata con successo.');
   });
 
-  it('Dovrebbe cancellare il messaggio del toast quando il componente Toast emette un evento close', async () => {
+  it('dovrebbe cancellare il messaggio del toast quando il componente Toast emette un evento close', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({})
@@ -83,7 +83,7 @@ describe('SessionCommitWidget', () => {
     expect(toast.exists()).toBe(false);
   });
 
-  it('Non dovrebbe mostrare il toast di successo se il server restituisce un errore', async () => {
+  it('non dovrebbe mostrare il toast di successo se il server restituisce un errore', async () => {
     global.fetch.mockResolvedValueOnce({
       ok: false,
       json: () => Promise.resolve({ error: 'Sessione scaduta o non valida' })
