@@ -11,4 +11,10 @@ class UpdateDeviceCommand(BaseModel):
 
 class UpdateDeviceUseCase(ABC):
     @abstractmethod
-    def update_device(self, command: UpdateDeviceCommand) -> None: ...
+    def update_device(self, command: UpdateDeviceCommand) -> None:
+        """Aggiorna le informazioni del dispositivo specificato.
+
+        Raises:
+            UpdateDeviceFailure: se il dispositivo non può essere aggiornato (non trovato o dati non validi).
+        """
+        ...

@@ -14,4 +14,9 @@ class EvaluateDecisionNodeCommand(BaseModel):
 class EvaluateDecisionNodeUseCase(ABC):
     @abstractmethod
     def evaluate_node(self, command: EvaluateDecisionNodeCommand) -> None:
-        pass
+        """Registra la risposta a un nodo decisionale e persiste la sessione aggiornata.
+
+        Raises:
+            EvaluateNodeFailure: se la valutazione di un nodo decisionale fallisce per regole di business (la sessione o l'asset non esistono,
+                la risposta non è valida, o il salvataggio fallisce).
+        """

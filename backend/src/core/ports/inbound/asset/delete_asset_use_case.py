@@ -10,4 +10,10 @@ class DeleteAssetCommand(BaseModel):
 
 class DeleteAssetUseCase(ABC):
     @abstractmethod
-    def delete_asset(self, command: DeleteAssetCommand) -> None: ...
+    def delete_asset(self, command: DeleteAssetCommand) -> None:
+        """Elimina un asset dalla sessione di valutazione.
+
+        Raises:
+            DeleteAssetFailure: se la sessione o l'asset non esistono.
+        """
+        ...

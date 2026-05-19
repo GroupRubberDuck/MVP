@@ -9,4 +9,10 @@ class DeleteDeviceCommand:
 
 class DeleteDeviceUseCase(ABC):
     @abstractmethod
-    def delete_device(self, command: DeleteDeviceCommand) -> None: ...
+    def delete_device(self, command: DeleteDeviceCommand) -> None:
+        """Elimina il dispositivo specificato.
+
+        Raises:
+            DeleteDeviceFailure: se il dispositivo non può essere eliminato (non trovato o errore interno).
+        """
+        ...

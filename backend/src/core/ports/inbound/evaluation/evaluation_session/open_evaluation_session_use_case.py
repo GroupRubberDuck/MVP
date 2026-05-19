@@ -9,10 +9,10 @@ class OpenEvaluationSessionCommand(BaseModel):
 class OpenEvaluationSessionUseCase(ABC):
     @abstractmethod
     def open_evaluation_session(self, command: OpenEvaluationSessionCommand) -> str:
-        """
-        Opens a new evaluation session and returns the session ID.
+        """Apre una nuova sessione di valutazione e restituisce il suo ID.
 
-        Returns:
-                str: The ID of the newly opened evaluation session.
+        Raises:
+            OpenEvaluationSessionFailure: se l'apertura di una sessione di valutazione fallisce per logica di business o problemi infrastrutturali (esiste già una sessione attiva, il dispositivo
+                o lo standard non esistono, o la creazione della sessione fallisce).
         """
-        pass
+        ...

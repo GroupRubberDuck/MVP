@@ -9,6 +9,6 @@ class CloseEvaluationSessionCommand:
 
 class CloseEvaluationSessionUseCase(ABC):
     @abstractmethod
-    def close_evaluation_session(
-        self, command: CloseEvaluationSessionCommand
-    ) -> None: ...
+    def close_evaluation_session(self, command: CloseEvaluationSessionCommand) -> None:
+        """Chiude la sessione di valutazione specificata."""
+        ...

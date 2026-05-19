@@ -11,4 +11,5 @@ class ActiveSessionInfo:
 class GetActiveSessionUseCase(ABC):
     @abstractmethod
     def get_active_session(self) -> ActiveSessionInfo | None:
-        pass
+        """Restituisce i dati identificativi della sessione attiva, o None se assente."""
+        ...

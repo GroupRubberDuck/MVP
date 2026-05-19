@@ -15,4 +15,10 @@ class GetAssetEvaluationDetailUseCase(ABC):
     @abstractmethod
     def get_asset(
         self, command: GetAssetEvaluationDetailCommand
-    ) -> AssetEvaluationDetail: ...
+    ) -> AssetEvaluationDetail:
+        """Restituisce il dettaglio di valutazione dell'asset specificato.
+
+        Raises:
+            GetAssetDetailFailure: se la sessione o l'asset non esistono.
+        """
+        ...
